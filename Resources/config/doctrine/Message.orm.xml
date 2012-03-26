@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Sonata\NotificationBundle\Entity\Message"
+        table="notification__message"
+        >
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="type"         type="string"     column="type" length="255"/>
+        <field name="body"         type="json"       column="body" />
+        <field name="state"        type="integer"    column="state"  />
+        <!--<field name="group"        type="string"     column="group"   />-->
+
+        <field name="createdAt"    type="datetime"   column="created_at" />
+        <field name="updatedAt"    type="datetime"   column="updated_at"   nullable="true" />
+        <field name="startedAt"    type="datetime"   column="started_at"   nullable="true" />
+        <field name="completedAt"  type="datetime"   column="completed_at" nullable="true" />
+    </entity>
+</doctrine-mapping>
