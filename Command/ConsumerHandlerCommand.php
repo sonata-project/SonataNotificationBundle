@@ -64,9 +64,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
                 $output->writeln("OK!");
             } catch (\Exception $e) {
-                $output->writeln("KO!");
+                $message->setState(MessageInterface::STATE_ERROR);
+                $this->getMessageManager()->save($message);
 
-                throw $e;
+                $output->writeln(sprintf("KO! - %s", $e->getMessage()));
             }
         }
     }
