@@ -53,11 +53,11 @@ class SwiftMailerConsumer implements ConsumerInterface
             ->setTo($message->getValue('to'));
 
         if ($text = $message->getValue(array('message', 'text'))) {
-            $message->addPart($text, 'text/plain');
+            $mail->addPart($text, 'text/plain');
         }
 
         if ($html = $message->getValue(array('message', 'html'))) {
-            $message->addPart($html, 'text/html');
+            $mail->addPart($html, 'text/html');
         }
 
         $this->mailer->send($mail);
