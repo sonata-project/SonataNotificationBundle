@@ -34,10 +34,10 @@ class SonataNotificationExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('core.xml');
         $loader->load('doctrine_orm.xml');
-        $loader->load('handlers.xml');
+        $loader->load('backend.xml');
+        $loader->load('consumer.xml');
 
-        $container->setAlias('sonata.notification.iterator', $config['iterator']);
-        $container->setAlias('sonata.notification.producer', $config['producer']);
+        $container->setAlias('sonata.notification.backend', $config['backend']);
 
         $container->getDefinition('sonata.notification.consumer.swift_mailer')
             ->replaceArgument(0, $config['handlers']['swift_mailer']['path'])

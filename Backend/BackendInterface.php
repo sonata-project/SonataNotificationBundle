@@ -9,11 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonata\NotificationBundle\Producer;
+namespace Sonata\NotificationBundle\Backend;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-interface ProducerInterface
+interface BackendInterface
 {
     /**
      * @param \Sonata\NotificationBundle\Model\MessageInterface $message
@@ -34,4 +36,16 @@ interface ProducerInterface
      * @return void
      */
     function createAndPublish($type, array $body);
+
+    /**
+     * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
+     */
+    function getIterator();
+
+    /**
+     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @return void
+     */
+    function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
 }

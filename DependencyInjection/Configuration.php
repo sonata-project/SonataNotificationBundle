@@ -30,8 +30,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('sonata_notification')->children();
 
         $rootNode
-            ->scalarNode('iterator')->defaultValue('sonata.notification.iterator.mysql')->end()
-            ->scalarNode('producer')->defaultValue('sonata.notification.producer.model')->end()
+            ->scalarNode('backend')->defaultValue('sonata.notification.backend.runtime')->end()
 
             ->arrayNode('handlers')
                 ->addDefaultsIfNotSet()

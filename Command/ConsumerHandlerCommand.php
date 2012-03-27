@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 
-use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 
@@ -49,35 +48,30 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             }
         }
 
-        $output->writeln("<info>Starting the consumer handler</info>");
-        foreach($this->getIterator() as $message) {
+        $backend = $this->getBackend();
+
+        $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
+
+        $dispatcher = $this->getDispatcher();
+
+        foreach($backend->getIterator() as $message) {
             $output->write(sprintf("<info>Handling message: </info> %s ... ", $message->getType()));
             try {
-                $message->setStartedAt(new \DateTime());
-                $this->getMessageManager()->save($message);
-
-                $this->getDispatcher()->dispatch($message->getType(), new ConsumerEvent($message));
-
-                $message->setCompletedAt(new \DateTime());
-                $message->setState(MessageInterface::STATE_DONE);
-                $this->getMessageManager()->save($message);
+                $backend->handle($message, $dispatcher);
 
                 $output->writeln("OK!");
             } catch (\Exception $e) {
-                $message->setState(MessageInterface::STATE_ERROR);
-                $this->getMessageManager()->save($message);
-
                 $output->writeln(sprintf("KO! - %s", $e->getMessage()));
             }
         }
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
+     * @return \Sonata\NotificationBundle\Backend\BackendInterface
      */
-    private function getIterator()
+    private function getBackend()
     {
-        return $this->getContainer()->get('sonata.notification.iterator');
+        return $this->getContainer()->get('sonata.notification.backend');
     }
 
     /**

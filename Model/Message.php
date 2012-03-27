@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Model;
 
-abstract class Message implements MessageInterface
+class Message implements MessageInterface
 {
     protected $type;
 

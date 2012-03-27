@@ -45,10 +45,15 @@ Configuration
 To use the ``SonataNotificationBundle``, add the following lines to your application configuration
 file.
 
+Backend availables :
+
+ * ``sonata.notification.realtime`` : direct call, no benefit but useful for testing purpose
+ * ``sonata.notification.model``: use database to store message, require a background task to be started and supervised, decent starting point for a small amount of async task
+ * ``sonata.notification.rabbitmq``: use the RabbitMQ engine to handle messaging, best performance
+
 .. code-block:: yaml
 
     # app/config/config.yml
     sonata_notification:
-        iterator: sonata.notification.iterator.mysql
-        producer: sonata.notification.producer.model
+        backend: sonata.notification.realtime
 
