@@ -10,3 +10,5 @@ Reference Guide
 
    reference/introduction
    reference/installation
+   reference/usage
+   reference/advanced_configuration

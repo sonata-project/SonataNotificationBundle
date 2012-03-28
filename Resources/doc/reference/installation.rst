@@ -4,8 +4,12 @@ Installation
 To begin, add the dependent bundles to the vendor/bundles directory. Add the following lines to the file deps::
 
     [SonataNotificationBundle]
-        git=http://github.com/sonata-project/SonataNotificationBundle.git
+        git=git://github.com/sonata-project/SonataNotificationBundle.git
         target=/bundles/Sonata/NotificationBundle
+
+    [SonataNotificationBundle]
+        git=git://github.com/videlalvaro/php-amqplib.git
+        target=/php-amqplib
 
 
 Now, add the new `SonataNotificationBundle` Bundle to the kernel
@@ -27,8 +31,8 @@ Update the ``autoload.php`` to add new namespaces:
 
     <?php
     $loader->registerNamespaces(array(
-        'Sonata'                             => __DIR__,
-
+        'Sonata'          => __DIR__ . '/../vendor',
+        'PhpAmqpLib'      => __DIR__ . '/../vendor/php-amqplib',
         // ... other declarations
     ));
 
@@ -47,13 +51,12 @@ file.
 
 Backend availables :
 
- * ``sonata.notification.realtime`` : direct call, no benefit but useful for testing purpose
- * ``sonata.notification.model``: use database to store message, require a background task to be started and supervised, decent starting point for a small amount of async task
- * ``sonata.notification.rabbitmq``: use the RabbitMQ engine to handle messaging, best performance
+ * ``sonata.notification.backend.runtime`` : direct call, no benefit but useful for testing purpose
+ * ``sonata.notification.backend.doctrine``: use database to store message, require a background task to be started and supervised, decent starting point for a small amount of async task
+ * ``sonata.notification.backend.rabbitmq``: use the RabbitMQ engine to handle messaging, best performance
 
 .. code-block:: yaml
 
     # app/config/config.yml
     sonata_notification:
-        backend: sonata.notification.realtime
-
+        backend: sonata.notification.backend.runtime
