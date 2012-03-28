@@ -22,4 +22,12 @@ class SonataNotificationBundle extends Bundle
     {
         $container->addCompilerPass(new NotificationCompilerPass());
     }
+
+    public function boot()
+    {
+        if (!defined('AMQP_DEBUG')) {
+//            define('AMQP_DEBUG', $this->container->getParameter('kernel.debug'));
+            define('AMQP_DEBUG', false);
+        }
+    }
 }

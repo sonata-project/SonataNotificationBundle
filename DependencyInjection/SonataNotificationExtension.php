@@ -40,11 +40,12 @@ class SonataNotificationExtension extends Extension
         $container->setAlias('sonata.notification.backend', $config['backend']);
 
         $container->getDefinition('sonata.notification.consumer.swift_mailer')
-            ->replaceArgument(0, $config['handlers']['swift_mailer']['path'])
+            ->replaceArgument(0, $config['consumers']['swift_mailer']['path'])
         ;
 
         $this->registerDoctrineMapping($config);
         $this->registerParameters($container, $config);
+        $this->configureBackends($container, $config);
      }
 
      /**
@@ -55,6 +56,24 @@ class SonataNotificationExtension extends Extension
     public function registerParameters(ContainerBuilder $container, $config)
     {
         $container->setParameter('sonata.notification.message.class', $config['class']['message']);
+    }
+
+    /**
+      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+      * @param $config
+      * @return void
+      */
+    public function configureBackends(ContainerBuilder $container, $config)
+    {
+        if (isset($config['backends']['rabbitmq'])) {
+            $container->getDefinition('sonata.notification.backend.rabbitmq')
+                ->replaceArgument(0, $config['backends']['rabbitmq']['connection'])
+                ->replaceArgument(1, $config['backends']['rabbitmq']['exchange'])
+                ->replaceArgument(2, $config['backends']['rabbitmq']['queue'])
+            ;
+        } else {
+            $container->removeDefinition('sonata.notification.backend.rabbitmq');
+        }
     }
 
      /**

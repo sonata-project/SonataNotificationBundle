@@ -55,6 +55,11 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $dispatcher = $this->getDispatcher();
 
         foreach($backend->getIterator() as $message) {
+            if (!$message->getType()) {
+                $output->write("<error>Skipping : no type defined </error>");
+                continue;
+            }
+
             $output->write(sprintf("<info>Handling message: </info> %s ... ", $message->getType()));
             try {
                 $backend->handle($message, $dispatcher);
