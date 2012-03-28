@@ -47,6 +47,10 @@ class SwiftMailerConsumer implements ConsumerInterface
     {
         $message = $event->getMessage();
 
+        if (!$this->mailer->getTransport()->isStarted()){
+            $this->mailer->getTransport()->start();
+        }
+
         $mail = $this->mailer->createMessage()
             ->setSubject($message->getValue('subject'))
             ->setFrom(array($message->getValue(array('from', 'email')) => $message->getValue(array('from', 'name'))))
@@ -61,5 +65,6 @@ class SwiftMailerConsumer implements ConsumerInterface
         }
 
         $this->mailer->send($mail);
+        $this->mailer->getTransport()->stop();
     }
 }
