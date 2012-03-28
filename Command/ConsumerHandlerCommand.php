@@ -50,6 +50,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
         $backend = $this->getBackend();
 
+        $output->writeln('Initialize backend');
+        // initialize the backend
+        $backend->initialize();
+
         $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
 
         $dispatcher = $this->getDispatcher();

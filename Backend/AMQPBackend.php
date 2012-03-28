@@ -63,30 +63,36 @@ class AMQPBackend implements BackendInterface
 
             $this->channel = $this->connection->channel();
 
-            /**
-             * name: $queue
-             * passive: false
-             * durable: true // the queue will survive server restarts
-             * exclusive: false // the queue can be accessed in other channels
-             * auto_delete: false //the queue won't be deleted once the channel is closed.
-             */
-            $this->channel->queue_declare($this->queue, false, true, false, false);
-
-            /**
-             * name: $exchange
-             * type: direct
-             * passive: false
-             * durable: true // the exchange will survive server restarts
-             * auto_delete: false //the exchange won't be deleted once the channel is closed.
-             **/
-             $this->channel->exchange_declare($this->exchange, 'direct', false, true, false);
-
-             $this->channel->queue_bind($this->queue, $this->exchange);
-
-             register_shutdown_function(array($this, 'shutdown'));
+            register_shutdown_function(array($this, 'shutdown'));
         }
 
         return $this->channel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize()
+    {
+        /**
+         * name: $queue
+         * passive: false
+         * durable: true // the queue will survive server restarts
+         * exclusive: false // the queue can be accessed in other channels
+         * auto_delete: false //the queue won't be deleted once the channel is closed.
+         */
+        $this->getChannel()->queue_declare($this->queue, false, true, false, false);
+
+        /**
+         * name: $exchange
+         * type: direct
+         * passive: false
+         * durable: true // the exchange will survive server restarts
+         * auto_delete: false //the exchange won't be deleted once the channel is closed.
+         **/
+       $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
+
+       $this->getChannel()->queue_bind($this->queue, $this->exchange);
     }
 
     /**

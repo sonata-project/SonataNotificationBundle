@@ -43,6 +43,13 @@ interface BackendInterface
     function getIterator();
 
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    function initialize();
+
+    /**
      * @param \Sonata\NotificationBundle\Model\MessageInterface $message
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
      * @return void
