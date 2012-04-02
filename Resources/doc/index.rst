@@ -11,4 +11,6 @@ Reference Guide
    reference/introduction
    reference/installation
    reference/usage
+   reference/command_line
    reference/advanced_configuration
+

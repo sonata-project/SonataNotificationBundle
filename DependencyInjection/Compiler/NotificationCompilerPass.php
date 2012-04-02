@@ -33,7 +33,7 @@ class NotificationCompilerPass implements CompilerPassInterface
                     throw new \InvalidArgumentException(sprintf('Service "%s" must define the "type" attribute on "sonata.notification" tags.', $id));
                 }
 
-                $definition->addMethodCall('addListener', array($event['type'], array(new Reference($id), 'process'), $priority));
+                $definition->addMethodCall('addListenerService', array($event['type'], array($id, 'process'), $priority));
             }
         }
     }

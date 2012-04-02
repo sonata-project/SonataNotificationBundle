@@ -27,6 +27,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     {
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
+        $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL ,'Only run n iterations before exiting', false);
     }
 
     /**
@@ -58,20 +59,71 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
         $dispatcher = $this->getDispatcher();
 
+        $startMemoryUsage = memory_get_usage(true);
+        $i = 0;
         foreach($backend->getIterator() as $message) {
+            $i++;
             if (!$message->getType()) {
                 $output->write("<error>Skipping : no type defined </error>");
                 continue;
             }
 
-            $output->write(sprintf("<info>Handling message: </info> %s ... ", $message->getType()));
+            $date = new \DateTime();
+            $output->write(sprintf("[%s] <info>%s</info> : ", $date->format('r'), $message->getType(), $i));
+            $memoryUsage = memory_get_usage(true);
             try {
+
+                $start = microtime(true);
                 $backend->handle($message, $dispatcher);
 
-                $output->writeln("OK!");
+                $currentMemory = memory_get_usage(true);
+
+                $output->writeln(sprintf("<comment>OK! </comment> - %0.04fs, %ss, %s, %s - %s = %s, %0.02f%%",
+                    microtime(true) - $start,
+                    $date->format('U') - $message->getCreatedAt()->format('U'),
+                    $this->formatMemory($currentMemory - $memoryUsage),
+                    $this->formatMemory($currentMemory),
+                    $this->formatMemory($startMemoryUsage),
+                    $this->formatMemory($currentMemory - $startMemoryUsage),
+                    ($currentMemory - $startMemoryUsage) / $startMemoryUsage * 100
+                ));
+
             } catch (\Exception $e) {
-                $output->writeln(sprintf("KO! - %s", $e->getMessage()));
+                if ($e instanceof \Sonata\NotificationBundle\Exception\HandlingException) {
+                    $output->writeln(sprintf("<error>KO! - %s</error>", $e->getPrevious()->getMessage()));
+                } else {
+                    $output->writeln(sprintf("<error>KO! - %s</error>", $e->getMessage()));
+                }
             }
+
+            $this->optimize();
+
+            if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
+                $output->writeln('End of iteration cycle');
+                return;
+            }
+        }
+    }
+
+    private function optimize()
+    {
+        if ($this->getContainer()->has('doctrine')) {
+            $this->getContainer()->get('doctrine')->getEntityManager()->getUnitOfWork()->clear();
+        }
+    }
+
+    /**
+     * @param $memory
+     * @return string
+     */
+    private function formatMemory($memory)
+    {
+        if ($memory < 1024) {
+            return $memory."b";
+        } elseif ($memory < 1048576) {
+            return round($memory / 1024, 2)."Kb";
+        } else {
+            return round($memory / 1048576, 2)."Mb";
         }
     }
 

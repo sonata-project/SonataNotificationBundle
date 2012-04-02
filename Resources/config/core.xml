@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="sonata.notification.dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher" />
-
-
+        <service id="sonata.notification.dispatcher" class="Symfony\Bundle\FrameworkBundle\ContainerAwareEventDispatcher">
+            <argument type="service" id="service_container" />
+        </service>
     </services>
 </container>
