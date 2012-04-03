@@ -45,12 +45,29 @@ class SwiftMailerConsumer implements ConsumerInterface
      */
     public function process(ConsumerEvent $event)
     {
-        $message = $event->getMessage();
-
         if (!$this->mailer->getTransport()->isStarted()){
             $this->mailer->getTransport()->start();
         }
 
+        $exception = false;
+        try {
+            $this->sendEmail($event->getMessage());
+        } catch(\Exception $e) {
+            $exception = $e;
+        }
+
+        $this->mailer->getTransport()->stop();
+
+        if ($exception) {
+            throw new $exception;
+        }
+    }
+
+    /**
+     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
+     */
+    private function sendEmail(MessageInterface $message)
+    {
         $mail = $this->mailer->createMessage()
             ->setSubject($message->getValue('subject'))
             ->setFrom(array($message->getValue(array('from', 'email')) => $message->getValue(array('from', 'name'))))
@@ -65,6 +82,5 @@ class SwiftMailerConsumer implements ConsumerInterface
         }
 
         $this->mailer->send($mail);
-        $this->mailer->getTransport()->stop();
     }
 }
