@@ -124,7 +124,6 @@ class AMQPBackend implements BackendInterface
         $message->setType($type);
         $message->setBody($body);
         $message->setState(MessageInterface::STATE_OPEN);
-        $message->setCreatedAt(new \DateTime);
 
         return $message;
     }
