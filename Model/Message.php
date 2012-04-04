@@ -29,6 +29,12 @@ class Message implements MessageInterface
 
     protected $completedAt;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
     /**
      * {@inheritdoc}
      */
