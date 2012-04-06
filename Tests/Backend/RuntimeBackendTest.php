@@ -28,7 +28,7 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Sonata\\NotificationBundle\\Model\\MessageInterface", $message);
 
         $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
-        $this->assertNull($message->getCreatedAt());
+        $this->assertNotNull($message->getCreatedAt());
         $this->assertEquals('foo', $message->getType());
         $this->assertEquals(array('message' => 'salut'), $message->getBody());
     }
