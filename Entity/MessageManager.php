@@ -88,6 +88,29 @@ class MessageManager implements MessageManagerInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function countStates()
+    {
+        $tableName = $this->em->getClassMetadata($this->class)->table['name'];
+
+        $stm = $this->em->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
+
+        $states = array(
+            MessageInterface::STATE_DONE        => 0,
+            MessageInterface::STATE_ERROR       => 0,
+            MessageInterface::STATE_IN_PROGRESS => 0,
+            MessageInterface::STATE_OPEN        => 0,
+        );
+
+        foreach($stm->fetch() as $data) {
+            $states[$data['state']] = $data['cnt'];
+        }
+
+        return $states;
+    }
+
+    /**
      * Returns the next open message available in the stack
      *
      * @return MessageInterface

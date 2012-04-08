@@ -98,4 +98,12 @@ class RuntimeBackend implements BackendInterface
             throw new HandlingException("Error while handling a message", 0, $e);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatus()
+    {
+         return new BackendStatus(BackendStatus::SUCCESS, 'Ok  (Runtime)');
+    }
 }

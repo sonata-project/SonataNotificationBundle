@@ -55,4 +55,9 @@ interface BackendInterface
      * @return void
      */
     function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
+
+    /**
+     * @return BackendStatus
+     */
+    function getStatus();
 }

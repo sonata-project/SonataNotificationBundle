@@ -69,4 +69,9 @@ interface MessageManagerInterface
      * @return MessageInterface
      */
     function getNextOpenMessage();
+
+    /**
+     * @return integer
+     */
+    function countStates();
 }

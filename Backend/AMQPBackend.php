@@ -167,6 +167,9 @@ class AMQPBackend implements BackendInterface
         }
     }
 
+    /**
+     * @return void
+     */
     public function shutdown()
     {
         if ($this->channel) {
@@ -176,5 +179,19 @@ class AMQPBackend implements BackendInterface
         if ($this->connection) {
             $this->connection->close();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatus()
+    {
+        try {
+            $this->getChannel();
+        } catch(\Exception $e) {
+            return new BackendStatus(BackendStatus::SUCCESS, 'Error : '.$e->getMessage(). '(RabbitMQ)');
+        }
+
+        return new BackendStatus(BackendStatus::SUCCESS, 'Channel is running (RabbitMQ)');
     }
 }

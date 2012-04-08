@@ -16,6 +16,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
+use Sonata\NotificationBundle\Model\MessageInterface;
+
 /**
  * This is the class that loads and manages your bundle configuration
  *
@@ -36,6 +38,11 @@ class SonataNotificationExtension extends Extension
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
+
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['LiipMonitorBundle'])) {
+            $loader->load('checkmonitor.xml');
+        }
 
         $container->setAlias('sonata.notification.backend', $config['backend']);
 
@@ -73,6 +80,17 @@ class SonataNotificationExtension extends Extension
             ;
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
+        }
+
+        if (isset($config['backends']['doctrine'])) {
+            $container->getDefinition('sonata.notification.backend.doctrine')
+                ->replaceArgument(1, array(
+                    MessageInterface::STATE_DONE => $config['backends']['doctrine']['states']['done'],
+                    MessageInterface::STATE_ERROR => $config['backends']['doctrine']['states']['error'],
+                    MessageInterface::STATE_IN_PROGRESS => $config['backends']['doctrine']['states']['in_progress'],
+                    MessageInterface::STATE_OPEN => $config['backends']['doctrine']['states']['open'],
+                ))
+            ;
         }
     }
 

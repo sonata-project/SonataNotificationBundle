@@ -11,6 +11,7 @@
 
         <service id="sonata.notification.backend.doctrine" class="Sonata\NotificationBundle\Backend\MessageManagerBackend" >
             <argument type="service" id="sonata.notification.manager.message" />
+            <argument />
         </service>
 
         <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackend" >
