@@ -12,6 +12,7 @@ if (is_file($autoload)) {
     $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
     $loader->registerNamespaces(array(
         'Symfony'               => array($vendorDir.'/symfony/src'),
+        'Liip\MonitorBundle'   => array($vendorDir),
     ));
     $loader->register();
 

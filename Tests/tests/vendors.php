@@ -10,6 +10,7 @@ if (!is_dir($vendorDir)) {
 
 $deps = array(
     array('symfony', 'git://github.com/symfony/symfony.git', isset($_SERVER['SYMFONY_VERSION']) ? $_SERVER['SYMFONY_VERSION'] : 'origin/master'),
+    array('Liip/MonitorBundle', 'git://github.com/sonata-project/LiipMonitorBundle.git', 'origin/add_new_status'),
 );
 
 foreach ($deps as $dep) {
