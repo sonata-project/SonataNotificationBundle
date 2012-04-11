@@ -37,8 +37,8 @@ class AMQPBackend implements BackendInterface
 
     /**
      * @param array $settings
-     * @param $exchange
-     * @param $queue
+     * @param string $exchange
+     * @param string $queue
      */
     public function __construct(array $settings, $exchange, $queue)
     {
@@ -159,6 +159,13 @@ class AMQPBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);
 
+        } catch(HandlingException $e) {
+            $message->setCompletedAt(new \DateTime());
+            $message->setState(MessageInterface::STATE_ERROR);
+
+            $message->getValue('AMQMessage')->delivery_info['channel']->basic_ack($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
+
+            throw new HandlingException("Error while handling a message", 0, $e);
         } catch(\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
@@ -189,7 +196,7 @@ class AMQPBackend implements BackendInterface
         try {
             $this->getChannel();
         } catch(\Exception $e) {
-            return new BackendStatus(BackendStatus::SUCCESS, 'Error : '.$e->getMessage(). '(RabbitMQ)');
+            return new BackendStatus(BackendStatus::FAILURE, 'Error : '.$e->getMessage(). ' (RabbitMQ)');
         }
 
         return new BackendStatus(BackendStatus::SUCCESS, 'Channel is running (RabbitMQ)');
