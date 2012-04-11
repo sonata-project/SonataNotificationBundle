@@ -196,9 +196,9 @@ class AMQPBackend implements BackendInterface
         try {
             $this->getChannel();
         } catch(\Exception $e) {
-            return new BackendStatus(BackendStatus::FAILURE, 'Error : '.$e->getMessage(). ' (RabbitMQ)');
+            return new BackendStatus(BackendStatus::CRITICAL, 'Error : '.$e->getMessage(). ' (RabbitMQ)');
         }
 
-        return new BackendStatus(BackendStatus::SUCCESS, 'Channel is running (RabbitMQ)');
+        return new BackendStatus(BackendStatus::OK, 'Channel is running (RabbitMQ)');
     }
 }

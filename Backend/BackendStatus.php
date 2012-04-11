@@ -13,10 +13,9 @@ namespace Sonata\NotificationBundle\Backend;
 
 class BackendStatus
 {
-    const SUCCESS = 1;
-    const FAILURE = 0;
-    const WARNING = -1;
-    const CRITICAL = -2;
+    const OK       = 0;
+    const WARNING  = 1;
+    const CRITICAL = 2;
 
     protected $status;
 
