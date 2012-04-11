@@ -19,7 +19,7 @@ class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
 {
     public function testCheck()
     {
-        $status = new BackendStatus(BackendStatus::SUCCESS, 'OK');
+        $status = new BackendStatus(BackendStatus::OK, 'OK');
 
         $backend = $this->getMock('Sonata\NotificationBundle\Backend\BackendInterface');
         $backend->expects($this->once())->method('getStatus')->will($this->returnValue($status));
@@ -28,6 +28,6 @@ class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
 
         $status = $health->check();
 
-        $this->assertEquals(BackendStatus::SUCCESS, $status->getStatus());
+        $this->assertEquals(BackendStatus::OK, $status->getStatus());
     }
 }
