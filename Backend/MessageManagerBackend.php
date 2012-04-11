@@ -25,14 +25,18 @@ class MessageManagerBackend implements BackendInterface
 
     protected $checkLevel;
 
+    protected $pause;
+
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
      * @param array $checkLevel
+     * @param int $pause
      */
-    public function __construct(MessageManagerInterface $messageManager, array $checkLevel)
+    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000)
     {
         $this->messageManager = $messageManager;
-        $this->checkLevel = $checkLevel;
+        $this->checkLevel     = $checkLevel;
+        $this->pause          = $pause;
     }
 
     /**
@@ -71,7 +75,7 @@ class MessageManagerBackend implements BackendInterface
      */
     public function getIterator()
     {
-        return new MessageManagerMessageIterator($this->messageManager);
+        return new MessageManagerMessageIterator($this->messageManager, $this->pause);
     }
 
     /**
@@ -81,7 +85,6 @@ class MessageManagerBackend implements BackendInterface
     {
 
     }
-
 
     /**
      * {@inheritdoc}

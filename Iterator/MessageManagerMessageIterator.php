@@ -23,11 +23,13 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
+     * @param int $pause
      */
-    public function __construct(MessageManagerInterface $messageManager)
+    public function __construct(MessageManagerInterface $messageManager, $pause = 500000)
     {
         $this->messageManager = $messageManager;
-        $this->counter = 0;
+        $this->counter        = 0;
+        $this->pause          = $pause;
     }
 
     /**
@@ -43,7 +45,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      */
     public function next()
     {
-        $this->current = $this->messageManager->getNextOpenMessage();
+        $this->current = $this->messageManager->getNextOpenMessage($this->pause);
         $this->counter++;
     }
 
@@ -68,6 +70,6 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      */
     public function rewind()
     {
-        $this->current = $this->messageManager->getNextOpenMessage();
+        $this->current = $this->messageManager->getNextOpenMessage($this->pause);
     }
 }

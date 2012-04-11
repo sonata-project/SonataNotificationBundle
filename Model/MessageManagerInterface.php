@@ -66,9 +66,10 @@ interface MessageManagerInterface
     /**
      * Returns the next open message available in the stack
      *
+     * @param int $pause
      * @return MessageInterface
      */
-    function getNextOpenMessage();
+    function getNextOpenMessage($pause = 500000);
 
     /**
      * @return integer

@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('doctrine')
                         ->addDefaultsIfNotSet()
                         ->children()
+                            ->scalarNode('pause')->defaultValue(500000)->end() # delay in microseconds
                             ->arrayNode('states')
                                 ->addDefaultsIfNotSet()
                                 ->children()

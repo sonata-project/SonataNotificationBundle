@@ -115,7 +115,7 @@ class MessageManager implements MessageManagerInterface
      *
      * @return MessageInterface
      */
-    public function getNextOpenMessage($pause = 250000)
+    public function getNextOpenMessage($pause = 500000)
     {
         $tableName = $this->em->getClassMetadata($this->class)->table['name'];
 

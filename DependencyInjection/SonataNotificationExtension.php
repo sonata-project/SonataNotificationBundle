@@ -90,6 +90,7 @@ class SonataNotificationExtension extends Extension
                     MessageInterface::STATE_IN_PROGRESS => $config['backends']['doctrine']['states']['in_progress'],
                     MessageInterface::STATE_OPEN => $config['backends']['doctrine']['states']['open'],
                 ))
+                ->replaceArgument(2, $config['backends']['doctrine']['pause'])
             ;
         }
     }
