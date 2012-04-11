@@ -18,5 +18,10 @@
         <field name="updatedAt"    type="datetime"   column="updated_at"   nullable="true" />
         <field name="startedAt"    type="datetime"   column="started_at"   nullable="true" />
         <field name="completedAt"  type="datetime"   column="completed_at" nullable="true" />
+
+        <indexes>
+            <index name="state" columns="state" />
+            <index name="createdAt" columns="created_at" />
+        </indexes>
     </entity>
 </doctrine-mapping>
