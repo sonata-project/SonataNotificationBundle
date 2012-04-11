@@ -37,7 +37,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Checking listeners');
+        $output->writeln('<info>Checking listeners</info>');
         foreach($this->getDispatcher()->getListeners() as $type => $listeners) {
             $output->writeln(sprintf(" - %s", $type));
             foreach ($listeners as $listener) {
@@ -51,9 +51,12 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
         $backend = $this->getBackend();
 
-        $output->writeln('Initialize backend');
+        $output->writeln("");
+        $output->write('Initialize backend ...');
+
         // initialize the backend
         $backend->initialize();
+        $output->writeln(" done!");
 
         $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
 
