@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('exchange')->cannotBeEmpty()->isRequired()->end()
                             ->scalarNode('queue')->cannotBeEmpty()->isRequired()->end()
                             ->arrayNode('connection')
+                                ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('host')->defaultValue('localhost')->end()
                                     ->scalarNode('port')->defaultValue(5672)->end()
