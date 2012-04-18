@@ -10,7 +10,7 @@
         </id>
 
         <field name="type"         type="string"     column="type" length="255"/>
-        <field name="body"         type="json"       column="body" />
+        <field name="body"         type="array"       column="body" />
         <field name="state"        type="integer"    column="state"  />
         <!--<field name="group"        type="string"     column="group"   />-->
 
