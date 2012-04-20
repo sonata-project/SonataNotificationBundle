@@ -11,6 +11,9 @@ To begin, add the dependent bundles to the vendor/bundles directory. Add the fol
         git=git://github.com/videlalvaro/php-amqplib.git
         target=/php-amqplib
 
+    [SonataDoctrineExtensions]
+        git=git@github.com:sonata-project/sonata-doctrine-extensions.git
+        target=/sonata-doctrine-extensions
 
 Now, add the new `SonataNotificationBundle` Bundle to the kernel
 
@@ -31,7 +34,10 @@ Update the ``autoload.php`` to add new namespaces:
 
     <?php
     $loader->registerNamespaces(array(
-        'Sonata'          => __DIR__ . '/../vendor',
+        'Sonata'          => array(
+            __DIR__ .'/../vendor',
+            __DIR__.'/../sonata-doctrine-extensions',
+        ),
         'PhpAmqpLib'      => __DIR__ . '/../vendor/php-amqplib',
         // ... other declarations
     ));
@@ -40,8 +46,21 @@ Then add these bundles in the config mapping definition:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
-    SonataNotificationBundle: ~
+    doctrine:
+        dbal:
+            # ...
+
+            types:
+                json: Sonata\Doctrine\Types\JsonType
+
+        orm:
+            # ...
+            entity_managers:
+                default:
+                        # ...
+                    mappings:
+                        # ...
+                        SonataNotificationBundle: ~
 
 Configuration
 -------------
