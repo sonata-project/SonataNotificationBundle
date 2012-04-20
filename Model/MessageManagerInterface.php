@@ -75,4 +75,10 @@ interface MessageManagerInterface
      * @return integer
      */
     function countStates();
+
+    /**
+     * @param $maxAge
+     * @return void
+     */
+    function cleanup($maxAge);
 }

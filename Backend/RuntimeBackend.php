@@ -81,6 +81,14 @@ class RuntimeBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
+    public function cleanup()
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
         $event = new ConsumerEvent($message);

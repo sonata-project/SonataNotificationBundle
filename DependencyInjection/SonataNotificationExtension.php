@@ -91,6 +91,7 @@ class SonataNotificationExtension extends Extension
                     MessageInterface::STATE_OPEN => $config['backends']['doctrine']['states']['open'],
                 ))
                 ->replaceArgument(2, $config['backends']['doctrine']['pause'])
+                ->replaceArgument(3, $config['backends']['doctrine']['max_age'])
             ;
         }
     }

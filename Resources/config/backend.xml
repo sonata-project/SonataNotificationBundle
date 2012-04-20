@@ -13,6 +13,7 @@
             <argument type="service" id="sonata.notification.manager.message" />
             <argument />
             <argument />
+            <argument />
         </service>
 
         <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackend" >

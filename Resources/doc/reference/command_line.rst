@@ -33,3 +33,10 @@ If you are deploying with capistrano, you can restart the supervisor process wit
     after "deploy:symlink" do
         run "supervisorctl -u user -p password restart sonata_production_sonata_notification"
     end
+
+Clean up messages
+-----------------
+
+You might want to clean old messages from differents backend (if ever a backend old them)::
+
+    app/console sonata:notification:cleanup --env=prod

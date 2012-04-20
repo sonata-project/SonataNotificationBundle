@@ -27,16 +27,20 @@ class MessageManagerBackend implements BackendInterface
 
     protected $pause;
 
+    protected $maxAge;
+
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
      * @param array $checkLevel
      * @param int $pause
+     * @param int $maxAge
      */
-    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000)
+    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 84600)
     {
         $this->messageManager = $messageManager;
         $this->checkLevel     = $checkLevel;
         $this->pause          = $pause;
+        $this->maxAge         = $maxAge;
     }
 
     /**
@@ -142,5 +146,13 @@ class MessageManagerBackend implements BackendInterface
         }
 
         return new BackendStatus(BackendStatus::OK, 'Ok (Database)');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cleanup()
+    {
+        $this->messageManager->cleanup($this->maxAge);
     }
 }

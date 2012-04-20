@@ -16,6 +16,15 @@ Full configuration options:
                 path:         %kernel.root_dir%/../vendor/swiftmailer
 
         backends:
+            doctrine:
+                max_age:      86400     # max age in second
+                pause:        500000    # delay in microseconds
+                states:                 # raising errors level
+                    in_progress: 10
+                    error:       20
+                    open:        100
+                    done:        10000
+
             rabbitmq:
                 exchange:     router
                 queue:        msgs

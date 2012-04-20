@@ -60,4 +60,11 @@ interface BackendInterface
      * @return BackendStatus
      */
     function getStatus();
+
+    /**
+     * Clean up messages
+     *
+     * @return void
+     */
+    function cleanup();
 }

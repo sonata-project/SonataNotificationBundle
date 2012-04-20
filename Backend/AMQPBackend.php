@@ -201,4 +201,12 @@ class AMQPBackend implements BackendInterface
 
         return new BackendStatus(BackendStatus::OK, 'Channel is running (RabbitMQ)');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cleanup()
+    {
+        throw new \RuntimeException('Not implemented');
+    }
 }

@@ -111,9 +111,7 @@ class MessageManager implements MessageManagerInterface
     }
 
     /**
-     * Returns the next open message available in the stack
-     *
-     * @return MessageInterface
+     * {@inheritDoc}
      */
     public function getNextOpenMessage($pause = 500000)
     {
@@ -150,5 +148,18 @@ class MessageManager implements MessageManagerInterface
 
             throw $e;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cleanup($maxAge)
+    {
+        $tableName = $this->em->getClassMetadata($this->class)->table['name'];
+
+        $date = new \DateTime('now');
+        $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
+
+        $this->em->getConnection()->exec(sprintf('DELETE FROM %s WHERE state = %s AND completed_at < "%s"', $tableName, MessageInterface::STATE_DONE, $date->format('Y-m-d H:i:s')));
     }
 }
