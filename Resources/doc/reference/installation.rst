@@ -6,6 +6,7 @@ To begin, add the dependent bundles to the vendor/bundles directory. Add the fol
     [SonataNotificationBundle]
         git=git://github.com/sonata-project/SonataNotificationBundle.git
         target=/bundles/Sonata/NotificationBundle
+        version=origin/2.0
 
     [PhpAmqplib]
         git=git://github.com/videlalvaro/php-amqplib.git
