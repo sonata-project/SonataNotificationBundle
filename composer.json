@@ -18,7 +18,11 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "2.0.*"
+        "symfony/symfony": "2.0.*"
+    },
+    "require-dev": {
+        "videlalvaro/php-amqplib": "dev-master",
+        "liip/monitor-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Sonata\\NotificationBundle": "" }
