@@ -23,10 +23,9 @@
             <directory>./</directory>
             <exclude>
                 <directory>./Tests/</directory>
-                <directory>./DataFixtures/</directory>
                 <directory>./Resources/</directory>
                 <directory>./DependencyInjection/</directory>
-                <directory>./Twig/</directory>
+                <directory>./vendor/</directory>
             </exclude>
         </whitelist>
     </filter>
