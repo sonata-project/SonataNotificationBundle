@@ -10,7 +10,7 @@ env:
 
 before_script:
   - wget -nc http://getcomposer.org/composer.phar
-  - php composer.phar install
+  - php composer.phar --dev install
 
 notifications:
     webhooks: http://sonata-project.org/bundles/notification/master/travis
