@@ -35,10 +35,10 @@ Update the ``autoload.php`` to add new namespaces:
     <?php
     $loader->registerNamespaces(array(
         'Sonata'          => array(
-            __DIR__ .'/../vendor',
-            __DIR__.'/../sonata-doctrine-extensions',
+            __DIR__ .'/../vendor/bundles',
+            __DIR__.'/../vendor/sonata-doctrine-extensions/src',
         ),
-        'PhpAmqpLib'      => __DIR__ . '/../vendor/php-amqplib',
+        'PhpAmqpLib'      => __DIR__ . '/../vendor/php-amqplib/PhpAmqpLib',
         // ... other declarations
     ));
 
