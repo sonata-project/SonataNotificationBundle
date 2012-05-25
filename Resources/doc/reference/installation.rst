@@ -38,7 +38,7 @@ Update the ``autoload.php`` to add new namespaces:
             __DIR__ .'/../vendor/bundles',
             __DIR__.'/../vendor/sonata-doctrine-extensions/src',
         ),
-        'PhpAmqpLib'      => __DIR__ . '/../vendor/php-amqplib/PhpAmqpLib',
+        'PhpAmqpLib'      => __DIR__ . '/../vendor/php-amqplib',
         // ... other declarations
     ));
 
