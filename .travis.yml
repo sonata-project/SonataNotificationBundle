@@ -8,8 +8,7 @@ env:
   - SYMFONY_VERSION=origin/master
 
 before_script:
-  - wget -nc http://getcomposer.org/composer.phar
-  - php composer.phar --dev install
+  - composer --dev install
 
 notifications:
     webhooks: http://sonata-project.org/bundles/notification/master/travis
