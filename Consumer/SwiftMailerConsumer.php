@@ -12,6 +12,7 @@
 namespace Sonata\NotificationBundle\Consumer;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Backend\BackendInterface;
 
 class SwiftMailerConsumer implements ConsumerInterface
 {
@@ -23,19 +24,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     /**
      * @param $vendorDir
      */
-    public function __construct($vendorDir)
-    {
-        require_once sprintf('%s/lib/classes/Swift.php', $vendorDir);
-
-        if (!\Swift::$initialized) {
-            \Swift::registerAutoload(sprintf('%s/lib/swift_init.php', $vendorDir));
-        }
-    }
-
-    /**
-     * @param \Swift_Mailer $mailer
-     */
-    public function setMailer(\Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer)
     {
         $this->mailer = $mailer;
     }

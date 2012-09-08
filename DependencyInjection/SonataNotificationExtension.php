@@ -46,10 +46,6 @@ class SonataNotificationExtension extends Extension
 
         $container->setAlias('sonata.notification.backend', $config['backend']);
 
-        $container->getDefinition('sonata.notification.consumer.swift_mailer')
-            ->replaceArgument(0, $config['consumers']['swift_mailer']['path'])
-        ;
-
         $this->registerDoctrineMapping($config);
         $this->registerParameters($container, $config);
         $this->configureBackends($container, $config);
