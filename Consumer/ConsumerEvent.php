@@ -14,12 +14,12 @@ namespace Sonata\NotificationBundle\Consumer;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class ConsumerEvent extends Event
+class ConsumerEvent extends Event implements ConsumerEventInterface
 {
     protected $message;
 
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
+     * @param MessageInterface $message
      */
     public function __construct(MessageInterface $message)
     {
@@ -27,7 +27,7 @@ class ConsumerEvent extends Event
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Model\MessageInterface
+     * {@inheritdoc}
      */
     public function getMessage()
     {

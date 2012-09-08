@@ -11,11 +11,15 @@
 
 namespace Sonata\NotificationBundle\Consumer;
 
+use Sonata\NotificationBundle\Backend\BackendInterface;
+
 interface ConsumerInterface
 {
     /**
-     * @param ConsumerEvent $event
-     * @return void
+     * Process a ConsumerEvent
+     *
+     * @param ConsumerEvent    $event
+     * @param BackendInterface $backend
      */
     function process(ConsumerEvent $event);
 }
