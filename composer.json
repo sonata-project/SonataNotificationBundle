@@ -21,6 +21,10 @@
         "symfony/symfony": "2.1.*",
         "sonata-project/doctrine-extensions": "dev-master"
     },
+    "suggest": {
+        "liip/monitor-bundle": "*",
+        "videlalvaro/php-amqplib": "*"
+    },
     "require-dev": {
         "videlalvaro/php-amqplib": "dev-master",
         "liip/monitor-bundle": "dev-master"

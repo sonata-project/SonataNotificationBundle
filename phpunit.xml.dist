@@ -10,7 +10,7 @@
          stopOnFailure="false"
          syntaxCheck="false"
          verbose="true"
-         bootstrap="Tests/tests/bootstrap.php"
+         bootstrap="Tests/bootstrap.php"
 >
     <testsuites>
         <testsuite name="NotificationBundle Test Suite">
