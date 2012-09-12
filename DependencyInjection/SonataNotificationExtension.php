@@ -38,6 +38,7 @@ class SonataNotificationExtension extends Extension
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
+        $loader->load('selector.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['LiipMonitorBundle'])) {

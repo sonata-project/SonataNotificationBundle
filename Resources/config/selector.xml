@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.notification.erroneous_messages_selector" class="Sonata\NotificationBundle\Selector\ErroneousMessagesSelector">
+            <argument type="service" id="sonata.notification.entity_manager" />
+            <argument>%sonata.notification.message.class%</argument>
+        </service>
+    </services>
+</container>
