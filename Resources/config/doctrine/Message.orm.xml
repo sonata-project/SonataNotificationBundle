@@ -12,6 +12,7 @@
         <field name="type"         type="string"     column="type" length="255"/>
         <field name="body"         type="json"       column="body" />
         <field name="state"        type="integer"    column="state"  />
+        <field name="restartCount" type="integer"    column="restart_count" />
         <!--<field name="group"        type="string"     column="group"   />-->
 
         <field name="createdAt"    type="datetime"   column="created_at" />
