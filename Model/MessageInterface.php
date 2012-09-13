@@ -92,6 +92,17 @@ interface MessageInterface
     function getState();
 
     /**
+     * @param integer $restartCount
+     * @return void
+     */
+    function setRestartCount($restartCount);
+
+    /**
+     * @return integer
+     */
+    function getRestartCount();
+
+    /**
      * @param \DateTime $updatedAt
      * @return void
      */
