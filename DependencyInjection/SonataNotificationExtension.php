@@ -34,6 +34,7 @@ class SonataNotificationExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('admin.xml');
         $loader->load('core.xml');
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
@@ -64,6 +65,8 @@ class SonataNotificationExtension extends Extension
     public function registerParameters(ContainerBuilder $container, $config)
     {
         $container->setParameter('sonata.notification.message.class', $config['class']['message']);
+
+        $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
     }
 
     /**
