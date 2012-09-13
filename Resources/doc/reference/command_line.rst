@@ -45,6 +45,6 @@ Restart erroneous messages
 --------------------------
 
 In case of getting messages with an erroneous status, you can reset their statuses and they will be reprocessed during
-the next iteration::
+the next iteration (this command must be used for the database backend)::
 
     app/console sonata:notification:restart --type="xxx" --type="yyy" --max-attempts=10
