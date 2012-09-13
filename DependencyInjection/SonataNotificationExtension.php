@@ -34,10 +34,12 @@ class SonataNotificationExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('admin.xml');
         $loader->load('core.xml');
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
+        $loader->load('selector.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['LiipMonitorBundle'])) {
@@ -63,6 +65,8 @@ class SonataNotificationExtension extends Extension
     public function registerParameters(ContainerBuilder $container, $config)
     {
         $container->setParameter('sonata.notification.message.class', $config['class']['message']);
+
+        $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
     }
 
     /**
