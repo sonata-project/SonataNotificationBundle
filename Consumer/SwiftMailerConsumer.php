@@ -48,7 +48,7 @@ class SwiftMailerConsumer implements ConsumerInterface
         $this->mailer->getTransport()->stop();
 
         if ($exception) {
-            throw new $exception;
+            throw $exception;
         }
     }
 
