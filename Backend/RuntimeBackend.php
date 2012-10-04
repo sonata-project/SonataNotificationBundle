@@ -112,6 +112,6 @@ class RuntimeBackend implements BackendInterface
      */
     public function getStatus()
     {
-         return new BackendStatus(BackendStatus::SUCCESS, 'Ok  (Runtime)');
+         return new BackendStatus(BackendStatus::OK, 'Ok  (Runtime)');
     }
 }
