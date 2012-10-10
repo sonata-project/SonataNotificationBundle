@@ -11,8 +11,8 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Liip\MonitorBundle\Check\CheckInterface;
-use Liip\MonitorBundle\Result\CheckResult;
+use Liip\Monitor\Check\CheckInterface;
+use Liip\Monitor\Result\CheckResult;
 
 class BackendHealthCheck implements CheckInterface
 {
