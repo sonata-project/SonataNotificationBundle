@@ -19,7 +19,6 @@ interface ConsumerInterface
      * Process a ConsumerEvent
      *
      * @param ConsumerEvent    $event
-     * @param BackendInterface $backend
      */
     function process(ConsumerEvent $event);
 }
