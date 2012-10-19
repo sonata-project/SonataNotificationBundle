@@ -7,7 +7,7 @@
     <services>
         <service id="sonata.notification.backend.heath_check" class="Sonata\NotificationBundle\Backend\BackendHealthCheck">
             <argument type="service" id="sonata.notification.backend" />
-            <tag name="monitor.check" />
+            <tag name="liip_monitor.check" />
         </service>
     </services>
 </container>
