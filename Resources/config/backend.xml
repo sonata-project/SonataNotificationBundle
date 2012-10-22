@@ -21,7 +21,8 @@
             <argument />
         </service>
 
-        <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackend" >
+        <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackendDispatcher" >
+            <argument  />
             <argument  />
             <argument  />
             <argument  />

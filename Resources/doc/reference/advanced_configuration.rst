@@ -28,7 +28,6 @@ Full configuration options:
 
             rabbitmq:
                 exchange:     router
-                queue:        msgs
                 connection:
                     host:     localhost
                     user:     guest
