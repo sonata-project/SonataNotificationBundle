@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Definition;
+
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -68,12 +70,36 @@ class SonataNotificationExtension extends Extension
       */
     public function configureBackends(ContainerBuilder $container, $config)
     {
-        if (isset($config['backends']['rabbitmq']) && isset($config['backends']['rabbitmq']['exchange']) && isset($config['backends']['rabbitmq']['queue'])) {
-            $container->getDefinition('sonata.notification.backend.rabbitmq')
-                ->replaceArgument(0, $config['backends']['rabbitmq']['connection'])
-                ->replaceArgument(1, $config['backends']['rabbitmq']['exchange'])
-                ->replaceArgument(2, $config['backends']['rabbitmq']['queue'])
-            ;
+        if (isset($config['backends']['rabbitmq']) && isset($config['backends']['rabbitmq']['queues']) && isset($config['backends']['rabbitmq']['default_queue'])) {
+
+            $default = $config['backends']['rabbitmq']['default_queue'];
+            $connection = $config['backends']['rabbitmq']['connection'];
+            $exchange = $config['backends']['rabbitmq']['exchange'];
+
+            $defaultSet = false;
+            foreach ($config['backends']['rabbitmq']['queues'] as $name => $queue) {
+                if ($name === $default) {
+                    $container->getDefinition('sonata.notification.backend.rabbitmq')
+                        ->replaceArgument(0, $connection)
+                        ->replaceArgument(1, $exchange)
+                        ->replaceArgument(2, $queue['queue'])
+                        ->replaceArgument(3, $queue['routing_key'])
+                    ;
+                    $defaultSet = true;
+                }
+
+                // runtime backend does not define different queues, simply alias the queues to the runtimebackend
+                if ($config['backend'] === 'sonata.notification.backend.runtime') {
+                    $container->setAlias('sonata.notification.backend.queue_' . $queue['queue'], $config['backend']);
+                } else {
+                    $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($connection, $exchange, $queue['queue'], $queue['routing_key']));
+                    $container->setDefinition('sonata.notification.backend.queue_' . $queue['queue'], $definition);
+                }
+            }
+
+            if ($defaultSet === false) {
+                throw new \RuntimeException('You need to defint an existing default_queue for the sonata.rabbitmq backend.');
+            }
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
         }

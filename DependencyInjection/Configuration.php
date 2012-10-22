@@ -53,8 +53,9 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('rabbitmq')
                         ->addDefaultsIfNotSet()
                         ->children()
+                            ->append($this->getQueueNode())
+                            ->scalarNode('default_queue')->cannotBeEmpty()->isRequired()->end()
                             ->scalarNode('exchange')->cannotBeEmpty()->isRequired()->end()
-                            ->scalarNode('queue')->cannotBeEmpty()->isRequired()->end()
                             ->arrayNode('connection')
                                 ->addDefaultsIfNotSet()
                                 ->children()
@@ -82,5 +83,24 @@ class Configuration implements ConfigurationInterface
 
 
         return $treeBuilder;
+    }
+
+    protected function getQueueNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('queues');
+
+        $connectionNode = $node
+            ->requiresAtLeastOneElement()
+            ->prototype('array')
+        ;
+
+        $connectionNode->children()
+            ->scalarNode('queue')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('routing_key')->cannotBeEmpty()->isRequired()->end()
+        ->end();
+
+        return $node;
+
     }
 }

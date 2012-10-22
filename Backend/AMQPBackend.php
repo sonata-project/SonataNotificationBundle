@@ -35,16 +35,20 @@ class AMQPBackend implements BackendInterface
 
     protected $channel;
 
+    protected $key;
+
     /**
      * @param array $settings
      * @param string $exchange
      * @param string $queue
+     * @param string $key
      */
-    public function __construct(array $settings, $exchange, $queue)
+    public function __construct(array $settings, $exchange, $queue, $key)
     {
         $this->settings = $settings;
         $this->exchange = $exchange;
         $this->queue    = $queue;
+        $this->key = $key;
     }
 
     /**
@@ -92,7 +96,7 @@ class AMQPBackend implements BackendInterface
          **/
        $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
 
-       $this->getChannel()->queue_bind($this->queue, $this->exchange);
+       $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
     }
 
     /**
@@ -112,7 +116,7 @@ class AMQPBackend implements BackendInterface
             'delivery-mode' => 2
         ));
 
-        $this->getChannel()->basic_publish($amq, $this->exchange);
+        $this->getChannel()->basic_publish($amq, $this->exchange, $this->key);
     }
 
     /**

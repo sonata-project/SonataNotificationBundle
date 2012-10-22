@@ -28,6 +28,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
         $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL ,'Only run n iterations before exiting', false);
+        $this->addOption('queue', null, InputOption::VALUE_OPTIONAL, 'Use a specific backend queue', null);
     }
 
     /**
@@ -50,7 +51,8 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             }
         }
 
-        $backend = $this->getBackend();
+        $queue = $input->getOption('queue');
+        $backend = $this->getBackend($queue);
 
         $output->writeln("");
         $output->write('Initialize backend ...');
@@ -59,7 +61,11 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $backend->initialize();
         $output->writeln(" done!");
 
-        $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
+        if ($queue === null) {
+            $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
+        } else {
+            $output->writeln(sprintf("<info>Starting the backend handler</info> - %s (queue: %s)", get_class($backend), $queue));
+        }
 
         $dispatcher = $this->getDispatcher();
 
@@ -132,11 +138,18 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param string $queue
      * @return \Sonata\NotificationBundle\Backend\BackendInterface
      */
-    private function getBackend()
+    private function getBackend($queue = null)
     {
-        return $this->getContainer()->get('sonata.notification.backend');
+        $serviceId = 'sonata.notification.backend';
+
+        if ($queue !== null) {
+            $serviceId .= '.queue_' . $queue;
+        }
+
+        return $this->getContainer()->get($serviceId);
     }
 
     /**
