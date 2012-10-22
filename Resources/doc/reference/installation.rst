@@ -51,6 +51,7 @@ file.
 Backend availables :
 
  * ``sonata.notification.backend.runtime`` : direct call, no benefit but useful for testing purpose
+ * ``sonata.notification.backend.postpone``: post-pone the messages to be dispatched on kernel.terminate
  * ``sonata.notification.backend.doctrine``: use database to store message, require a background task to be started and supervised, decent starting point for a small amount of async task
  * ``sonata.notification.backend.rabbitmq``: use the RabbitMQ engine to handle messaging, best performance
 
