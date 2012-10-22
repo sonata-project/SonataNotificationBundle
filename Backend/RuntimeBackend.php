@@ -67,7 +67,7 @@ class RuntimeBackend implements BackendInterface
      */
     public function getIterator()
     {
-        throw new \RuntimeException('A RuntimeBackend do not provide an Iterator');
+        return new \EmptyIterator();
     }
 
     /**
