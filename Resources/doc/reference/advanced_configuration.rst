@@ -8,6 +8,7 @@ Full configuration options:
     # app/config/config.yml
     sonata_notification:
         backend: sonata.notification.backend.runtime
+        #backend: sonata.notification.backend.postpone
         #backend: sonata.notification.backend.doctrine
         #backend: sonata.notification.backend.rabbitmq
 
