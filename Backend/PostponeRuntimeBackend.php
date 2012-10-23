@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Sonata\NotificationBundle\Backend\BackendStatus;
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -30,6 +32,15 @@ class PostponeRuntimeBackend extends RuntimeBackend
      * @var MessageInterface[]
      */
     protected $messages;
+
+    /**
+     * @param EventDispatcherInterface $dispatcher
+     */
+    public function __construct(EventDispatcherInterface $dispatcher)
+    {
+        parent::__construct($dispatcher);
+        $this->messages = array();
+    }
 
     /**
      * Publish a message by adding it to the local storage.
