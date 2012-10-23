@@ -48,7 +48,7 @@ class AMQPBackend implements BackendInterface
         $this->settings = $settings;
         $this->exchange = $exchange;
         $this->queue    = $queue;
-        $this->key = $key;
+        $this->key      = $key;
     }
 
     /**

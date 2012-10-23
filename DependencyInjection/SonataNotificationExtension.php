@@ -98,7 +98,7 @@ class SonataNotificationExtension extends Extension
             }
 
             if ($defaultSet === false) {
-                throw new \RuntimeException('You need to defint an existing default_queue for the sonata.rabbitmq backend.');
+                throw new \RuntimeException('You need to define an existing default_queue for the sonata.rabbitmq backend.');
             }
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
