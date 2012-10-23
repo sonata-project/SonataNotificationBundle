@@ -33,13 +33,20 @@ class PostponeRuntimeBackend extends RuntimeBackend
      */
     protected $messages;
 
+    protected $sapi;
+
     /**
-     * @param EventDispatcherInterface $dispatcher
+     * @param EventDispatcherInterface $dispatcher The symfony event dispatcher
+     * @param string                   $sapi       Only used for testing ...
      */
-    public function __construct(EventDispatcherInterface $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher, $sapi = null)
     {
         parent::__construct($dispatcher);
+
         $this->messages = array();
+
+
+        $this->sapi = $sapi === null ? php_sapi_name() : $sapi;
     }
 
     /**
@@ -51,6 +58,14 @@ class PostponeRuntimeBackend extends RuntimeBackend
      */
     public function publish(MessageInterface $message)
     {
+        // if the message is generated from the cli the message is handled
+        // directly as there is no kernel.terminate in cli
+        if (php_sapi_name() === $this->sapi) {
+            $this->handle($message, $this->dispatcher);
+
+            return;
+        }
+
         $this->messages[] = $message;
     }
 

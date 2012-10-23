@@ -25,7 +25,7 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 {
     public function testIteratorContainsPublishedMessages()
     {
-        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'));
+        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), 'fake_sapi');
 
         $messages = array();
 
@@ -52,7 +52,7 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
     public function testLiveEnvironment()
     {
         $dispatcher = new EventDispatcher();
-        $backend = new PostponeRuntimeBackend($dispatcher);
+        $backend = new PostponeRuntimeBackend($dispatcher, 'fake_sapi');
         $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
 
         $message = $backend->create('notification.demo', array());
@@ -77,7 +77,7 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testStatusIsOk()
     {
-        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'));
+        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), 'fake_sapi');
 
         $status = $backend->getStatus();
 
