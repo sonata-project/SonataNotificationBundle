@@ -41,6 +41,7 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         $mock2 = $this->getMockQueue('bar', 'message.type.foo', $this->never());
         $dispatcher = $this->getDispatcher();
         $dispatcher->addBackend('foo', $mock);
+        $dispatcher->addBackend('bar', $mock2);
         $dispatcher->createAndPublish('message.type.foo', array());
     }
     
