@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Reference;
+
 use Symfony\Component\DependencyInjection\Definition;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -47,6 +49,7 @@ class SonataNotificationExtension extends Extension
         }
 
         $container->setAlias('sonata.notification.backend', $config['backend']);
+        $container->setParameter('sonata.notification.backend', $config['backend']);
 
         $this->registerDoctrineMapping($config);
         $this->registerParameters($container, $config);
@@ -70,35 +73,28 @@ class SonataNotificationExtension extends Extension
       */
     public function configureBackends(ContainerBuilder $container, $config)
     {
-        if (isset($config['backends']['rabbitmq']) && isset($config['backends']['rabbitmq']['queues']) && isset($config['backends']['rabbitmq']['default_queue'])) {
+        $default = $config['default_queue'];
+        $queues = $config['queues'];
+        
+        if (isset($config['backends']['rabbitmq'])) {
 
-            $default = $config['backends']['rabbitmq']['default_queue'];
             $connection = $config['backends']['rabbitmq']['connection'];
             $exchange = $config['backends']['rabbitmq']['exchange'];
-
             $defaultSet = false;
-            foreach ($config['backends']['rabbitmq']['queues'] as $name => $queue) {
-                if ($name === $default) {
-                    $container->getDefinition('sonata.notification.backend.rabbitmq')
-                        ->replaceArgument(0, $connection)
-                        ->replaceArgument(1, $exchange)
-                        ->replaceArgument(2, $queue['queue'])
-                        ->replaceArgument(3, $queue['routing_key'])
-                    ;
-                    $defaultSet = true;
-                }
-
+            
+            $rabbitmqDefinition = $container->getDefinition('sonata.notification.backend.rabbitmq')->replaceArgument(0, $queues);
+            
+            foreach ($queues as $name => $queue) {
+                
+                $id = 'sonata.notification.backend.rabbitmq.' . $name;
                 // runtime backend does not define different queues, simply alias the queues to the runtimebackend
                 if ($config['backend'] === 'sonata.notification.backend.runtime') {
-                    $container->setAlias('sonata.notification.backend.queue_' . $queue['queue'], $config['backend']);
+                    $container->setAlias($id, $config['backend']);
                 } else {
                     $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($connection, $exchange, $queue['queue'], $queue['routing_key']));
-                    $container->setDefinition('sonata.notification.backend.queue_' . $queue['queue'], $definition);
+                    $container->setDefinition($id, $definition);
+                    $rabbitmqDefinition->addMethodCall('addBackend', array($queue['queue'], new Reference($id)));
                 }
-            }
-
-            if ($defaultSet === false) {
-                throw new \RuntimeException('You need to define an existing default_queue for the sonata.rabbitmq backend.');
             }
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');

@@ -31,6 +31,8 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->scalarNode('backend')->defaultValue('sonata.notification.backend.runtime')->end()
+            ->append($this->getQueueNode())
+            ->scalarNode('default_queue')->cannotBeEmpty()->isRequired()->end()
             ->arrayNode('backends')
                 ->addDefaultsIfNotSet()
                 ->children()
@@ -53,8 +55,6 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('rabbitmq')
                         ->addDefaultsIfNotSet()
                         ->children()
-                            ->append($this->getQueueNode())
-                            ->scalarNode('default_queue')->cannotBeEmpty()->isRequired()->end()
                             ->scalarNode('exchange')->cannotBeEmpty()->isRequired()->end()
                             ->arrayNode('connection')
                                 ->addDefaultsIfNotSet()

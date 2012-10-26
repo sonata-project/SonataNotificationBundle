@@ -23,6 +23,9 @@ use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
+/**
+ * Consumer side of the rabbitMQ backend. 
+ */
 class AMQPBackend implements BackendInterface
 {
     protected $settings;

@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -143,13 +144,19 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      */
     private function getBackend($queue = null)
     {
-        $serviceId = 'sonata.notification.backend';
-
+        $backend = $this->getContainer()->getParameter('sonata.notification.backend');
+        $actualBackend = $backend;
+        
         if ($queue !== null) {
-            $serviceId .= '.queue_' . $queue;
+            $actualBackend .= '.' . $queue;
         }
 
-        return $this->getContainer()->get($serviceId);
+        try {
+            return $this->getContainer()->get($actualBackend);
+        } catch (ServiceNotFoundException $e) {
+            throw new \RuntimeException("The requested backend queue '" . $queue . " 'does not exist. \nMake sure the backend '" . 
+                    $backend . "' \nsupports multiple queues and the queue is defined. (Currently rabbitmq only)");
+        }
     }
 
     /**
