@@ -31,22 +31,26 @@ class PostponeRuntimeBackend extends RuntimeBackend
     /**
      * @var MessageInterface[]
      */
-    protected $messages;
-
-    protected $sapi;
+    protected $messages = array();
 
     /**
-     * @param EventDispatcherInterface $dispatcher The symfony event dispatcher
-     * @param string                   $sapi       Only used for testing ...
+     * If set to true, you have to fire an event the onEvent method is subscribed to manually!
+     *
+     * @var bool
      */
-    public function __construct(EventDispatcherInterface $dispatcher, $sapi = null)
+    protected $postponeOnCli = false;
+
+    /**
+     * Constructor.
+     *
+     * @param EventDispatcherInterface $dispatcher
+     * @param bool                     $postponeOnCli Whether to postpone the messages on the CLI, too.
+     */
+    public function __construct(EventDispatcherInterface $dispatcher, $postponeOnCli = false)
     {
         parent::__construct($dispatcher);
 
-        $this->messages = array();
-
-
-        $this->sapi = $sapi === null ? php_sapi_name() : $sapi;
+        $this->postponeOnCli = $postponeOnCli;
     }
 
     /**
@@ -60,7 +64,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     {
         // if the message is generated from the cli the message is handled
         // directly as there is no kernel.terminate in cli
-        if (php_sapi_name() === $this->sapi) {
+        if (!$this->postponeOnCli && $this->isCommandLineInterface()) {
             $this->handle($message, $this->dispatcher);
 
             return;
@@ -98,5 +102,15 @@ class PostponeRuntimeBackend extends RuntimeBackend
     public function getStatus()
     {
         return new BackendStatus(BackendStatus::OK, 'Ok (Postpone Runtime)');
+    }
+
+    /**
+     * Check whether this Backend is run on the CLI.
+     *
+     * @return bool
+     */
+    protected function isCommandLineInterface()
+    {
+        return 'cli' === PHP_SAPI;
     }
 }

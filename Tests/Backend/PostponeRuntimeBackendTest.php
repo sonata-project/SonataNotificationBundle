@@ -25,7 +25,7 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 {
     public function testIteratorContainsPublishedMessages()
     {
-        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), 'fake_sapi');
+        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true);
 
         $messages = array();
 
@@ -49,10 +49,21 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testNoMessagesOnEvent()
+    {
+        $backend = $this->getMock('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend', array('handle'), array($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true));
+        $backend
+            ->expects($this->never())
+            ->method('handle')
+        ;
+
+        $backend->onEvent();
+    }
+
     public function testLiveEnvironment()
     {
         $dispatcher = new EventDispatcher();
-        $backend = new PostponeRuntimeBackend($dispatcher, 'fake_sapi');
+        $backend = new PostponeRuntimeBackend($dispatcher, true);
         $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
 
         $message = $backend->create('notification.demo', array());
@@ -77,11 +88,23 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testStatusIsOk()
     {
-        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), 'fake_sapi');
+        $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true);
 
         $status = $backend->getStatus();
 
         $this->assertInstanceOf('Sonata\NotificationBundle\Backend\BackendStatus', $status);
         $this->assertEquals(BackendStatus::OK, $status->getStatus());;
+    }
+
+    public function testOnCliPublishHandlesDirectly()
+    {
+        $backend = $this->getMock('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend', array('handle'), array($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), false));
+        $backend
+            ->expects($this->once())
+            ->method('handle')
+        ;
+
+        $message = $backend->create('notification.demo', array());
+        $backend->publish($message);
     }
 }
