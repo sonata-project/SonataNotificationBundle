@@ -18,6 +18,7 @@
 
         <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackendDispatcher" >
             <argument  />
+            <argument  />
         </service>
     </services>
 </container>

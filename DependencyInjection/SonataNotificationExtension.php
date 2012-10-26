@@ -82,7 +82,10 @@ class SonataNotificationExtension extends Extension
             $exchange = $config['backends']['rabbitmq']['exchange'];
             $defaultSet = false;
             
-            $rabbitmqDefinition = $container->getDefinition('sonata.notification.backend.rabbitmq')->replaceArgument(0, $queues);
+            $rabbitmqDefinition = $container->getDefinition('sonata.notification.backend.rabbitmq')
+                ->replaceArgument(0, $connection)
+                ->replaceArgument(1, $queues)
+            ;
             
             foreach ($queues as $name => $queue) {
                 
@@ -91,7 +94,7 @@ class SonataNotificationExtension extends Extension
                 if ($config['backend'] === 'sonata.notification.backend.runtime') {
                     $container->setAlias($id, $config['backend']);
                 } else {
-                    $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($connection, $exchange, $queue['queue'], $queue['routing_key']));
+                    $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $queue['queue'], $queue['routing_key']));
                     $container->setDefinition($id, $definition);
                     $rabbitmqDefinition->addMethodCall('addBackend', array($queue['queue'], new Reference($id)));
                 }
