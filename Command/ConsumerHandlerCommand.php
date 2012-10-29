@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
+
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
 
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -147,12 +149,12 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     private function getBackend($queue = null)
     {
         $backend = $this->getContainer()->getParameter('sonata.notification.backend');
-        
+
         if ($queue !== null) {
-            
+
             $service = $this->getContainer()->get($backend);
-            
-            if ($service instanceof AMQPBackendDispatcher) {
+
+            if ($service instanceof QueueDispatcherInterface) {
                 return $service->getBackendByQueue($queue);
             } else {
                 $this->throwQueueNotFoundException($queue);
@@ -165,7 +167,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             $this->throwQueueNotFoundException($queue);
         }
     }
-    
+
     /**
      * @param string $queue
      * @throws \RuntimeException
