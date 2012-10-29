@@ -1,25 +1,37 @@
 <?php
+
+/*
+ * This file is part of the Sonata project.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sonata\NotificationBundle\Backend;
+
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Backend\BackendInterface;
+use Sonata\NotificationBundle\Exception\QueueNotFoundException;
 
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
- * Producer side of the rabbitmq backend. 
+ * Producer side of the rabbitmq backend.
  */
-class AMQPBackendDispatcher implements BackendInterface
+class AMQPBackendDispatcher implements QueueDispatcherInterface
 {
     protected $settings;
-    
+
     protected $queues;
-    
+
     protected $backends;
-    
+
     protected $channel;
 
     /**
@@ -31,12 +43,12 @@ class AMQPBackendDispatcher implements BackendInterface
         $this->settings = $settings;
         $this->queues = $queues;
         $this->backends = $backends;
-        
+
         foreach ($this->backends as $backend) {
             $backend->setDispatcher($this);
         }
     }
-    
+
     /**
      * @return \PhpAmqpLib\Channel\AMQPChannel
      */
@@ -50,15 +62,15 @@ class AMQPBackendDispatcher implements BackendInterface
                     $this->settings['pass'],
                     $this->settings['vhost']
             );
-    
+
             $this->channel = $this->connection->channel();
-    
+
             register_shutdown_function(array($this, 'shutdown'));
         }
-    
+
         return $this->channel;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -66,98 +78,88 @@ class AMQPBackendDispatcher implements BackendInterface
     {
         $this->getBackend($message->getType())->publish($message);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function create($type, array $body)
     {
         $this->getBackend($type)->create($type, $body);
-
     }
-    
+
     public function createAndPublish($type, array $body)
     {
         $this->getBackend($type)->createAndPublish($type, $body);
     }
-    
+
     /**
-     * Get a backend by message type.
-     * 
-     * @param string $type
-     * @throws \RuntimeException
-     * @return BackendInterface
+     * {@inheritdoc}
      */
-    protected function getBackend($type)
+    public function getBackend($type)
     {
         foreach ($this->queues as $queue) {
             if (isset($this->backends[$queue['queue']]) && $type === $queue['routing_key']) {
                 return $this->backends[$queue['queue']];
             }
         }
-        
-        throw new \RuntimeException('Could not find a message backend for the type ' . $type);
+
+        throw new QueueNotFoundException('Could not find a message backend for the type ' . $type .
+                ' Available queues: ' . implode(', ', array_keys($this->queues)));
     }
-    
+
     /**
-     * Get a backend by queue name
-     * 
-     * @param string $type the queue name
-     * @throws \RuntimeException
+     * {@inheritdoc}
      */
-    public function getBackendByQueue($name) 
+    public function getBackendByQueue($name)
     {
         if (isset($this->backends[$name])) {
             return $this->backends[$name];
         }
-        
-        throw new \RuntimeException('Could not find a message backend for the queue ' . $name);
+
+        throw new QueueNotFoundException('Could not find a message backend for the type ' . $name .
+                ' Available queues: ' . implode(', ', array_keys($this->queues)));
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function getIterator()
     {
         throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
-
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function initialize()
     {
-        
+
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
         throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
-
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function getStatus()
     {
         throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
-
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function cleanup()
     {
         throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
-
     }
-    
+
     /**
      * @return void
      */
@@ -166,11 +168,9 @@ class AMQPBackendDispatcher implements BackendInterface
         if ($this->channel) {
             $this->channel->close();
         }
-    
+
         if ($this->connection) {
             $this->connection->close();
         }
     }
-    
-    
 }
