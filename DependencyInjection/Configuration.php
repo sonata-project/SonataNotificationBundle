@@ -32,7 +32,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->scalarNode('backend')->defaultValue('sonata.notification.backend.runtime')->end()
             ->append($this->getQueueNode())
-            ->scalarNode('default_queue')->cannotBeEmpty()->isRequired()->end()
             ->arrayNode('backends')
                 ->addDefaultsIfNotSet()
                 ->children()
@@ -97,7 +96,7 @@ class Configuration implements ConfigurationInterface
 
         $connectionNode->children()
             ->scalarNode('queue')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('routing_key')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('routing_key')->isRequired()->end()
         ->end();
 
         return $node;

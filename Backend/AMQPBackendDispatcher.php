@@ -24,7 +24,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 /**
  * Producer side of the rabbitmq backend.
  */
-class AMQPBackendDispatcher implements QueueDispatcherInterface
+class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterface
 {
     protected $settings;
 
@@ -34,9 +34,12 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface
 
     protected $channel;
 
+    protected $connection;
+
     /**
      * @param array $settings
      * @param array $queues
+     * @param array $backends
      */
     public function __construct(array $settings, array $queues, array $backends)
     {
@@ -56,11 +59,11 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface
     {
         if (!$this->channel) {
             $this->connection = new AMQPConnection(
-                    $this->settings['host'],
-                    $this->settings['port'],
-                    $this->settings['user'],
-                    $this->settings['pass'],
-                    $this->settings['vhost']
+                $this->settings['host'],
+                $this->settings['port'],
+                $this->settings['user'],
+                $this->settings['pass'],
+                $this->settings['vhost']
             );
 
             $this->channel = $this->connection->channel();
@@ -87,6 +90,9 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface
         $this->getBackend($type)->create($type, $body);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createAndPublish($type, array $body)
     {
         $this->getBackend($type)->createAndPublish($type, $body);

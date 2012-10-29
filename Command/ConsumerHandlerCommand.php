@@ -157,14 +157,14 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             if ($service instanceof QueueDispatcherInterface) {
                 return $service->getBackendByQueue($queue);
             } else {
-                $this->throwQueueNotFoundException($queue);
+                $this->throwQueueNotFoundException($queue, $backend);
             }
         }
 
         try {
             return $this->getContainer()->get($backend);
         } catch (ServiceNotFoundException $e) {
-            $this->throwQueueNotFoundException($queue);
+            $this->throwQueueNotFoundException($queue, $backend);
         }
     }
 
@@ -172,10 +172,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      * @param string $queue
      * @throws \RuntimeException
      */
-    protected function throwQueueNotFoundException($queue)
+    protected function throwQueueNotFoundException($queue, $backend)
     {
         throw new \RuntimeException("The requested backend queue '" . $queue . " 'does not exist. \nMake sure the backend '" .
-                $backend . "' \nsupports multiple queues and the queue is defined. (Currently rabbitmq only)");
+                get_class($backend) . "' \nsupports multiple queues and the queue is defined. (Currently rabbitmq only)");
     }
 
     /**

@@ -19,13 +19,15 @@ namespace Sonata\NotificationBundle\Backend;
  * @see AMQPBackendDispatcher for an eample implementation.
  *
  */
-interface QueueDispatcherInterface extends BackendInterface {
-
+interface QueueDispatcherInterface
+{
     /**
      * Get a backend by message type.
      *
      * @param string $type
-     * @throws Sonata\NotificationBundle\Exception\QueueNotFoundException
+     *
+     * @throws \Sonata\NotificationBundle\Exception\QueueNotFoundException
+     *
      * @return BackendInterface
      */
     function getBackend($type);
@@ -34,7 +36,9 @@ interface QueueDispatcherInterface extends BackendInterface {
      * Get a backend by queue name
      *
      * @param string $type the queue name
-     * @throws Sonata\NotificationBundle\Exception\QueueNotFoundException
+     *
+     * @throws \Sonata\NotificationBundle\Exception\QueueNotFoundException
+     *
      * @return BackendInterface
      */
     function getBackendByQueue($name);
