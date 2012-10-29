@@ -26,11 +26,15 @@ class AMQPBackendDispatcher implements BackendInterface
      * @param array $settings
      * @param array $queues
      */
-    public function __construct(array $settings, array $queues)
+    public function __construct(array $settings, array $queues, array $backends)
     {
         $this->settings = $settings;
         $this->queues = $queues;
-        $this->backends = array();        
+        $this->backends = $backends;
+        
+        foreach ($this->backends as $backend) {
+            $backend->setDispatcher($this);
+        }
     }
     
     /**
@@ -58,19 +62,6 @@ class AMQPBackendDispatcher implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function addBackend($queue, BackendInterface $backend)
-    {
-        if (!$backend instanceof AMQPBackend) {
-            throw new \InvalidArgumentException('$backend needs to be an instance of AMQPBackend');
-        }
-        
-        $backend->setDispatcher($this);
-        $this->backends[$queue] = $backend;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message)
     {
         $this->getBackend($message->getType())->publish($message);
@@ -91,6 +82,8 @@ class AMQPBackendDispatcher implements BackendInterface
     }
     
     /**
+     * Get a backend by message type.
+     * 
      * @param string $type
      * @throws \RuntimeException
      * @return BackendInterface
@@ -103,7 +96,22 @@ class AMQPBackendDispatcher implements BackendInterface
             }
         }
         
-        throw new \RuntimeException('Could not find a message backend for the type ' . $type . ', tried ');
+        throw new \RuntimeException('Could not find a message backend for the type ' . $type);
+    }
+    
+    /**
+     * Get a backend by queue name
+     * 
+     * @param string $type the queue name
+     * @throws \RuntimeException
+     */
+    public function getBackendByQueue($name) 
+    {
+        if (isset($this->backends[$name])) {
+            return $this->backends[$name];
+        }
+        
+        throw new \RuntimeException('Could not find a message backend for the queue ' . $name);
     }
     
     /**

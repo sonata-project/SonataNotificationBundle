@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
+
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -145,18 +147,33 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     private function getBackend($queue = null)
     {
         $backend = $this->getContainer()->getParameter('sonata.notification.backend');
-        $actualBackend = $backend;
         
         if ($queue !== null) {
-            $actualBackend .= '.' . $queue;
+            
+            $service = $this->getContainer()->get($backend);
+            
+            if ($service instanceof AMQPBackendDispatcher) {
+                return $service->getBackendByQueue($queue);
+            } else {
+                $this->throwQueueNotFoundException($queue);
+            }
         }
 
         try {
-            return $this->getContainer()->get($actualBackend);
+            return $this->getContainer()->get($backend);
         } catch (ServiceNotFoundException $e) {
-            throw new \RuntimeException("The requested backend queue '" . $queue . " 'does not exist. \nMake sure the backend '" . 
-                    $backend . "' \nsupports multiple queues and the queue is defined. (Currently rabbitmq only)");
+            $this->throwQueueNotFoundException($queue);
         }
+    }
+    
+    /**
+     * @param string $queue
+     * @throws \RuntimeException
+     */
+    protected function throwQueueNotFoundException($queue)
+    {
+        throw new \RuntimeException("The requested backend queue '" . $queue . " 'does not exist. \nMake sure the backend '" .
+                $backend . "' \nsupports multiple queues and the queue is defined. (Currently rabbitmq only)");
     }
 
     /**

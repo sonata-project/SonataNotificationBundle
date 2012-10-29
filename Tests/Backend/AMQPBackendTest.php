@@ -20,10 +20,9 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         return $mock;
     }
     
-    protected function getDispatcher($queue = 'foo', $key = 'message.type.foo')
+    protected function getDispatcher(array $backends, $queue = 'foo', $key = 'message.type.foo')
     {
         $queues = array(array('queue' => $queue, 'routing_key' => $key));
-        
         $settings = array(
                 'host' => 'foo',
                 'port' => 'port',
@@ -32,16 +31,15 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
                 'vhost' => '/'
         );
         
-        return new AMQPBackendDispatcher($settings, $queues);
+        return new AMQPBackendDispatcher($settings, $queues, $backends);
     }
     
     public function testQueue()
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
         $mock2 = $this->getMockQueue('bar', 'message.type.foo', $this->never());
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->addBackend('foo', $mock);
-        $dispatcher->addBackend('bar', $mock2);
+        $backends = array('foo' => $mock, 'bar' => $mock2);
+        $dispatcher = $this->getDispatcher($backends);
         $dispatcher->createAndPublish('message.type.foo', array());
     }
     
@@ -51,8 +49,7 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
     public function testInvalidQueue()
     {
         $mock = $this->getMockQueue('foo', 'message.type.bar');
-        $dispatcher = $this->getDispatcher('foo', 'message.type.bar');
-        $dispatcher->addBackend('bar', $mock);
+        $dispatcher = $this->getDispatcher(array('bar' => $mock), 'foo', 'message.type.bar');
         $dispatcher->createAndPublish('message.type.bar', array());
     }
 }
