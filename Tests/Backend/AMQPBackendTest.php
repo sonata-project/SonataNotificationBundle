@@ -10,16 +10,16 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         $methods = array('createAndPublish');
         $args = array(array(), '', 'foo', 'message.type.foo');
         $mock = $this->getMock('Sonata\NotificationBundle\Backend\AMQPBackend', $methods, $args);
-        
+
         if ($called !== null) {
             $mock->expects($called)
                 ->method('createAndPublish')
             ;
         }
-        
+
         return $mock;
     }
-    
+
     protected function getDispatcher(array $backends, $queue = 'foo', $key = 'message.type.foo')
     {
         $queues = array(array('queue' => $queue, 'routing_key' => $key));
@@ -30,10 +30,10 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
                 'pass' => 'pass',
                 'vhost' => '/'
         );
-        
-        return new AMQPBackendDispatcher($settings, $queues, $backends);
+
+        return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);
     }
-    
+
     public function testQueue()
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
@@ -42,7 +42,7 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->getDispatcher($backends);
         $dispatcher->createAndPublish('message.type.foo', array());
     }
-    
+
     /**
      * @expectedException \RuntimeException
      */

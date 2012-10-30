@@ -77,6 +77,11 @@ class SonataNotificationExtension extends Extension
 
         if (isset($config['backends']['rabbitmq'])) {
 
+            if (!isset($config['default_queue'])) {
+                throw new \RuntimeException('You need to specify a default_queue for the rabbitmq backend.');
+            }
+
+            $defaultQueue = $config['default_queue'];
             $connection = $config['backends']['rabbitmq']['connection'];
             $exchange = $config['backends']['rabbitmq']['exchange'];
 
@@ -93,7 +98,8 @@ class SonataNotificationExtension extends Extension
             $container->getDefinition('sonata.notification.backend.rabbitmq')
                 ->replaceArgument(0, $connection)
                 ->replaceArgument(1, $queues)
-                ->replaceArgument(2, $amqBackends)
+                ->replaceArgument(2, $defaultQueue)
+                ->replaceArgument(3, $amqBackends)
             ;
 
         } else {

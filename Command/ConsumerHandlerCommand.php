@@ -149,16 +149,12 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     private function getBackend($queue = null)
     {
         $backend = $this->getContainer()->getParameter('sonata.notification.backend');
+        $service = $this->getContainer()->get($backend);
 
-        if ($queue !== null) {
-
-            $service = $this->getContainer()->get($backend);
-
-            if ($service instanceof QueueDispatcherInterface) {
-                return $service->getBackendByQueue($queue);
-            } else {
-                $this->throwQueueNotFoundException($queue, $backend);
-            }
+        if ($service instanceof QueueDispatcherInterface) {
+            return $service->getBackendByQueue($queue);
+        } else {
+            $this->throwQueueNotFoundException($queue, $backend);
         }
 
         try {

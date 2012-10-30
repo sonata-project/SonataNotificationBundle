@@ -30,6 +30,8 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
 
     protected $queues;
 
+    protected $defaultQueue;
+
     protected $backends;
 
     protected $channel;
@@ -39,13 +41,15 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     /**
      * @param array $settings
      * @param array $queues
+     * @param unknown $defaultQueue
      * @param array $backends
      */
-    public function __construct(array $settings, array $queues, array $backends)
+    public function __construct(array $settings, array $queues, $defaultQueue, array $backends)
     {
         $this->settings = $settings;
         $this->queues = $queues;
         $this->backends = $backends;
+        $this->defaultQueue = $defaultQueue;
 
         foreach ($this->backends as $backend) {
             $backend->setDispatcher($this);
@@ -109,8 +113,12 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
             }
         }
 
-        throw new QueueNotFoundException('Could not find a message backend for the type ' . $type .
-                ' Available queues: ' . implode(', ', array_keys($this->queues)));
+        if (!isset($this->backends[$this->defaultQueue])) {
+            throw new QueueNotFoundException('Could not find a message backend for the type ' . $type .
+                    ' Available queues: ' . implode(', ', array_keys($this->queues)));
+        }
+
+        return $this->backends[$this->defaultQueue];
     }
 
     /**
@@ -122,8 +130,12 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
             return $this->backends[$name];
         }
 
-        throw new QueueNotFoundException('Could not find a message backend for the type ' . $name .
-                ' Available queues: ' . implode(', ', array_keys($this->queues)));
+        if (!isset($this->backends[$this->defaultQueue])) {
+            throw new QueueNotFoundException('Could not find a message backend for the type ' . $type .
+                    ' Available queues: ' . implode(', ', array_keys($this->queues)));
+        }
+
+        return $this->backends[$this->defaultQueue];
     }
 
     /**
