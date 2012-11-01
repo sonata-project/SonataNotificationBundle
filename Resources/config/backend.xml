@@ -9,6 +9,11 @@
             <argument type="service" id="sonata.notification.dispatcher" />
         </service>
 
+        <service id="sonata.notification.backend.postpone" class="Sonata\NotificationBundle\Backend\PostponeRuntimeBackend" >
+            <tag name="kernel.event_listener" event="kernel.terminate" method="onEvent" />
+            <argument type="service" id="sonata.notification.dispatcher" />
+        </service>
+
         <service id="sonata.notification.backend.doctrine" class="Sonata\NotificationBundle\Backend\MessageManagerBackend" >
             <argument type="service" id="sonata.notification.manager.message" />
             <argument />

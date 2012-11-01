@@ -10,13 +10,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonata\NotificationBundle\Tests\Notification;
+namespace Sonata\NotificationBundle\Tests\Backend;
 
 use Sonata\NotificationBundle\Backend\BackendHealthCheck;
 use Sonata\NotificationBundle\Backend\BackendStatus;
 
 class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        if (!interface_exists('Liip\Monitor\Check\CheckInterface')) {
+            $this->markTestSkipped('Liip\Monitor\Check\CheckInterface does not exist');
+        }
+
+    }
     public function testCheck()
     {
         $status = new BackendStatus(BackendStatus::OK, 'OK');
