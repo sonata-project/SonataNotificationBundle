@@ -43,4 +43,11 @@ interface QueueDispatcherInterface
      */
     function getBackendByQueue($name);
 
+    /**
+     * Get all registered queues.
+     *
+     * @return array
+     */
+    function getQueues();
+
 }

@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->scalarNode('backend')->defaultValue('sonata.notification.backend.runtime')->end()
             ->append($this->getQueueNode())
-            ->scalarNode('default_queue')->end()
+            ->scalarNode('default_queue')->defaultValue('default')->end()
             ->arrayNode('backends')
                 ->addDefaultsIfNotSet()
                 ->children()

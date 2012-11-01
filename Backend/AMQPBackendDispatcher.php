@@ -139,6 +139,14 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getQueues()
+    {
+        return $this->queues;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getIterator()
