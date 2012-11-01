@@ -11,6 +11,11 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
+
+use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
+
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,6 +33,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
         $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL ,'Only run n iterations before exiting', false);
+        $this->addOption('queue', null, InputOption::VALUE_OPTIONAL, 'Use a specific backend queue', null);
     }
 
     /**
@@ -50,7 +56,8 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             }
         }
 
-        $backend = $this->getBackend();
+        $queue = $input->getOption('queue');
+        $backend = $this->getBackend($queue);
 
         $output->writeln("");
         $output->write('Initialize backend ...');
@@ -59,7 +66,11 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $backend->initialize();
         $output->writeln(" done!");
 
-        $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
+        if ($queue === null) {
+            $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
+        } else {
+            $output->writeln(sprintf("<info>Starting the backend handler</info> - %s (queue: %s)", get_class($backend), $queue));
+        }
 
         $dispatcher = $this->getDispatcher();
 
@@ -132,11 +143,35 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param string $queue
      * @return \Sonata\NotificationBundle\Backend\BackendInterface
      */
-    private function getBackend()
+    private function getBackend($queue = null)
     {
-        return $this->getContainer()->get('sonata.notification.backend');
+        $backend = $this->getContainer()->getParameter('sonata.notification.backend');
+        $service = $this->getContainer()->get($backend);
+
+        if ($service instanceof QueueDispatcherInterface) {
+            return $service->getBackendByQueue($queue);
+        } else {
+            $this->throwQueueNotFoundException($queue, $backend);
+        }
+
+        try {
+            return $this->getContainer()->get($backend);
+        } catch (ServiceNotFoundException $e) {
+            $this->throwQueueNotFoundException($queue, $backend);
+        }
+    }
+
+    /**
+     * @param string $queue
+     * @throws \RuntimeException
+     */
+    protected function throwQueueNotFoundException($queue, $backend)
+    {
+        throw new \RuntimeException("The requested backend queue '" . $queue . " 'does not exist. \nMake sure the backend '" .
+                get_class($backend) . "' \nsupports multiple queues and the queue is defined. (Currently rabbitmq only)");
     }
 
     /**
