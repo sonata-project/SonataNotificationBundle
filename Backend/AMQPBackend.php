@@ -23,28 +23,40 @@ use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
+/**
+ * Consumer side of the rabbitMQ backend. 
+ */
 class AMQPBackend implements BackendInterface
 {
-    protected $settings;
-
+    
     protected $exchange;
 
     protected $queue;
 
     protected $connection;
 
-    protected $channel;
+    protected $key;
+    
+    protected $dispatcher = null;
 
     /**
-     * @param array $settings
      * @param string $exchange
      * @param string $queue
+     * @param string $key
      */
-    public function __construct(array $settings, $exchange, $queue)
+    public function __construct($exchange, $queue, $key)
     {
-        $this->settings = $settings;
         $this->exchange = $exchange;
         $this->queue    = $queue;
+        $this->key      = $key;
+    }
+    
+    /**
+     * @param AMQPBackendDispatcher $dispatcher
+     */
+    public function setDispatcher(AMQPBackendDispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -52,21 +64,11 @@ class AMQPBackend implements BackendInterface
      */
     protected function getChannel()
     {
-        if (!$this->channel) {
-            $this->connection = new AMQPConnection(
-                $this->settings['host'],
-                $this->settings['port'],
-                $this->settings['user'],
-                $this->settings['pass'],
-                $this->settings['vhost']
-            );
-
-            $this->channel = $this->connection->channel();
-
-            register_shutdown_function(array($this, 'shutdown'));
+        if ($this->dispatcher === null) {
+            throw new \RuntimeException('Unable to retrieve AMQP channel without dispatcher.');
         }
-
-        return $this->channel;
+        
+        return $this->dispatcher->getChannel();
     }
 
     /**
@@ -92,7 +94,7 @@ class AMQPBackend implements BackendInterface
          **/
        $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
 
-       $this->getChannel()->queue_bind($this->queue, $this->exchange);
+       $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
     }
 
     /**
@@ -112,7 +114,7 @@ class AMQPBackend implements BackendInterface
             'delivery-mode' => 2
         ));
 
-        $this->getChannel()->basic_publish($amq, $this->exchange);
+        $this->getChannel()->basic_publish($amq, $this->exchange, $this->key);
     }
 
     /**
@@ -171,20 +173,6 @@ class AMQPBackend implements BackendInterface
             $message->setState(MessageInterface::STATE_ERROR);
 
             throw new HandlingException("Error while handling a message", 0, $e);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function shutdown()
-    {
-        if ($this->channel) {
-            $this->channel->close();
-        }
-
-        if ($this->connection) {
-            $this->connection->close();
         }
     }
 
