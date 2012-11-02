@@ -13,10 +13,10 @@ To enable multiple queues, simply define a `queues` node in your configuration:
     # app/config/config.yml
     sonata_notification: 
         backend: sonata.notification.backend.rabbitmq
-        default_queue: mail
+        default_queue: catchall
         queues: 
             - { queue: transcoder, routing_key: start.transcode.video }
-            - { queue: mail, routing_key: send.some.mail }
+            - { queue: catchall, routing_key: send.some.mail }
         backends: 
         rabbitmq: 
             exchange:     router
@@ -28,7 +28,7 @@ To enable multiple queues, simply define a `queues` node in your configuration:
                 vhost:    %rabbitmq_vhost%
                 
                 
-This will define 2 different queues: `transcoder` and `mail` and 3 routing keys
+This will define 2 different queues: `transcoder` and `catchall` and 3 routing keys
 
     - `start.transcode.audio`
     - `start.transcode.video`
@@ -43,7 +43,7 @@ consumer will handle messages sent by a specific queue:
     
 When publishing a message with the type `start.transcode.video`, those
 messages will be handled by the first consumer. Messages with the routing key `send.some.mail` will
-be handled by the `mail` consumer.
+be handled by the `catchall` consumer.
 
 If a message is published which cannot be mapped to a queue because it's not defined in the configuration,
 it will be published to the queue defined in the `default_queue` configuration node.
