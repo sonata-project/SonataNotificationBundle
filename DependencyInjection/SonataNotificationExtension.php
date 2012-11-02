@@ -138,7 +138,11 @@ class SonataNotificationExtension extends Extension
      */
     protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name = 'default', $key = '')
     {
-        $id = 'sonata.notification.backend.rabbitmq.' . $name;
+        if ($key === '') {
+            $id = 'sonata.notification.backend.rabbitmq.default';
+        } else {
+            $id = 'sonata.notification.backend.rabbitmq.' . $key;
+        }
         $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $name, $key));
         $definition->setPublic(false);
         $container->setDefinition($id, $definition);

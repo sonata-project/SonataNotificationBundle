@@ -15,7 +15,6 @@ To enable multiple queues, simply define a `queues` node in your configuration:
         backend: sonata.notification.backend.rabbitmq
         default_queue: mail
         queues: 
-            - { queue: transcoder, routing_key: start.transcode.audio }
             - { queue: transcoder, routing_key: start.transcode.video }
             - { queue: mail, routing_key: send.some.mail }
         backends: 
@@ -38,11 +37,11 @@ This will define 2 different queues: `transcoder` and `mail` and 3 routing keys
 Each routing key is bound to a queue. In the above example you will need to create 2 consumers, where each
 consumer will handle messages sent by a specific queue:
 
-    - `php app/console sonata:notification:start --env=prod --iteration=250 --queue=transcoder`
-    - `php app/console sonata:notification:start --env=prod --iteration=250 --queue=mail`
+    - `php app/console sonata:notification:start --env=prod --iteration=250 --type=start.transcode.video`
+    - `php app/console sonata:notification:start --env=prod --iteration=250 --type=send.some.mail`
     
     
-When publishing a message with the type `start.transcode.audio` or `start.transcode.video`, those
+When publishing a message with the type `start.transcode.video`, those
 messages will be handled by the first consumer. Messages with the routing key `send.some.mail` will
 be handled by the `mail` consumer.
 

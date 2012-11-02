@@ -33,17 +33,6 @@ interface QueueDispatcherInterface
     function getBackend($type);
 
     /**
-     * Get a backend by queue name
-     *
-     * @param string $type the queue name
-     *
-     * @throws \Sonata\NotificationBundle\Exception\QueueNotFoundException
-     *
-     * @return BackendInterface
-     */
-    function getBackendByQueue($name);
-
-    /**
      * Get all registered queues.
      *
      * @return array

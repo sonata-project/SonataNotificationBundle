@@ -122,23 +122,6 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getBackendByQueue($name)
-    {
-        if (isset($this->backends[$name])) {
-            return $this->backends[$name];
-        }
-
-        if (!isset($this->backends[$this->defaultQueue])) {
-            throw new QueueNotFoundException('Could not find a message backend for the type ' . $type .
-                    ' Available queues: ' . implode(', ', array_keys($this->queues)));
-        }
-
-        return $this->backends[$this->defaultQueue];
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getQueues()
