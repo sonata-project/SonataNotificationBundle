@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -25,6 +27,8 @@ use Sonata\NotificationBundle\Model\MessageInterface;
  */
 class SonataNotificationExtension extends Extension
 {
+    protected $amqpCounter = 0;
+
     /**
      * {@inheritDoc}
      */
@@ -45,6 +49,7 @@ class SonataNotificationExtension extends Extension
         }
 
         $container->setAlias('sonata.notification.backend', $config['backend']);
+        $container->setParameter('sonata.notification.backend', $config['backend']);
 
         $this->registerDoctrineMapping($config);
         $this->registerParameters($container, $config);
@@ -68,12 +73,8 @@ class SonataNotificationExtension extends Extension
       */
     public function configureBackends(ContainerBuilder $container, $config)
     {
-        if (isset($config['backends']['rabbitmq']) && isset($config['backends']['rabbitmq']['exchange']) && isset($config['backends']['rabbitmq']['queue'])) {
-            $container->getDefinition('sonata.notification.backend.rabbitmq')
-                ->replaceArgument(0, $config['backends']['rabbitmq']['connection'])
-                ->replaceArgument(1, $config['backends']['rabbitmq']['exchange'])
-                ->replaceArgument(2, $config['backends']['rabbitmq']['queue'])
-            ;
+        if (isset($config['backends']['rabbitmq'])) {
+            $this->configureRabbitmq($container, $config);
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
         }
@@ -90,6 +91,67 @@ class SonataNotificationExtension extends Extension
                 ->replaceArgument(3, $config['backends']['doctrine']['max_age'])
             ;
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array $config
+     */
+    protected function configureRabbitmq(ContainerBuilder $container, $config)
+    {
+        $queues = $config['queues'];
+        $connection = $config['backends']['rabbitmq']['connection'];
+        $exchange = $config['backends']['rabbitmq']['exchange'];
+        $amqBackends = array();
+
+        if(count($queues) == 0) {
+            $defaultQueue = 'default';
+            $id = $this->createAMQPBackend($container, $exchange, $defaultQueue);
+            $amqBackends[0] = array('type' => $defaultQueue, 'backend' => new Reference($id));
+        } else {
+            $defaultSet = false;
+            foreach ($queues as $pos => $queue) {
+                $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['routing_key']);
+                $amqBackends[$pos] = array('type' => $queue['routing_key'], 'backend' =>  new Reference($id));
+                if ($queue['default'] === true) {
+                    if ($defaultSet === true) {
+                        throw new \RuntimeException('You can only set one rabbitmq default queue in your sonata notification configuration.');
+                    }
+                    $defaultSet = true;
+                    $defaultQueue = $queue['routing_key'];
+                }
+            }
+            if ($defaultSet === false) {
+                throw new \RuntimeException("You need to specify a valid default queue for the rabbitmq backend!");
+            }
+        }
+
+        $container->getDefinition('sonata.notification.backend.rabbitmq')
+            ->replaceArgument(0, $connection)
+            ->replaceArgument(1, $queues)
+            ->replaceArgument(2, $defaultQueue)
+            ->replaceArgument(3, $amqBackends)
+        ;
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string $name
+     * @param string $key
+     * @return string
+     */
+    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $key = '')
+    {
+        if ($key === '') {
+            $id = 'sonata.notification.backend.rabbitmq.default' . $this->amqpCounter++;
+        } else {
+            $id = 'sonata.notification.backend.rabbitmq.' . $key;
+        }
+        $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $name, $key));
+        $definition->setPublic(false);
+        $container->setDefinition($id, $definition);
+
+        return $id;
     }
 
      /**
