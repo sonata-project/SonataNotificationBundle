@@ -38,9 +38,30 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
         $mock2 = $this->getMockQueue('bar', 'message.type.foo', $this->never());
-        $backends = array('foo' => $mock, 'bar' => $mock2);
+        $fooBackend = array('type' => 'message.type.foo', 'backend' => $mock);
+        $barBackend = array('type' => 'message.type.bar', 'backend' => $mock2);
+        $backends = array($fooBackend, $barBackend);
         $dispatcher = $this->getDispatcher($backends);
         $dispatcher->createAndPublish('message.type.foo', array());
+    }
+
+    public function testDefaultQueue()
+    {
+        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
+        $fooBackend = array('type' => 'default', 'backend' => $mock);
+        $dispatcher = $this->getDispatcher(array($fooBackend));
+        $dispatcher->createAndPublish('some.other.type', array());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testDefaultQueueNotFound()
+    {
+        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->never());
+        $fooBackend = array('type' => 'message.type.foo', 'backend' => $mock);
+        $dispatcher = $this->getDispatcher(array($fooBackend));
+        $dispatcher->createAndPublish('some.other.type', array());
     }
 
     /**
@@ -49,7 +70,7 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
     public function testInvalidQueue()
     {
         $mock = $this->getMockQueue('foo', 'message.type.bar');
-        $dispatcher = $this->getDispatcher(array('bar' => $mock), 'foo', 'message.type.bar');
+        $dispatcher = $this->getDispatcher(array(array('type' => 'bar', 'backend' => $mock)), 'foo', 'message.type.bar');
         $dispatcher->createAndPublish('message.type.bar', array());
     }
 }

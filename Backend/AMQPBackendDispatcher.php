@@ -51,8 +51,8 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
         $this->backends = $backends;
         $this->defaultQueue = $defaultQueue;
 
-        foreach ($this->backends as $backend) {
-            $backend->setDispatcher($this);
+        foreach ($this->backends as $type => $backend) {
+            $backend['backend']->setDispatcher($this);
         }
     }
 
@@ -107,18 +107,25 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
      */
     public function getBackend($type)
     {
+        $default = null;
+
         foreach ($this->queues as $queue) {
-            if (isset($this->backends[$queue['queue']]) && $type === $queue['routing_key']) {
-                return $this->backends[$queue['queue']];
+            foreach ($this->backends as $backend) {
+                if ($backend['type'] === $type) {
+                    return $backend['backend'];
+                }
+                if ($backend['type'] === $this->defaultQueue) {
+                    $default = $backend['backend'];
+                }
             }
         }
 
-        if (!isset($this->backends[$this->defaultQueue])) {
+        if ($default === null) {
             throw new QueueNotFoundException('Could not find a message backend for the type ' . $type .
                     ' Available queues: ' . implode(', ', array_keys($this->queues)));
         }
 
-        return $this->backends[$this->defaultQueue];
+        return $default;
     }
 
     /**

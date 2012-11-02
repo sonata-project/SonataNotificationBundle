@@ -100,21 +100,24 @@ class SonataNotificationExtension extends Extension
     protected function configureRabbitmq(ContainerBuilder $container, $config)
     {
         $queues = $config['queues'];
-        $defaultQueue = $config['default_queue'];
         $connection = $config['backends']['rabbitmq']['connection'];
         $exchange = $config['backends']['rabbitmq']['exchange'];
         $amqBackends = array();
 
         if(count($queues) == 0) {
             $id = $this->createAMQPBackend($container, $exchange);
-            $amqBackends[$defaultQueue] = new Reference($id);
+            $amqBackends[0] = array('default' => new Reference($id));
         } else {
             $defaultSet = false;
-            foreach ($queues as $queue) {
+            foreach ($queues as $pos => $queue) {
                 $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['routing_key']);
-                $amqBackends[$queue['queue']] = new Reference($id);
-                if ($defaultQueue === $queue['queue']) {
+                $amqBackends[$pos] = array('type' => $queue['routing_key'], 'backend' =>  new Reference($id));
+                if ($queue['default'] === true) {
+                    if ($defaultSet === true) {
+                        throw new \RuntimeException('You can only set one rabbitmq default queue in your sonata notification configuration.');
+                    }
                     $defaultSet = true;
+                    $defaultQueue = $queue['routing_key'];
                 }
             }
             if ($defaultSet === false) {
