@@ -172,7 +172,13 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
      */
     public function getStatus()
     {
-        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
+        try {
+            $this->getChannel();
+        } catch(\Exception $e) {
+            return new BackendStatus(BackendStatus::CRITICAL, 'Error : '.$e->getMessage(). ' (RabbitMQ)');
+        }
+
+        return new BackendStatus(BackendStatus::OK, 'Channel is running (RabbitMQ)');
     }
 
     /**
