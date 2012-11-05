@@ -22,7 +22,8 @@
         "sonata-project/doctrine-extensions": "dev-master"
     },
     "suggest": {
-        "liip/monitor-bundle": "*",
+        "guzzle/guzzle" : "*",
+        "liip/monitor": "*",
         "videlalvaro/php-amqplib": "*"
     },
     "require-dev": {

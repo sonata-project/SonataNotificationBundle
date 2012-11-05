@@ -63,6 +63,7 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('user')->defaultValue('guest')->end()
                                     ->scalarNode('pass')->defaultValue('guest')->end()
                                     ->scalarNode('vhost')->defaultValue('guest')->end()
+                                    ->scalarNode('console_url')->defaultValue('http://localhost:55672/api')->end()
                                 ->end()
                             ->end()
                         ->end()
