@@ -12,11 +12,12 @@
 namespace Sonata\NotificationBundle\Backend;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\Event;
 
-use Sonata\NotificationBundle\Backend\BackendStatus;
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Symfony\Component\EventDispatcher\Event;
+
+use Liip\Monitor\Result\CheckResult;
 
 /**
  * This backend postpones the handling of messages to a registered event.
@@ -97,11 +98,11 @@ class PostponeRuntimeBackend extends RuntimeBackend
     }
 
     /**
-     * @return BackendStatus
+     * {@inheritdoc}
      */
     public function getStatus()
     {
-        return new BackendStatus(BackendStatus::OK, 'Ok (Postpone Runtime)');
+        return new CheckResult("Postpone runtime backend", 'Ok (Postpone Runtime)', CheckResult::OK);
     }
 
     /**

@@ -11,7 +11,6 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Backend\BackendInterface;
@@ -20,6 +19,8 @@ use Sonata\NotificationBundle\Exception\QueueNotFoundException;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
+
+use Liip\Monitor\Result\CheckResult;
 
 /**
  * Producer side of the rabbitmq backend.
@@ -173,12 +174,57 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     public function getStatus()
     {
         try {
+
             $this->getChannel();
+            $output = $this->getApiQueueStatus();
+            $checked = 0;
+            $missingConsumers = array();
+
+            foreach ($this->queues as $queue) {
+                foreach ($output as $q) {
+                    if ($q['name'] === $queue['queue']) {
+                        $checked++;
+                        if ($q['consumers'] === 0) {
+                            $missingConsumers[] = $queue['queue'];
+                        }
+                    }
+                }
+            }
+
+            if ($checked !== count($this->queues)) {
+                return $this->buildResult('Not all queues for the available notification types registered in the rabbitmq broker. Are the consumer commands running?', CheckResult::CRITICAL);
+            }
+
+            if (count($missingConsumers) > 0) {
+                return $this->buildResult('There are no rabbitmq consumers running for the queues: '. implode(', ', $missingConsumers), CheckResult::CRITICAL);
+            }
+
+
         } catch(\Exception $e) {
-            return new BackendStatus(BackendStatus::CRITICAL, 'Error : '.$e->getMessage(). ' (RabbitMQ)');
+            return $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
         }
 
-        return new BackendStatus(BackendStatus::OK, 'Channel is running (RabbitMQ)');
+        return $this->buildResult('Channel is running (RabbitMQ) and consumers for all queues available.', CheckResult::OK);
+    }
+
+    /**
+     * Calls the rabbitmq management api /api/<vhost>/queues endpoint to list the available queues.
+     *
+     * @see http://hg.rabbitmq.com/rabbitmq-management/raw-file/3646dee55e02/priv/www-api/help.html
+     *
+     * @return array
+     */
+    protected function getApiQueueStatus()
+    {
+        if (class_exists('Guzzle\Http\Client') === false) {
+            throw new \RuntimeException("The guzzle http client library is required to run rabbitmq health checks. Make sure to add guzzle/guzzle to your composer.json.");
+        }
+
+        $client = new \Guzzle\Http\Client();
+        $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
+        $request->setAuth($this->settings['user'], $this->settings['pass']);
+        $response = $request->send();
+        return json_decode($request->send()->getBody(true), true);
     }
 
     /**
@@ -201,5 +247,15 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
         if ($this->connection) {
             $this->connection->close();
         }
+    }
+
+    /**
+     * @param string $message
+     * @param string $status
+     * @return \Liip\Monitor\Result\CheckResult
+     */
+    protected function buildResult($message, $status)
+    {
+        return new CheckResult("Rabbitmq backend health check", $message, $status);
     }
 }

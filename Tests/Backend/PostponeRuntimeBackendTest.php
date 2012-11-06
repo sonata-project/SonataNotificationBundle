@@ -12,15 +12,16 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
-use Sonata\NotificationBundle\Backend\BackendStatus;
 use Sonata\NotificationBundle\Backend\PostponeRuntimeBackend;
 use Sonata\NotificationBundle\Consumer\ConsumerEventInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Liip\Monitor\Result\CheckResult;
 
 /**
  * @covers Sonata\NotificationBundle\Backend\PostponeRuntimeBackend
  */
+
 class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 {
     public function testIteratorContainsPublishedMessages()
@@ -91,9 +92,8 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
         $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true);
 
         $status = $backend->getStatus();
-
-        $this->assertInstanceOf('Sonata\NotificationBundle\Backend\BackendStatus', $status);
-        $this->assertEquals(BackendStatus::OK, $status->getStatus());;
+        $this->assertInstanceOf('Liip\Monitor\Result\CheckResult', $status);
+        $this->assertEquals(CheckResult::OK, $status->getStatus());;
     }
 
     public function testOnCliPublishHandlesDirectly()

@@ -13,5 +13,6 @@ Reference Guide
    reference/usage
    reference/multiple_queues   
    reference/command_line
+   reference/monitoring
    reference/advanced_configuration
 

@@ -23,12 +23,14 @@ use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
+use Liip\Monitor\Result\CheckResult;
+
 /**
- * Consumer side of the rabbitMQ backend. 
+ * Consumer side of the rabbitMQ backend.
  */
 class AMQPBackend implements BackendInterface
 {
-    
+
     protected $exchange;
 
     protected $queue;
@@ -36,7 +38,7 @@ class AMQPBackend implements BackendInterface
     protected $connection;
 
     protected $key;
-    
+
     protected $dispatcher = null;
 
     /**
@@ -50,7 +52,7 @@ class AMQPBackend implements BackendInterface
         $this->queue    = $queue;
         $this->key      = $key;
     }
-    
+
     /**
      * @param AMQPBackendDispatcher $dispatcher
      */
@@ -67,7 +69,7 @@ class AMQPBackend implements BackendInterface
         if ($this->dispatcher === null) {
             throw new \RuntimeException('Unable to retrieve AMQP channel without dispatcher.');
         }
-        
+
         return $this->dispatcher->getChannel();
     }
 
@@ -184,10 +186,10 @@ class AMQPBackend implements BackendInterface
         try {
             $this->getChannel();
         } catch(\Exception $e) {
-            return new BackendStatus(BackendStatus::CRITICAL, 'Error : '.$e->getMessage(). ' (RabbitMQ)');
+            return $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
         }
 
-        return new BackendStatus(BackendStatus::OK, 'Channel is running (RabbitMQ)');
+        return $this->buildResult('Channel is running (RabbitMQ)', CheckResult::OK);
     }
 
     /**
@@ -196,5 +198,15 @@ class AMQPBackend implements BackendInterface
     public function cleanup()
     {
         throw new \RuntimeException('Not implemented');
+    }
+
+    /**
+     * @param string $message
+     * @param string $status
+     * @return \Liip\Monitor\Result\CheckResult
+     */
+    protected function buildResult($message, $status)
+    {
+        return new CheckResult("Rabbitmq backend health check", $message, $status);
     }
 }
