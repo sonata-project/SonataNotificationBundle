@@ -73,7 +73,7 @@ class SonataNotificationExtension extends Extension
       */
     public function configureBackends(ContainerBuilder $container, $config)
     {
-        if (isset($config['backends']['rabbitmq'])) {
+        if (isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
             $this->configureRabbitmq($container, $config);
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
