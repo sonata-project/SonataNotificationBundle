@@ -13,7 +13,8 @@
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\BackendHealthCheck;
-use Sonata\NotificationBundle\Backend\BackendStatus;
+
+use Liip\Monitor\Result\CheckResult;
 
 class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,15 +27,15 @@ class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
     }
     public function testCheck()
     {
-        $status = new BackendStatus(BackendStatus::OK, 'OK');
+        $result = new CheckResult('Test check', 'OK', CheckResult::OK);
 
         $backend = $this->getMock('Sonata\NotificationBundle\Backend\BackendInterface');
-        $backend->expects($this->once())->method('getStatus')->will($this->returnValue($status));
+        $backend->expects($this->once())->method('getStatus')->will($this->returnValue($result));
 
         $health = new BackendHealthCheck($backend);
 
-        $status = $health->check();
+        $result = $health->check();
 
-        $this->assertEquals(BackendStatus::OK, $status->getStatus());
+        $this->assertEquals(CheckResult::OK, $result->getStatus());
     }
 }

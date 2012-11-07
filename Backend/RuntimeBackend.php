@@ -19,6 +19,8 @@ use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Model\Message;
 use Sonata\NotificationBundle\Exception\HandlingException;
 
+use Liip\Monitor\Result\CheckResult;
+
 class RuntimeBackend implements BackendInterface
 {
     protected $dispatcher;
@@ -112,6 +114,6 @@ class RuntimeBackend implements BackendInterface
      */
     public function getStatus()
     {
-         return new BackendStatus(BackendStatus::OK, 'Ok  (Runtime)');
+         return new CheckResult('Runtime backend health check', 'Ok  (Runtime)', CheckResult::OK);
     }
 }

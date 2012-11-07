@@ -34,6 +34,7 @@ Full configuration options:
                     pass:     guest
                     port:     5672
                     vhost:    /
+                    console_url : http://some.other.host:55999/api
 
     doctrine:
         orm:

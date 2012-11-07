@@ -15,6 +15,7 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+
 interface BackendInterface
 {
     /**
@@ -57,7 +58,7 @@ interface BackendInterface
     function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
 
     /**
-     * @return BackendStatus
+     * @return Liip\Monitor\Result\CheckResult
      */
     function getStatus();
 
