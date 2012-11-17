@@ -44,7 +44,9 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>Checking listeners</info>');
+        $startDate = new \DateTime();
+        $now = $startDate->format('r');
+        $output->writeln(sprintf('[%s] <info>Checking listeners</info>', $now));
         foreach($this->getDispatcher()->getListeners() as $type => $listeners) {
             $output->writeln(sprintf(" - %s", $type));
             foreach ($listeners as $listener) {
@@ -59,17 +61,18 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $type = $input->getOption('type');
         $backend = $this->getBackend($type);
 
+
         $output->writeln("");
-        $output->write('Initialize backend ...');
+        $output->write(sprintf('[%s] <info>Initialize backend</info> ...', $now));
 
         // initialize the backend
         $backend->initialize();
         $output->writeln(" done!");
 
         if ($type === null) {
-            $output->writeln(sprintf("<info>Starting the backend handler</info> - %s", get_class($backend)));
+            $output->writeln(sprintf("[%s] <info>Starting the backend handler</info> - %s", $now, get_class($backend)));
         } else {
-            $output->writeln(sprintf("<info>Starting the backend handler</info> - %s (type: %s)", get_class($backend), $type));
+            $output->writeln(sprintf("[%s] <info>Starting the backend handler</info> - %s (type: %s)", $now, get_class($backend), $type));
         }
 
         $dispatcher = $this->getDispatcher();
