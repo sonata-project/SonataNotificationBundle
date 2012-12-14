@@ -17,8 +17,8 @@ Calling an existing consumer
             'name'  => 'No Reply'
         ),
         'to'   => array(
-            array('email' => 'myuser@example.org', 'name'  => 'My User'),
-            array('email' => 'myuser1@example.org', 'name'  => 'My User 1'),
+            'myuser@example.org' => 'My User',
+            'myuser1@example.org' => 'My User 1',
         ),
         'message' => array(
             'html' => '<b>hello</b>',
