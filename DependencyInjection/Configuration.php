@@ -99,6 +99,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('queue')->cannotBeEmpty()->isRequired()->end()
             ->scalarNode('routing_key')->defaultValue('')->end()
             ->booleanNode('default')->defaultValue(false)->end()
+            ->booleanNode('recover')->defaultValue(false)->end()
         ->end();
 
         return $node;
