@@ -25,9 +25,12 @@ Full configuration options:
                     error:       20
                     open:        100
                     done:        10000
-
             rabbitmq:
                 exchange:     router
+			    queues: 
+			        # if `recover` is set to true, the consumer will respond with a `basic.recover` when an exception occurs
+			        # otherwise it will not respond at all and the message will be unacknowledged
+			       - { queue: defaultQueue, recover: true|false, default: true|false, routing_key: the_routing_key}
                 connection:
                     host:     localhost
                     user:     guest
