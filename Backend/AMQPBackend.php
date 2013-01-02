@@ -38,18 +38,22 @@ class AMQPBackend implements BackendInterface
     protected $connection;
 
     protected $key;
+    
+    protected $recover;
 
     protected $dispatcher = null;
 
     /**
      * @param string $exchange
      * @param string $queue
+     * @param string $recover
      * @param string $key
      */
-    public function __construct($exchange, $queue, $key)
+    public function __construct($exchange, $queue, $recover, $key)
     {
         $this->exchange = $exchange;
         $this->queue    = $queue;
+        $this->recover  = $recover;
         $this->key      = $key;
     }
 
@@ -174,6 +178,10 @@ class AMQPBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
+            if ($this->recover === true) {
+                $message->getValue('AMQMessage')->delivery_info['channel']->basic_recover($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
+            }
+            
             throw new HandlingException("Error while handling a message", 0, $e);
         }
     }
