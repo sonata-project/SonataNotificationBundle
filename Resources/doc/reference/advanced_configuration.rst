@@ -18,9 +18,10 @@ Full configuration options:
 
         backends:
             doctrine:
-                max_age:      86400     # max age in second
-                pause:        500000    # delay in microseconds
-                states:                 # raising errors level
+                message_manager: sonata.notification.manager.message.default
+                max_age:         86400     # max age in second
+                pause:           500000    # delay in microseconds
+                states:                    # raising errors level
                     in_progress: 10
                     error:       20
                     open:        100
