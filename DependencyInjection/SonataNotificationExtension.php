@@ -90,6 +90,8 @@ class SonataNotificationExtension extends Extension
                 ->replaceArgument(2, $config['backends']['doctrine']['pause'])
                 ->replaceArgument(3, $config['backends']['doctrine']['max_age'])
             ;
+
+            $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
         }
     }
 

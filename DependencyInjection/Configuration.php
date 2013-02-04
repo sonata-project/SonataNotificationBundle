@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('doctrine')
                         ->addDefaultsIfNotSet()
                         ->children()
+                            ->scalarNode('message_manager')->defaultValue('sonata.notification.manager.message.default')->end()
                             ->scalarNode('max_age')->defaultValue(86400)->end() # max age in second
                             ->scalarNode('pause')->defaultValue(500000)->end()  # delay in microseconds
                             ->arrayNode('states')
