@@ -43,4 +43,12 @@ class BackendHealthCheck implements CheckInterface
     {
         return "Sonata Notification Default Backend";
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroup()
+    {
+        return 'sonata';
+    }
 }
