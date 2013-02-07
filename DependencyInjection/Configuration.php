@@ -101,6 +101,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('routing_key')->defaultValue('')->end()
             ->booleanNode('default')->defaultValue(false)->end()
             ->booleanNode('recover')->defaultValue(false)->end()
+            ->scalarNode('dead_letter_exchange')->defaultValue(null)->end()
         ->end();
 
         return $node;
