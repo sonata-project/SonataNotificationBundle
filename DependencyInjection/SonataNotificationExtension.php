@@ -113,7 +113,7 @@ class SonataNotificationExtension extends Extension
         } else {
             $defaultSet = false;
             foreach ($queues as $pos => $queue) {
-                $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['recover'], $queue['routing_key']);
+                $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['recover'], $queue['routing_key'], $queue['dead_letter_exchange']);
                 $amqBackends[$pos] = array('type' => $queue['routing_key'], 'backend' =>  new Reference($id));
                 if ($queue['default'] === true) {
                     if ($defaultSet === true) {
@@ -140,16 +140,17 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param string $name
      * @param string $key
+     * @param string $deadLetterExchange
      * @return string
      */
-    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '')
+    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null)
     {
         if ($key === '') {
             $id = 'sonata.notification.backend.rabbitmq.default' . $this->amqpCounter++;
         } else {
             $id = 'sonata.notification.backend.rabbitmq.' . $key;
         }
-        $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $name, $recover, $key));
+        $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $name, $recover, $key, $deadLetterExchange));
         $definition->setPublic(false);
         $container->setDefinition($id, $definition);
 

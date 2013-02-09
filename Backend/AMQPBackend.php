@@ -38,8 +38,10 @@ class AMQPBackend implements BackendInterface
     protected $connection;
 
     protected $key;
-    
+
     protected $recover;
+
+    protected $deadLetterExchange;
 
     protected $dispatcher = null;
 
@@ -48,13 +50,15 @@ class AMQPBackend implements BackendInterface
      * @param string $queue
      * @param string $recover
      * @param string $key
+     * @param string $deadLetterExchange
      */
-    public function __construct($exchange, $queue, $recover, $key)
+    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null)
     {
         $this->exchange = $exchange;
         $this->queue    = $queue;
         $this->recover  = $recover;
         $this->key      = $key;
+        $this->deadLetterExchange = $deadLetterExchange;
     }
 
     /**
@@ -82,14 +86,22 @@ class AMQPBackend implements BackendInterface
      */
     public function initialize()
     {
+        $args = array();
+
+        if ($this->deadLetterExchange !== null) {
+            $args['x-dead-letter-exchange'] = array('S', $this->deadLetterExchange);
+        }
+
         /**
          * name: $queue
          * passive: false
          * durable: true // the queue will survive server restarts
          * exclusive: false // the queue can be accessed in other channels
          * auto_delete: false //the queue won't be deleted once the channel is closed.
+         * no_wait: false the channel will wait until queue.declare_ok is received
+         * args: array
          */
-        $this->getChannel()->queue_declare($this->queue, false, true, false, false);
+        $this->getChannel()->queue_declare($this->queue, false, true, false, false, false, $args);
 
         /**
          * name: $exchange
@@ -180,8 +192,10 @@ class AMQPBackend implements BackendInterface
 
             if ($this->recover === true) {
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_recover($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
+            } else if ($this->deadLetterExchange !== null) {
+                $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
             }
-            
+
             throw new HandlingException("Error while handling a message", 0, $e);
         }
     }
