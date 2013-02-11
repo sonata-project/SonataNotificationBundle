@@ -221,6 +221,7 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
         }
 
         $client = new \Guzzle\Http\Client();
+        $client->setConfig(array('curl.options' => array(CURLOPT_CONNECTTIMEOUT_MS => 3000)));
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);
         $response = $request->send();
