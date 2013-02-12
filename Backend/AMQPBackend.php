@@ -193,7 +193,7 @@ class AMQPBackend implements BackendInterface
             if ($this->recover === true) {
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_recover($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
             } else if ($this->deadLetterExchange !== null) {
-                $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
+                $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag'], false);
             }
 
             throw new HandlingException("Error while handling a message", 0, $e);
