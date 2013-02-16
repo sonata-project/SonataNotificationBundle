@@ -29,7 +29,7 @@ class MessageManager implements MessageManagerInterface
 
     /**
      * @param \Doctrine\ORM\EntityManager $em
-     * @param string $class
+     * @param string                      $class
      */
     public function __construct(EntityManager $em, $class)
     {
@@ -103,7 +103,7 @@ class MessageManager implements MessageManagerInterface
             MessageInterface::STATE_OPEN        => 0,
         );
 
-        foreach($stm->fetch() as $data) {
+        foreach ($stm->fetch() as $data) {
             $states[$data['state']] = $data['cnt'];
         }
 
@@ -119,7 +119,7 @@ class MessageManager implements MessageManagerInterface
 
         $locked = false;
         try {
-            while(true) {
+            while (true) {
                 $this->em->getConnection()->exec(sprintf('LOCK TABLES %s as t0 WRITE', $tableName));
                 $locked = true;
 
@@ -141,7 +141,7 @@ class MessageManager implements MessageManagerInterface
 
                 return $message;
             }
-        }  catch(\Exception $e) {
+        } catch (\Exception $e) {
             if ($locked) {
                 $this->em->getConnection()->exec(sprintf('UNLOCK TABLES'));
             }

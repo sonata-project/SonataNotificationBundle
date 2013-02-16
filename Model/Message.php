@@ -171,7 +171,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    static function getStateList()
+    public static function getStateList()
     {
         return array(
             self::STATE_OPEN            => 'open',

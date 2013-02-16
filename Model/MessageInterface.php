@@ -19,98 +19,97 @@ interface MessageInterface
     const STATE_ERROR = -1;
 
     /**
-     * @param array $body
+     * @param  array $body
      * @return array
      */
-    function setBody(array $body);
+    public function setBody(array $body);
 
     /**
      * @return array
      */
-    function getBody();
+    public function getBody();
 
     /**
      * @param array|string $names
      * @param $default
      * @return mixed
      */
-    function getValue($names, $default = null);
+    public function getValue($names, $default = null);
 
     /**
-     * @param \DateTime $completedAt
+     * @param  \DateTime $completedAt
      * @return void
      */
-    function setCompletedAt(\DateTime $completedAt);
+    public function setCompletedAt(\DateTime $completedAt);
 
     /**
      * @return \DateTime
      */
-    function getCompletedAt();
+    public function getCompletedAt();
 
     /**
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return void
      */
-    function setCreatedAt(\DateTime $createdAt);
+    public function setCreatedAt(\DateTime $createdAt);
 
     /**
      * @return \DateTime
      */
-    function getCreatedAt();
+    public function getCreatedAt();
 
     /**
-     * @param string $group
+     * @param  string $group
      * @return void
      */
-    function setGroup($group);
+    public function setGroup($group);
 
     /**
      * @return string
      */
-    function getGroup();
+    public function getGroup();
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return void
      */
-    function setType($type);
+    public function setType($type);
 
     /**
      * @return string
      */
-    function getType();
+    public function getType();
 
     /**
-     * @param integer $state
+     * @param  integer $state
      * @return void
      */
-    function setState($state);
+    public function setState($state);
 
     /**
      * @return integer
      */
-    function getState();
+    public function getState();
 
     /**
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return void
      */
-    function setUpdatedAt(\DateTime $updatedAt);
+    public function setUpdatedAt(\DateTime $updatedAt);
 
     /**
      * @return \DateTime
      */
-    function getUpdatedAt();
+    public function getUpdatedAt();
 
     /**
-     * @param \DateTime $startedAt
+     * @param  \DateTime $startedAt
      * @return void
      */
-    function setStartedAt(\DateTime $startedAt);
+    public function setStartedAt(\DateTime $startedAt);
 
     /**
      * @return \DateTime
      */
-    function getStartedAt();
+    public function getStartedAt();
 }
-

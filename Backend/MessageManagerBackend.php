@@ -33,9 +33,9 @@ class MessageManagerBackend implements BackendInterface
 
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
-     * @param array $checkLevel
-     * @param int $pause
-     * @param int $maxAge
+     * @param array                                                    $checkLevel
+     * @param int                                                      $pause
+     * @param int                                                      $maxAge
      */
     public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 84600)
     {
@@ -110,7 +110,7 @@ class MessageManagerBackend implements BackendInterface
             $message->setState(MessageInterface::STATE_DONE);
             $this->messageManager->save($message);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
@@ -159,8 +159,8 @@ class MessageManagerBackend implements BackendInterface
     }
 
     /**
-     * @param string $message
-     * @param string $status
+     * @param  string                           $message
+     * @param  string                           $status
      * @return \Liip\Monitor\Result\CheckResult
      */
     protected function buildResult($message, $status)

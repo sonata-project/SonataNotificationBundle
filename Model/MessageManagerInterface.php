@@ -18,7 +18,7 @@ interface MessageManagerInterface
      *
      * @return MessageInterface
      */
-    function create();
+    public function create();
 
     /**
      * Deletes a message
@@ -27,7 +27,7 @@ interface MessageManagerInterface
      *
      * @return void
      */
-    function delete(MessageInterface $message);
+    public function delete(MessageInterface $message);
 
     /**
      * Finds one message by the given criteria
@@ -36,7 +36,7 @@ interface MessageManagerInterface
      *
      * @return MessageInterface
      */
-    function findOneBy(array $criteria);
+    public function findOneBy(array $criteria);
 
     /**
      * Finds one message by the given criteria
@@ -45,14 +45,14 @@ interface MessageManagerInterface
      *
      * @return MessageInterface
      */
-    function findBy(array $criteria);
+    public function findBy(array $criteria);
 
     /**
      * Returns the message's fully qualified class name
      *
      * @return string
      */
-    function getClass();
+    public function getClass();
 
     /**
      * Save a message
@@ -61,24 +61,24 @@ interface MessageManagerInterface
      *
      * @return void
      */
-    function save(MessageInterface $message);
+    public function save(MessageInterface $message);
 
     /**
      * Returns the next open message available in the stack
      *
-     * @param int $pause
+     * @param  int              $pause
      * @return MessageInterface
      */
-    function getNextOpenMessage($pause = 500000);
+    public function getNextOpenMessage($pause = 500000);
 
     /**
      * @return integer
      */
-    function countStates();
+    public function countStates();
 
     /**
      * @param $maxAge
      * @return void
      */
-    function cleanup($maxAge);
+    public function cleanup($maxAge);
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * This file is part of the Sonata package.
  *
@@ -97,13 +96,12 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
 
         $status = $backend->getStatus();
 
-
         $this->assertInstanceOf('Liip\Monitor\Result\CheckResult', $status);
         $this->assertEquals($expectedStatus, $status->getStatus());
         $this->assertEquals($message, $status->getMessage());
     }
 
-    static function statusProvider()
+    public static function statusProvider()
     {
         $data = array();
 

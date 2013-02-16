@@ -15,57 +15,56 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-
 interface BackendInterface
 {
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
+     * @param  \Sonata\NotificationBundle\Model\MessageInterface $message
      * @return void
      */
-    function publish(MessageInterface $message);
+    public function publish(MessageInterface $message);
 
     /**
      * @param $type
-     * @param array $body
+     * @param  array $body
      * @return void
      */
-    function create($type, array $body);
+    public function create($type, array $body);
 
     /**
      * @param $type
-     * @param array $body
+     * @param  array $body
      * @return void
      */
-    function createAndPublish($type, array $body);
+    public function createAndPublish($type, array $body);
 
     /**
      * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
      */
-    function getIterator();
+    public function getIterator();
 
     /**
      * Initialize
      *
      * @return void
      */
-    function initialize();
+    public function initialize();
 
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @param  \Sonata\NotificationBundle\Model\MessageInterface           $message
+     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
      * @return void
      */
-    function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
+    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
 
     /**
      * @return Liip\Monitor\Result\CheckResult
      */
-    function getStatus();
+    public function getStatus();
 
     /**
      * Clean up messages
      *
      * @return void
      */
-    function cleanup();
+    public function cleanup();
 }

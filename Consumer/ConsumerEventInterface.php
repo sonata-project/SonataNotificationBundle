@@ -18,5 +18,5 @@ interface ConsumerEventInterface
     /**
      * @return MessageInterface
      */
-    function getMessage();
+    public function getMessage();
 }

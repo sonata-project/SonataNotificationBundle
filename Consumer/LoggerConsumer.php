@@ -11,10 +11,8 @@
 
 namespace Sonata\NotificationBundle\Consumer;
 
-use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
-use Sonata\NotificationBundle\Backend\BackendInterface;
 
 class LoggerConsumer implements ConsumerInterface
 {

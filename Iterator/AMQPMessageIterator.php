@@ -99,7 +99,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * @param \PhpAmqpLib\Message\AMQPMessage $AMQMessage
+     * @param  \PhpAmqpLib\Message\AMQPMessage $AMQMessage
      * @return void
      */
     public function receiveMessage(AMQPMessage $AMQMessage)

@@ -11,7 +11,6 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-
 /**
  * A QueueDispatcherInterface acts as a router for different
  * queue types.
@@ -30,13 +29,13 @@ interface QueueDispatcherInterface
      *
      * @return BackendInterface
      */
-    function getBackend($type);
+    public function getBackend($type);
 
     /**
      * Get all registered queues.
      *
      * @return array
      */
-    function getQueues();
+    public function getQueues();
 
 }

@@ -13,17 +13,12 @@ namespace Sonata\NotificationBundle\Command;
 
 use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
 
-use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
-
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 
-use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 
 class ConsumerHandlerCommand extends ContainerAwareCommand
@@ -47,7 +42,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $startDate = new \DateTime();
         $now = $startDate->format('r');
         $output->writeln(sprintf('[%s] <info>Checking listeners</info>', $now));
-        foreach($this->getDispatcher()->getListeners() as $type => $listeners) {
+        foreach ($this->getDispatcher()->getListeners() as $type => $listeners) {
             $output->writeln(sprintf(" - %s", $type));
             foreach ($listeners as $listener) {
                 if (!$listener[0] instanceof ConsumerInterface) {
@@ -60,7 +55,6 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
         $type = $input->getOption('type');
         $backend = $this->getBackend($type);
-
 
         $output->writeln("");
         $output->write(sprintf('[%s] <info>Initialize backend</info> ...', $now));
@@ -79,7 +73,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
         $startMemoryUsage = memory_get_usage(true);
         $i = 0;
-        foreach($backend->getIterator() as $message) {
+        foreach ($backend->getIterator() as $message) {
             $i++;
             if (!$message->getType()) {
                 $output->write("<error>Skipping : no type defined </error>");
@@ -118,6 +112,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');
+
                 return;
             }
         }
@@ -146,7 +141,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param string $type
+     * @param  string                                              $type
      * @return \Sonata\NotificationBundle\Backend\BackendInterface
      */
     private function getBackend($type = null)
@@ -161,7 +156,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param string $type
+     * @param  string            $type
      * @throws \RuntimeException
      */
     protected function throwTypeNotFoundException($type, $backend)

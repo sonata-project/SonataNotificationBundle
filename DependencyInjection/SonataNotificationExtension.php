@@ -97,7 +97,7 @@ class SonataNotificationExtension extends Extension
 
     /**
      * @param ContainerBuilder $container
-     * @param array $config
+     * @param array            $config
      */
     protected function configureRabbitmq(ContainerBuilder $container, $config)
     {
@@ -106,7 +106,7 @@ class SonataNotificationExtension extends Extension
         $exchange = $config['backends']['rabbitmq']['exchange'];
         $amqBackends = array();
 
-        if(count($queues) == 0) {
+        if (count($queues) == 0) {
             $defaultQueue = 'default';
             $id = $this->createAMQPBackend($container, $exchange, false, $defaultQueue);
             $amqBackends[0] = array('type' => $defaultQueue, 'backend' => new Reference($id));
@@ -137,10 +137,10 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string $name
-     * @param string $key
-     * @param string $deadLetterExchange
+     * @param  ContainerBuilder $container
+     * @param  string           $name
+     * @param  string           $key
+     * @param  string           $deadLetterExchange
      * @return string
      */
     protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null)
@@ -158,7 +158,7 @@ class SonataNotificationExtension extends Extension
     }
 
      /**
-     * @param array $config
+     * @param  array $config
      * @return void
      */
     public function registerDoctrineMapping(array $config)

@@ -18,7 +18,6 @@ use Sonata\NotificationBundle\Exception\QueueNotFoundException;
 
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Message\AMQPMessage;
 
 use Liip\Monitor\Result\CheckResult;
 
@@ -40,10 +39,10 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     protected $connection;
 
     /**
-     * @param array $settings
-     * @param array $queues
+     * @param array   $settings
+     * @param array   $queues
      * @param unknown $defaultQueue
-     * @param array $backends
+     * @param array   $backends
      */
     public function __construct(array $settings, array $queues, $defaultQueue, array $backends)
     {
@@ -199,8 +198,7 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
                 return $this->buildResult('There are no rabbitmq consumers running for the queues: '. implode(', ', $missingConsumers), CheckResult::CRITICAL);
             }
 
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
         }
 
@@ -225,6 +223,7 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);
         $response = $request->send();
+
         return json_decode($request->send()->getBody(true), true);
     }
 
@@ -251,8 +250,8 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     }
 
     /**
-     * @param string $message
-     * @param string $status
+     * @param  string                           $message
+     * @param  string                           $status
      * @return \Liip\Monitor\Result\CheckResult
      */
     protected function buildResult($message, $status)

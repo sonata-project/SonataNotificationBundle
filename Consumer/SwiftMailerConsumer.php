@@ -12,7 +12,6 @@
 namespace Sonata\NotificationBundle\Consumer;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Backend\BackendInterface;
 
 class SwiftMailerConsumer implements ConsumerInterface
 {
@@ -34,14 +33,14 @@ class SwiftMailerConsumer implements ConsumerInterface
      */
     public function process(ConsumerEvent $event)
     {
-        if (!$this->mailer->getTransport()->isStarted()){
+        if (!$this->mailer->getTransport()->isStarted()) {
             $this->mailer->getTransport()->start();
         }
 
         $exception = false;
         try {
             $this->sendEmail($event->getMessage());
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $exception = $e;
         }
 

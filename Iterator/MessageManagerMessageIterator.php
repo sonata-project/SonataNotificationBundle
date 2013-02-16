@@ -23,7 +23,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
-     * @param int $pause
+     * @param int                                                      $pause
      */
     public function __construct(MessageManagerInterface $messageManager, $pause = 500000)
     {

@@ -12,8 +12,6 @@
 namespace Sonata\NotificationBundle\Backend;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Model\MessageManagerInterface;
-use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Model\Message;
@@ -101,7 +99,7 @@ class RuntimeBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 

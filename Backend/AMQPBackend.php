@@ -19,7 +19,6 @@ use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -179,20 +178,20 @@ class AMQPBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);
 
-        } catch(HandlingException $e) {
+        } catch (HandlingException $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
             $message->getValue('AMQMessage')->delivery_info['channel']->basic_ack($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
 
             throw new HandlingException("Error while handling a message", 0, $e);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
             if ($this->recover === true) {
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_recover($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
-            } else if ($this->deadLetterExchange !== null) {
+            } elseif ($this->deadLetterExchange !== null) {
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag'], false);
             }
 
@@ -207,7 +206,7 @@ class AMQPBackend implements BackendInterface
     {
         try {
             $this->getChannel();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
         }
 
@@ -223,8 +222,8 @@ class AMQPBackend implements BackendInterface
     }
 
     /**
-     * @param string $message
-     * @param string $status
+     * @param  string                           $message
+     * @param  string                           $status
      * @return \Liip\Monitor\Result\CheckResult
      */
     protected function buildResult($message, $status)
