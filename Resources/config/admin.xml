@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.notification.admin.message" class="%sonata.notification.admin.message.class%">
+            <tag
+                    name="sonata.admin"
+                    manager_type="orm"
+                    group="sonata_notification"
+                    label="notifications"
+                    label_translator_strategy="sonata.admin.label.strategy.underscore"
+               />
+            <argument />
+            <argument>%sonata.notification.admin.message.entity%</argument>
+            <argument>%sonata.notification.admin.message.controller%</argument>
+
+            <call method="setTranslationDomain">
+                <argument>%sonata.notification.admin.message.translation_domain%</argument>
+            </call>
+        </service>
+    </services>
+</container>

@@ -42,6 +42,7 @@ class SonataNotificationExtension extends Extension
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
+        $loader->load('admin.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['LiipMonitorBundle'])) {
@@ -54,12 +55,37 @@ class SonataNotificationExtension extends Extension
         $this->registerDoctrineMapping($config);
         $this->registerParameters($container, $config);
         $this->configureBackends($container, $config);
+        $this->configureClass($container, $config);
+        $this->configureAdmin($container, $config);
      }
 
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    public function configureClass(ContainerBuilder $container, $config)
+    {
+        // admin configuration
+        $container->setParameter('sonata.notification.admin.message.entity',       $config['class']['message']);
+
+        // manager configuration
+        $container->setParameter('sonata.notification.manager.message.entity',     $config['class']['message']);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    public function configureAdmin(ContainerBuilder $container, $config)
+    {
+        $container->setParameter('sonata.notification.admin.message.class',              $config['admin']['message']['class']);
+        $container->setParameter('sonata.notification.admin.message.controller',         $config['admin']['message']['controller']);
+        $container->setParameter('sonata.notification.admin.message.translation_domain', $config['admin']['message']['translation']);
+    }
+
      /**
-      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-      * @param $config
-      * @return void
+      * @param ContainerBuilder $container
+      * @param array            $config
       */
     public function registerParameters(ContainerBuilder $container, $config)
     {
@@ -67,9 +93,8 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-      * @param $config
-      * @return void
+      * @param ContainerBuilder $container
+      * @param array            $config
       */
     public function configureBackends(ContainerBuilder $container, $config)
     {
@@ -141,6 +166,7 @@ class SonataNotificationExtension extends Extension
      * @param  string           $name
      * @param  string           $key
      * @param  string           $deadLetterExchange
+     *
      * @return string
      */
     protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null)

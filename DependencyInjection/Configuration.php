@@ -80,6 +80,19 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('message')->defaultValue('Sonata\\NotificationBundle\\Entity\\Message')->end()
                 ->end()
             ->end()
+            ->arrayNode('admin')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->arrayNode('message')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('class')->cannotBeEmpty()->defaultValue('Sonata\\NotificationBundle\\Admin\\MessageAdmin')->end()
+                            ->scalarNode('controller')->cannotBeEmpty()->defaultValue('SonataNotificationBundle:MessageAdmin')->end()
+                            ->scalarNode('translation')->cannotBeEmpty()->defaultValue('SonataNotificationBundle')->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
         ;
 
         return $treeBuilder;

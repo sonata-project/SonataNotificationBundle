@@ -27,6 +27,18 @@ class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $message->getValue($names, $default));
     }
 
+    public function testClone()
+    {
+        $message = new Message;
+        $message->setState(Message::STATE_ERROR);
+
+        $this->assertTrue($message->isError());
+
+        $newMessage = clone $message;
+
+        $this->assertTrue($newMessage->isOpen());
+    }
+
     /**
      * @return array
      */

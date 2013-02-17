@@ -17,6 +17,7 @@ interface MessageInterface
     const STATE_IN_PROGRESS = 1;
     const STATE_DONE = 2;
     const STATE_ERROR = -1;
+    const STATE_CANCELLED = -2;
 
     /**
      * @param  array $body
@@ -40,7 +41,7 @@ interface MessageInterface
      * @param  \DateTime $completedAt
      * @return void
      */
-    public function setCompletedAt(\DateTime $completedAt);
+    public function setCompletedAt(\DateTime $completedAt = null);
 
     /**
      * @return \DateTime
@@ -51,7 +52,7 @@ interface MessageInterface
      * @param  \DateTime $createdAt
      * @return void
      */
-    public function setCreatedAt(\DateTime $createdAt);
+    public function setCreatedAt(\DateTime $createdAt = null);
 
     /**
      * @return \DateTime
@@ -95,7 +96,7 @@ interface MessageInterface
      * @param  \DateTime $updatedAt
      * @return void
      */
-    public function setUpdatedAt(\DateTime $updatedAt);
+    public function setUpdatedAt(\DateTime $updatedAt = null);
 
     /**
      * @return \DateTime
@@ -106,10 +107,30 @@ interface MessageInterface
      * @param  \DateTime $startedAt
      * @return void
      */
-    public function setStartedAt(\DateTime $startedAt);
+    public function setStartedAt(\DateTime $startedAt = null);
 
     /**
      * @return \DateTime
      */
     public function getStartedAt();
+
+    /**
+     * @return string
+     */
+    public function getStateName();
+
+    /**
+     * @return boolean
+     */
+    public function isRunning();
+
+    /**
+     * @return boolean
+     */
+    public function isError();
+
+    /**
+     * @return boolean
+     */
+    public function isOpen();
 }
