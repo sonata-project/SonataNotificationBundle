@@ -42,9 +42,12 @@ class SonataNotificationExtension extends Extension
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
-        $loader->load('admin.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
+            $loader->load('admin.xml');
+        }
+
         if (isset($bundles['LiipMonitorBundle'])) {
             $loader->load('checkmonitor.xml');
         }

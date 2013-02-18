@@ -24,7 +24,8 @@
     "suggest": {
         "guzzle/guzzle" : "*",
         "liip/monitor": "*",
-        "videlalvaro/php-amqplib": "*"
+        "videlalvaro/php-amqplib": "*",
+        "sonata-project/doctrine-orm-admin-bundle": "dev-master",
     },
     "require-dev": {
         "videlalvaro/php-amqplib": "dev-master",
