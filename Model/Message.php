@@ -19,6 +19,8 @@ class Message implements MessageInterface
 
     protected $state;
 
+    protected $restartCount;
+
     protected $group;
 
     protected $createdAt;
@@ -161,6 +163,22 @@ class Message implements MessageInterface
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRestartCount($restartCount)
+    {
+        $this->restartCount = $restartCount;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRestartCount()
+    {
+        return $this->restartCount;
     }
 
     /**

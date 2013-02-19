@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata project.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -12,6 +12,7 @@
 namespace Sonata\NotificationBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
+
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
@@ -32,6 +33,7 @@ class MessageAdmin extends Admin
             ->add('completedAt')
             ->add('getStateName')
             ->add('body')
+            ->add('restartCount')
         ;
     }
 
@@ -59,12 +61,14 @@ class MessageAdmin extends Admin
             ->add('startedAt')
             ->add('completedAt')
             ->add('getStateName')
+            ->add('restartCount')
         ;
     }
 
     /**
      * {@inheritdoc}
      */
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $class = $this->getClass();
@@ -88,7 +92,7 @@ class MessageAdmin extends Admin
 
         $actions['cancelled'] = array(
             'label'            =>  $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
-            'ask_confirmation' => false
+            'ask_confirmation' => false,
         );
 
         return $actions;

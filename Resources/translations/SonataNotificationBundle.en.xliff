@@ -78,6 +78,14 @@
                 <source>batch.message_cancelled</source>
                 <target>Cancel messages</target>
             </trans-unit>
+            <trans-unit id="list.label_restart_count">
+                <source>list.label_restart_count</source>
+                <target>Restart #</target>
+            </trans-unit>
+            <trans-unit id="show.label_restart_count">
+                <source>show.label_restart_count</source>
+                <target>Restart #</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

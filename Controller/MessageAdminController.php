@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata project.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -51,7 +51,12 @@ class MessageAdminController extends CRUDController
 
             $this->cancelMessage($message);
 
-            $this->get('sonata.notification.backend')->publish(clone $message);
+            $count = $message->getRestartCount();
+
+            $message = clone $message;
+            $message->setRestartCount($count + 1);
+
+            $this->get('sonata.notification.backend')->publish($message);
         }
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
