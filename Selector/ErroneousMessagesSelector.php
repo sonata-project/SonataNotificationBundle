@@ -47,17 +47,23 @@ class ErroneousMessagesSelector
      */
     public function getMessages(array $types, $maxAttempts = 5)
     {
-        return $this->em->getRepository($this->class)
+        $query = $this->em->getRepository($this->class)
             ->createQueryBuilder('m')
             ->where('m.state = :erroneousState')
-            ->andWhere('m.type IN (:types)')
-            ->andWhere('m.restartCount < :maxAttempts')
-            ->setParameters(array(
-                'erroneousState' => MessageInterface::STATE_ERROR,
-                'types'          => $types,
-                'maxAttempts'    => $maxAttempts,
-            ))
-            ->getQuery()
-            ->execute();
+            ->andWhere('m.restartCount < :maxAttempts');
+
+        $parameters = array(
+            'erroneousState' => MessageInterface::STATE_ERROR,
+            'maxAttempts'    => $maxAttempts,
+        );
+
+        if (count($types) > 0) {
+            $query->andWhere('m.type IN (:types)');
+            $parameters['types']= $types;
+        }
+
+        $query->setParameters($parameters);
+
+        return $query->getQuery()->execute();
     }
 }

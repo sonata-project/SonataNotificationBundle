@@ -30,7 +30,7 @@ class RestartCommand extends ContainerAwareCommand
     {
         $this->setName('sonata:notification:restart');
         $this->setDescription('Restart messages with erroneous statuses');
-        $this->addOption('type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'List of messages types to restart');
+        $this->addOption('type', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'List of messages types to restart');
         $this->addOption('max-attempts', null, InputOption::VALUE_REQUIRED, 'Maximum number of attempts', 5);
     }
 
@@ -45,10 +45,6 @@ class RestartCommand extends ContainerAwareCommand
             throw new \Exception('Option "max-attempts" is invalid (integer value needed).');
         }
 
-        if (0 == count($input->getOption('type'))) {
-            throw new \Exception('You need to specify at least one message type.');
-        }
-
         $messages = $this->getErroneousMessageSelector()->getMessages($input->getOption('type'), $input->getOption('max-attempts'));
 
         if (0 == count($messages)) {
@@ -60,12 +56,21 @@ class RestartCommand extends ContainerAwareCommand
         $manager = $this->getMessageManager();
 
         foreach ($messages as $message) {
+            if ($message->isOpen() || $message->isRunning() || $message->isError()) {
+                continue;
+            }
+
             $output->writeln(sprintf('Reset Message <info>#%d</info> status', $message->getId()));
 
-            $message->setRestartCount($message->getRestartCount() + 1);
-            $message->setState(MessageInterface::STATE_OPEN);
-
+            $message->setState(MessageInterface::STATE_CANCELLED);
             $manager->save($message);
+
+            $count = $message->getRestartCount();
+
+            $message = clone $message;
+            $message->setRestartCount($count + 1);
+
+            $this->getContainer()->get('sonata.notification.backend')->publish($message);
         }
 
         $output->writeln('<info>Done!</info>');
