@@ -21,6 +21,16 @@ class SonataNotificationBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new NotificationCompilerPass());
+
+        if ($container->hasExtension('jms_di_extra')) {
+            $container
+                ->getExtension('jms_di_extra')
+                ->blacklistControllerFile(
+                    $container->getParameter('kernel.root_dir') .
+                    '/../vendor/sonata-project/notification-bundle/Sonata/NotificationBundle/Controller/MessageAdminController.php'
+                )
+            ;
+        }
     }
 
     public function boot()
