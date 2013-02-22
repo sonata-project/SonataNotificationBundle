@@ -19,13 +19,13 @@
     "minimum-stability": "dev",
     "require": {
         "symfony/symfony": ">=2.1,<2.3-dev",
-        "sonata-project/doctrine-extensions": "dev-master"
+        "sonata-project/doctrine-extensions": "dev-master",
+        "sonata-project/doctrine-orm-admin-bundle": "dev-master"
     },
     "suggest": {
         "guzzle/guzzle" : "*",
         "liip/monitor": "*",
-        "videlalvaro/php-amqplib": "*",
-        "sonata-project/doctrine-orm-admin-bundle": "dev-master"
+        "videlalvaro/php-amqplib": "*"
     },
     "require-dev": {
         "videlalvaro/php-amqplib": "dev-master",
