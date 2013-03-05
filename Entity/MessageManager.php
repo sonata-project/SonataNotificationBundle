@@ -160,6 +160,13 @@ class MessageManager implements MessageManagerInterface
         $date = new \DateTime('now');
         $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
 
-        $this->em->getConnection()->exec(sprintf('DELETE FROM %s WHERE state = %s AND completed_at < "%s"', $tableName, MessageInterface::STATE_DONE, $date->format('Y-m-d H:i:s')));
+        $qb = $this->em->getRepository($this->class)->createQueryBuilder('message')
+            ->delete()
+            ->where('message.state = :state')
+            ->andWhere('message.completedAt < :date')
+            ->setParameter('state', Message::STATE_DONE)
+            ->setParameter('date', $date);
+
+        $qb->getQuery()->execute();
     }
 }
