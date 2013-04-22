@@ -77,7 +77,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('class')
                 ->addDefaultsIfNotSet()
                 ->children()
-                    ->scalarNode('message')->defaultValue('Sonata\\NotificationBundle\\Entity\\Message')->end()
+                    ->scalarNode('message')->defaultValue('Application\\Sonata\\NotificationBundle\\Entity\\Message')->end()
                 ->end()
             ->end()
             ->arrayNode('admin')
