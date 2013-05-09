@@ -48,3 +48,4 @@ Full configuration options:
                 default:
                     mappings:
                         SonataNotificationBundle: ~
+                        ApplicationSonataNotificationBundle: ~
