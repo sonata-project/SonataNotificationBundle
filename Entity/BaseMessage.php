@@ -11,9 +11,9 @@
 
 namespace Sonata\NotificationBundle\Entity;
 
-use Sonata\NotificationBundle\Model\Message as BaseMessage;
+use Sonata\NotificationBundle\Model\Message;
 
-class Message extends BaseMessage
+class BaseMessage extends Message
 {
     /**
      * @var integer $id

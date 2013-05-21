@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity
-        name="Sonata\NotificationBundle\Entity\Message"
-        table="notification__message"
-        >
-
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
-        </id>
-
+    <mapped-superclass name="Sonata\NotificationBundle\Entity\BaseMessage">
         <field name="type"         type="string"     column="type" length="255"/>
         <field name="body"         type="json"       column="body" />
         <field name="state"        type="integer"    column="state"  />
@@ -24,5 +16,5 @@
             <index name="state" columns="state" />
             <index name="createdAt" columns="created_at" />
         </indexes>
-    </entity>
+    </mapped-superclass>
 </doctrine-mapping>
