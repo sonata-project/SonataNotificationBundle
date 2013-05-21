@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -196,6 +197,14 @@ class SonataNotificationExtension extends Extension
      */
     public function registerDoctrineMapping(array $config)
     {
+        $collector = DoctrineCollector::getInstance();
 
+        $collector->addIndex($config['class']['message'], 'idx_state', array(
+            'state',
+        ));
+
+        $collector->addIndex($config['class']['message'], 'idx_created_at', array(
+            'created_at',
+        ));
     }
 }
