@@ -18,17 +18,16 @@
     ],
     "require": {
         "symfony/symfony": ">=2.1,<2.4-dev",
-        "sonata-project/doctrine-extensions": "1.*",
-        "sonata-project/doctrine-orm-admin-bundle": "2.2.*@dev",
-        "sonata-project/admin-bundle": "2.2.*@dev",
-        "sonata-project/block-bundle": "2.*"
+        "sonata-project/doctrine-extensions": "1.*"
     },
     "suggest": {
+        "sonata-project/doctrine-orm-admin-bundle": "2.2.*",
         "guzzle/guzzle" : "3.*",
         "liip/monitor-bundle": "0.4.*",
         "videlalvaro/php-amqplib": "2.0.*"
     },
     "require-dev": {
+        "sonata-project/doctrine-orm-admin-bundle": "2.2.*",
         "videlalvaro/php-amqplib": "2.0.*",
         "liip/monitor-bundle": "0.4.*"
     },
