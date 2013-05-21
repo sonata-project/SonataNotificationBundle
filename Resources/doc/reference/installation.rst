@@ -41,6 +41,7 @@ Then add these bundles in the config mapping definition:
                     mappings:
                         # ...
                         SonataNotificationBundle: ~
+                        ApplicationSonataNotificationBundle: ~
 
 Configuration
 -------------
@@ -60,3 +61,41 @@ Backend availables :
     # app/config/config.yml
     sonata_notification:
         backend: sonata.notification.backend.runtime
+
+Extending the Bundle
+--------------------
+At this point, the bundle is functional, but not quite ready yet. You need to
+generate the correct entities for the media:
+
+    php app/console sonata:easy-extends:generate SonataNotificationBundle
+
+If you specify no parameter, the files are generated in app/Application/Sonata...
+but you can specify the path with ``--dest=src``
+
+.. note::
+
+    The command will generate domain objects in an ``Application`` namespace.
+    So you can point entities' associations to a global and common namespace.
+    This will make Entities sharing easier as your models will allow to
+    point to a global namespace. For instance the user will be
+    ``Application\Sonata\NotificationBundle\Entity\Message``.
+
+Now, add the new `Application` Bundle into the kernel:
+
+.. code-block:: php
+
+    <?php
+
+    // AppKernel.php
+    class AppKernel {
+        public function registerbundles()
+        {
+            return array(
+                // Application Bundles
+                // ...
+                new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
+                // ...
+
+            )
+        }
+    }
