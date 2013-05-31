@@ -28,7 +28,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
         $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL ,'Only run n iterations before exiting', false);
-        $this->addOption('type', null, InputOption::VALUE_OPTIONAL, 'Use a specific backed based on a message type', null);
+        $this->addOption('type', null, InputOption::VALUE_OPTIONAL, 'Use a specific backed based on a message type, "all" with doctrine backend will handle all notifications no matter their type', null);
     }
 
     /**
@@ -74,6 +74,11 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $startMemoryUsage = memory_get_usage(true);
         $i = 0;
         foreach ($backend->getIterator() as $message) {
+
+            if (!$message) {
+                continue;
+            }
+
             $i++;
             if (!$message->getType()) {
                 $output->write("<error>Skipping : no type defined </error>");
@@ -86,7 +91,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             try {
 
                 $start = microtime(true);
-                $backend->handle($message, $dispatcher);
+                $returnInfos = $backend->handle($message, $dispatcher);
 
                 $currentMemory = memory_get_usage(true);
 
@@ -99,6 +104,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
                     $this->formatMemory($currentMemory - $startMemoryUsage),
                     ($currentMemory - $startMemoryUsage) / $startMemoryUsage * 100
                 ));
+
+                if (null !== $returnInfos) {
+                    $output->writeln($returnInfos->getReturnMessage());
+                }
 
             } catch (\Exception $e) {
                 if ($e instanceof \Sonata\NotificationBundle\Exception\HandlingException) {
@@ -121,7 +130,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     private function optimize()
     {
         if ($this->getContainer()->has('doctrine')) {
-            $this->getContainer()->get('doctrine')->getEntityManager()->getUnitOfWork()->clear();
+            $this->getContainer()->get('doctrine')->getManager()->getUnitOfWork()->clear();
         }
     }
 

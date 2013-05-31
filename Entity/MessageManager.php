@@ -57,9 +57,9 @@ class MessageManager implements MessageManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->em->getRepository($this->class)->findBy($criteria);
+        return $this->em->getRepository($this->class)->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -113,7 +113,7 @@ class MessageManager implements MessageManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function getNextOpenMessage($pause = 500000)
+    public function getNextOpenMessage($pause = 500000, $type = null)
     {
         $tableName = $this->em->getClassMetadata($this->class)->table['name'];
 
@@ -123,7 +123,12 @@ class MessageManager implements MessageManagerInterface
                 $this->em->getConnection()->exec(sprintf('LOCK TABLES %s as t0 WRITE', $tableName));
                 $locked = true;
 
-                $message = $this->findOneBy(array('state' => MessageInterface::STATE_OPEN));
+                $params = array('state' => MessageInterface::STATE_OPEN);
+                if ($type !== null) {
+                    $params['type'] = $type;
+                }
+
+                $message = $this->findOneBy($params);
 
                 if (!$message) {
                     $this->em->getConnection()->exec(sprintf('UNLOCK TABLES'));

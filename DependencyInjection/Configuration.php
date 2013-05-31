@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('message_manager')->defaultValue('sonata.notification.manager.message.default')->end()
                             ->scalarNode('max_age')->defaultValue(86400)->end() # max age in second
                             ->scalarNode('pause')->defaultValue(500000)->end()  # delay in microseconds
+                            ->scalarNode('batch_size')->defaultValue(10)->end() # number of items on each iteration
                             ->arrayNode('states')
                                 ->addDefaultsIfNotSet()
                                 ->children()

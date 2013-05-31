@@ -23,13 +23,15 @@
     "suggest": {
         "sonata-project/doctrine-orm-admin-bundle": "2.2.*",
         "guzzle/guzzle" : "3.*",
-        "liip/monitor-bundle": "0.4.*",
+        "liip/monitor-bundle": "0.5.*@dev",
         "videlalvaro/php-amqplib": "2.0.*"
     },
     "require-dev": {
         "sonata-project/doctrine-orm-admin-bundle": "2.2.*",
+        "guzzle/guzzle" : "3.*",
         "videlalvaro/php-amqplib": "2.0.*",
-        "liip/monitor-bundle": "0.4.*"
+        "liip/monitor-bundle": "0.5.*@dev",
+        "liip/monitor": "0.5.*@dev"
     },
     "autoload": {
         "psr-0": { "Sonata\\NotificationBundle": "" }

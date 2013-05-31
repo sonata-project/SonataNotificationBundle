@@ -14,7 +14,7 @@
             <argument type="service" id="sonata.notification.dispatcher" />
         </service>
 
-        <service id="sonata.notification.backend.doctrine" class="Sonata\NotificationBundle\Backend\MessageManagerBackend" >
+        <service id="sonata.notification.backend.doctrine" class="Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher" >
             <argument type="service" id="sonata.notification.manager.message" />
             <argument />
             <argument />

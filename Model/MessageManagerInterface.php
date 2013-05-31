@@ -42,10 +42,13 @@ interface MessageManagerInterface
      * Finds one message by the given criteria
      *
      * @param array $criteria
+     * @param array $orderBy
+     * @param int   $limit
+     * @param int   $offset
      *
      * @return MessageInterface
      */
-    public function findBy(array $criteria);
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     /**
      * Returns the message's fully qualified class name
