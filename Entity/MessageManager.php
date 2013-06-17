@@ -164,7 +164,7 @@ class MessageManager implements MessageManagerInterface
             ->delete()
             ->where('message.state = :state')
             ->andWhere('message.completedAt < :date')
-            ->setParameter('state', Message::STATE_DONE)
+            ->setParameter('state', MessageInterface::STATE_DONE)
             ->setParameter('date', $date);
 
         $qb->getQuery()->execute();
