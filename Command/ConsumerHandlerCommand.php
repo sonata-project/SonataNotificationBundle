@@ -121,7 +121,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     private function optimize()
     {
         if ($this->getContainer()->has('doctrine')) {
-            $this->getContainer()->get('doctrine')->getEntityManager()->getUnitOfWork()->clear();
+            $this->getContainer()->get('doctrine')->getManager()->getUnitOfWork()->clear();
         }
     }
 
