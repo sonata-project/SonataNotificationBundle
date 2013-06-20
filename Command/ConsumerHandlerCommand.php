@@ -11,8 +11,7 @@
 
 namespace Sonata\NotificationBundle\Command;
 
-use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
-
+use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 
 use Sonata\NotificationBundle\Consumer\ConsumerInterface;
+use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
 
 class ConsumerHandlerCommand extends ContainerAwareCommand
 {
@@ -75,15 +75,14 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $i = 0;
         foreach ($backend->getIterator() as $message) {
 
-            if (!$message) {
-                continue;
-            }
-
             $i++;
             if (!$message->getType()) {
                 $output->write("<error>Skipping : no type defined </error>");
                 continue;
             }
+
+            $message->setState(MessageInterface::STATE_IN_PROGRESS);
+            $this->getMessageManager()->save($message);
 
             $date = new \DateTime();
             $output->write(sprintf("[%s] <info>%s</info> : ", $date->format('r'), $message->getType(), $i));

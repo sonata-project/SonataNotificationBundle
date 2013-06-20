@@ -124,7 +124,7 @@ class SonataNotificationExtension extends Extension
             $batchSize = $config['backends']['doctrine']['batch_size'];
             $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
 
-            $this->configureQueueBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
+            $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
         }
     }
 
@@ -137,7 +137,7 @@ class SonataNotificationExtension extends Extension
      * @param $batchSize
      * @throws \RuntimeException
      */
-    protected function configureQueueBackends(ContainerBuilder $container, $config, $checkLevel, $pause, $maxAge, $batchSize)
+    protected function configureDoctrineBackends(ContainerBuilder $container, $config, $checkLevel, $pause, $maxAge, $batchSize)
     {
         $queues = $config['queues'];
         $qBackends = array();
@@ -166,7 +166,6 @@ class SonataNotificationExtension extends Extension
             }
         }
 
-        //
         $id = $this->createQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize);
         array_push($qBackends, array('type' => '', 'backend' => new Reference($id)));
 
@@ -196,8 +195,9 @@ class SonataNotificationExtension extends Extension
         }
         $definition = new Definition('Sonata\NotificationBundle\Backend\MessageManagerBackend', array($manager, $checkLevel, $pause, $maxAge, $batchSize));
         $definition->setPublic(false);
-        if($key !== '')
+        if ($key !== '') {
             $definition->addArgument($key);
+        }
         $container->setDefinition($id, $definition);
 
         return $id;

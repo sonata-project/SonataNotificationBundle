@@ -9,6 +9,14 @@ use Sonata\NotificationBundle\Exception\QueueNotFoundException;
 
 use Liip\Monitor\Result\CheckResult;
 
+/**
+ * Base class for queue backent dispatchers
+ *
+ * @author Kevin Nedelec <kevin.nedelec@ekino.com>
+ *
+ * Class QueueBackendDispatcher
+ * @package Sonata\NotificationBundle\Backend
+ */
 abstract class QueueBackendDispatcher implements QueueDispatcherInterface, BackendInterface
 {
     protected $queues;

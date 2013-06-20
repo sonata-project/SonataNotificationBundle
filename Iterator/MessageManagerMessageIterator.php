@@ -34,7 +34,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      * @param int                                                      $pause
      * @param int                                                      $batchSize
      */
-    public function __construct(MessageManagerInterface $messageManager, $type, $pause = 500000, $batchSize = 10)
+    public function __construct(MessageManagerInterface $messageManager, $type = null, $pause = 500000, $batchSize = 10)
     {
         $this->messageManager = $messageManager;
         $this->counter        = 0;
@@ -56,12 +56,8 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      */
     public function next()
     {
-        while (true) {
-            if ($this->setCurrent()) {
-                break;
-            }
-            usleep($this->pause);
-        }
+        $this->setCurrent();
+        $this->counter++;
     }
 
     /**
@@ -90,10 +86,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
 
     /**
-     * Assign current pointer a message
-     * return true if current is assigned
-     *
-     * @return bool
+     * Assign current pointer a message     *
      */
     protected function setCurrent()
     {
@@ -101,29 +94,27 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
             $this->bufferize($this->type);
         }
 
-        if(count($this->buffer) > 0) {
-            $this->current = array_pop($this->buffer);
-
-            $this->current->setState(MessageInterface::STATE_IN_PROGRESS);
-            $this->messageManager->save($this->current());
-            return true;
-        }
-
-        return false;
+        $this->current = array_pop($this->buffer);
     }
 
     /**
-     * {@inheritDoc}
+     * Fill the inner messages buffer
      */
     protected function bufferize($type = null)
     {
-        $params = array('state' => MessageInterface::STATE_OPEN);
-        if ($type !== null) {
-            $params['type'] = $type;
+        while (true) {
+            $params = array('state' => MessageInterface::STATE_OPEN);
+            if ($type !== null) {
+                $params['type'] = $type;
+            }
+
+            $this->buffer = $this->messageManager->findBy($params, null, $this->batchSize, null);
+
+            if (count($this->buffer) > 0 ) {
+                break;
+            }
+
+            usleep($this->pause);
         }
-
-        $this->buffer = $this->messageManager->findBy($params, null, $this->batchSize, null);
-
-        $this->counter += count($this->buffer);
     }
 }

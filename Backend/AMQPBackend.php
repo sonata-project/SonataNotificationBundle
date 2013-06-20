@@ -158,7 +158,7 @@ class AMQPBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator($type = null)
+    public function getIterator()
     {
         return new AMQPMessageIterator($this->getChannel(), $this->queue);
     }
