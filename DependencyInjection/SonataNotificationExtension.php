@@ -96,7 +96,6 @@ class SonataNotificationExtension extends Extension
     public function registerParameters(ContainerBuilder $container, $config)
     {
         $container->setParameter('sonata.notification.message.class', $config['class']['message']);
-
         $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
     }
 
@@ -113,19 +112,95 @@ class SonataNotificationExtension extends Extension
         }
 
         if (isset($config['backends']['doctrine'])) {
-            $container->getDefinition('sonata.notification.backend.doctrine')
-                ->replaceArgument(1, array(
-                    MessageInterface::STATE_DONE => $config['backends']['doctrine']['states']['done'],
-                    MessageInterface::STATE_ERROR => $config['backends']['doctrine']['states']['error'],
-                    MessageInterface::STATE_IN_PROGRESS => $config['backends']['doctrine']['states']['in_progress'],
-                    MessageInterface::STATE_OPEN => $config['backends']['doctrine']['states']['open'],
-                ))
-                ->replaceArgument(2, $config['backends']['doctrine']['pause'])
-                ->replaceArgument(3, $config['backends']['doctrine']['max_age'])
-            ;
 
+            $checkLevel = array(
+                MessageInterface::STATE_DONE => $config['backends']['doctrine']['states']['done'],
+                MessageInterface::STATE_ERROR => $config['backends']['doctrine']['states']['error'],
+                MessageInterface::STATE_IN_PROGRESS => $config['backends']['doctrine']['states']['in_progress'],
+                MessageInterface::STATE_OPEN => $config['backends']['doctrine']['states']['open'],
+            );
+            $pause = $config['backends']['doctrine']['pause'];
+            $maxAge = $config['backends']['doctrine']['max_age'];
+            $batchSize = $config['backends']['doctrine']['batch_size'];
             $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
+
+            $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $config
+     * @param $checkLevel
+     * @param $pause
+     * @param $maxAge
+     * @param $batchSize
+     * @throws \RuntimeException
+     */
+    protected function configureDoctrineBackends(ContainerBuilder $container, $config, $checkLevel, $pause, $maxAge, $batchSize)
+    {
+        $queues = $config['queues'];
+        $qBackends = array();
+
+        $definition = $container->getDefinition('sonata.notification.backend.doctrine');
+
+        if (count($queues) == 0) {
+            $defaultQueue = 'default';
+            $id = $this->createQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize, $defaultQueue);
+            $qBackends[0] = array('type' => $defaultQueue, 'backend' => new Reference($id));
+        } else {
+            $defaultSet = false;
+            foreach ($queues as $pos => $queue) {
+                $id = $this->createQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize, $queue['queue']);
+                $qBackends[$pos] = array('type' => $queue['routing_key'], 'backend' =>  new Reference($id));
+                if ($queue['default'] === true) {
+                    if ($defaultSet === true) {
+                        throw new \RuntimeException('You can only set one doctrine default queue in your sonata notification configuration.');
+                    }
+                    $defaultSet = true;
+                    $defaultQueue = $queue['routing_key'];
+                }
+            }
+            if ($defaultSet === false) {
+                throw new \RuntimeException("You need to specify a valid default queue for the doctrine backend!");
+            }
+        }
+
+        $id = $this->createQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize);
+        array_push($qBackends, array('type' => '', 'backend' => new Reference($id)));
+
+        $definition
+            ->replaceArgument(1, $queues)
+            ->replaceArgument(2, $defaultQueue)
+            ->replaceArgument(3, $qBackends)
+        ;
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $manager
+     * @param $checkLevel
+     * @param $pause
+     * @param $maxAge
+     * @param $batchSize
+     * @param string $key
+     * @return string
+     */
+    protected function createQueueBackend(ContainerBuilder $container, $manager, $checkLevel, $pause, $maxAge, $batchSize, $key = '')
+    {
+        if ($key === '') {
+            $id = 'sonata.notification.backend.doctrine.default' . $this->amqpCounter++;
+        } else {
+            $id = 'sonata.notification.backend.doctrine.' . $key;
+        }
+        $definition = new Definition('Sonata\NotificationBundle\Backend\MessageManagerBackend', array($manager, $checkLevel, $pause, $maxAge, $batchSize));
+        $definition->setPublic(false);
+        if ($key !== '') {
+            $definition->addArgument($key);
+        }
+        $container->setDefinition($id, $definition);
+
+        return $id;
     }
 
     /**

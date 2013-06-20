@@ -12,7 +12,7 @@
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
-use Sonata\NotificationBundle\Entity\Message;
+use \Sonata\NotificationBundle\Tests\Entity\Message;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Exception\HandlingException;
 

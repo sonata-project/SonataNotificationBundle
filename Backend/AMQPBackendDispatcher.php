@@ -24,15 +24,9 @@ use Liip\Monitor\Result\CheckResult;
 /**
  * Producer side of the rabbitmq backend.
  */
-class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterface
+class AMQPBackendDispatcher extends QueueBackendDispatcher
 {
     protected $settings;
-
-    protected $queues;
-
-    protected $defaultQueue;
-
-    protected $backends;
 
     protected $channel;
 
@@ -46,14 +40,8 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
      */
     public function __construct(array $settings, array $queues, $defaultQueue, array $backends)
     {
+        parent::__construct($queues, $defaultQueue, $backends);
         $this->settings = $settings;
-        $this->queues = $queues;
-        $this->backends = $backends;
-        $this->defaultQueue = $defaultQueue;
-
-        foreach ($this->backends as $backend) {
-            $backend['backend']->setDispatcher($this);
-        }
     }
 
     /**
@@ -81,82 +69,9 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     /**
      * {@inheritdoc}
      */
-    public function publish(MessageInterface $message)
-    {
-        $this->getBackend($message->getType())->publish($message);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function create($type, array $body)
-    {
-        $this->getBackend($type)->create($type, $body);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createAndPublish($type, array $body)
-    {
-        $this->getBackend($type)->createAndPublish($type, $body);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBackend($type)
-    {
-        $default = null;
-
-        if (count($this->queues) === 0) {
-            foreach ($this->backends as $backend) {
-                if ($backend['type'] === 'default') {
-                    return $backend['backend'];
-                }
-            }
-        }
-
-        foreach ($this->queues as $queue) {
-            foreach ($this->backends as $backend) {
-                if ($backend['type'] === $type) {
-                    return $backend['backend'];
-                }
-                if ($backend['type'] === $this->defaultQueue) {
-                    $default = $backend['backend'];
-                }
-            }
-        }
-
-        if ($default === null) {
-            throw new QueueNotFoundException('Could not find a message backend for the type ' . $type);
-        }
-
-        return $default;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getQueues()
-    {
-        return $this->queues;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initialize()
-    {
-
     }
 
     /**
@@ -250,12 +165,7 @@ class AMQPBackendDispatcher implements QueueDispatcherInterface, BackendInterfac
     }
 
     /**
-     * @param  string                           $message
-     * @param  string                           $status
-     * @return \Liip\Monitor\Result\CheckResult
+     * {@inheritdoc}
      */
-    protected function buildResult($message, $status)
-    {
-        return new CheckResult("Rabbitmq backend health check", $message, $status);
-    }
+    public function initialize() {}
 }

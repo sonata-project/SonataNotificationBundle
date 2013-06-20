@@ -13,7 +13,7 @@ namespace Sonata\NotificationBundle\Tests\Consumer;
 
 use Sonata\NotificationBundle\Consumer\LoggerConsumer;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
-use Sonata\NotificationBundle\Entity\Message;
+use Sonata\NotificationBundle\Tests\Entity\Message;
 
 class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
 {
