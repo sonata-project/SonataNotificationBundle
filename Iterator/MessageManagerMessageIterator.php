@@ -86,7 +86,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
 
     /**
-     * Assign current pointer a message     *
+     * Assign current pointer a message
      */
     protected function setCurrent()
     {
