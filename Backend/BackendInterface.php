@@ -38,6 +38,8 @@ interface BackendInterface
     public function createAndPublish($type, array $body);
 
     /**
+     * @param string $type
+     *
      * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
      */
     public function getIterator();
@@ -52,7 +54,7 @@ interface BackendInterface
     /**
      * @param  \Sonata\NotificationBundle\Model\MessageInterface           $message
      * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-     * @return void
+     * @return mixed
      */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
 

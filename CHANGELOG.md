@@ -15,3 +15,7 @@ A [BC BREAK] means the update will break the project for many reasons :
 ### 2013-04-22
 
 * made the bundle extendable for SonataEasyExtendsBundle. This introduces a [BC BREAK].
+
+### 2013-06-11
+
+* add queues management for doctrine backend

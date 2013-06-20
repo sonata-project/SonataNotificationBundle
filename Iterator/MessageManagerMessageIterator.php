@@ -12,6 +12,7 @@
 namespace Sonata\NotificationBundle\Iterator;
 
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
+use Sonata\NotificationBundle\Model\MessageInterface;
 
 class MessageManagerMessageIterator implements MessageIteratorInterface
 {
@@ -21,15 +22,25 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     protected $current;
 
+    protected $type;
+
+    protected $batchSize;
+
+    private $buffer = array();
+
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
+     * @param string                                                   $type
      * @param int                                                      $pause
+     * @param int                                                      $batchSize
      */
-    public function __construct(MessageManagerInterface $messageManager, $pause = 500000)
+    public function __construct(MessageManagerInterface $messageManager, $type = null, $pause = 500000, $batchSize = 10)
     {
         $this->messageManager = $messageManager;
         $this->counter        = 0;
         $this->pause          = $pause;
+        $this->type           = $type;
+        $this->batchSize      = $batchSize;
     }
 
     /**
@@ -45,7 +56,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      */
     public function next()
     {
-        $this->current = $this->messageManager->getNextOpenMessage($this->pause);
+        $this->setCurrent();
         $this->counter++;
     }
 
@@ -70,6 +81,40 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      */
     public function rewind()
     {
-        $this->current = $this->messageManager->getNextOpenMessage($this->pause);
+        $this->setCurrent();
+    }
+
+
+    /**
+     * Assign current pointer a message
+     */
+    protected function setCurrent()
+    {
+        if(count($this->buffer) === 0) {
+            $this->bufferize($this->type);
+        }
+
+        $this->current = array_pop($this->buffer);
+    }
+
+    /**
+     * Fill the inner messages buffer
+     */
+    protected function bufferize($type = null)
+    {
+        while (true) {
+            $params = array('state' => MessageInterface::STATE_OPEN);
+            if ($type !== null) {
+                $params['type'] = $type;
+            }
+
+            $this->buffer = $this->messageManager->findBy($params, null, $this->batchSize, null);
+
+            if (count($this->buffer) > 0 ) {
+                break;
+            }
+
+            usleep($this->pause);
+        }
     }
 }

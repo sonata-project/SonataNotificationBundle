@@ -19,6 +19,11 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
     protected $message;
 
     /**
+     * @var ConsumerReturnInfo
+     */
+    protected $returnInfo;
+
+    /**
      * @param MessageInterface $message
      */
     public function __construct(MessageInterface $message)
@@ -33,4 +38,21 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
     {
         return $this->message;
     }
+
+    /**
+     * @param \Sonata\NotificationBundle\Consumer\ConsumerReturnInfo $returnInfo
+     */
+    public function setReturnInfo($returnInfo)
+    {
+        $this->returnInfo = $returnInfo;
+    }
+
+    /**
+     * @return \Sonata\NotificationBundle\Consumer\ConsumerReturnInfo
+     */
+    public function getReturnInfo()
+    {
+        return $this->returnInfo;
+    }
+
 }

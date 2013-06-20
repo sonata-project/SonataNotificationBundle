@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
-use Sonata\NotificationBundle\Entity\Message;
+use \Sonata\NotificationBundle\Tests\Entity\Message;
 
 class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
 {
