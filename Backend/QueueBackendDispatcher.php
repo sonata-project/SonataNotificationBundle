@@ -126,29 +126,4 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     {
         return new CheckResult("backend health check", $message, $status);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public abstract function getIterator();
-
-    /**
-     * {@inheritdoc}
-     */
-    public abstract  function initialize();
-
-    /**
-     * {@inheritdoc}
-     */
-    public abstract function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
-
-    /**
-     * {@inheritdoc}
-     */
-    public abstract function getStatus();
-
-    /**
-     * {@inheritdoc}
-     */
-    public abstract function cleanup();
 }
