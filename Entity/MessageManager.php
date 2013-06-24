@@ -42,6 +42,11 @@ class MessageManager implements MessageManagerInterface
      */
     public function save(MessageInterface $message)
     {
+        //Hack for ConsumerHandlerCommand->optimize()
+        if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
+            $this->em->getUnitOfWork()->merge($message);
+        }
+
         $this->em->persist($message);
         $this->em->flush();
     }
@@ -108,51 +113,6 @@ class MessageManager implements MessageManagerInterface
         }
 
         return $states;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getNextOpenMessage($pause = 500000, $type = null)
-    {
-        $tableName = $this->em->getClassMetadata($this->class)->table['name'];
-
-        $locked = false;
-        try {
-            while (true) {
-                $this->em->getConnection()->exec(sprintf('LOCK TABLES %s as t0 WRITE', $tableName));
-                $locked = true;
-
-                $params = array('state' => MessageInterface::STATE_OPEN);
-                if ($type !== null) {
-                    $params['type'] = $type;
-                }
-
-                $message = $this->findOneBy($params);
-
-                if (!$message) {
-                    $this->em->getConnection()->exec(sprintf('UNLOCK TABLES'));
-                    $locked = false;
-
-                    usleep($pause);
-
-                    continue;
-                }
-
-                $message->setState(MessageInterface::STATE_IN_PROGRESS);
-                $this->save($message);
-
-                $this->em->getConnection()->exec(sprintf('UNLOCK TABLES'));
-
-                return $message;
-            }
-        } catch (\Exception $e) {
-            if ($locked) {
-                $this->em->getConnection()->exec(sprintf('UNLOCK TABLES'));
-            }
-
-            throw $e;
-        }
     }
 
     /**
