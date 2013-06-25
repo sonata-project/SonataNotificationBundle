@@ -19,7 +19,7 @@ class Message implements MessageInterface
 
     protected $state;
 
-    protected $restartCount;
+    protected $restartCount = 0;
 
     protected $group;
 

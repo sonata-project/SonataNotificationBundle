@@ -26,7 +26,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     protected $batchSize;
 
-    private $buffer = array();
+    protected $buffer = array();
 
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
@@ -84,7 +84,6 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
         $this->setCurrent();
     }
 
-
     /**
      * Assign current pointer a message
      */
@@ -99,6 +98,8 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     /**
      * Fill the inner messages buffer
+     *
+     * @param string|null $type
      */
     protected function bufferize($type = null)
     {

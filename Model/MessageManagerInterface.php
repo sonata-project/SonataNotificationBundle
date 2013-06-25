@@ -67,14 +67,6 @@ interface MessageManagerInterface
     public function save(MessageInterface $message);
 
     /**
-     * Returns the next open message available in the stack
-     *
-     * @param  int              $pause
-     * @return MessageInterface
-     */
-    public function getNextOpenMessage($pause = 500000);
-
-    /**
      * @return integer
      */
     public function countStates();
