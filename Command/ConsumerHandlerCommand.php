@@ -29,6 +29,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $this->setDescription('Listen for incoming messages');
         $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL ,'Only run n iterations before exiting', false);
         $this->addOption('type', null, InputOption::VALUE_OPTIONAL, 'Use a specific backed based on a message type, "all" with doctrine backend will handle all notifications no matter their type', null);
+        $this->addOption('show-details', 'd', InputOption::VALUE_OPTIONAL ,'Show consumers return details', true);
     }
 
     /**
@@ -54,6 +55,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         }
 
         $type = $input->getOption('type');
+        $showDetails = $input->getOption('show-details') === 'true';
         $backend = $this->getBackend($type);
 
         $output->writeln("");
@@ -81,11 +83,8 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $message->setState(MessageInterface::STATE_IN_PROGRESS);
-            $this->getMessageManager()->save($message);
-
             $date = new \DateTime();
-            $output->write(sprintf("[%s] <info>%s</info> : ", $date->format('r'), $message->getType(), $i));
+            $output->write(sprintf("[%s] <info>%s</info> #%s: ", $date->format('r'), $message->getType(), $i));
             $memoryUsage = memory_get_usage(true);
             try {
 
@@ -104,7 +103,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
                     ($currentMemory - $startMemoryUsage) / $startMemoryUsage * 100
                 ));
 
-                if (null !== $returnInfos) {
+                if ($showDetails && null !== $returnInfos) {
                     $output->writeln($returnInfos->getReturnMessage());
                 }
 

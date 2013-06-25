@@ -56,7 +56,7 @@ class RestartCommand extends ContainerAwareCommand
         $manager = $this->getMessageManager();
 
         foreach ($messages as $message) {
-            if ($message->isOpen() || $message->isRunning() || $message->isError()) {
+            if ($message->isOpen() || $message->isRunning()) {
                 continue;
             }
 

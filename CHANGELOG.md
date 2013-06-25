@@ -19,3 +19,7 @@ A [BC BREAK] means the update will break the project for many reasons :
 ### 2013-06-11
 
 * add queues management for doctrine backend
+
+### 2013-06-25
+
+* performance optimizations. This introduces a [BC BREAK].
