@@ -22,7 +22,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     protected $current;
 
-    protected $type;
+    protected $types;
 
     protected $batchSize;
 
@@ -30,16 +30,16 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
     /**
      * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
-     * @param string                                                   $type
+     * @param array                                                    $types
      * @param int                                                      $pause
      * @param int                                                      $batchSize
      */
-    public function __construct(MessageManagerInterface $messageManager, $type = null, $pause = 500000, $batchSize = 10)
+    public function __construct(MessageManagerInterface $messageManager, $types = array(), $pause = 500000, $batchSize = 10)
     {
         $this->messageManager = $messageManager;
         $this->counter        = 0;
         $this->pause          = $pause;
-        $this->type           = $type;
+        $this->types          = $types;
         $this->batchSize      = $batchSize;
     }
 
@@ -90,7 +90,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     protected function setCurrent()
     {
         if(count($this->buffer) === 0) {
-            $this->bufferize($this->type);
+            $this->bufferize($this->types);
         }
 
         $this->current = array_pop($this->buffer);
@@ -101,15 +101,10 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      *
      * @param string|null $type
      */
-    protected function bufferize($type = null)
+    protected function bufferize($types = array())
     {
         while (true) {
-            $params = array('state' => MessageInterface::STATE_OPEN);
-            if ($type !== null) {
-                $params['type'] = $type;
-            }
-
-            $this->buffer = $this->messageManager->findBy($params, null, $this->batchSize, null);
+            $this->buffer = $this->findNextMessages($types);
 
             if (count($this->buffer) > 0 ) {
                 break;
@@ -117,5 +112,16 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
 
             usleep($this->pause);
         }
+    }
+
+    /**
+     * Find open messages
+     *
+     * @param $types
+     * @return mixed
+     */
+    protected function findNextMessages($types)
+    {
+        return $this->messageManager->findByTypes($types, MessageInterface::STATE_OPEN, $this->batchSize);
     }
 }

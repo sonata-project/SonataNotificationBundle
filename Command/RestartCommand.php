@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Sonata\NotificationBundle\Iterator\ErroneousMessageIterator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,9 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 
-class RestartCommand extends ContainerAwareCommand
+class RestartCommand extends PullingCommand
 {
     /**
      * {@inheritDoc}
@@ -29,9 +28,11 @@ class RestartCommand extends ContainerAwareCommand
     public function configure()
     {
         $this->setName('sonata:notification:restart');
-        $this->setDescription('Restart messages with erroneous statuses');
+        $this->setDescription('Restart messages with erroneous statuses, only for doctrine backends');
         $this->addOption('type', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'List of messages types to restart');
-        $this->addOption('max-attempts', null, InputOption::VALUE_REQUIRED, 'Maximum number of attempts', 5);
+        $this->addOption('max-attempts', null, InputOption::VALUE_REQUIRED, 'Maximum number of attempts', 6);
+        $this->addOption('attempt-delay', null, InputOption::VALUE_OPTIONAL, 'Min seconds between two attempts', 10);
+        $this->addOption('pulling', null, InputOption::VALUE_NONE, 'Run the command as an infinite pulling loop');
     }
 
     /**
@@ -45,7 +46,20 @@ class RestartCommand extends ContainerAwareCommand
             throw new \Exception('Option "max-attempts" is invalid (integer value needed).');
         }
 
-        $messages = $this->getErroneousMessageSelector()->getMessages($input->getOption('type'), $input->getOption('max-attempts'));
+        $pullMode = $input->getOption('pulling');
+        $manager = $this->getMessageManager();
+
+        if ($pullMode) {
+            $messages = new ErroneousMessageIterator(
+                $manager,
+                $input->getOption('type'),
+                null,
+                null,
+                $input->getOption('max-attempts'),
+                $input->getOption('attempt-delay'));
+        } else {
+            $messages = $this->getErroneousMessageSelector()->getMessages($input->getOption('type'), $input->getOption('max-attempts'));
+        }
 
         if (0 == count($messages)) {
             $output->writeln('Nothing to restart, bye.');
@@ -53,15 +67,12 @@ class RestartCommand extends ContainerAwareCommand
             return;
         }
 
-        $manager = $this->getMessageManager();
-
         foreach ($messages as $message) {
             if ($message->isOpen() || $message->isRunning()) {
                 continue;
             }
 
-            $output->writeln(sprintf('Reset Message <info>#%d</info> status', $message->getId()));
-
+            $id = $message->getId();
             $message->setState(MessageInterface::STATE_CANCELLED);
             $manager->save($message);
 
@@ -71,6 +82,12 @@ class RestartCommand extends ContainerAwareCommand
             $message->setRestartCount($count + 1);
 
             $this->getContainer()->get('sonata.notification.backend')->publish($message);
+
+            $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $message->getType(), $id, $message->getId(), $message->getRestartCount()));
+
+            if ($pullMode) {
+                $this->optimize();
+            }
         }
 
         $output->writeln('<info>Done!</info>');

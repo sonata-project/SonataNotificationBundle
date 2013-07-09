@@ -55,3 +55,8 @@ In case of getting messages with an erroneous status, you can reset their status
 the next iteration (this command must be used for the database backend)::
 
     app/console sonata:notification:restart --type="xxx" --type="yyy" --max-attempts=10
+
+You can get this command to run continuously with the --pulling option and you can set the delay between the time the
+message has been set to error and the time the message can be reprocess with --attempt-delay option (in seconds)
+
+    app/console sonata:notification:restart --type="xxx" --type="yyy" --pulling --max-attempts=10 --attempt-delay=60
