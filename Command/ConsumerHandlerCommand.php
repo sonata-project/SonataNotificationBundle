@@ -12,7 +12,6 @@
 namespace Sonata\NotificationBundle\Command;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +20,7 @@ use Symfony\Component\Console\Output\Output;
 use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
 
-class ConsumerHandlerCommand extends ContainerAwareCommand
+class ConsumerHandlerCommand extends PullingCommand
 {
     public function configure()
     {
@@ -55,7 +54,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         }
 
         $type = $input->getOption('type');
-        $showDetails = $input->getOption('show-details') === 'true';
+        $showDetails = $input->getOption('show-details');
         $backend = $this->getBackend($type);
 
         $output->writeln("");
@@ -125,13 +124,6 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         }
     }
 
-    private function optimize()
-    {
-        if ($this->getContainer()->has('doctrine')) {
-            $this->getContainer()->get('doctrine')->getManager()->getUnitOfWork()->clear();
-        }
-    }
-
     /**
      * @param $memory
      * @return string
@@ -178,13 +170,5 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     private function getDispatcher()
     {
         return $this->getContainer()->get('sonata.notification.dispatcher');
-    }
-
-    /**
-     * @return \Sonata\NotificationBundle\Model\MessageManagerInterface
-     */
-    private function getMessageManager()
-    {
-        return $this->getContainer()->get('sonata.notification.manager.message');
     }
 }

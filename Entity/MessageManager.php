@@ -68,6 +68,56 @@ class MessageManager implements MessageManagerInterface
     }
 
     /**
+     * Find messages by types and states
+     *
+     * @param array $types
+     * @param int   $state
+     * @param int   $batchSize
+     *
+     * @return mixed
+     */
+    public function findByTypes(array $types, $state, $batchSize)
+    {
+        $params = array();
+        $query = $this->prepareStateQuery($state, $types, $batchSize, $params);
+
+        $query->setParameters($params);
+
+        return $query->getQuery()->execute();
+    }
+
+    /**
+     * Find messages by types, states and attempts
+     *
+     * @param array $types
+     * @param int   $state
+     * @param int   $batchSize
+     * @param int   $maxAttempts
+     * @param int   $attemptDelay
+     *
+     * @return mixed
+     */
+    public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10)
+    {
+        $params = array();
+        $query = $this->prepareStateQuery($state, $types, $batchSize, $params);
+
+        if ($maxAttempts) {
+            $query
+                ->andWhere('m.restartCount < :maxAttempts')
+                ->andWhere('m.updatedAt < :delayDate');
+
+            $params['maxAttempts'] = $maxAttempts;
+            $now = new \DateTime();
+            $params['delayDate'] = $now->add(\DateInterval::createFromDateString(($attemptDelay * -1) . ' second'));
+        }
+
+        $query->setParameters($params);
+
+        return $query->getQuery()->execute();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function delete(MessageInterface $message)
@@ -133,5 +183,32 @@ class MessageManager implements MessageManagerInterface
             ->setParameter('date', $date);
 
         $qb->getQuery()->execute();
+    }
+
+    /**
+     * @param int   $state
+     * @param array $types
+     * @param int   $batchSize
+     * @param array $parameters
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    protected function prepareStateQuery($state, $types, $batchSize, &$parameters)
+    {
+        $query = $this->em->getRepository($this->class)
+            ->createQueryBuilder('m')
+            ->where('m.state = :state')
+            ->orderBy('m.createdAt');
+
+        $parameters['state'] = $state;
+
+        if (count($types) > 0) {
+            $query->andWhere('m.type IN (:types)');
+            $parameters['types'] = $types;
+        }
+
+        $query->setMaxResults($batchSize);
+
+        return $query;
     }
 }
