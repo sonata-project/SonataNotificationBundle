@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="breadcrumb.link_message_list">
                 <source>breadcrumb.link_message_list</source>
-                <target>Nachrichten</target>
+                <target>Systemmeldungen</target>
             </trans-unit>
             <trans-unit id="list.label_id">
                 <source>list.label_id</source>
@@ -56,7 +56,7 @@
             </trans-unit>
             <trans-unit id="breadcrumb.link_message_show">
                 <source>breadcrumb.link_message_show</source>
-                <target>Nachricht</target>
+                <target>Systemmeldung</target>
             </trans-unit>
             <trans-unit id="show.label_body">
                 <source>show.label_body</source>
