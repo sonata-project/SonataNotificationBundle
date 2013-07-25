@@ -17,14 +17,14 @@ To enable multiple queues, simply define a `queues` node in your configuration:
             - { queue: transcoder, routing_key: start.transcode.video }
             - { queue: catchall, default: true }
         backends: 
-        rabbitmq: 
-            exchange:     router
-            connection:
-                host:     %rabbitmq_host%
-                user:     %rabbitmq_user%
-                pass:     %rabbitmq_pass%
-                port:     %rabbitmq_port%
-                vhost:    %rabbitmq_vhost%
+            rabbitmq: 
+                exchange:     router
+                connection:
+                    host:     %rabbitmq_host%
+                    user:     %rabbitmq_user%
+                    pass:     %rabbitmq_pass%
+                    port:     %rabbitmq_port%
+                    vhost:    %rabbitmq_vhost%
                 
                 
 This will define 2 different queues: `transcoder` and `catchall` and where the `transcoder` queue is bound to a routing key:
