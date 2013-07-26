@@ -91,7 +91,9 @@ class MessageManagerBackend implements BackendInterface
      */
     public function getIterator()
     {
-        return new MessageManagerMessageIterator($this->messageManager, array($this->type), $this->pause, $this->batchSize);
+        $types = null !== $this->type ? array($this->type) : array();
+
+        return new MessageManagerMessageIterator($this->messageManager, $types, $this->pause, $this->batchSize);
     }
 
     /**
