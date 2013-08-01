@@ -74,7 +74,8 @@ class ConsumerHandlerCommand extends PullingCommand
 
         $startMemoryUsage = memory_get_usage(true);
         $i = 0;
-        foreach ($backend->getIterator() as $message) {
+        $iterator = $backend->getIterator();
+        foreach ($iterator as $message) {
 
             $i++;
             if (!$message->getType()) {
@@ -114,7 +115,9 @@ class ConsumerHandlerCommand extends PullingCommand
                 }
             }
 
-            $this->optimize();
+            if ($iterator->isBufferEmpty()) {
+                $this->optimize();
+            }
 
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');

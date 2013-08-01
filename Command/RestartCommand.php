@@ -85,7 +85,7 @@ class RestartCommand extends PullingCommand
 
             $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $message->getType(), $id, $message->getId(), $message->getRestartCount()));
 
-            if ($pullMode) {
+            if ($pullMode && $messages->isBufferEmpty()) {
                 $this->optimize();
             }
         }
