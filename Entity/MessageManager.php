@@ -42,11 +42,6 @@ class MessageManager implements MessageManagerInterface
      */
     public function save(MessageInterface $message)
     {
-        //Hack for ConsumerHandlerCommand->optimize()
-        if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
-            $this->em->getUnitOfWork()->merge($message);
-        }
-
         $this->em->persist($message);
         $this->em->flush();
     }
