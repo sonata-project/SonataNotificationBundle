@@ -21,6 +21,7 @@ Full configuration options:
                 message_manager: sonata.notification.manager.message.default
                 max_age:         86400     # max age in second
                 pause:           500000    # delay in microseconds
+                batch_size:      10        # number of messages on each iteration
                 states:                    # raising errors level
                     in_progress: 10
                     error:       20
@@ -41,6 +42,26 @@ Full configuration options:
             #
             # if dead_letter_exchange is set,failed messages will be rejected and sent to this exchange
             - { queue: defaultQueue, recover: true|false, default: true|false, routing_key: the_routing_key, dead_letter_exchange: 'my.dead.letter.exchange'}
+
+        # Clear doctrine context on each command iteration if doctrine service is loaded
+        #
+        # default true or false if doctrine backend
+        doctrine_optimize: true|false
+
+        # Clear doctrine context on each doctrine command batch iteration
+        # It means if backends.doctrine.batch_size = 10, doctrine context will be cleared when the 10 messages buffer will be empty
+        #
+        # default true when doctrine backend
+        doctrine_backend_optimize: true|false
+
+        # Listeners attached to the IterateEvent
+        # Iterate event is thrown on each command iteration
+        #
+        # iteration listener class must implement Sonata\NotificationBundle\Event\IterationListener
+        iteration_listeners:
+            - the_service_id
+            - the_other_service_id
+
     doctrine:
         orm:
             entity_managers:

@@ -11,7 +11,9 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Event\IterateEvent;
 use Sonata\NotificationBundle\Iterator\ErroneousMessageIterator;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,7 +22,7 @@ use Symfony\Component\Console\Output\Output;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
 
-class RestartCommand extends PullingCommand
+class RestartCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritDoc}
@@ -67,6 +69,8 @@ class RestartCommand extends PullingCommand
             return;
         }
 
+        $eventDispatcher = $this->getContainer()->get('event_dispatcher');
+
         foreach ($messages as $message) {
             if ($message->isOpen() || $message->isRunning()) {
                 continue;
@@ -86,7 +90,7 @@ class RestartCommand extends PullingCommand
             $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $message->getType(), $id, $message->getId(), $message->getRestartCount()));
 
             if ($pullMode) {
-                $this->optimize();
+                $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($message, null, $message));
             }
         }
 
