@@ -88,6 +88,10 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testStatusIsOk()
     {
+        if (!class_exists('Liip\Monitor\Result\CheckResult')) {
+            $this->markTestSkipped('The class Liip\Monitor\Result\CheckResult does not exist');
+        }
+
         $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true);
 
         $status = $backend->getStatus();

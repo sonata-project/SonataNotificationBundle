@@ -22,8 +22,8 @@ class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
         if (!interface_exists('Liip\Monitor\Check\CheckInterface')) {
             $this->markTestSkipped('Liip\Monitor\Check\CheckInterface does not exist');
         }
-
     }
+
     public function testCheck()
     {
         $result = new CheckResult('Test check', 'OK', CheckResult::OK);
