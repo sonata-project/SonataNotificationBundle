@@ -25,7 +25,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testBufferize()
     {
-        $iterator = new MessageManagerMessageIterator(0);
+        $iterator = new MessageManagerMessageIterator($this->getEmMock(), 0);
 
         $iterator->_bufferize();
 
@@ -36,7 +36,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
     {
         $size = 10;
 
-        $iterator = new MessageManagerMessageIterator(0);
+        $iterator = new MessageManagerMessageIterator($this->getEmMock(), 0);
 
         $iterator->rewind();
         $this->assertTrue($iterator->valid());
@@ -57,7 +57,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testLongForeach()
     {
-        $iterator = new MessageManagerMessageIterator(500000, 2);
+        $iterator = new MessageManagerMessageIterator($this->getEmMock(), 500000, 2);
 
         $count = 0;
 
@@ -68,5 +68,28 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
                 return;
             }
         }
+    }
+
+    protected function getEmMock()
+    {
+        $emMock  = $this->getMockBuilder('\Doctrine\ORM\EntityManager',
+            array('getRepository', 'getClassMetadata', 'persist', 'flush'), array(), '', false)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $emMock->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($this->getMockBuilder('EntityRepository')
+                ->disableOriginalConstructor()
+                ->getMock()));
+        $emMock->expects($this->any())
+            ->method('getClassMetadata')
+            ->will($this->returnValue((object)array('name' => 'aClass')));
+        $emMock->expects($this->any())
+            ->method('persist')
+            ->will($this->returnValue(null));
+        $emMock->expects($this->any())
+            ->method('flush')
+            ->will($this->returnValue(null));
+        return $emMock;  // it tooks 13 lines to achieve mock!
     }
 }

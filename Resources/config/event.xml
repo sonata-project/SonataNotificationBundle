@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.notification.event.doctrine_optimize" class="Sonata\NotificationBundle\Event\DoctrineOptimizeListener" >
+            <argument type="service" id="doctrine" />
+        </service>
+        <service id="sonata.notification.event.doctrine_backend_optimize" class="Sonata\NotificationBundle\Event\DoctrineBackendOptimizeListener" >
+            <argument type="service" id="doctrine" />
+        </service>
+    </services>
+</container>

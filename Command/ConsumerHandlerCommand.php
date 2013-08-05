@@ -11,7 +11,8 @@
 
 namespace Sonata\NotificationBundle\Command;
 
-use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Event\IterateEvent;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Output\Output;
 use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
 
-class ConsumerHandlerCommand extends PullingCommand
+class ConsumerHandlerCommand extends ContainerAwareCommand
 {
     public function configure()
     {
@@ -53,6 +54,7 @@ class ConsumerHandlerCommand extends PullingCommand
             }
         }
 
+        $dispatcher = $this->getDispatcher();
         $type = $input->getOption('type');
         $showDetails = $input->getOption('show-details');
         $backend = $this->getBackend($type);
@@ -62,6 +64,9 @@ class ConsumerHandlerCommand extends PullingCommand
 
         // initialize the backend
         $backend->initialize();
+
+        $eventDispatcher = $this->getContainer()->get('event_dispatcher');
+
         $output->writeln(" done!");
 
         if ($type === null) {
@@ -70,11 +75,10 @@ class ConsumerHandlerCommand extends PullingCommand
             $output->writeln(sprintf("[%s] <info>Starting the backend handler</info> - %s (type: %s)", $now, get_class($backend), $type));
         }
 
-        $dispatcher = $this->getDispatcher();
-
         $startMemoryUsage = memory_get_usage(true);
         $i = 0;
-        foreach ($backend->getIterator() as $message) {
+        $iterator = $backend->getIterator();
+        foreach ($iterator as $message) {
 
             $i++;
             if (!$message->getType()) {
@@ -114,7 +118,7 @@ class ConsumerHandlerCommand extends PullingCommand
                 }
             }
 
-            $this->optimize();
+            $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($iterator, $backend, $message));
 
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');

@@ -75,6 +75,11 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('consumers')
                 ->addDefaultsIfNotSet()
             ->end()
+            ->arrayNode('iteration_listeners')
+                ->defaultValue(array())
+                ->prototype('scalar')
+                ->end()
+            ->end()
             ->arrayNode('class')
                 ->addDefaultsIfNotSet()
                 ->children()
@@ -94,6 +99,10 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
+            ->booleanNode('doctrine_optimize')
+                ->defaultValue(true)->end() # attach doctrine optimize listener
+            ->booleanNode('doctrine_backend_optimize')
+                ->defaultValue(true)->end() # attach doctrine backend optimize listener
         ;
 
         return $treeBuilder;
@@ -118,6 +127,5 @@ class Configuration implements ConfigurationInterface
         ->end();
 
         return $node;
-
     }
 }

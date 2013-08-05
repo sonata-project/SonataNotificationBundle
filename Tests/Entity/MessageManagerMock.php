@@ -35,4 +35,15 @@ class MessageManagerMock extends MessageManager
 
         return $result;
     }
+
+    public function findByTypes(array $types, $state, $batchSize)
+    {
+        $result = array();
+        while ($batchSize !== null && $batchSize > 0) {
+            $result[$batchSize] = new Message();
+            $batchSize--;
+        }
+
+        return $result;
+    }
 }
