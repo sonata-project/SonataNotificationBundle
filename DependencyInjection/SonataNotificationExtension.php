@@ -45,6 +45,7 @@ class SonataNotificationExtension extends Extension
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
         $loader->load('selector.xml');
+        $loader->load('event.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
@@ -62,8 +63,25 @@ class SonataNotificationExtension extends Extension
         $this->registerParameters($container, $config);
         $this->configureBackends($container, $config);
         $this->configureClass($container, $config);
+        $this->configureListeners($container, $config);
         $this->configureAdmin($container, $config);
      }
+
+    protected function configureListeners(ContainerBuilder $container, $config)
+    {
+        $ids = $config['iteration_listeners'];
+
+        if ($config['doctrine_optimize']) {
+            $config['doctrine_backend_optimize'] = false;
+            $ids[] = 'sonata.notification.event.doctrine_optimize';
+        }
+
+        if ($config['doctrine_backend_optimize']) {
+            $ids[] = 'sonata.notification.event.doctrine_backend_optimize';
+        }
+
+        $container->setParameter('sonata.notification.event.iteration_listeners', $ids);
+    }
 
     /**
      * @param ContainerBuilder $container

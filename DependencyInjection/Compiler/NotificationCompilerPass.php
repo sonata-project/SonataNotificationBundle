@@ -11,8 +11,10 @@
 
 namespace Sonata\NotificationBundle\DependencyInjection\Compiler;
 
+use Sonata\NotificationBundle\Event\IterateEvent;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 class NotificationCompilerPass implements CompilerPassInterface
 {
@@ -45,5 +47,20 @@ class NotificationCompilerPass implements CompilerPassInterface
         }
 
         $container->getDefinition('sonata.notification.consumer.metadata')->replaceArgument(0, $informations);
+
+        if ($container->getParameter('sonata.notification.event.iteration_listeners')) {
+            $ids = $container->getParameter('sonata.notification.event.iteration_listeners');
+
+            foreach ($ids as $serviceId) {
+                $definition = $container->getDefinition($serviceId);
+
+                $class = new \ReflectionClass($definition->getClass());
+                if (!$class->implementsInterface('Sonata\NotificationBundle\Event\IterationListener')) {
+                    throw new RuntimeException('Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener');
+                }
+
+                $definition->addTag('kernel.event_listener', array( 'event' => IterateEvent::EVENT_NAME, 'method' => 'iterate'));
+            }
+        }
     }
 }

@@ -85,6 +85,16 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
+     * Return true if the internal buffer is empty
+     *
+     * @return bool
+     */
+    public function isBufferEmpty()
+    {
+        return 0 === count($this->buffer);
+    }
+
+    /**
      * Assign current pointer a message
      */
     protected function setCurrent()

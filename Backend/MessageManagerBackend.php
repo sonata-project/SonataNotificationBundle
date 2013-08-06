@@ -101,7 +101,6 @@ class MessageManagerBackend implements BackendInterface
      */
     public function initialize()
     {
-
     }
 
     /**
@@ -189,5 +188,4 @@ class MessageManagerBackend implements BackendInterface
     {
         return new CheckResult("Message manager backend health check", $message, $status);
     }
-
 }

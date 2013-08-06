@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
+use Doctrine\ORM\EntityManager;
 use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator as Iterator;
 use Sonata\NotificationBundle\Tests\Entity\MessageManagerMock;
 
@@ -22,21 +23,21 @@ use Sonata\NotificationBundle\Tests\Entity\MessageManagerMock;
  */
 class MessageManagerMessageIterator extends Iterator
 {
-    public function __construct($pause = 0, $batchSize = 10)
+    public function __construct(EntityManager $messageManager, $pause = 0, $batchSize = 10)
     {
         parent::__construct(
-            new MessageManagerMock(),
-            null,
+            new MessageManagerMock($messageManager, 'Sonata\NotificationBundle\Model\Message'),
+            array(),
             $pause,
             $batchSize);
     }
 
     /**
-     * @param null $type
+     * @param null $types
      */
-    public function _bufferize($type = null)
+    public function _bufferize($types = array())
     {
-        $this->bufferize($type);
+        $this->bufferize($types);
     }
 
     /**
