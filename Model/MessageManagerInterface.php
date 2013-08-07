@@ -76,4 +76,22 @@ interface MessageManagerInterface
      * @return void
      */
     public function cleanup($maxAge);
+
+    /**
+     * Cancels a given Message.
+     *
+     * @param MessageInterface $message
+     *
+     * @return void
+     */
+    public function cancel(MessageInterface $message);
+
+    /**
+     * Restarts a given message (cancels it and returns a new one, ready for publication).
+     *
+     * @param MessageInterface $message
+     *
+     * @return MessageInterface $message
+     */
+    public function restart(MessageInterface $message);
 }

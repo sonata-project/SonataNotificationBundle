@@ -72,20 +72,11 @@ class RestartCommand extends ContainerAwareCommand
         $eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
         foreach ($messages as $message) {
-            if ($message->isOpen() || $message->isRunning()) {
-                continue;
-            }
-
             $id = $message->getId();
-            $message->setState(MessageInterface::STATE_CANCELLED);
-            $manager->save($message);
 
-            $count = $message->getRestartCount();
+            $message = $manager->restart($message);
 
-            $message = clone $message;
-            $message->setRestartCount($count + 1);
-
-            $this->getContainer()->get('sonata.notification.backend')->publish($message);
+            $this->getBackend()->publish($message);
 
             $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $message->getType(), $id, $message->getId(), $message->getRestartCount()));
 
@@ -113,5 +104,13 @@ class RestartCommand extends ContainerAwareCommand
     protected function getMessageManager()
     {
         return $this->getContainer()->get('sonata.notification.manager.message');
+    }
+
+    /**
+     * @return \Sonata\NotificationBundle\Backend\BackendInterface
+     */
+    protected function getBackend()
+    {
+        return $this->getContainer()->get('sonata.notification.backend');
     }
 }
