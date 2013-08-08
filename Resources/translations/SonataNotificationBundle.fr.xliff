@@ -64,7 +64,7 @@
             </trans-unit>
             <trans-unit id="filter.label_type">
                 <source>filter.label_type</source>
-                <target>Typee</target>
+                <target>Type</target>
             </trans-unit>
             <trans-unit id="filter.label_state">
                 <source>filter.label_state</source>
