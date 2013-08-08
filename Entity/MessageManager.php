@@ -186,6 +186,39 @@ class MessageManager implements MessageManagerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function cancel(MessageInterface $message)
+    {
+        if ($message->isRunning() || $message->isError()) {
+            return;
+        }
+
+        $message->setState(MessageInterface::STATE_CANCELLED);
+
+        $this->save($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function restart(MessageInterface $message)
+    {
+        if ($message->isOpen() || $message->isRunning()) {
+            return;
+        }
+
+        $this->cancel($message);
+
+        $count = $message->getRestartCount();
+
+        $newMessage = clone $message;
+        $newMessage->setRestartCount($count + 1);
+
+        return $newMessage;
+    }
+
+    /**
      * @param int   $state
      * @param array $types
      * @param int   $batchSize

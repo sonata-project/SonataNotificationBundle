@@ -20,21 +20,9 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 class MessageAdminController extends CRUDController
 {
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
-     */
-    protected function cancelMessage(MessageInterface $message)
-    {
-        if ($message->isRunning() || $message->isError()) {
-            return;
-        }
-
-        $message->setState(MessageInterface::STATE_CANCELLED);
-
-        $this->admin->getModelManager()->update($message);
-    }
-
-    /**
      * @param ProxyQueryInterface $query
+     *
+     * @throws AccessDeniedException
      *
      * @return RedirectResponse
      */
@@ -45,18 +33,9 @@ class MessageAdminController extends CRUDController
         }
 
         foreach ($query->execute() as $message) {
-            if ($message->isOpen()) {
-                continue;
-            }
+            $message = $this->getMessageManager()->restart($message);
 
-            $this->cancelMessage($message);
-
-            $count = $message->getRestartCount();
-
-            $message = clone $message;
-            $message->setRestartCount($count + 1);
-
-            $this->get('sonata.notification.backend')->publish($message);
+            $this->getBackend()->publish($message);
         }
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
@@ -64,6 +43,8 @@ class MessageAdminController extends CRUDController
 
     /**
      * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $query
+     *
+     * @throws AccessDeniedException
      *
      * @return RedirectResponse
      */
@@ -74,9 +55,25 @@ class MessageAdminController extends CRUDController
         }
 
         foreach ($query->execute() as $message) {
-            $this->cancelMessage($message);
+            $this->getMessageManager()->cancel($message);
         }
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
+    }
+
+    /**
+     * @return \Sonata\NotificationBundle\Model\MessageManagerInterface
+     */
+    protected function getMessageManager()
+    {
+        return $this->get('sonata.notification.manager.message');
+    }
+
+    /**
+     * @return \Sonata\NotificationBundle\Backend\BackendInterface
+     */
+    protected function getBackend()
+    {
+        return $this->get('sonata.notification.backend');
     }
 }
