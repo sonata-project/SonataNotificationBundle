@@ -64,7 +64,7 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
      */
     public function create($type, array $body)
     {
-        $this->getBackend($type)->create($type, $body);
+        return $this->getBackend($type)->create($type, $body);
     }
 
     /**
