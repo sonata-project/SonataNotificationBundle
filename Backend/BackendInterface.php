@@ -26,7 +26,8 @@ interface BackendInterface
     /**
      * @param $type
      * @param  array $body
-     * @return void
+     *
+     * @return \Sonata\NotificationBundle\Model\MessageInterface
      */
     public function create($type, array $body);
 
