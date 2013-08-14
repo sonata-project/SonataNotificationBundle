@@ -2,6 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="fr" datatype="plaintext" original="" >
         <body>
+            <trans-unit id="sonata_notification">
+                <source>sonata_notification</source>
+                <target>Notification</target>
+            </trans-unit>
+            <trans-unit id="notifications">
+                <source>notifications</source>
+                <target>Notifications</target>
+            </trans-unit>
             <trans-unit id="breadcrumb.link_message_list">
                 <source>breadcrumb.link_message_list</source>
                 <target>Messages</target>
