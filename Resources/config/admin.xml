@@ -10,6 +10,7 @@
                     manager_type="orm"
                     group="sonata_notification"
                     label="notifications"
+                    label_catalogue="%sonata.notification.admin.message.translation_domain%"
                     label_translator_strategy="sonata.admin.label.strategy.underscore"
                />
             <argument />
