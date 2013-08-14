@@ -19,13 +19,15 @@ class SwiftMailerConsumer implements ConsumerInterface
      * @var \Swift_Mailer
      */
     protected $mailer;
+    protected $realTransport;
 
     /**
      * @param $vendorDir
      */
-    public function __construct(\Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer, $realTransport = false)
     {
         $this->mailer = $mailer;
+        $this->realTransport = $realTransport;
     }
 
     /**
@@ -42,6 +44,11 @@ class SwiftMailerConsumer implements ConsumerInterface
             $this->sendEmail($event->getMessage());
         } catch (\Exception $e) {
             $exception = $e;
+        }
+
+        $spool = $this->mailer->getTransport()->getSpool();
+        if ($this->realTransport && $spool instanceof \Swift_MemorySpool) {
+            $spool->flushQueue($this->realTransport);
         }
 
         $this->mailer->getTransport()->stop();
