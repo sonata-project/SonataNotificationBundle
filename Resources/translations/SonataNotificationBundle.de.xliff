@@ -4,11 +4,11 @@
         <body>
             <trans-unit id="sonata_notification">
                 <source>sonata_notification</source>
-                <target>Notification</target>
+                <target>Systemmeldungen</target>
             </trans-unit>
             <trans-unit id="notifications">
                 <source>notifications</source>
-                <target>Notifications</target>
+                <target>Systemmeldungen</target>
             </trans-unit>
             <trans-unit id="breadcrumb.link_message_list">
                 <source>breadcrumb.link_message_list</source>
