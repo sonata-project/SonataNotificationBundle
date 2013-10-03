@@ -103,7 +103,7 @@ class RuntimeBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
-            throw new HandlingException("Error while handling a message", 0, $e);
+            throw new HandlingException("Error while handling a message: " . $e->getMessage(), 0, $e);
         }
     }
 
