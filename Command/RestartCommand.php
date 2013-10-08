@@ -81,7 +81,7 @@ class RestartCommand extends ContainerAwareCommand
             $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $message->getType(), $id, $message->getId(), $message->getRestartCount()));
 
             if ($pullMode) {
-                $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($message, null, $message));
+                $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($messages, null, $message));
             }
         }
 
