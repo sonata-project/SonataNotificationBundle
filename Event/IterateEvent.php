@@ -43,7 +43,7 @@ class IterateEvent extends Event
      */
     protected $message;
 
-    public function __construct(MessageIteratorInterface $iterator, BackendInterface $backend, Message $message)
+    public function __construct(MessageIteratorInterface $iterator, BackendInterface $backend = null, Message $message = null)
     {
         $this->iterator = $iterator;
         $this->backend = $backend;
