@@ -11,7 +11,6 @@
 
 namespace Sonata\NotificationBundle\Event;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -43,6 +42,12 @@ class DoctrineOptimizeListener implements IterationListener
      */
     public function iterate(IterateEvent $event)
     {
-        $this->doctrine->getManager()->getUnitOfWork()->clear();
+        foreach($this->doctrine->getManagers() as $name => $manager) {
+            if (!$manager->isOpen()) {
+                throw new \RuntimeException(sprintf('The doctrine manager: %s is closed', $name));
+            }
+
+            $manager->getUnitOfWork()->clear();
+        }
     }
 }
