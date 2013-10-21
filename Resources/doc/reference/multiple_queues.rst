@@ -8,7 +8,7 @@ to consume to block messages which take only a short amount of time.
 
 .. note::
 
-    Depends on the backend used, the configuration can be differents and the messaging handling can also be differents
+    Depends on the backend used, the configuration can be differents and the message handling can also be different.
 
 RabbitMQ
 ~~~~~~~~
