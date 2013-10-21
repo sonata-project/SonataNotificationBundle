@@ -210,7 +210,7 @@ class SonataNotificationExtension extends Extension
 
         foreach ($queues as $pos => &$queue) {
             if (in_array($queue['queue'], $declaredQueues)) {
-                throw new \RuntimeException('The doctrine backend does not support 2 identicals queue name, please rename the queue');
+                throw new \RuntimeException('The doctrine backend does not support 2 identicals queue name, please rename one queue');
             }
 
             $declaredQueues[] = $queue['queue'];
@@ -295,25 +295,43 @@ class SonataNotificationExtension extends Extension
         $amqBackends = array();
 
         if (count($queues) == 0) {
-            $defaultQueue = 'default';
-            $id = $this->createAMQPBackend($container, $exchange, $defaultQueue, false);
-            $amqBackends[0] = array('type' => $defaultQueue, 'backend' => new Reference($id));
-        } else {
-            $defaultSet = false;
-            foreach ($queues as $pos => $queue) {
-                $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['recover'], $queue['routing_key'], $queue['dead_letter_exchange']);
-                $amqBackends[$pos] = array('type' => $queue['routing_key'], 'backend' =>  new Reference($id));
-                if ($queue['default'] === true) {
-                    if ($defaultSet === true) {
-                        throw new \RuntimeException('You can only set one rabbitmq default queue in your sonata notification configuration.');
-                    }
-                    $defaultSet = true;
-                    $defaultQueue = $queue['routing_key'];
+            $queues = array(array(
+                'queue'       => 'default',
+                'default'     => true,
+                'routing_key' => '',
+                'recover'     => false,
+                'dead_letter_exchange' => null,
+            ));
+        }
+
+        $declaredQueues = array();
+
+        $defaultSet = false;
+        foreach ($queues as $pos => $queue) {
+            if (in_array($queue['queue'], $declaredQueues)) {
+                throw new \RuntimeException('The RabbitMQ backend does not support 2 identicals queue name, please rename one queue');
+            }
+
+            $declaredQueues[] = $queue['queue'];
+
+            $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['recover'], $queue['routing_key'], $queue['dead_letter_exchange']);
+
+            $amqBackends[$pos] = array(
+                'type' => $queue['routing_key'],
+                'backend' =>  new Reference($id)
+            );
+
+            if ($queue['default'] === true) {
+                if ($defaultSet === true) {
+                    throw new \RuntimeException('You can only set one rabbitmq default queue in your sonata notification configuration.');
                 }
+                $defaultSet = true;
+                $defaultQueue = $queue['routing_key'];
             }
-            if ($defaultSet === false) {
-                throw new \RuntimeException("You need to specify a valid default queue for the rabbitmq backend!");
-            }
+        }
+
+        if ($defaultSet === false) {
+            throw new \RuntimeException("You need to specify a valid default queue for the rabbitmq backend!");
         }
 
         $container->getDefinition('sonata.notification.backend.rabbitmq')
@@ -334,11 +352,8 @@ class SonataNotificationExtension extends Extension
      */
     protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null)
     {
-        if ($key === '') {
-            $id = 'sonata.notification.backend.rabbitmq.default' . $this->amqpCounter++;
-        } else {
-            $id = 'sonata.notification.backend.rabbitmq.' . $key;
-        }
+        $id = 'sonata.notification.backend.rabbitmq.' . $this->amqpCounter++;
+
         $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $name, $recover, $key, $deadLetterExchange));
         $definition->setPublic(false);
         $container->setDefinition($id, $definition);
