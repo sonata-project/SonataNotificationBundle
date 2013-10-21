@@ -242,7 +242,7 @@ class SonataNotificationExtension extends Extension
 
         if (count($queues) == 0) {
             $defaultQueue = 'default';
-            $id = $this->createAMQPBackend($container, $exchange, false, $defaultQueue);
+            $id = $this->createAMQPBackend($container, $exchange, $defaultQueue, false);
             $amqBackends[0] = array('type' => $defaultQueue, 'backend' => new Reference($id));
         } else {
             $defaultSet = false;
