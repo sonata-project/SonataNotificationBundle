@@ -21,7 +21,8 @@ namespace Sonata\NotificationBundle\Consumer;
  * Class ConsumerReturnInfo
  * @package Sonata\NotificationBundle\Consumer
  */
-class ConsumerReturnInfo {
+class ConsumerReturnInfo
+{
 
     /**
      * @var string

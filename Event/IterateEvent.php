@@ -13,7 +13,7 @@ namespace Sonata\NotificationBundle\Event;
 
 use Sonata\NotificationBundle\Backend\BackendInterface;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
-use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -39,11 +39,16 @@ class IterateEvent extends Event
     protected $backend;
 
     /**
-     * @var \Sonata\NotificationBundle\Model\Message
+     * @var MessageInterface
      */
     protected $message;
 
-    public function __construct(MessageIteratorInterface $iterator, BackendInterface $backend = null, Message $message = null)
+    /**
+     * @param MessageIteratorInterface $iterator
+     * @param BackendInterface         $backend
+     * @param MessageInterface         $message
+     */
+    public function __construct(MessageIteratorInterface $iterator, BackendInterface $backend = null, MessageInterface $message = null)
     {
         $this->iterator = $iterator;
         $this->backend = $backend;
@@ -67,7 +72,7 @@ class IterateEvent extends Event
     }
 
     /**
-     * @return Message
+     * @return MessageInterface
      */
     public function getMessage()
     {

@@ -36,9 +36,9 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
 
     /**
      *
-     * @param array   $queues
-     * @param unknown $defaultQueue
-     * @param array   $backends
+     * @param array  $queues
+     * @param string $defaultQueue
+     * @param array  $backends
      */
     public function __construct(array $queues, $defaultQueue, array $backends)
     {
@@ -94,9 +94,11 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
             if ('all' === $type && $backend['type'] === '') {
                 return $backend['backend'];
             }
+
             if ($backend['type'] === $type) {
                 return $backend['backend'];
             }
+
             if ($backend['type'] === $this->defaultQueue) {
                 $default = $backend['backend'];
             }
@@ -118,8 +120,9 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     }
 
     /**
-     * @param  string                           $message
-     * @param  string                           $status
+     * @param string $message
+     * @param string $status
+     *
      * @return \Liip\Monitor\Result\CheckResult
      */
     protected function buildResult($message, $status)

@@ -58,6 +58,10 @@ class AMQPBackend implements BackendInterface
         $this->recover  = $recover;
         $this->key      = $key;
         $this->deadLetterExchange = $deadLetterExchange;
+
+        if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
+            throw new \RuntimeException('Please install videlalvaro/php-amqplib dependency');
+        }
     }
 
     /**
@@ -109,9 +113,9 @@ class AMQPBackend implements BackendInterface
          * durable: true // the exchange will survive server restarts
          * auto_delete: false //the exchange won't be deleted once the channel is closed.
          **/
-       $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
+        $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
 
-       $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
+        $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
     }
 
     /**
@@ -120,14 +124,14 @@ class AMQPBackend implements BackendInterface
     public function publish(MessageInterface $message)
     {
         $body = json_encode(array(
-            'type' => $message->getType(),
-            'body' => $message->getBody(),
+            'type'      => $message->getType(),
+            'body'      => $message->getBody(),
             'createdAt' => $message->getCreatedAt()->format('U'),
-            'state' => $message->getState()
+            'state'     => $message->getState()
         ));
 
         $amq = new AMQPMessage($body, array(
-            'content_type' => 'text/plain',
+            'content_type'  => 'text/plain',
             'delivery-mode' => 2
         ));
 

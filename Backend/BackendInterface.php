@@ -12,55 +12,49 @@
 namespace Sonata\NotificationBundle\Backend;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 interface BackendInterface
 {
     /**
-     * @param  \Sonata\NotificationBundle\Model\MessageInterface $message
-     * @return void
+     * @param MessageInterface $message
      */
     public function publish(MessageInterface $message);
 
     /**
-     * @param $type
-     * @param  array $body
+     * @param string $type
+     * @param array  $body
      *
-     * @return \Sonata\NotificationBundle\Model\MessageInterface
+     * @return MessageInterface
      */
     public function create($type, array $body);
 
     /**
-     * @param $type
-     * @param  array $body
-     * @return void
+     * @param string $type
+     * @param array  $body
      */
     public function createAndPublish($type, array $body);
 
     /**
-     * @param string $type
-     *
      * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
      */
     public function getIterator();
 
     /**
      * Initialize
-     *
-     * @return void
      */
     public function initialize();
 
     /**
-     * @param  \Sonata\NotificationBundle\Model\MessageInterface           $message
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @param MessageInterface         $message
+     * @param EventDispatcherInterface $dispatcher
+     *
      * @return mixed
      */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
 
     /**
-     * @return Liip\Monitor\Result\CheckResult
+     * @return \Liip\Monitor\Result\CheckResult
      */
     public function getStatus();
 
