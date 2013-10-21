@@ -74,8 +74,16 @@ class SonataNotificationExtension extends Extension
      */
     protected function checkConfiguration(array $config)
     {
-        if (count($config['backends']) > 1) {
-            throw new \RuntimeException('2 backends configured, you can have only 1 backend configuration');
+        if (isset($config['backends']) && count($config['backends']) > 1) {
+            throw new \RuntimeException('more than one backend configured, you can have only one backend configuration');
+        }
+
+        if (!isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
+            throw new \RuntimeException('Please configure the sonata_notification.backends.rabbitmq section');
+        }
+
+        if (!isset($config['backends']['doctrine']) && $config['backend']  === 'sonata.notification.backend.doctrine') {
+            throw new \RuntimeException('Please configure the sonata_notification.backends.doctrine section');
         }
     }
 
@@ -143,6 +151,9 @@ class SonataNotificationExtension extends Extension
       */
     public function configureBackends(ContainerBuilder $container, $config)
     {
+        // set the default value, will be erase if required
+        $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
+
         if (isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
             $this->configureRabbitmq($container, $config);
 
@@ -151,11 +162,11 @@ class SonataNotificationExtension extends Extension
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
         }
 
-        if (isset($config['backends']['doctrine'])) {
+        if (isset($config['backends']['doctrine']) && $config['backend']  === 'sonata.notification.backend.doctrine') {
             $checkLevel = array(
-                MessageInterface::STATE_DONE        => $config['backends']['doctrine']['states']['done'],
-                MessageInterface::STATE_ERROR       => $config['backends']['doctrine']['states']['error'],
-                MessageInterface::STATE_IN_PROGRESS => $config['backends']['doctrine']['states']['in_progress'],
+                MessageInterface::STATE_DONE         => $config['backends']['doctrine']['states']['done'],
+                MessageInterface::STATE_ERROR        => $config['backends']['doctrine']['states']['error'],
+                MessageInterface::STATE_IN_PROGRESS  => $config['backends']['doctrine']['states']['in_progress'],
                 MessageInterface::STATE_OPEN         => $config['backends']['doctrine']['states']['open'],
             );
 
@@ -197,7 +208,7 @@ class SonataNotificationExtension extends Extension
         $defaultSet = false;
         $declaredQueues = array();
 
-        foreach ($queues as $pos => $queue) {
+        foreach ($queues as $pos => &$queue) {
             if (in_array($queue['queue'], $declaredQueues)) {
                 throw new \RuntimeException('The doctrine backend does not support 2 identicals queue name, please rename the queue');
             }
@@ -205,7 +216,7 @@ class SonataNotificationExtension extends Extension
             $declaredQueues[] = $queue['queue'];
 
             // make the configuration compatible with old code and rabbitmq
-            if (strlen($queue['routing_key']) > 0) {
+            if (isset($queue['routing_key']) && strlen($queue['routing_key']) > 0) {
                 $queue['types'] = array($queue['routing_key']);
             }
 

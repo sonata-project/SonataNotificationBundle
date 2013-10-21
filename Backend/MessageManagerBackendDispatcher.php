@@ -60,11 +60,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         $default = null;
 
         if (!$type) {
-            $this->default->setTypes(array(
-                'exclude' => $this->dedicatedTypes
-            ));
-
-            return $this->default;
+            return $this->getDefaultBackend();
         }
 
         foreach ($this->backends as $backend) {
@@ -73,7 +69,25 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
             }
         }
 
-        throw new BackendNotFoundException('Unable to found the correct backend');
+        return $this->getDefaultBackend();
+    }
+
+    /**
+     * @return BackendInterface
+     */
+    protected function getDefaultBackend()
+    {
+        $types = array();
+
+        if (!empty($this->dedicatedTypes)) {
+            $types = array(
+                'exclude' => $this->dedicatedTypes
+            );
+        }
+
+        $this->default->setTypes($types);
+
+        return $this->default;
     }
 
     /**
