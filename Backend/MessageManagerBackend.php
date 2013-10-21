@@ -33,26 +33,34 @@ class MessageManagerBackend implements BackendInterface
 
     protected $dispatcher = null;
 
-    protected $type;
+    protected $types;
 
     protected $batchSize;
 
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
-     * @param array                                                    $checkLevel
-     * @param int                                                      $pause
-     * @param int                                                      $maxAge
-     * @param int                                                      $batchSize
-     * @param string                                                   $type
+     * @param MessageManagerInterface $messageManager
+     * @param array                   $checkLevel
+     * @param int                     $pause
+     * @param int                     $maxAge
+     * @param int                     $batchSize
+     * @param array                   $types
      */
-    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 84600,  $batchSize = 10, $type = null)
+    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 84600,  $batchSize = 10, array $types = array())
     {
         $this->messageManager = $messageManager;
         $this->checkLevel     = $checkLevel;
         $this->pause          = $pause;
         $this->maxAge         = $maxAge;
         $this->batchSize      = $batchSize;
-        $this->type           = $type;
+        $this->types          = $types;
+    }
+
+    /**
+     * @param array $types
+     */
+    public function setTypes($types)
+    {
+        $this->types = $types;
     }
 
     /**
@@ -91,9 +99,7 @@ class MessageManagerBackend implements BackendInterface
      */
     public function getIterator()
     {
-        $types = null !== $this->type ? array($this->type) : array();
-
-        return new MessageManagerMessageIterator($this->messageManager, $types, $this->pause, $this->batchSize);
+        return new MessageManagerMessageIterator($this->messageManager, $this->types, $this->pause, $this->batchSize);
     }
 
     /**

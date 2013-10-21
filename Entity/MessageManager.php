@@ -236,8 +236,20 @@ class MessageManager implements MessageManagerInterface
         $parameters['state'] = $state;
 
         if (count($types) > 0) {
-            $query->andWhere('m.type IN (:types)');
-            $parameters['types'] = $types;
+            if (array_key_exists('exclude', $types) || array_key_exists('include', $types)) {
+                if (array_key_exists('exclude', $types)) {
+                    $query->andWhere('m.type NOT IN (:exclude)');
+                    $parameters['exclude'] = $types['exclude'];
+                }
+
+                if (array_key_exists('include', $types)) {
+                    $query->andWhere('m.type IN (:include)');
+                    $parameters['include'] = $types['include'];
+                }
+            } else { // BC
+                $query->andWhere('m.type IN (:types)');
+                $parameters['types'] = $types;
+            }
         }
 
         $query->setMaxResults($batchSize);

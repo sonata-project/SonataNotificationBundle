@@ -185,34 +185,57 @@ class SonataNotificationExtension extends Extension
 
         $definition = $container->getDefinition('sonata.notification.backend.doctrine');
 
+        // no queue defined, set a default one
         if (count($queues) == 0) {
-            $defaultQueue = 'default';
-            $id = $this->createDoctrineQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize, $defaultQueue);
-            $qBackends[0] = array('type' => $defaultQueue, 'backend' => new Reference($id));
-        } else {
-            $defaultSet = false;
+            $queues = array(array(
+                'queue'   => 'default',
+                'default' => true,
+                'types'   => array()
+            ));
+        }
 
-            foreach ($queues as $pos => $queue) {
-                $id = $this->createDoctrineQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize, $queue['queue']);
-                $qBackends[$pos] = array('type' => $queue['routing_key'], 'backend' =>  new Reference($id));
-                if ($queue['default'] === true) {
+        $defaultSet = false;
+        $declaredQueues = array();
 
-                    if ($defaultSet === true) {
-                        throw new \RuntimeException('You can only set one doctrine default queue in your sonata notification configuration.');
-                    }
-
-                    $defaultSet = true;
-                    $defaultQueue = $queue['routing_key'];
-                }
+        foreach ($queues as $pos => $queue) {
+            if (in_array($queue['queue'], $declaredQueues)) {
+                throw new \RuntimeException('The doctrine backend does not support 2 identicals queue name, please rename the queue');
             }
 
-            if ($defaultSet === false) {
-                throw new \RuntimeException("You need to specify a valid default queue for the doctrine backend!");
+            $declaredQueues[] = $queue['queue'];
+
+            // make the configuration compatible with old code and rabbitmq
+            if (strlen($queue['routing_key']) > 0) {
+                $queue['types'] = array($queue['routing_key']);
+            }
+
+            if (empty($queue['types']) && $queue['default'] === false) {
+                throw new \RuntimeException('You cannot declared a doctrine queue with no type defined with default = false');
+            }
+
+            if (!empty($queue['types']) && $queue['default'] === true) {
+                throw new \RuntimeException('You cannot declared a doctrine queue with types defined with default = true');
+            }
+
+            $id = $this->createDoctrineQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize, $queue['queue'], $queue['types']);
+            $qBackends[$pos] = array(
+                'types'   => $queue['types'],
+                'backend' => new Reference($id)
+            );
+
+            if ($queue['default'] === true) {
+                if ($defaultSet === true) {
+                    throw new \RuntimeException('You can only set one doctrine default queue in your sonata notification configuration.');
+                }
+
+                $defaultSet = true;
+                $defaultQueue = $queue['queue'];
             }
         }
 
-        $id = $this->createDoctrineQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize);
-        array_push($qBackends, array('type' => '', 'backend' => new Reference($id)));
+        if ($defaultSet === false) {
+            throw new \RuntimeException("You need to specify a valid default queue for the doctrine backend!");
+        }
 
         $definition
             ->replaceArgument(1, $queues)
@@ -224,26 +247,26 @@ class SonataNotificationExtension extends Extension
     /**
      * @param ContainerBuilder $container
      * @param string           $manager
-     * @param $checkLevel
+     * @param boolean          $checkLevel
      * @param integer          $pause
      * @param integer          $maxAge
      * @param integer          $batchSize
      * @param string           $key
+     * @param array            $types
      *
      * @return string
      */
-    protected function createDoctrineQueueBackend(ContainerBuilder $container, $manager, $checkLevel, $pause, $maxAge, $batchSize, $key = '')
+    protected function createDoctrineQueueBackend(ContainerBuilder $container, $manager, $checkLevel, $pause, $maxAge, $batchSize, $key, array $types = array())
     {
-        if ($key === '') {
-            $id = 'sonata.notification.backend.doctrine.default' . $this->amqpCounter++;
+        if ($key == '') {
+            $id = 'sonata.notification.backend.doctrine.default_' . $this->amqpCounter++;
         } else {
             $id = 'sonata.notification.backend.doctrine.' . $key;
         }
-        $definition = new Definition('Sonata\NotificationBundle\Backend\MessageManagerBackend', array($manager, $checkLevel, $pause, $maxAge, $batchSize));
+
+        $definition = new Definition('Sonata\NotificationBundle\Backend\MessageManagerBackend', array($manager, $checkLevel, $pause, $maxAge, $batchSize, $types));
         $definition->setPublic(false);
-        if ($key !== '') {
-            $definition->addArgument($key);
-        }
+
         $container->setDefinition($id, $definition);
 
         return $id;
@@ -253,7 +276,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    protected function configureRabbitmq(ContainerBuilder $container, $config)
+    protected function configureRabbitmq(ContainerBuilder $container, array $config)
     {
         $queues = $config['queues'];
         $connection = $config['backends']['rabbitmq']['connection'];

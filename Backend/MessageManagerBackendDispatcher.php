@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -22,15 +23,57 @@ use Liip\Monitor\Result\CheckResult;
  */
 class MessageManagerBackendDispatcher extends QueueBackendDispatcher
 {
+    protected $dedicatedTypes = array();
+
+    protected $default;
+
     /**
-     * @param MessageManagerInterface   $messageManager Only used in compiler pass
-     * @param array                     $queues
-     * @param unknown                   $defaultQueue
-     * @param array                     $backends
+     * @param MessageManagerInterface $messageManager Only used in compiler pass
+     * @param array                   $queues
+     * @param string                  $defaultQueue
+     * @param array                   $backends
      */
     public function __construct(MessageManagerInterface $messageManager, array $queues, $defaultQueue, array $backends)
     {
         parent::__construct($queues, $defaultQueue, $backends);
+
+        foreach ($this->queues as $queue) {
+            if ($queue['default'] === true) {
+                continue;
+            }
+
+            $this->dedicatedTypes = array_merge($this->dedicatedTypes, $queue['types']);
+        }
+
+        foreach ($this->backends as $backend) {
+            if (empty($backend['types'])) {
+                $this->default = $backend['backend'];
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBackend($type)
+    {
+        $default = null;
+
+        if (!$type) {
+            $this->default->setTypes(array(
+                'exclude' => $this->dedicatedTypes
+            ));
+
+            return $this->default;
+        }
+
+        foreach ($this->backends as $backend) {
+            if (in_array($type, $backend['types'])) {
+                return $backend['backend'];
+            }
+        }
+
+        throw new BackendNotFoundException('Unable to found the correct backend');
     }
 
     /**

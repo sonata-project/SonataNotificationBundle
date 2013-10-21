@@ -29,10 +29,10 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     protected $buffer = array();
 
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageManagerInterface $messageManager
-     * @param array                                                    $types
-     * @param int                                                      $pause
-     * @param int                                                      $batchSize
+     * @param MessageManagerInterface $messageManager
+     * @param array                   $types
+     * @param int                     $pause
+     * @param int                     $batchSize
      */
     public function __construct(MessageManagerInterface $messageManager, $types = array(), $pause = 500000, $batchSize = 10)
     {
@@ -109,7 +109,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     /**
      * Fill the inner messages buffer
      *
-     * @param string|null $type
+     * @param array $types
      */
     protected function bufferize($types = array())
     {
@@ -127,7 +127,8 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     /**
      * Find open messages
      *
-     * @param $types
+     * @param array $types
+     *
      * @return mixed
      */
     protected function findNextMessages($types)

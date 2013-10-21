@@ -21,7 +21,7 @@ class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $testBackend = $this->getMockBuilder("Sonata\NotificationBundle\Backend\MessageManagerBackend")
+        $testBackend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\MessageManagerBackend')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -39,9 +39,9 @@ class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($message))
         ;
 
-        $mMgr = $this->getMock("Sonata\NotificationBundle\Model\MessageManagerInterface");
+        $mMgr = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
 
-        $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, array(), '', array(array('type' => 'test', 'backend' => $testBackend)));
+        $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, array(), '', array(array('types' => array('test'), 'backend' => $testBackend)));
 
         $this->assertEquals($message, $mMgrBackend->create("test", array()));
     }

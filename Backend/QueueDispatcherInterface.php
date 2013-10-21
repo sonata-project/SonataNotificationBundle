@@ -25,7 +25,7 @@ interface QueueDispatcherInterface
      *
      * @param string $type
      *
-     * @throws \Sonata\NotificationBundle\Exception\QueueNotFoundException
+     * @throws \Sonata\NotificationBundle\Exception\BackendNotFoundException
      *
      * @return BackendInterface
      */
@@ -37,5 +37,4 @@ interface QueueDispatcherInterface
      * @return array
      */
     public function getQueues();
-
 }

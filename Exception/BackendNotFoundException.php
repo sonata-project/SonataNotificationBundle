@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Exception;
 
-class QueueNotFoundException extends \RuntimeException
+class BackendNotFoundException extends \RuntimeException
 {
 
 }

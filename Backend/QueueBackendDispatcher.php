@@ -13,8 +13,6 @@ namespace Sonata\NotificationBundle\Backend;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Backend\BackendInterface;
-use Sonata\NotificationBundle\Exception\QueueNotFoundException;
 
 use Liip\Monitor\Result\CheckResult;
 
@@ -73,42 +71,6 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     public function createAndPublish($type, array $body)
     {
         $this->getBackend($type)->createAndPublish($type, $body);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBackend($type)
-    {
-        $default = null;
-
-        if (count($this->queues) === 0) {
-            foreach ($this->backends as $backend) {
-                if ($backend['type'] === 'default') {
-                    return $backend['backend'];
-                }
-            }
-        }
-
-        foreach ($this->backends as $backend) {
-            if ('all' === $type && $backend['type'] === '') {
-                return $backend['backend'];
-            }
-
-            if ($backend['type'] === $type) {
-                return $backend['backend'];
-            }
-
-            if ($backend['type'] === $this->defaultQueue) {
-                $default = $backend['backend'];
-            }
-        }
-
-        if ($default === null) {
-            throw new QueueNotFoundException('Could not find a message backend for the type ' . $type);
-        }
-
-        return $default;
     }
 
     /**

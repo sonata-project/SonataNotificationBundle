@@ -13,11 +13,9 @@ namespace Sonata\NotificationBundle\Backend;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Backend\BackendInterface;
-use Sonata\NotificationBundle\Exception\QueueNotFoundException;
+use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 
 use PhpAmqpLib\Connection\AMQPConnection;
-use PhpAmqpLib\Channel\AMQPChannel;
 
 use Liip\Monitor\Result\CheckResult;
 
@@ -35,12 +33,13 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * @param array   $settings
      * @param array   $queues
-     * @param unknown $defaultQueue
+     * @param string  $defaultQueue
      * @param array   $backends
      */
     public function __construct(array $settings, array $queues, $defaultQueue, array $backends)
     {
         parent::__construct($queues, $defaultQueue, $backends);
+
         $this->settings = $settings;
     }
 
@@ -64,6 +63,42 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
 
         return $this->channel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBackend($type)
+    {
+        $default = null;
+
+        if (count($this->queues) === 0) {
+            foreach ($this->backends as $backend) {
+                if ($backend['type'] === 'default') {
+                    return $backend['backend'];
+                }
+            }
+        }
+
+        foreach ($this->backends as $backend) {
+            if ('all' === $type && $backend['type'] === '') {
+                return $backend['backend'];
+            }
+
+            if ($backend['type'] === $type) {
+                return $backend['backend'];
+            }
+
+            if ($backend['type'] === $this->defaultQueue) {
+                $default = $backend['backend'];
+            }
+        }
+
+        if ($default === null) {
+            throw new BackendNotFoundException('Could not find a message backend for the type ' . $type);
+        }
+
+        return $default;
     }
 
     /**
@@ -137,7 +172,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         $client->setConfig(array('curl.options' => array(CURLOPT_CONNECTTIMEOUT_MS => 3000)));
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);
-        $response = $request->send();
 
         return json_decode($request->send()->getBody(true), true);
     }
