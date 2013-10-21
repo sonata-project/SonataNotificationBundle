@@ -33,10 +33,8 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('backend')->defaultValue('sonata.notification.backend.runtime')->end()
             ->append($this->getQueueNode())
             ->arrayNode('backends')
-                ->addDefaultsIfNotSet()
                 ->children()
                     ->arrayNode('doctrine')
-                        ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('message_manager')->defaultValue('sonata.notification.manager.message.default')->end()
                             ->scalarNode('max_age')->defaultValue(86400)->end() # max age in second
@@ -54,7 +52,6 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->arrayNode('rabbitmq')
-                        ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('exchange')->cannotBeEmpty()->isRequired()->end()
                             ->arrayNode('connection')
@@ -99,10 +96,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->booleanNode('doctrine_optimize')
-                ->defaultValue(true)->end() # attach doctrine optimize listener
-            ->booleanNode('doctrine_backend_optimize')
-                ->defaultValue(true)->end() # attach doctrine backend optimize listener
         ;
 
         return $treeBuilder;

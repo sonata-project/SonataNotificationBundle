@@ -56,6 +56,8 @@ class SonataNotificationExtension extends Extension
             $loader->load('checkmonitor.xml');
         }
 
+        $this->checkConfiguration($config);
+
         $container->setAlias('sonata.notification.backend', $config['backend']);
         $container->setParameter('sonata.notification.backend', $config['backend']);
 
@@ -65,19 +67,37 @@ class SonataNotificationExtension extends Extension
         $this->configureClass($container, $config);
         $this->configureListeners($container, $config);
         $this->configureAdmin($container, $config);
-     }
+    }
 
-    protected function configureListeners(ContainerBuilder $container, $config)
+    /**
+     * @param array $config
+     */
+    protected function checkConfiguration(array $config)
+    {
+        if (count($config['backends']) > 1) {
+            throw new \RuntimeException('2 backends configured, you can have only 1 backend configuration');
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    protected function configureListeners(ContainerBuilder $container, array $config)
     {
         $ids = $config['iteration_listeners'];
 
-        if ($config['doctrine_optimize']) {
-            $config['doctrine_backend_optimize'] = false;
-            $ids[] = 'sonata.notification.event.doctrine_optimize';
-        }
+        // this one clean the unit of work after every iteration
+        // it must be set on any backend ...
+        $ids[] = 'sonata.notification.event.doctrine_optimize';
 
-        if ($config['doctrine_backend_optimize']) {
-            $ids[] = 'sonata.notification.event.doctrine_backend_optimize';
+        if (isset($config['backends']['doctrine']) && $config['backends']['doctrine']['batch_size'] > 1) {
+            // if the backend is doctrine and the batch size > 1, then
+            // the unit of work must be cleaned wisely to avoid any issue
+            // while persisting entities
+            $ids = array(
+                'sonata.notification.event.doctrine_backend_optimize'
+            );
         }
 
         $container->setParameter('sonata.notification.event.iteration_listeners', $ids);
