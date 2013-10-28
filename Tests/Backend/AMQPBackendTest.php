@@ -5,6 +5,13 @@ use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
 
 class AMQPBackendTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        if (!class_exists('PhpAmqpLib\Connection\AMQPConnection')) {
+            $this->markTestSkipped("Amqplib file is not installed");
+        }
+    }
+
     protected function getMockQueue($queue, $type, $called = null)
     {
         $methods = array('createAndPublish');
