@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="" >
+        <body>
+            <trans-unit id="sonata_notification">
+                <source>sonata_notification</source>
+                <target>Oznámenie</target>
+            </trans-unit>
+            <trans-unit id="notifications">
+                <source>notifications</source>
+                <target>Oznámenia</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_message_list">
+                <source>breadcrumb.link_message_list</source>
+                <target>Správy</target>
+            </trans-unit>
+            <trans-unit id="list.label_id">
+                <source>list.label_id</source>
+                <target>Id</target>
+            </trans-unit>
+            <trans-unit id="list.label_type">
+                <source>list.label_type</source>
+                <target>Typ</target>
+            </trans-unit>
+            <trans-unit id="list.label_created_at">
+                <source>list.label_created_at</source>
+                <target>Vytvorené</target>
+            </trans-unit>
+            <trans-unit id="list.label_started_at">
+                <source>list.label_started_at</source>
+                <target>Začaté</target>
+            </trans-unit>
+            <trans-unit id="list.label_completed_at">
+                <source>list.label_completed_at</source>
+                <target>Dokončené</target>
+            </trans-unit>
+            <trans-unit id="list.label_get_state_name">
+                <source>list.label_get_state_name</source>
+                <target>Stav</target>
+            </trans-unit>
+            <trans-unit id="show.label_id">
+                <source>show.label_id</source>
+                <target>Id</target>
+            </trans-unit>
+            <trans-unit id="show.label_type">
+                <source>show.label_type</source>
+                <target>Typ</target>
+            </trans-unit>
+            <trans-unit id="show.label_created_at">
+                <source>show.label_created_at</source>
+                <target>Vytvorené</target>
+            </trans-unit>
+            <trans-unit id="show.label_started_at">
+                <source>show.label_started_at</source>
+                <target>Začaté</target>
+            </trans-unit>
+            <trans-unit id="show.label_completed_at">
+                <source>show.label_completed_at</source>
+                <target>Dokončené</target>
+            </trans-unit>
+            <trans-unit id="show.label_get_state_name">
+                <source>show.label_get_state_name</source>
+                <target>Stav</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_message_show">
+                <source>breadcrumb.link_message_show</source>
+                <target>Správa</target>
+            </trans-unit>
+            <trans-unit id="show.label_body">
+                <source>show.label_body</source>
+                <target>Náklad</target>
+            </trans-unit>
+            <trans-unit id="filter.label_type">
+                <source>filter.label_type</source>
+                <target>Typ</target>
+            </trans-unit>
+            <trans-unit id="filter.label_state">
+                <source>filter.label_state</source>
+                <target>Stav</target>
+            </trans-unit>
+            <trans-unit id="batch.message_publish">
+                <source>batch.message_publish</source>
+                <target>Publikovanie správ</target>
+            </trans-unit>
+            <trans-unit id="batch.message_cancelled">
+                <source>batch.message_cancelled</source>
+                <target>Zrušenie správ</target>
+            </trans-unit>
+            <trans-unit id="list.label_restart_count">
+                <source>list.label_restart_count</source>
+                <target>Znova #</target>
+            </trans-unit>
+            <trans-unit id="show.label_restart_count">
+                <source>show.label_restart_count</source>
+                <target>Znova #</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
