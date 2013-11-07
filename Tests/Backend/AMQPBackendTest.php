@@ -7,8 +7,8 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        if (!class_exists('PhpAmqpLib\Connection\AMQPConnection')) {
-            $this->markTestSkipped("Amqplib file is not installed");
+        if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
+            $this->markTestSkipped('AMQP Lib not installed');
         }
     }
 
