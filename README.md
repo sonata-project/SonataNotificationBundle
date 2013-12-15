@@ -3,7 +3,7 @@ Sonata Notification Bundle
 
 [![Build Status](https://secure.travis-ci.org/sonata-project/SonataNotificationBundle.png)](https://secure.travis-ci.org/#!/sonata-project/SonataNotificationBundle)
 
-This bundle provides a notification mechanism through asbracted message queues.
+This bundle provides a notification mechanism through abstracted message queues.
 
 Check out the documentation on [http://sonata-project.org/bundles/notification/master/doc/index.html](http://sonata-project.org/bundles/notification/master/doc/index.html)
 
