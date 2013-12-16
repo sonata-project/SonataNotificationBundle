@@ -26,7 +26,7 @@ class MessageManagerMessageIterator extends Iterator
     public function __construct(EntityManager $messageManager, $pause = 0, $batchSize = 10)
     {
         parent::__construct(
-            new MessageManagerMock($messageManager, 'Sonata\NotificationBundle\Model\Message'),
+            new MessageManagerMock('Sonata\NotificationBundle\Model\Message', $messageManager),
             array(),
             $pause,
             $batchSize);

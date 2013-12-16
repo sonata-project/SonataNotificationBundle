@@ -23,3 +23,7 @@ A [BC BREAK] means the update will break the project for many reasons :
 ### 2013-06-25
 
 * performance optimizations. This introduces a [BC BREAK].
+
+### 2013-12-13
+
+* MessageManager now extends the DoctrineBaseManager (from SonataCoreBundle).

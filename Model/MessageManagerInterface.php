@@ -11,61 +11,10 @@
 
 namespace Sonata\NotificationBundle\Model;
 
-interface MessageManagerInterface
+use Sonata\CoreBundle\Entity\ManagerInterface;
+
+interface MessageManagerInterface extends ManagerInterface
 {
-    /**
-     * Creates an empty message instance
-     *
-     * @return MessageInterface
-     */
-    public function create();
-
-    /**
-     * Deletes a message
-     *
-     * @param MessageInterface $message
-     *
-     * @return void
-     */
-    public function delete(MessageInterface $message);
-
-    /**
-     * Finds one message by the given criteria
-     *
-     * @param array $criteria
-     *
-     * @return MessageInterface
-     */
-    public function findOneBy(array $criteria);
-
-    /**
-     * Finds one message by the given criteria
-     *
-     * @param array $criteria
-     * @param array $orderBy
-     * @param int   $limit
-     * @param int   $offset
-     *
-     * @return MessageInterface
-     */
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
-
-    /**
-     * Returns the message's fully qualified class name
-     *
-     * @return string
-     */
-    public function getClass();
-
-    /**
-     * Save a message
-     *
-     * @param MessageInterface $message
-     *
-     * @return void
-     */
-    public function save(MessageInterface $message);
-
     /**
      * @return integer
      */

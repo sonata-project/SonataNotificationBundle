@@ -12,59 +12,23 @@
 namespace Sonata\NotificationBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
+use Sonata\CoreBundle\Entity\DoctrineBaseManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
-class MessageManager implements MessageManagerInterface
+class MessageManager extends DoctrineBaseManager implements MessageManagerInterface
 {
-    /**
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param string                      $class
-     */
-    public function __construct(EntityManager $em, $class)
-    {
-        $this->em    = $em;
-        $this->class = $class;
-    }
-
     /**
      * {@inheritDoc}
      */
-    public function save(MessageInterface $message)
+    public function save($message, $andFlush = true)
     {
         //Hack for ConsumerHandlerCommand->optimize()
         if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
             $this->em->getUnitOfWork()->merge($message);
         }
 
-        $this->em->persist($message);
-        $this->em->flush();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function findOneBy(array $criteria)
-    {
-        return $this->em->getRepository($this->class)->findOneBy($criteria);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        return $this->em->getRepository($this->class)->findBy($criteria, $orderBy, $limit, $offset);
+        parent::save($message, $andFlush);
     }
 
     /**
@@ -120,31 +84,6 @@ class MessageManager implements MessageManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function delete(MessageInterface $message)
-    {
-        $this->em->remove($message);
-        $this->em->flush();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create()
-    {
-        return new $this->class;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function countStates()
     {
         $tableName = $this->em->getClassMetadata($this->class)->table['name'];
@@ -175,7 +114,7 @@ class MessageManager implements MessageManagerInterface
         $date = new \DateTime('now');
         $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
 
-        $qb = $this->em->getRepository($this->class)->createQueryBuilder('message')
+        $qb = $this->getRepository()->createQueryBuilder('message')
             ->delete()
             ->where('message.state = :state')
             ->andWhere('message.completedAt < :date')
@@ -228,7 +167,7 @@ class MessageManager implements MessageManagerInterface
      */
     protected function prepareStateQuery($state, $types, $batchSize, &$parameters)
     {
-        $query = $this->em->getRepository($this->class)
+        $query = $this->getRepository()
             ->createQueryBuilder('m')
             ->where('m.state = :state')
             ->orderBy('m.createdAt');
