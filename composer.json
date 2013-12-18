@@ -30,6 +30,7 @@
     },
     "require-dev": {
         "sonata-project/doctrine-orm-admin-bundle": "2.2.*",
+        "sonata-project/core-bundle": "dev-master",
         "guzzle/guzzle" : "3.*",
         "videlalvaro/php-amqplib": "2.0.*",
         "liip/monitor": "~1.0",
