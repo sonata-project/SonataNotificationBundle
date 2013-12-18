@@ -89,7 +89,7 @@ class RestartCommand extends ContainerAwareCommand
     }
 
     /**
-     * Return the errorneous message selector service.
+     * Return the erroneous message selector service.
      *
      * @return \Sonata\NotificationBundle\Selector\ErroneousMessagesSelector
      */

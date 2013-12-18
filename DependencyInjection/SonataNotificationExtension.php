@@ -344,7 +344,9 @@ class SonataNotificationExtension extends Extension
 
     /**
      * @param  ContainerBuilder $container
+     * @param  string           $exchange
      * @param  string           $name
+     * @param  string           $recover
      * @param  string           $key
      * @param  string           $deadLetterExchange
      *

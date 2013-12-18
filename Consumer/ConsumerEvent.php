@@ -54,5 +54,4 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
     {
         return $this->returnInfo;
     }
-
 }

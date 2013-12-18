@@ -156,7 +156,7 @@ class AMQPBackend implements BackendInterface
      */
     public function createAndPublish($type, array $body)
     {
-        return $this->publish($this->create($type, $body));
+        $this->publish($this->create($type, $body));
     }
 
     /**

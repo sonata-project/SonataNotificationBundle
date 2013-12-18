@@ -95,12 +95,12 @@ interface MessageInterface
     /**
      * @param integer $restartCount
      */
-    function setRestartCount($restartCount);
+    public function setRestartCount($restartCount);
 
     /**
      * @return integer
      */
-    function getRestartCount();
+    public function getRestartCount();
 
     /**
      * @param \DateTime $updatedAt

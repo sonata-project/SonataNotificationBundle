@@ -44,7 +44,7 @@ If you are deploying with capistrano, you can restart the supervisor process wit
 Clean up messages
 -----------------
 
-You might want to clean old messages from differents backend (if ever a backend old them)::
+You might want to clean old messages from different backend (if ever a backend old them)::
 
     app/console sonata:notification:cleanup --env=prod
 
