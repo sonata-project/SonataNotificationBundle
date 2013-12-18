@@ -33,7 +33,7 @@ class MessageManagerMessageIterator extends Iterator
     }
 
     /**
-     * @param null $types
+     * @param array $types
      */
     public function _bufferize($types = array())
     {

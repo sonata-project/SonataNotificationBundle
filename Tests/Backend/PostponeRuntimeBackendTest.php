@@ -96,7 +96,7 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
         $status = $backend->getStatus();
         $this->assertInstanceOf('Liip\Monitor\Result\CheckResult', $status);
-        $this->assertEquals(CheckResult::OK, $status->getStatus());;
+        $this->assertEquals(CheckResult::OK, $status->getStatus());
     }
 
     public function testOnCliPublishHandlesDirectly()

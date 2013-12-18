@@ -42,7 +42,7 @@ class DoctrineOptimizeListener implements IterationListener
      */
     public function iterate(IterateEvent $event)
     {
-        foreach($this->doctrine->getManagers() as $name => $manager) {
+        foreach ($this->doctrine->getManagers() as $name => $manager) {
             if (!$manager->isOpen()) {
                 throw new \RuntimeException(sprintf('The doctrine manager: %s is closed', $name));
             }

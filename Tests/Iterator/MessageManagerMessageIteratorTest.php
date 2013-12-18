@@ -64,7 +64,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
         foreach ($iterator as $message) {
             $count++;
             $this->assertNotNull($message);
-            if($count > 20) {
+            if ($count > 20) {
                 return;
             }
         }

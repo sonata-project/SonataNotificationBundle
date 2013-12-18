@@ -21,7 +21,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     protected $mailer;
 
     /**
-     * @param $vendorDir
+     * @param $mailer
      */
     public function __construct(\Swift_Mailer $mailer)
     {

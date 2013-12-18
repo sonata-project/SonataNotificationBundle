@@ -29,9 +29,9 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     {
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
-        $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL ,'Only run n iterations before exiting', false);
+        $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL, 'Only run n iterations before exiting', false);
         $this->addOption('type', null, InputOption::VALUE_OPTIONAL, 'Use a specific backed based on a message type, "all" with doctrine backend will handle all notifications no matter their type', null);
-        $this->addOption('show-details', 'd', InputOption::VALUE_OPTIONAL ,'Show consumers return details', true);
+        $this->addOption('show-details', 'd', InputOption::VALUE_OPTIONAL, 'Show consumers return details', true);
     }
 
     /**
@@ -164,7 +164,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf("Unable to use the provided type %s with a non QueueDispatcherInterface backend", $type));
         }
 
-        if ($backend instanceof QueueDispatcherInterface) {;
+        if ($backend instanceof QueueDispatcherInterface) {
             return $backend->getBackend($type);
         }
 

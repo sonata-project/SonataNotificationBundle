@@ -38,7 +38,7 @@ class ErroneousMessagesSelector
     }
 
     /**
-     * Retrive messages with given type(s) and restrict to max attempts count.
+     * Retrieve messages with given type(s) and restrict to max attempts count.
      *
      * @param array $types
      * @param int $maxAttempts
