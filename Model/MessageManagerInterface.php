@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Model;
 
-use Sonata\CoreBundle\Entity\ManagerInterface;
+use Sonata\CoreBundle\Model\ManagerInterface;
 
 interface MessageManagerInterface extends ManagerInterface
 {
