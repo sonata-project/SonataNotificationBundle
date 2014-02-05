@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Sonata\NotificationBundle\Model\Message" exclusion-policy="all" xml-root-name="message">
+
+        <property name="type" type="string" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write" />
+        <property name="body" type="string" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write" />
+
+        <property name="state"        type="integer" expose="true" since-version="1.0" groups="sonata_api_read" />
+        <property name="restartCount" type="integer" expose="true" since-version="1.0" groups="sonata_api_read" />
+
+        <property name="createdAt"   type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read" />
+        <property name="updatedAt"   type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read" />
+        <property name="startedAt"   type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read" />
+        <property name="completedAt" type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read" />
+
+    </class>
+</serializer>
