@@ -11,7 +11,6 @@
 
 namespace Sonata\NotificationBundle\Controller\Api;
 
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -28,7 +27,7 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
  *
  * @author Hugo Briand <briand@ekino.com>
  */
-class MessageController extends FOSRestController
+class MessageController
 {
     /**
      * @var MessageManagerInterface
