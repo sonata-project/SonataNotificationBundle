@@ -19,6 +19,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 /**
  * Class MessageController
@@ -29,6 +30,21 @@ use Sonata\NotificationBundle\Model\Message;
  */
 class MessageController extends FOSRestController
 {
+    /**
+     * @var MessageManagerInterface
+     */
+    protected $messageManager;
+
+    /**
+     * Constructor
+     *
+     * @param MessageManagerInterface $messageManager
+     */
+    public function __construct(MessageManagerInterface $messageManager)
+    {
+        $this->messageManager = $messageManager;
+    }
+
     /**
      * Retrieves the list of messages (paginated)
      *
@@ -69,11 +85,11 @@ class MessageController extends FOSRestController
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Entity\MessageManager
+     * @return MessageManagerInterface
      */
     protected function getMessageManager()
     {
-        return $this->get('sonata.notification.manager.message');
+        return $this->messageManager;
     }
 
 }
