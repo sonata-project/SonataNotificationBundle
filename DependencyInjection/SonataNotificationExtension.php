@@ -48,6 +48,11 @@ class SonataNotificationExtension extends Extension
         $loader->load('event.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['FOSRestBundle'])) {
+            $loader->load('api_controllers.xml');
+        }
+
         if (isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
             $loader->load('admin.xml');
         }
