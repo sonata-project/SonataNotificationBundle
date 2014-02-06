@@ -24,8 +24,8 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
     public function save($message, $andFlush = true)
     {
         //Hack for ConsumerHandlerCommand->optimize()
-        if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
-            $this->em->getUnitOfWork()->merge($message);
+        if ($message->getId() && !$this->om->getUnitOfWork()->isInIdentityMap($message)) {
+            $this->om->getUnitOfWork()->merge($message);
         }
 
         parent::save($message, $andFlush);
@@ -86,9 +86,9 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
      */
     public function countStates()
     {
-        $tableName = $this->em->getClassMetadata($this->class)->table['name'];
+        $tableName = $this->om->getClassMetadata($this->class)->table['name'];
 
-        $stm = $this->em->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
+        $stm = $this->om->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
 
         $states = array(
             MessageInterface::STATE_DONE        => 0,
@@ -109,7 +109,7 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
      */
     public function cleanup($maxAge)
     {
-        $tableName = $this->em->getClassMetadata($this->class)->table['name'];
+        $tableName = $this->om->getClassMetadata($this->class)->table['name'];
 
         $date = new \DateTime('now');
         $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
