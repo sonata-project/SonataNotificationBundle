@@ -45,8 +45,8 @@ In the above example you will need to start 2 processes, where each process will
     - `php app/console sonata:notification:start --env=prod --iteration=250`
 
 
-When publishing a message with the type `start.transcode.video`, those messages will be handled by the first consumer.
-Any other messagetype will be handled by the `catchall` consumer, as it has been set to be the default one.
+Messages published with the `start.transcode.video` type will be handled by the first consumer.
+Any other message types will be handled by the `catchall` consumer, as it has been set as the default one.
 
 Doctrine
 ~~~~~~~~
@@ -83,5 +83,5 @@ In the above example you will need to create 2 processes, where each process wil
     - `php app/console sonata:notification:start --env=prod --iteration=250`
 
 
-When publishing a message with the type `sonata.page.create_snapshot` or `sonata.page.create_snapshots`, those messages will be handled by the first consumer.
-Any other message types will be handled by the `catchall` consumer, as it has been set to be the default one.
+Messages published with `sonata.page.create_snapshot` or `sonata.page.create_snapshots` types will be handled by the first consumer.
+Any other message types will be handled by the `catchall` consumer, as it has been set as the default one.

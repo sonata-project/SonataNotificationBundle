@@ -69,12 +69,12 @@ generate the correct entities for the media:
 
     php app/console sonata:easy-extends:generate SonataNotificationBundle
 
-If you specify no parameter, the files are generated in app/Application/Sonata...
+If you specify no parameters, the files will be generated in app/Application/Sonata...
 but you can specify the path with ``--dest=src``
 
 .. note::
 
-    The command will generate domain objects in an ``Application`` namespace.
+    The command will generate domain objects in ``Application`` namespace.
     So you can point entities' associations to a global and common namespace.
     This will make Entities sharing easier as your models will allow to
     point to a global namespace. For instance the user will be

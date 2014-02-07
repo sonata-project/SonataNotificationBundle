@@ -31,19 +31,19 @@ Calling an existing consumer
 Custom consumer
 ----------------
 
-In order to create a consumer, 2 step must be done :
+In order to create a consumer, you have to take these two steps :
 
 * Create a consumer class
-* Define the consumer into the service container
+* Define the consumer in the service container
 
 
-The consumer class must implement a ``ConsumerInterface`` interface, which defines
-only one method ``process``. The ``process`` method will get a ``ConsumerEvent`` as
+The consumer class must implement the ``ConsumerInterface`` interface, which defines
+only one method ``process``. The ``process`` method will receive a ``ConsumerEvent`` as an
 argument. The ``ConsumerEvent`` object is a standard Symfony Event from the ``EventDispatcher``
-Component. So it is possible to stop the event propagation from the a consumer.
+Component. So it is possible to stop the event propagation from the consumer.
 
-The current example does not mean to be used in production, however it is a good example about
-how to create a logger consumer.
+The current example does not mean to be used in production, however it is a good example on creating
+a logger consumer.
 
 .. code-block:: php
 
@@ -92,7 +92,7 @@ how to create a logger consumer.
         }
     }
 
-The last step is to register the service as a consumer into the service container. This must be done by using
+The last step is to register the service as a consumer in the service container. This must be done by using
 a custom tag : ``sonata.notification.consumer`` with a ``type``. The ``type`` value is the name used when a
 message is receive or created.
 
