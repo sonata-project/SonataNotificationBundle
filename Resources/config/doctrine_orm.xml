@@ -5,11 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="sonata.notification.entity_manager" alias="doctrine.orm.default_entity_manager" />
-
         <service id="sonata.notification.manager.message.default" class="Sonata\NotificationBundle\Entity\MessageManager">
             <argument>%sonata.notification.message.class%</argument>
-            <argument type="service" id="sonata.notification.entity_manager" />
+            <argument type="service" id="doctrine" />
         </service>
     </services>
 </container>

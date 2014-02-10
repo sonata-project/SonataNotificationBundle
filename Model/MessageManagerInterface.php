@@ -43,4 +43,24 @@ interface MessageManagerInterface extends ManagerInterface
      * @return MessageInterface $message
      */
     public function restart(MessageInterface $message);
+
+    /**
+     * @param array   $types
+     * @param integer $state
+     * @param integer $batchSize
+     *
+     * @return []MessageInterface
+     */
+    public function findByTypes(array $types, $state, $batchSize);
+
+    /**
+     * @param array $types
+     * @param       $state
+     * @param       $batchSize
+     * @param null  $maxAttempts
+     * @param int   $attemptDelay
+     *
+     * @return mixed
+     */
+    public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10);
 }

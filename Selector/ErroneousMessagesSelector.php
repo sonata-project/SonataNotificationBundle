@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Selector;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
 
@@ -23,18 +23,18 @@ class ErroneousMessagesSelector
     protected $class;
 
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var ManagerRegistry
      */
-    protected $em;
+    protected $registry;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param string $class
+     * @param ManagerRegistry $registry
+     * @param string          $class
      */
-    public function __construct(EntityManager $em, $class)
+    public function __construct(ManagerRegistry $registry, $class)
     {
-        $this->em    = $em;
-        $this->class = $class;
+        $this->registry = $registry;
+        $this->class    = $class;
     }
 
     /**
@@ -47,7 +47,7 @@ class ErroneousMessagesSelector
      */
     public function getMessages(array $types, $maxAttempts = 5)
     {
-        $query = $this->em->getRepository($this->class)
+        $query = $this->registry->getManagerForClass($this->class)->getRepository($this->class)
             ->createQueryBuilder('m')
             ->where('m.state = :erroneousState')
             ->andWhere('m.restartCount < :maxAttempts');

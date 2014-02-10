@@ -6,7 +6,7 @@
 
     <services>
         <service id="sonata.notification.erroneous_messages_selector" class="Sonata\NotificationBundle\Selector\ErroneousMessagesSelector">
-            <argument type="service" id="sonata.notification.entity_manager" />
+            <argument type="service" id="doctrine" />
             <argument>%sonata.notification.message.class%</argument>
         </service>
     </services>

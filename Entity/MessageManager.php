@@ -11,12 +11,11 @@
 
 namespace Sonata\NotificationBundle\Entity;
 
-use Doctrine\ORM\EntityManager;
-use Sonata\CoreBundle\Entity\DoctrineBaseManager;
+use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
-class MessageManager extends DoctrineBaseManager implements MessageManagerInterface
+class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {
     /**
      * {@inheritDoc}
@@ -25,20 +24,14 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
     {
         //Hack for ConsumerHandlerCommand->optimize()
         if ($message->getId() && !$this->om->getUnitOfWork()->isInIdentityMap($message)) {
-            $this->om->getUnitOfWork()->merge($message);
+            $this->getEntityManager()->getUnitOfWork()->merge($message);
         }
 
         parent::save($message, $andFlush);
     }
 
     /**
-     * Find messages by types and states
-     *
-     * @param array $types
-     * @param int   $state
-     * @param int   $batchSize
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
     public function findByTypes(array $types, $state, $batchSize)
     {
@@ -51,15 +44,7 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
     }
 
     /**
-     * Find messages by types, states and attempts
-     *
-     * @param array $types
-     * @param int   $state
-     * @param int   $batchSize
-     * @param int   $maxAttempts
-     * @param int   $attemptDelay
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
     public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10)
     {
@@ -86,9 +71,9 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
      */
     public function countStates()
     {
-        $tableName = $this->om->getClassMetadata($this->class)->table['name'];
+        $tableName = $this->getEntityManager()->getClassMetadata($this->class)->table['name'];
 
-        $stm = $this->om->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
+        $stm = $this->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
 
         $states = array(
             MessageInterface::STATE_DONE        => 0,
@@ -109,7 +94,7 @@ class MessageManager extends DoctrineBaseManager implements MessageManagerInterf
      */
     public function cleanup($maxAge)
     {
-        $tableName = $this->om->getClassMetadata($this->class)->table['name'];
+        $tableName = $this->getEntityManager()->getClassMetadata($this->class)->table['name'];
 
         $date = new \DateTime('now');
         $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
