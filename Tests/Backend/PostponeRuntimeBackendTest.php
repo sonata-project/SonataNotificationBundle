@@ -86,6 +86,44 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
     }
 
+    public function testRecursiveMessage()
+    {
+        $dispatcher = new EventDispatcher();
+        $backend = new PostponeRuntimeBackend($dispatcher, true);
+        $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
+
+        $message1 = $backend->create('notification.demo1', array());
+        $message2 = $backend->create('notification.demo2', array());
+
+        $backend->publish($message1);
+
+        $phpunit = $this;
+        $phpunit->passed1 = false;
+        $phpunit->passed2 = false;
+
+        $dispatcher->addListener('notification.demo1', function (ConsumerEventInterface $event) use ($phpunit, $message1, $message2, $backend, $dispatcher) {
+            $phpunit->assertSame($message1, $event->getMessage());
+
+            $phpunit->passed1 = true;
+
+            $backend->publish($message2);
+        });
+
+        $dispatcher->addListener('notification.demo2', function (ConsumerEventInterface $event) use ($phpunit, $message2) {
+            $phpunit->assertSame($message2, $event->getMessage());
+
+            $phpunit->passed2 = true;
+        });
+
+        $dispatcher->dispatch('kernel.terminate');
+
+        $this->assertTrue($phpunit->passed1);
+        $this->assertTrue($phpunit->passed2);
+
+        $this->assertEquals(MessageInterface::STATE_DONE, $message1->getState());
+        $this->assertEquals(MessageInterface::STATE_DONE, $message2->getState());
+    }
+
     public function testStatusIsOk()
     {
         if (!class_exists('Liip\Monitor\Result\CheckResult')) {
