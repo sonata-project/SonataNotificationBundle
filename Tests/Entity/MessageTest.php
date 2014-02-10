@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
-use \Sonata\NotificationBundle\Tests\Entity\Message;
+use Sonata\NotificationBundle\Model\MessageInterface;
 
 class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,10 +33,29 @@ class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
         $message->setState(Message::STATE_ERROR);
 
         $this->assertTrue($message->isError());
+        $this->assertEquals(42, $message->getId());
 
         $newMessage = clone $message;
 
         $this->assertTrue($newMessage->isOpen());
+        $this->assertNull($newMessage->getId());
+    }
+
+    public function testStatuses()
+    {
+        $message = new Message;
+
+        $message->setState(MessageInterface::STATE_IN_PROGRESS);
+        $this->assertTrue($message->isRunning());
+
+        $message->setState(MessageInterface::STATE_CANCELLED);
+        $this->assertTrue($message->isCancelled());
+
+        $message->setState(MessageInterface::STATE_ERROR);
+        $this->assertTrue($message->isError());
+
+        $message->setState(MessageInterface::STATE_OPEN);
+        $this->assertTrue($message->isOpen());
     }
 
     /**

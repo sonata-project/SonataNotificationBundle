@@ -136,6 +136,11 @@ interface MessageInterface
     /**
      * @return boolean
      */
+    public function isCancelled();
+
+    /**
+     * @return boolean
+     */
     public function isError();
 
     /**
