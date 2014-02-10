@@ -132,7 +132,8 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
             return;
         }
 
-        $this->cancel($message);
+        $message->setState(MessageInterface::STATE_CANCELLED);
+        $this->save($message);
 
         $count = $message->getRestartCount();
 
