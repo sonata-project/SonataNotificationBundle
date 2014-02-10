@@ -248,6 +248,14 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
+    public function isCancelled()
+    {
+        return $this->state == self::STATE_CANCELLED;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isError()
     {
         return $this->state == self::STATE_ERROR;

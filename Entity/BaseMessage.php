@@ -29,4 +29,11 @@ class BaseMessage extends Message
     {
         return $this->id;
     }
+
+    public function __clone()
+    {
+        parent::__clone();
+
+        $this->id = null;
+    }
 }

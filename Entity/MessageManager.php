@@ -128,16 +128,16 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
      */
     public function restart(MessageInterface $message)
     {
-        if ($message->isOpen() || $message->isRunning()) {
+        if ($message->isOpen() || $message->isRunning() || $message->isCancelled()) {
             return;
         }
 
-        $this->cancel($message);
+        $message->setState(MessageInterface::STATE_CANCELLED);
 
-        $count = $message->getRestartCount();
+        $this->save($message);
 
         $newMessage = clone $message;
-        $newMessage->setRestartCount($count + 1);
+        $newMessage->setRestartCount($message->getRestartCount() + 1);
 
         return $newMessage;
     }
