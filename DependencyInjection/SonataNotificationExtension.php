@@ -49,7 +49,7 @@ class SonataNotificationExtension extends Extension
 
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (isset($bundles['FOSRestBundle'])) {
+        if (isset($bundles['FOSRestBundle']) && isset($bundles['NelmioApiDocBundle'])) {
             $loader->load('api_controllers.xml');
         }
 
