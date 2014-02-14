@@ -38,9 +38,8 @@
         "liip/monitor-bundle": "~1.0"
     },
     "autoload": {
-        "psr-0": { "Sonata\\NotificationBundle": "" }
+        "psr-4": { "Sonata\\NotificationBundle\\": "" }
     },
-    "target-dir": "Sonata/NotificationBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.2.x-dev"
