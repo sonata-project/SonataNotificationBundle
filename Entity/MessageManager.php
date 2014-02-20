@@ -23,7 +23,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     public function save($message, $andFlush = true)
     {
         //Hack for ConsumerHandlerCommand->optimize()
-        if ($message->getId() && !$this->om->getUnitOfWork()->isInIdentityMap($message)) {
+        if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
             $this->getEntityManager()->getUnitOfWork()->merge($message);
         }
 
