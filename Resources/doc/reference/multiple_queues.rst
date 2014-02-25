@@ -37,16 +37,16 @@ To enable multiple queues, simply define a `queues` node in your configuration:
 
 This will define 2 different queues: `transcoder` and `catchall` and where the `transcoder` queue is bound to a routing key:
 
-    - `start.transcode.video`
+    - ``start.transcode.video``
 
 In the above example you will need to start 2 processes, where each process will handle messages sent by a specific queue:
 
-    - `php app/console sonata:notification:start --env=prod --iteration=250 --type=start.transcode.video`
-    - `php app/console sonata:notification:start --env=prod --iteration=250`
+    - ``php app/console sonata:notification:start --env=prod --iteration=250 --type=start.transcode.video``
+    - ``php app/console sonata:notification:start --env=prod --iteration=250``
 
 
-Messages published with the `start.transcode.video` type will be handled by the first consumer.
-Any other message types will be handled by the `catchall` consumer, as it has been set as the default one.
+Messages published with the ``start.transcode.video`` type will be handled by the first consumer.
+Any other message types will be handled by the ``catchall`` consumer, as it has been set as the default one.
 
 Doctrine
 ~~~~~~~~
@@ -74,13 +74,13 @@ To enable multiple queues, simply define a `queues` node in your configuration:
 
 This will define 2 different queues: `sonata_page` and `catchall` and where the `sonata_page` queue is bound to two messages types:
 
-    - `sonata.page.create_snapshot`
-    - `sonata.page.create_snapshots`
+    - ``sonata.page.create_snapshot``
+    - ``sonata.page.create_snapshots``
 
 In the above example you will need to create 2 processes, where each process will handle messages sent by a specific queue:
 
-    - `php app/console sonata:notification:start --env=prod --iteration=250 --type=sonata.page.create_snapshot`
-    - `php app/console sonata:notification:start --env=prod --iteration=250`
+    - ``php app/console sonata:notification:start --env=prod --iteration=250 --type=sonata.page.create_snapshot``
+    - ``php app/console sonata:notification:start --env=prod --iteration=250``
 
 
 Messages published with `sonata.page.create_snapshot` or `sonata.page.create_snapshots` types will be handled by the first consumer.

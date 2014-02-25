@@ -1,20 +1,20 @@
 Monitoring
 ==========
 
-The bundle ships with built-in health checks to be used by the .. _LiipMonitorBundle: https://github.com/liip/LiipMonitorBundle , 
-see the sonata.notification.backend.heath_check service.
+The bundle ships with built-in health checks to be used by the `LiipMonitorBundle <https://github.com/liip/LiipMonitorBundle>`_ ,
+see the ``sonata.notification.backend.heath_check`` service.
 
-The rabbitmq backend uses the default URL for the .. _management plugin: http://www.rabbitmq.com/management.html API (http://localhost:55672/api)
+The rabbitmq backend uses the default URL for the `Management plugin <http://www.rabbitmq.com/management.html>`_ API (http://localhost:55672/api)
 
-If you need to change the default URL, you can configure it by setting the "console_url" configuration value:
+If you need to change the default URL, you can configure it by setting the ``console_url`` configuration value:
 
 .. code-block:: yaml
 
-    sonata_notification: 
+    sonata_notification:
         backend: sonata.notification.backend.rabbitmq
-    
-        backends: 
-          rabbitmq: 
+
+        backends:
+          rabbitmq:
               exchange:     router
               connection:
                   host:         %rabbitmq_host%
