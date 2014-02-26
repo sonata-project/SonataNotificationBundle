@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.notification.consumer.swift_mailer" class="Sonata\NotificationBundle\Consumer\SwiftMailerConsumer">
+            <tag name="sonata.notification.consumer" type="mailer" />
+            <argument type="service" id="mailer" />
+        </service>
+
+        <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
+            <tag name="sonata.notification.consumer" type="logger" />
+
+            <argument type="service" id="logger" />
+        </service>
+    </services>
+</container>
