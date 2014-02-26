@@ -1,9 +1,11 @@
 Installation
 ============
 
-To begin, add the dependent bundles::
+To begin, add the dependent bundles:
 
-    php composer.phar require sonata-project/notification-bundle  # optional
+.. code-block:: bash
+
+    php composer.phar require sonata-project/notification-bundle
     php composer.phar require videlalvaro/php-amqplib --no-update # optional
     php composer.phar require liip/monitor-bundle --no-update     # optional
     php composer.phar update
@@ -66,6 +68,8 @@ Extending the Bundle
 --------------------
 At this point, the bundle is functional, but not quite ready yet. You need to
 generate the correct entities for the media:
+
+.. code-block:: bash
 
     php app/console sonata:easy-extends:generate SonataNotificationBundle
 
