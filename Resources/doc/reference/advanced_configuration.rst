@@ -58,6 +58,9 @@ Full configuration options:
             - the_service_id
             - the_other_service_id
 
+        consumers:
+            register_default: true    # if set to true, SwiftMailerConsumer and LoggerConsumer will be registered as services
+
     doctrine:
         orm:
             entity_managers:
