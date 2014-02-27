@@ -47,6 +47,10 @@ class SonataNotificationExtension extends Extension
         $loader->load('selector.xml');
         $loader->load('event.xml');
 
+        if ($config['consumers']['register_default']) {
+            $loader->load('default_consumers.xml');
+        }
+
         $bundles = $container->getParameter('kernel.bundles');
 
         if (isset($bundles['FOSRestBundle']) && isset($bundles['NelmioApiDocBundle'])) {
