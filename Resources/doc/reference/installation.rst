@@ -64,6 +64,15 @@ Backend availables :
     sonata_notification:
         backend: sonata.notification.backend.runtime
 
+You can disable the admin if you don't need it :
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+    sonata_notification:
+        admin:
+            enabled: false
+
 Extending the Bundle
 --------------------
 At this point, the bundle is functional, but not quite ready yet. You need to

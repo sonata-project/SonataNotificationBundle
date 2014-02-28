@@ -57,7 +57,7 @@ class SonataNotificationExtension extends Extension
             $loader->load('api_controllers.xml');
         }
 
-        if (isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
+        if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
             $loader->load('admin.xml');
         }
 
