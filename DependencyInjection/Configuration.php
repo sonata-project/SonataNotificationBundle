@@ -86,6 +86,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('admin')
                 ->addDefaultsIfNotSet()
                 ->children()
+                    ->booleanNode('enabled')->defaultTrue()->end()
                     ->arrayNode('message')
                         ->addDefaultsIfNotSet()
                         ->children()
