@@ -114,7 +114,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
      */
     public function cancel(MessageInterface $message)
     {
-        if ($message->isRunning() || $message->isError()) {
+        if ($message->isRunning()) {
             return;
         }
 
@@ -132,12 +132,11 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
             return;
         }
 
-        $message->setState(MessageInterface::STATE_CANCELLED);
-
-        $this->save($message);
+        $this->cancel($message);
 
         $newMessage = clone $message;
         $newMessage->setRestartCount($message->getRestartCount() + 1);
+        $newMessage->setType($message->getType());
 
         return $newMessage;
     }

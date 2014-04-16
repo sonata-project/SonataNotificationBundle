@@ -19,8 +19,8 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
  * Class ErroneousMessageIterator
  * @package Sonata\NotificationBundle\Iterator
  */
-class ErroneousMessageIterator extends MessageManagerMessageIterator {
-
+class ErroneousMessageIterator extends MessageManagerMessageIterator
+{
     /**
      * @var int
      */

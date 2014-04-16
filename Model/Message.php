@@ -40,8 +40,8 @@ class Message implements MessageInterface
 
     public function __clone()
     {
-        $this->state = self::STATE_OPEN;
-        $this->startedAt = null;
+        $this->state       = self::STATE_OPEN;
+        $this->startedAt   = null;
         $this->completedAt = null;
 
         $this->createdAt = new \DateTime();
