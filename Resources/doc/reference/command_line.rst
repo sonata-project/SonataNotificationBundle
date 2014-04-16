@@ -69,4 +69,4 @@ message has been set to error and the time the message can be reprocess with --a
 
 .. code-block:: bash
 
-    app/console sonata:notification:restart --type="xxx" --pulling --max-attempts=10 --attempt-delay=60
+    app/console sonata:notification:restart --type="xxx" --pulling --max-attempts=10 --attempt-delay=60 --pause=500000 --batch-size=10

@@ -31,10 +31,12 @@ class RestartCommand extends ContainerAwareCommand
     {
         $this->setName('sonata:notification:restart');
         $this->setDescription('Restart messages with erroneous statuses, only for doctrine backends');
-        $this->addOption('type', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'List of messages types to restart');
+        $this->addOption('type', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'List of messages types to restart (separate multiple types with a space)');
         $this->addOption('max-attempts', null, InputOption::VALUE_REQUIRED, 'Maximum number of attempts', 6);
         $this->addOption('attempt-delay', null, InputOption::VALUE_OPTIONAL, 'Min seconds between two attempts', 10);
         $this->addOption('pulling', null, InputOption::VALUE_NONE, 'Run the command as an infinite pulling loop');
+        $this->addOption('pause', null, InputOption::VALUE_OPTIONAL, 'Seconds between each data pull (used only when pulling option is set)', 500000);
+        $this->addOption('batch-size', null, InputOption::VALUE_OPTIONAL, 'Number of message to process on each pull (used only when pulling option is set)', 10);
     }
 
     /**
@@ -55,8 +57,8 @@ class RestartCommand extends ContainerAwareCommand
             $messages = new ErroneousMessageIterator(
                 $manager,
                 $input->getOption('type'),
-                null,
-                null,
+                $input->getOption('pause'),
+                $input->getOption('batch-size'),
                 $input->getOption('max-attempts'),
                 $input->getOption('attempt-delay'));
         } else {
@@ -74,14 +76,14 @@ class RestartCommand extends ContainerAwareCommand
         foreach ($messages as $message) {
             $id = $message->getId();
 
-            $message = $manager->restart($message);
+            $newMessage = $manager->restart($message);
 
-            $this->getBackend()->publish($message);
+            $this->getBackend()->publish($newMessage);
 
-            $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $message->getType(), $id, $message->getId(), $message->getRestartCount()));
+            $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $newMessage->getType(), $id, $newMessage->getId(), $newMessage->getRestartCount()));
 
             if ($pullMode) {
-                $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($messages, null, $message));
+                $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($messages, null, $newMessage));
             }
         }
 
