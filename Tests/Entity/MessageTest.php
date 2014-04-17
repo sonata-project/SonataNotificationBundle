@@ -30,6 +30,7 @@ class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
     public function testClone()
     {
         $message = new Message;
+        $message->setId(42);
         $message->setState(Message::STATE_ERROR);
 
         $this->assertTrue($message->isError());
