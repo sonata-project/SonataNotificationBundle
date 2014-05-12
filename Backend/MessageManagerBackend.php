@@ -45,7 +45,7 @@ class MessageManagerBackend implements BackendInterface
      * @param int                     $batchSize
      * @param array                   $types
      */
-    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 84600, $batchSize = 10, array $types = array())
+    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 86400, $batchSize = 10, array $types = array())
     {
         $this->messageManager = $messageManager;
         $this->checkLevel     = $checkLevel;
