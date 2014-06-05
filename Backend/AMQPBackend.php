@@ -132,7 +132,7 @@ class AMQPBackend implements BackendInterface
 
         $amq = new AMQPMessage($body, array(
             'content_type'  => 'text/plain',
-            'delivery-mode' => 2
+            'delivery_mode' => 2
         ));
 
         $this->getChannel()->basic_publish($amq, $this->exchange, $this->key);
