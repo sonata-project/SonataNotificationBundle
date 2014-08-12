@@ -13,6 +13,7 @@ namespace Sonata\NotificationBundle\Backend;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ZendDiagnostics\Result\ResultInterface;
 
 interface BackendInterface
 {
@@ -54,7 +55,7 @@ interface BackendInterface
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);
 
     /**
-     * @return \Liip\Monitor\Result\CheckResult
+     * @return ResultInterface
      */
     public function getStatus();
 

@@ -18,6 +18,7 @@ use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
 
 use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Result\Success;
 
 /**
  * This backend postpones the handling of messages to a registered event.
@@ -106,7 +107,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
      */
     public function getStatus()
     {
-        return new CheckResult("Postpone runtime backend", 'Ok (Postpone Runtime)', CheckResult::OK);
+        return new Success("Postpone runtime backend", 'Ok (Postpone Runtime)');
     }
 
     /**

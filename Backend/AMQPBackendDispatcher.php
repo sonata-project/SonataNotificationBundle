@@ -18,6 +18,8 @@ use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 use PhpAmqpLib\Connection\AMQPConnection;
 
 use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Result\Failure;
+use ZendDiagnostics\Result\Success;
 
 /**
  * Producer side of the rabbitmq backend.
@@ -141,18 +143,18 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             }
 
             if ($checked !== count($this->queues)) {
-                return $this->buildResult('Not all queues for the available notification types registered in the rabbitmq broker. Are the consumer commands running?', CheckResult::CRITICAL);
+                return new Failure('Not all queues for the available notification types registered in the rabbitmq broker. Are the consumer commands running?');
             }
 
             if (count($missingConsumers) > 0) {
-                return $this->buildResult('There are no rabbitmq consumers running for the queues: '. implode(', ', $missingConsumers), CheckResult::CRITICAL);
+                return new Failure('There are no rabbitmq consumers running for the queues: '. implode(', ', $missingConsumers));
             }
 
         } catch (\Exception $e) {
-            return $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
+            return new Failure($e->getMessage());
         }
 
-        return $this->buildResult('Channel is running (RabbitMQ) and consumers for all queues available.', CheckResult::OK);
+        return new Success('Channel is running (RabbitMQ) and consumers for all queues available.');
     }
 
     /**

@@ -17,6 +17,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 
 use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Result\Success;
 
 /**
  * Producer side of the doctrine backend.
@@ -111,7 +112,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
      */
     public function getStatus()
     {
-        return $this->buildResult('Channel is running (RabbitMQ) and consumers for all queues available.', CheckResult::OK);
+        return new Success('Channel is running (RabbitMQ) and consumers for all queues available.');
     }
 
     /**

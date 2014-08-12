@@ -7,6 +7,10 @@ A [BC BREAK] means the update will break the project for many reasons :
 * new dependencies
 * class refactoring
 
+### 2014-08-12
+
+* [BC BREAK] create a new 2.3 release to support ZendDiagnostic as LiipMonitor lib is now deprecated
+
 ### 2013-02-18
 
 * add Message Admin

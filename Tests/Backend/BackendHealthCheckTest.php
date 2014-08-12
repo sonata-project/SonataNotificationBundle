@@ -12,29 +12,26 @@
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\BackendHealthCheck;
-
-use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Result\Success;
 
 class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        if (!interface_exists('Liip\Monitor\Check\CheckInterface')) {
-            $this->markTestSkipped('Liip\Monitor\Check\CheckInterface does not exist');
+        if (!class_exists('ZendDiagnostics\Result\Success')) {
+            $this->markTestSkipped('ZendDiagnostics\Result\Success does not exist');
         }
     }
 
     public function testCheck()
     {
-        $result = new CheckResult('Test check', 'OK', CheckResult::OK);
+        $result = new Success('Test check', 'OK');
 
         $backend = $this->getMock('Sonata\NotificationBundle\Backend\BackendInterface');
         $backend->expects($this->once())->method('getStatus')->will($this->returnValue($result));
 
         $health = new BackendHealthCheck($backend);
 
-        $result = $health->check();
-
-        $this->assertEquals(CheckResult::OK, $result->getStatus());
+        $this->assertEquals($result, $health->check());
     }
 }

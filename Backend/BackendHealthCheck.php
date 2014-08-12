@@ -11,10 +11,10 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Liip\Monitor\Check\CheckInterface;
-use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Check\AbstractCheck;
+use ZendDiagnostics\Result\Success;
 
-class BackendHealthCheck implements CheckInterface
+class BackendHealthCheck extends AbstractCheck
 {
     protected $backend;
 
@@ -31,9 +31,7 @@ class BackendHealthCheck implements CheckInterface
      */
     public function check()
     {
-        $status = $this->backend->getStatus();
-
-        return new CheckResult($this->getName(), $status->getMessage(), $status->getStatus());
+        return $this->backend->getStatus();
     }
 
     /**
