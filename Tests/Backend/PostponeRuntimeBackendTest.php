@@ -15,7 +15,6 @@ use Sonata\NotificationBundle\Backend\PostponeRuntimeBackend;
 use Sonata\NotificationBundle\Consumer\ConsumerEventInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Liip\Monitor\Result\CheckResult;
 
 /**
  * @covers Sonata\NotificationBundle\Backend\PostponeRuntimeBackend
@@ -126,15 +125,14 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testStatusIsOk()
     {
-        if (!class_exists('Liip\Monitor\Result\CheckResult')) {
-            $this->markTestSkipped('The class Liip\Monitor\Result\CheckResult does not exist');
+        if (!class_exists('ZendDiagnostics\Result\Success')) {
+            $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
         }
 
         $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true);
 
         $status = $backend->getStatus();
-        $this->assertInstanceOf('Liip\Monitor\Result\CheckResult', $status);
-        $this->assertEquals(CheckResult::OK, $status->getStatus());
+        $this->assertInstanceOf('ZendDiagnostics\Result\Success', $status);
     }
 
     public function testOnCliPublishHandlesDirectly()

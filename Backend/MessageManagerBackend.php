@@ -19,7 +19,6 @@ use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Exception\HandlingException;
 
-use Liip\Monitor\Result\CheckResult;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;

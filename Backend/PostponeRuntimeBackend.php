@@ -17,7 +17,6 @@ use Symfony\Component\EventDispatcher\Event;
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
 
-use Liip\Monitor\Result\CheckResult;
 use ZendDiagnostics\Result\Success;
 
 /**

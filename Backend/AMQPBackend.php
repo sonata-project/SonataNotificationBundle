@@ -22,7 +22,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
-use Liip\Monitor\Result\CheckResult;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 

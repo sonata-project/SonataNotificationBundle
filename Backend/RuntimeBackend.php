@@ -17,7 +17,6 @@ use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Model\Message;
 use Sonata\NotificationBundle\Exception\HandlingException;
 
-use Liip\Monitor\Result\CheckResult;
 use ZendDiagnostics\Result\Success;
 
 class RuntimeBackend implements BackendInterface

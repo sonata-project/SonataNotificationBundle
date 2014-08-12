@@ -14,7 +14,6 @@ namespace Sonata\NotificationBundle\Backend;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 
-use Liip\Monitor\Result\CheckResult;
 use ZendDiagnostics\Result\ResultInterface;
 
 /**

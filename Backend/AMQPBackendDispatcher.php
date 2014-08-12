@@ -17,7 +17,6 @@ use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 
 use PhpAmqpLib\Connection\AMQPConnection;
 
-use Liip\Monitor\Result\CheckResult;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 

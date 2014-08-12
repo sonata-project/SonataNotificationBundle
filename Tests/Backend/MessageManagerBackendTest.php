@@ -15,8 +15,9 @@ use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use \Sonata\NotificationBundle\Tests\Entity\Message;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Exception\HandlingException;
-
-use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Result\Failure;
+use ZendDiagnostics\Result\Success;
+use ZendDiagnostics\Result\Warning;
 
 class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,8 +85,8 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
      */
     public function testStatus($counts, $expectedStatus, $message)
     {
-        if (!class_exists('Liip\Monitor\Result\CheckResult')) {
-            $this->markTestSkipped('The class Liip\Monitor\Result\CheckResult does not exist');
+        if (!class_exists('ZendDiagnostics\Result\Success')) {
+            $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
         }
 
         $modelManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
@@ -100,14 +101,13 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
 
         $status = $backend->getStatus();
 
-        $this->assertInstanceOf('Liip\Monitor\Result\CheckResult', $status);
-        $this->assertEquals($expectedStatus, $status->getStatus());
+        $this->assertInstanceOf(get_class($expectedStatus), $status);
         $this->assertEquals($message, $status->getMessage());
     }
 
     public static function statusProvider()
     {
-        if (!class_exists('Liip\Monitor\Result\CheckResult')) {
+        if (!class_exists('ZendDiagnostics\Result\Success')) {
             return array(array(1,1,1));
         }
 
@@ -120,7 +120,7 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
                 MessageInterface::STATE_OPEN => 100,
                 MessageInterface::STATE_DONE => 10000,
             ),
-            CheckResult::CRITICAL,
+            new Failure(),
             'Too many messages processed at the same time (Database)'
         );
 
@@ -131,7 +131,7 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
                 MessageInterface::STATE_OPEN => 100,
                 MessageInterface::STATE_DONE => 10000,
             ),
-            CheckResult::CRITICAL,
+            new Failure(),
             'Too many errors (Database)'
         );
 
@@ -142,7 +142,7 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
                 MessageInterface::STATE_OPEN => 101, #here
                 MessageInterface::STATE_DONE => 10000,
             ),
-            CheckResult::WARNING,
+            new Warning(),
             'Too many messages waiting to be processed (Database)'
         );
 
@@ -153,7 +153,7 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
                 MessageInterface::STATE_OPEN => 100,
                 MessageInterface::STATE_DONE => 10001, #here
             ),
-            CheckResult::WARNING,
+                new Warning(),
             'Too many processed messages, please clean the database (Database)'
         );
 
@@ -164,7 +164,7 @@ class MessageManagerProducerTest extends \PHPUnit_Framework_TestCase
                 MessageInterface::STATE_OPEN => 1,
                 MessageInterface::STATE_DONE => 1,
             ),
-            CheckResult::OK,
+            new Success(),
             'Ok (Database)'
         );
 
