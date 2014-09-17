@@ -70,3 +70,10 @@ message has been set to error and the time the message can be reprocess with --a
 .. code-block:: bash
 
     app/console sonata:notification:restart --type="xxx" --pulling --max-attempts=10 --attempt-delay=60 --pause=500000 --batch-size=10
+
+Create and publish messages
+---------------------------
+
+For testing purpose, you might want to manually create and publish messages::
+
+    app/console sonata:notification:create-and-publish logger '{"level":"debug","message":"Hello world!"}'
