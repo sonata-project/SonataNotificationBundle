@@ -42,8 +42,8 @@ only one method ``process``. The ``process`` method will receive a ``ConsumerEve
 argument. The ``ConsumerEvent`` object is a standard Symfony Event from the ``EventDispatcher``
 Component. So it is possible to stop the event propagation from the consumer.
 
-The current example does not mean to be used in production, however it is a good example on creating
-a logger consumer.
+The current example is not meant to be used in production, however it is a good example of
+logger consumer creation.
 
 .. code-block:: php
 
