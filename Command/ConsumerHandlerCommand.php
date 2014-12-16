@@ -120,6 +120,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
                 $output->writeln(sprintf("<error>KO! - %s</error>", $e->getPrevious()->getMessage()));
             } catch (\Exception $e) {
                 $output->writeln(sprintf("<error>KO! - %s</error>", $e->getMessage()));
+                throw $e;
             }
 
             $this->getEventDispatcher()->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($iterator, $backend, $message));
