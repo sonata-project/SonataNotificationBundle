@@ -49,7 +49,7 @@ class MessageController
      *
      * @ApiDoc(
      *  resource=true,
-     *  output={"class"="Sonata\NotificationBundle\Model\Message", "groups"="sonata_api_read"}
+     *  output={"class"="Sonata\DatagridBundle\Pager\PagerInterface", "groups"="sonata_api_read"}
      * )
      *
      * @QueryParam(name="page", requirements="\d+", default="1", description="Page for message list pagination")
@@ -62,25 +62,34 @@ class MessageController
      *
      * @param ParamFetcherInterface $paramFetcher
      *
-     * @return Message[]
+     * @return Sonata\DatagridBundle\Pager\PagerInterface
      */
     public function getMessagesAction(ParamFetcherInterface $paramFetcher)
     {
-        $page    = $paramFetcher->get('page');
-        $count   = $paramFetcher->get('count');
-        $orderBy = $paramFetcher->get('orderBy');
 
-        $criteria = $paramFetcher->all();
+        $supportedCriteria = array(
+            'state' => "",
+            'type' => "",
+        );
 
-        unset($criteria['page'], $criteria['count'], $criteria['orderBy']);
+        $page     = $paramFetcher->get('page');
+        $limit    = $paramFetcher->get('count');
+        $sort     = $paramFetcher->get('orderBy');
+        $criteria = array_intersect_key($paramFetcher->all(), $supportedCriteria);
 
-        foreach ($criteria as $key => $crit) {
-            if (null === $crit) {
+        foreach ($criteria as $key => $value) {
+            if (null === $value) {
                 unset($criteria[$key]);
             }
         }
 
-        return $this->getMessageManager()->findBy($criteria, $orderBy, $count, $page);
+        if (!$sort) {
+            $sort = array();
+        } elseif (!is_array($sort)) {
+            $sort = array($sort => 'asc');
+        }
+
+        return $this->getMessageManager()->getPager($criteria, $page, $limit, $sort);
     }
 
     /**

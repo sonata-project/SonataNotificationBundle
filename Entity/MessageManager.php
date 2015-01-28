@@ -14,6 +14,8 @@ namespace Sonata\NotificationBundle\Entity;
 use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
+use Sonata\DatagridBundle\Pager\Doctrine\Pager;
+use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
 
 class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {
@@ -178,5 +180,50 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         $query->setMaxResults($batchSize);
 
         return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
+    {
+        $query = $this->getRepository()
+            ->createQueryBuilder('m')
+            ->select('m');
+
+        $fields = $this->getEntityManager()->getClassMetadata($this->class)->getFieldNames();
+        foreach ($sort as $field => $direction) {
+            if (!in_array($field, $fields)) {
+                throw new \RuntimeException(sprintf("Invalid sort field '%s' in '%s' class", $field, $this->class));
+            }
+        }
+        if (count($sort) == 0) {
+            $sort = array('type' => 'ASC');
+        }
+        foreach ($sort as $field => $direction) {
+            $query->orderBy(sprintf('m.%s', $field), strtoupper($direction));
+        }
+
+        $parameters = array();
+
+        if (isset($criteria['type'])) {
+            $query->andWhere('m.type = :type');
+            $parameters['type'] = $criteria['type'];
+        }
+
+        if (isset($criteria['state'])) {
+            $query->andWhere('m.state = :state');
+            $parameters['state'] = $criteria['state'];
+        }
+
+        $query->setParameters($parameters);
+        $pager = new Pager();
+
+        $pager->setMaxPerPage($limit);
+        $pager->setQuery(new ProxyQuery($query));
+        $pager->setPage($page);
+        $pager->init();
+
+        return $pager;
     }
 }

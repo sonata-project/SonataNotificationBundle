@@ -12,8 +12,9 @@
 namespace Sonata\NotificationBundle\Model;
 
 use Sonata\CoreBundle\Model\ManagerInterface;
+use Sonata\CoreBundle\Model\PageableManagerInterface;
 
-interface MessageManagerInterface extends ManagerInterface
+interface MessageManagerInterface extends ManagerInterface, PageableManagerInterface
 {
     /**
      * @return integer
