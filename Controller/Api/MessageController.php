@@ -13,11 +13,17 @@ namespace Sonata\NotificationBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use FOS\RestBundle\View\View as FOSRestView;
 
+use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 
-use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 /**
@@ -35,13 +41,20 @@ class MessageController
     protected $messageManager;
 
     /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
+
+    /**
      * Constructor
      *
      * @param MessageManagerInterface $messageManager
+     * @param FormFactoryInterface $formFactory
      */
-    public function __construct(MessageManagerInterface $messageManager)
+    public function __construct(MessageManagerInterface $messageManager, FormFactoryInterface $formFactory)
     {
         $this->messageManager = $messageManager;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -90,6 +103,51 @@ class MessageController
         }
 
         return $this->getMessageManager()->getPager($criteria, $page, $limit, $sort);
+    }
+
+    /**
+     * Adds a message
+     *
+     * @ApiDoc(
+     *  input={"class"="sonata_notification_api_form_message", "name"="", "groups"={"sonata_api_write"}},
+     *  output={"class"="Sonata\NotificationBundle\Model\Message", "groups"={"sonata_api_read"}},
+     *  statusCodes={
+     *      200="Returned when successful",
+     *      400="Returned when an error has occurred while message creation"
+     *  }
+     * )
+     *
+     * @Route(requirements={"_format"="json|xml"})
+     *
+     * @param Request $request A Symfony request
+     *
+     * @return MessageInterface
+     */
+    public function postMessageAction(Request $request)
+    {
+        $message = null;
+
+        $form = $this->formFactory->createNamed(null, 'sonata_notification_api_form_message', $message, array(
+            'csrf_protection' => false,
+        ));
+
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            $message = $form->getData();
+
+            $this->messageManager->save($message);
+
+            $view = FOSRestView::create($message);
+            $serializationContext = SerializationContext::create();
+            $serializationContext->setGroups(array('sonata_api_read'));
+            $serializationContext->enableMaxDepthChecks();
+            $view->setSerializationContext($serializationContext);
+
+            return $view;
+        }
+
+        return $form;
     }
 
     /**

@@ -10,7 +10,7 @@
 
 
 namespace Sonata\NotificationBundle\Tests\Controller\Api;
-
+use Symfony\Component\HttpFoundation\Request;
 use Sonata\NotificationBundle\Controller\Api\MessageController;
 
 
@@ -33,6 +33,45 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
         $paramFetcher->expects($this->once())->method('all')->will($this->returnValue(array()));
 
         $this->assertEquals(array(), $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
+    }
+
+    public function testPostMessageAction()
+    {
+        $message = $this->getMock('Sonata\NotificationBundle\Model\MessageInterface');
+
+        $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $messageManager->expects($this->once())->method('save')->will($this->returnValue($message));
+
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
+        $form->expects($this->once())->method('bind');
+        $form->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        $form->expects($this->once())->method('getData')->will($this->returnValue($message));
+
+        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
+
+        $view = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
+
+        $this->assertInstanceOf('FOS\RestBundle\View\View', $view);
+    }
+
+    public function testPostMessageInvalidAction()
+    {
+        $message = $this->getMock('Sonata\NotificationBundle\Model\MessageInterface');
+
+        $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $messageManager->expects($this->never())->method('save')->will($this->returnValue($message));
+
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
+        $form->expects($this->once())->method('bind');
+        $form->expects($this->once())->method('isValid')->will($this->returnValue(false));
+
+        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
+
+        $view = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
+
+        $this->assertInstanceOf('Symfony\Component\Form\FormInterface', $view);
     }
 
     /**

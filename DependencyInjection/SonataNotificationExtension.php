@@ -55,6 +55,7 @@ class SonataNotificationExtension extends Extension
 
         if (isset($bundles['FOSRestBundle']) && isset($bundles['NelmioApiDocBundle'])) {
             $loader->load('api_controllers.xml');
+            $loader->load('api_form.xml');
         }
 
         if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
