@@ -30,6 +30,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
         $this->addOption('iteration', 'i', InputOption::VALUE_OPTIONAL, 'Only run n iterations before exiting', false);
+        $this->addOption('memory-limit', 'l', InputOption::VALUE_OPTIONAL, 'Allowed memory for this process', null);
         $this->addOption('type', null, InputOption::VALUE_OPTIONAL, 'Use a specific backed based on a message type, "all" with doctrine backend will handle all notifications no matter their type', null);
         $this->addOption('show-details', 'd', InputOption::VALUE_OPTIONAL, 'Show consumers return details', true);
     }
@@ -117,14 +118,22 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
             } catch (HandlingException $e) {
                 $output->writeln(sprintf("<error>KO! - %s</error>", $e->getPrevious()->getMessage()));
+                throw $e;
             } catch (\Exception $e) {
                 $output->writeln(sprintf("<error>KO! - %s</error>", $e->getMessage()));
+                throw $e;
             }
 
             $this->getEventDispatcher()->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($iterator, $backend, $message));
 
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');
+
+                return;
+            }
+
+            if ($input->getOption('memory-limit') && memory_get_usage(true) / 1048576 >= (int) $input->getOption('memory-limit')) {
+                $output->writeln('Memory limit reached. Exiting...');
 
                 return;
             }
