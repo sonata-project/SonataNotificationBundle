@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="sonata_notification">
                 <source>sonata_notification</source>
-                <target>Systemmeldungen</target>
+                <target>Systemmeldung</target>
             </trans-unit>
             <trans-unit id="notifications">
                 <source>notifications</source>
