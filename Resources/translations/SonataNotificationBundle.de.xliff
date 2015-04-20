@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="sonata_notification">
                 <source>sonata_notification</source>
-                <target>Systemmeldungen</target>
+                <target>Systemmeldung</target>
             </trans-unit>
             <trans-unit id="notifications">
                 <source>notifications</source>
@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="list.label_type">
                 <source>list.label_type</source>
-                <target>Type</target>
+                <target>Typ</target>
             </trans-unit>
             <trans-unit id="list.label_created_at">
                 <source>list.label_created_at</source>
@@ -44,7 +44,7 @@
             </trans-unit>
             <trans-unit id="show.label_type">
                 <source>show.label_type</source>
-                <target>Type</target>
+                <target>Typ</target>
             </trans-unit>
             <trans-unit id="show.label_created_at">
                 <source>show.label_created_at</source>
