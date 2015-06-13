@@ -48,7 +48,7 @@ If you are deploying with Capistrano, you can restart the supervisor process wit
 Clean up messages
 -----------------
 
-You might want to clean old messages from different backend (if ever a backend old them):
+You might want to clean old messages from different backend (if ever a backend holds them):
 
 .. code-block:: bash
 
