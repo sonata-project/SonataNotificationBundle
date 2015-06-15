@@ -12,10 +12,10 @@
 namespace Sonata\NotificationBundle\Entity;
 
 use Sonata\CoreBundle\Model\BaseEntityManager;
-use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
+use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {
@@ -60,7 +60,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
 
             $params['maxAttempts'] = $maxAttempts;
             $now = new \DateTime();
-            $params['delayDate'] = $now->add(\DateInterval::createFromDateString(($attemptDelay * -1) . ' second'));
+            $params['delayDate'] = $now->add(\DateInterval::createFromDateString(($attemptDelay * -1).' second'));
         }
 
         $query->setParameters($params);

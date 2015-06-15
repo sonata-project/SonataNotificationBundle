@@ -11,18 +11,14 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 
-use ZendDiagnostics\Result\ResultInterface;
-
 /**
- * Base class for queue backent dispatchers
+ * Base class for queue backent dispatchers.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
  * Class QueueBackendDispatcher
- * @package Sonata\NotificationBundle\Backend
  */
 abstract class QueueBackendDispatcher implements QueueDispatcherInterface, BackendInterface
 {
@@ -33,7 +29,6 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     protected $backends;
 
     /**
-     *
      * @param array  $queues
      * @param string $defaultQueue
      * @param array  $backends

@@ -24,14 +24,11 @@ class CreateAndPublishCommand extends ContainerAwareCommand
             ->setName('sonata:notification:create-and-publish')
             ->addArgument('type', InputArgument::REQUIRED, 'Type of the notification')
             ->addArgument('body', InputArgument::REQUIRED, 'Body of the notification (json)');
-        ;
     }
 
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

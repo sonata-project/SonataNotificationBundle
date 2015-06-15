@@ -11,14 +11,12 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Model\MessageManagerInterface;
-use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Exception\HandlingException;
-
+use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator;
+use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
@@ -138,14 +136,13 @@ class MessageManagerBackend implements BackendInterface
             $this->messageManager->save($message);
 
             return $event->getReturnInfo();
-
         } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
             $this->messageManager->save($message);
 
-            throw new HandlingException("Error while handling a message", 0, $e);
+            throw new HandlingException('Error while handling a message', 0, $e);
         }
     }
 

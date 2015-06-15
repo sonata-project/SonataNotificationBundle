@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -27,12 +28,12 @@ class BaseMessageTest extends \PHPUnit_Framework_TestCase
     {
         $originalMessage = new Message();
         $originalMessage->setId(42);
-        $originalMessage->setBody("body");
+        $originalMessage->setBody('body');
         $originalMessage->setState(MessageInterface::STATE_ERROR);
 
         $clonedMessage = clone $originalMessage;
 
-        $this->assertEquals("body", $clonedMessage->getBody());
+        $this->assertEquals('body', $clonedMessage->getBody());
         $this->assertEquals(MessageInterface::STATE_ERROR, $clonedMessage->getState());
         $this->assertNull($clonedMessage->getId());
     }

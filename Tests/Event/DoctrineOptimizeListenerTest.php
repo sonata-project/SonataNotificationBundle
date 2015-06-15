@@ -28,7 +28,7 @@ class DoctrineOptimizeListenerTest extends \PHPUnit_Framework_TestCase
 
         $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->once())->method('getManagers')->will($this->returnValue(array(
-            'default' => $manager
+            'default' => $manager,
         )));
 
         $optimizer = new DoctrineOptimizeListener($registry);
@@ -53,7 +53,7 @@ class DoctrineOptimizeListenerTest extends \PHPUnit_Framework_TestCase
 
         $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->once())->method('getManagers')->will($this->returnValue(array(
-            'default' => $manager
+            'default' => $manager,
         )));
 
         $optimizer = new DoctrineOptimizeListener($registry);

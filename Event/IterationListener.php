@@ -12,12 +12,11 @@
 namespace Sonata\NotificationBundle\Event;
 
 /**
- * Listener for ConsumerHandlerCommand iterations event
+ * Listener for ConsumerHandlerCommand iterations event.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
  * Class IterationListener
- * @package Sonata\NotificationBundle\Event
  */
 interface IterationListener
 {

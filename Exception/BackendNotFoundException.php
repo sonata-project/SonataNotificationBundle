@@ -13,5 +13,4 @@ namespace Sonata\NotificationBundle\Exception;
 
 class BackendNotFoundException extends \RuntimeException
 {
-
 }

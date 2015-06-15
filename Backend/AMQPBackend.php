@@ -11,17 +11,13 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Sonata\NotificationBundle\Model\MessageInterface;
+use PhpAmqpLib\Message\AMQPMessage;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
-use Sonata\NotificationBundle\Model\Message;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
-
+use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Message\AMQPMessage;
-
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 
@@ -30,7 +26,6 @@ use ZendDiagnostics\Result\Success;
  */
 class AMQPBackend implements BackendInterface
 {
-
     protected $exchange;
 
     protected $queue;
@@ -96,7 +91,7 @@ class AMQPBackend implements BackendInterface
             $args['x-dead-letter-exchange'] = array('S', $this->deadLetterExchange);
         }
 
-        /**
+        /*
          * name: $queue
          * passive: false
          * durable: true // the queue will survive server restarts
@@ -107,7 +102,7 @@ class AMQPBackend implements BackendInterface
          */
         $this->getChannel()->queue_declare($this->queue, false, true, false, false, false, $args);
 
-        /**
+        /*
          * name: $exchange
          * type: direct
          * passive: false
@@ -128,12 +123,12 @@ class AMQPBackend implements BackendInterface
             'type'      => $message->getType(),
             'body'      => $message->getBody(),
             'createdAt' => $message->getCreatedAt()->format('U'),
-            'state'     => $message->getState()
+            'state'     => $message->getState(),
         ));
 
         $amq = new AMQPMessage($body, array(
             'content_type'  => 'text/plain',
-            'delivery_mode' => 2
+            'delivery_mode' => 2,
         ));
 
         $this->getChannel()->basic_publish($amq, $this->exchange, $this->key);
@@ -182,14 +177,13 @@ class AMQPBackend implements BackendInterface
 
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);
-
         } catch (HandlingException $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
             $message->getValue('AMQMessage')->delivery_info['channel']->basic_ack($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
 
-            throw new HandlingException("Error while handling a message", 0, $e);
+            throw new HandlingException('Error while handling a message', 0, $e);
         } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
@@ -200,7 +194,7 @@ class AMQPBackend implements BackendInterface
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag'], false);
             }
 
-            throw new HandlingException("Error while handling a message", 0, $e);
+            throw new HandlingException('Error while handling a message', 0, $e);
         }
     }
 

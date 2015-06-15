@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -8,15 +9,13 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Sonata\NotificationBundle\Tests\Exception;
 
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
 
 /**
- * Class InvalidParameterExceptionTest
+ * Class InvalidParameterExceptionTest.
  *
- * @package Sonata\NotificationBundle\Tests\Exception
  *
  * @author Hugo Briand <briand@ekino.com>
  */
@@ -27,6 +26,6 @@ class InvalidParameterExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testException()
     {
-        throw new InvalidParameterException;
+        throw new InvalidParameterException();
     }
 }

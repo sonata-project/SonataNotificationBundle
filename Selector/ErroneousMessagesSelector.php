@@ -12,7 +12,6 @@
 namespace Sonata\NotificationBundle\Selector;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Sonata\NotificationBundle\Model\MessageInterface;
 
 class ErroneousMessagesSelector
@@ -41,7 +40,7 @@ class ErroneousMessagesSelector
      * Retrieve messages with given type(s) and restrict to max attempts count.
      *
      * @param array $types
-     * @param int $maxAttempts
+     * @param int   $maxAttempts
      *
      * @return array
      */
@@ -59,7 +58,7 @@ class ErroneousMessagesSelector
 
         if (count($types) > 0) {
             $query->andWhere('m.type IN (:types)');
-            $parameters['types']= $types;
+            $parameters['types'] = $types;
         }
 
         $query->setParameters($parameters);

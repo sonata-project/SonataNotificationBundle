@@ -11,10 +11,9 @@
 
 namespace Sonata\NotificationBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class SonataNotificationBundle extends Bundle
 {
@@ -26,7 +25,7 @@ class SonataNotificationBundle extends Bundle
     public function boot()
     {
         if (!defined('AMQP_DEBUG')) {
-//            define('AMQP_DEBUG', $this->container->getParameter('kernel.debug'));
+            //            define('AMQP_DEBUG', $this->container->getParameter('kernel.debug'));
             define('AMQP_DEBUG', false);
         }
     }

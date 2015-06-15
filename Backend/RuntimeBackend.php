@@ -11,12 +11,11 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Sonata\NotificationBundle\Consumer\ConsumerEvent;
+use Sonata\NotificationBundle\Exception\HandlingException;
+use Sonata\NotificationBundle\Model\Message;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sonata\NotificationBundle\Consumer\ConsumerEvent;
-use Sonata\NotificationBundle\Model\Message;
-use Sonata\NotificationBundle\Exception\HandlingException;
-
 use ZendDiagnostics\Result\Success;
 
 class RuntimeBackend implements BackendInterface
@@ -75,7 +74,6 @@ class RuntimeBackend implements BackendInterface
      */
     public function initialize()
     {
-
     }
 
     /**
@@ -83,7 +81,6 @@ class RuntimeBackend implements BackendInterface
      */
     public function cleanup()
     {
-
     }
 
     /**
@@ -98,12 +95,11 @@ class RuntimeBackend implements BackendInterface
 
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);
-
         } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
-            throw new HandlingException("Error while handling a message: " . $e->getMessage(), 0, $e);
+            throw new HandlingException('Error while handling a message: '.$e->getMessage(), 0, $e);
         }
     }
 
@@ -112,6 +108,6 @@ class RuntimeBackend implements BackendInterface
      */
     public function getStatus()
     {
-         return new Success('Runtime backend health check', 'Ok  (Runtime)');
+        return new Success('Runtime backend health check', 'Ok  (Runtime)');
     }
 }

@@ -38,7 +38,9 @@
         "sonata-project/core-bundle": "~2.2@dev,>2.2.4",
         "guzzle/guzzle" : "~3.0",
         "videlalvaro/php-amqplib": "~2.0",
-        "liip/monitor-bundle": "~2.0"
+        "liip/monitor-bundle": "~2.0",
+        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "fabpot/php-cs-fixer": "~0.5|~1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

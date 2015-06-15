@@ -11,12 +11,10 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Exception\BackendNotFoundException;
-
 use PhpAmqpLib\Connection\AMQPConnection;
-
+use Sonata\NotificationBundle\Exception\BackendNotFoundException;
+use Sonata\NotificationBundle\Model\MessageInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 
@@ -32,10 +30,10 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     protected $connection;
 
     /**
-     * @param array   $settings
-     * @param array   $queues
-     * @param string  $defaultQueue
-     * @param array   $backends
+     * @param array  $settings
+     * @param array  $queues
+     * @param string $defaultQueue
+     * @param array  $backends
      */
     public function __construct(array $settings, array $queues, $defaultQueue, array $backends)
     {
@@ -96,7 +94,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
 
         if ($default === null) {
-            throw new BackendNotFoundException('Could not find a message backend for the type ' . $type);
+            throw new BackendNotFoundException('Could not find a message backend for the type '.$type);
         }
 
         return $default;
@@ -124,7 +122,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     public function getStatus()
     {
         try {
-
             $this->getChannel();
             $output = $this->getApiQueueStatus();
             $checked = 0;
@@ -133,7 +130,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             foreach ($this->queues as $queue) {
                 foreach ($output as $q) {
                     if ($q['name'] === $queue['queue']) {
-                        $checked++;
+                        ++$checked;
                         if ($q['consumers'] === 0) {
                             $missingConsumers[] = $queue['queue'];
                         }
@@ -146,9 +143,8 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             }
 
             if (count($missingConsumers) > 0) {
-                return new Failure('There are no rabbitmq consumers running for the queues: '. implode(', ', $missingConsumers));
+                return new Failure('There are no rabbitmq consumers running for the queues: '.implode(', ', $missingConsumers));
             }
-
         } catch (\Exception $e) {
             return new Failure($e->getMessage());
         }
@@ -166,7 +162,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     protected function getApiQueueStatus()
     {
         if (class_exists('Guzzle\Http\Client') === false) {
-            throw new \RuntimeException("The guzzle http client library is required to run rabbitmq health checks. Make sure to add guzzle/guzzle to your composer.json.");
+            throw new \RuntimeException('The guzzle http client library is required to run rabbitmq health checks. Make sure to add guzzle/guzzle to your composer.json.');
         }
 
         $client = new \Guzzle\Http\Client();
@@ -186,7 +182,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
-     * @return void
      */
     public function shutdown()
     {
@@ -202,5 +197,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * {@inheritdoc}
      */
-    public function initialize() {}
+    public function initialize()
+    {
+    }
 }

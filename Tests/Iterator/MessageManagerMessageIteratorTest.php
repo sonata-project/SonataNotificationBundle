@@ -15,9 +15,7 @@ namespace Sonata\NotificationBundle\Tests\Iterator;
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
  * Class MessageManagerMessageIteratorTest
- * @package Sonata\NotificationBundle\Tests\Iterator
  */
-
 class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testBufferize()
@@ -43,7 +41,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($iterator->valid());
         $this->assertNotNull($iterator->current());
 
-        $size --;
+        --$size;
         while (--$size >= 1) {
             $iterator->next();
         }
@@ -59,7 +57,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
         $count = 0;
 
         foreach ($iterator as $message) {
-            $count++;
+            ++$count;
             $this->assertNotNull($message);
             if ($count > 20) {
                 return;

@@ -15,7 +15,6 @@ use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\Output;
 
 class CleanupCommand extends ContainerAwareCommand
 {
@@ -28,8 +27,6 @@ class CleanupCommand extends ContainerAwareCommand
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -37,7 +34,7 @@ class CleanupCommand extends ContainerAwareCommand
 
         $this->getBackend()->cleanup();
 
-        $output->writeln("done!");
+        $output->writeln('done!');
     }
 
     /**

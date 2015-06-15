@@ -1,4 +1,5 @@
 <?php
+
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
@@ -31,11 +32,11 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
     {
         $queues = array(array('queue' => $queue, 'routing_key' => $key));
         $settings = array(
-                'host' => 'foo',
-                'port' => 'port',
-                'user' => 'user',
-                'pass' => 'pass',
-                'vhost' => '/'
+                'host'  => 'foo',
+                'port'  => 'port',
+                'user'  => 'user',
+                'pass'  => 'pass',
+                'vhost' => '/',
         );
 
         return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);

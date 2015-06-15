@@ -14,7 +14,7 @@ namespace Sonata\NotificationBundle\Consumer;
 interface ConsumerInterface
 {
     /**
-     * Process a ConsumerEvent
+     * Process a ConsumerEvent.
      *
      * @param ConsumerEvent $event
      */

@@ -19,7 +19,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 /**
  * @covers Sonata\NotificationBundle\Backend\PostponeRuntimeBackend
  */
-
 class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 {
     public function testIteratorContainsPublishedMessages()

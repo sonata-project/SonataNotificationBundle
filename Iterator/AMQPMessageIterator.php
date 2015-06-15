@@ -81,7 +81,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
             false,
             false,
             false,
-            array($this, 'receiveMessage'
+            array($this, 'receiveMessage',
         ));
 
         $this->wait();
@@ -99,8 +99,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * @param  \PhpAmqpLib\Message\AMQPMessage $AMQMessage
-     * @return void
+     * @param \PhpAmqpLib\Message\AMQPMessage $AMQMessage
      */
     public function receiveMessage(AMQPMessage $AMQMessage)
     {
@@ -114,8 +113,8 @@ class AMQPMessageIterator implements MessageIteratorInterface
         $message->setType($data['type']);
         $message->setState($data['state']);
 
-        $this->counter++;
+        ++$this->counter;
 
-        $this->message= $message;
+        $this->message = $message;
     }
 }

@@ -42,7 +42,7 @@ interface BackendInterface
     public function getIterator();
 
     /**
-     * Initialize
+     * Initialize.
      */
     public function initialize();
 
@@ -60,9 +60,7 @@ interface BackendInterface
     public function getStatus();
 
     /**
-     * Clean up messages
-     *
-     * @return void
+     * Clean up messages.
      */
     public function cleanup();
 }

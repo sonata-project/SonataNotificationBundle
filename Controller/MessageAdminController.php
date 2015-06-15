@@ -12,10 +12,9 @@
 namespace Sonata\NotificationBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sonata\NotificationBundle\Model\MessageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MessageAdminController extends CRUDController
 {
