@@ -12,11 +12,9 @@
 namespace Sonata\NotificationBundle\Command;
 
 use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
-
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\Output;
 
 class ListQueuesCommand extends ContainerAwareCommand
 {
@@ -29,15 +27,13 @@ class ListQueuesCommand extends ContainerAwareCommand
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $backend = $this->getContainer()->get('sonata.notification.backend');
 
         if (!$backend instanceof QueueDispatcherInterface) {
-            $output->writeln('The backend class <info>' . get_class($backend)  . '</info> does not provide multiple queues.');
+            $output->writeln('The backend class <info>'.get_class($backend).'</info> does not provide multiple queues.');
 
             return;
         }

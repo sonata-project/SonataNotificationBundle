@@ -207,7 +207,7 @@ class Message implements MessageInterface
             self::STATE_IN_PROGRESS     => 'in_progress',
             self::STATE_DONE            => 'done',
             self::STATE_ERROR           => 'error',
-            self::STATE_CANCELLED       => 'cancelled'
+            self::STATE_CANCELLED       => 'cancelled',
         );
     }
 

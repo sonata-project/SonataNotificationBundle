@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -10,8 +11,8 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
-use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Entity\MessageManager;
+use Sonata\NotificationBundle\Model\MessageInterface;
 
 class MessageManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,7 +66,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $query->expects($this->any())->method('execute')->will($this->returnValue(true));
 
         $qb = $this->getMock('Doctrine\ORM\QueryBuilder', array(), array(
-            $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock()
+            $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock(),
         ));
 
         $qb->expects($this->any())->method('select')->will($this->returnValue($qb));
@@ -103,8 +104,6 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
 
         return $message;
     }
-
-
 
     public function testGetPager()
     {
@@ -153,7 +152,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array()));
             })
             ->getPager(array(), 1, 10, array(
-                'type' => 'ASC',
+                'type'   => 'ASC',
                 'state'  => 'DESC',
             ));
     }
@@ -190,5 +189,4 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
             })
             ->getPager(array('state' => MessageInterface::STATE_IN_PROGRESS), 1);
     }
-
 }

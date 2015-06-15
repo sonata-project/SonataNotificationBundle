@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
 *
@@ -8,11 +9,10 @@
 * file that was distributed with this source code.
 */
 
-
 namespace Sonata\NotificationBundle\Tests\Backend;
 
-use Sonata\NotificationBundle\Model\Message;
 use Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher;
+use Sonata\NotificationBundle\Model\Message;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
@@ -31,7 +31,7 @@ class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
         ;
 
         $message = new Message();
-        $message->setType("test");
+        $message->setType('test');
         $message->setBody(array());
 
         $testBackend->expects($this->once())
@@ -43,6 +43,6 @@ class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
 
         $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, array(), '', array(array('types' => array('test'), 'backend' => $testBackend)));
 
-        $this->assertEquals($message, $mMgrBackend->create("test", array()));
+        $this->assertEquals($message, $mMgrBackend->create('test', array()));
     }
 }

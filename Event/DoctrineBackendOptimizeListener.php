@@ -11,17 +11,15 @@
 
 namespace Sonata\NotificationBundle\Event;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Doctrine context optimizer
- * Used with doctrine backend to clear context taking care of the batch iterations
+ * Used with doctrine backend to clear context taking care of the batch iterations.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
  * Class DoctrineOptimizeListener
- * @package Sonata\NotificationBundle\Event
  */
 class DoctrineBackendOptimizeListener implements IterationListener
 {
@@ -36,7 +34,7 @@ class DoctrineBackendOptimizeListener implements IterationListener
     }
 
     /**
-     * Clear the doctrine context if the internal iterator buffer is empty
+     * Clear the doctrine context if the internal iterator buffer is empty.
      *
      * @param IterateEvent $event
      */

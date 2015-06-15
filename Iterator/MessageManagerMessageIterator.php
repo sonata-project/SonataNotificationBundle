@@ -11,8 +11,8 @@
 
 namespace Sonata\NotificationBundle\Iterator;
 
-use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 class MessageManagerMessageIterator implements MessageIteratorInterface
 {
@@ -57,7 +57,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     public function next()
     {
         $this->setCurrent();
-        $this->counter++;
+        ++$this->counter;
     }
 
     /**
@@ -85,7 +85,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * Return true if the internal buffer is empty
+     * Return true if the internal buffer is empty.
      *
      * @return bool
      */
@@ -95,7 +95,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * Assign current pointer a message
+     * Assign current pointer a message.
      */
     protected function setCurrent()
     {
@@ -107,7 +107,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * Fill the inner messages buffer
+     * Fill the inner messages buffer.
      *
      * @param array $types
      */
@@ -125,7 +125,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * Find open messages
+     * Find open messages.
      *
      * @param array $types
      *

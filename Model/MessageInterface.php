@@ -20,7 +20,8 @@ interface MessageInterface
     const STATE_CANCELLED = -2;
 
     /**
-     * @param  array $body
+     * @param array $body
+     *
      * @return array
      */
     public function setBody(array $body);
@@ -33,13 +34,13 @@ interface MessageInterface
     /**
      * @param array|string $names
      * @param $default
+     *
      * @return mixed
      */
     public function getValue($names, $default = null);
 
     /**
-     * @param  \DateTime $completedAt
-     * @return void
+     * @param \DateTime $completedAt
      */
     public function setCompletedAt(\DateTime $completedAt = null);
 
@@ -49,8 +50,7 @@ interface MessageInterface
     public function getCompletedAt();
 
     /**
-     * @param  \DateTime $createdAt
-     * @return void
+     * @param \DateTime $createdAt
      */
     public function setCreatedAt(\DateTime $createdAt = null);
 
@@ -60,8 +60,7 @@ interface MessageInterface
     public function getCreatedAt();
 
     /**
-     * @param  string $group
-     * @return void
+     * @param string $group
      */
     public function setGroup($group);
 
@@ -71,8 +70,7 @@ interface MessageInterface
     public function getGroup();
 
     /**
-     * @param  string $type
-     * @return void
+     * @param string $type
      */
     public function setType($type);
 
@@ -82,23 +80,22 @@ interface MessageInterface
     public function getType();
 
     /**
-     * @param  integer $state
-     * @return void
+     * @param int $state
      */
     public function setState($state);
 
     /**
-     * @return integer
+     * @return int
      */
     public function getState();
 
     /**
-     * @param integer $restartCount
+     * @param int $restartCount
      */
     public function setRestartCount($restartCount);
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRestartCount();
 
@@ -113,8 +110,7 @@ interface MessageInterface
     public function getUpdatedAt();
 
     /**
-     * @param  \DateTime $startedAt
-     * @return void
+     * @param \DateTime $startedAt
      */
     public function setStartedAt(\DateTime $startedAt = null);
 
@@ -129,22 +125,22 @@ interface MessageInterface
     public function getStateName();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRunning();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCancelled();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isError();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isOpen();
 }

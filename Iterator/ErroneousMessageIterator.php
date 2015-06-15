@@ -11,13 +11,11 @@
 
 namespace Sonata\NotificationBundle\Iterator;
 
-
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 /**
- * Class ErroneousMessageIterator
- * @package Sonata\NotificationBundle\Iterator
+ * Class ErroneousMessageIterator.
  */
 class ErroneousMessageIterator extends MessageManagerMessageIterator
 {
@@ -33,11 +31,11 @@ class ErroneousMessageIterator extends MessageManagerMessageIterator
 
     /**
      * @param MessageManagerInterface $messageManager
-     * @param array $types
-     * @param int $pause
-     * @param int $batchSize
-     * @param int $maxAttempts
-     * @param int $attemptDelay
+     * @param array                   $types
+     * @param int                     $pause
+     * @param int                     $batchSize
+     * @param int                     $maxAttempts
+     * @param int                     $attemptDelay
      */
     public function __construct(MessageManagerInterface $messageManager, $types = array(), $pause = 500000, $batchSize = 10, $maxAttempts = 5, $attemptDelay = 10)
     {
@@ -48,9 +46,10 @@ class ErroneousMessageIterator extends MessageManagerMessageIterator
     }
 
     /**
-     * Find messages in error
+     * Find messages in error.
      *
      * @param $types
+     *
      * @return mixed
      */
     protected function findNextMessages($types)

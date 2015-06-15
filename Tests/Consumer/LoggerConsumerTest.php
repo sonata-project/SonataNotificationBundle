@@ -11,13 +11,12 @@
 
 namespace Sonata\NotificationBundle\Tests\Consumer;
 
-use Sonata\NotificationBundle\Consumer\LoggerConsumer;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
+use Sonata\NotificationBundle\Consumer\LoggerConsumer;
 use Sonata\NotificationBundle\Tests\Entity\Message;
 
 class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testProcess()
     {
         $logger = $this->getMock('Symfony\Component\HttpKernel\Log\LoggerInterface');
@@ -26,7 +25,7 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
         $message = new Message();
         $message->setBody(array(
             'level'   => 'crit',
-            'message' => 'Alert - Area 52 get compromised!!'
+            'message' => 'Alert - Area 52 get compromised!!',
         ));
 
         $event = new ConsumerEvent($message);
@@ -45,7 +44,7 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
         $message = new Message();
         $message->setBody(array(
             'level'   => 'ERROR',
-            'message' => 'Alert - Area 52 get compromised!!'
+            'message' => 'Alert - Area 52 get compromised!!',
         ));
 
         $event = new ConsumerEvent($message);

@@ -12,9 +12,9 @@
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\RuntimeBackend;
-use \Sonata\NotificationBundle\Tests\Entity\Message;
-use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Exception\HandlingException;
+use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Tests\Entity\Message;
 
 class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
         $backend = new RuntimeBackend($dispatcher);
         $message = $backend->createAndPublish('foo', array('message' => 'salut'));
 
-        $this->assertInstanceOf("Sonata\\NotificationBundle\\Model\\MessageInterface", $message);
+        $this->assertInstanceOf('Sonata\\NotificationBundle\\Model\\MessageInterface', $message);
 
         $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
@@ -53,7 +53,6 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
         $this->assertNotNull($message->getCompletedAt());
-
     }
 
     public function testHandleError()
@@ -69,7 +68,6 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
         try {
             $backend->handle($message, $dispatcher);
         } catch (HandlingException $e) {
-
         }
 
         $this->assertInstanceOf('Sonata\NotificationBundle\Exception\HandlingException', $e);

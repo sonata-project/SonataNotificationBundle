@@ -17,12 +17,11 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event for ConsumerHandlerCommand iterations event
+ * Event for ConsumerHandlerCommand iterations event.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
  * Class IterateEvent
- * @package Sonata\NotificationBundle\Event
  */
 class IterateEvent extends Event
 {

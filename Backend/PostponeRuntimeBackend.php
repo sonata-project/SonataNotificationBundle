@@ -11,18 +11,17 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\Event;
-
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
-
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZendDiagnostics\Result\Success;
 
 /**
  * This backend postpones the handling of messages to a registered event.
  *
  * It's based on the asynchronous event dispatcher:
+ *
  * @link https://gist.github.com/3852361
  *
  * @author Toni Uebernickel <tuebernickel@gmail.com>
@@ -58,8 +57,6 @@ class PostponeRuntimeBackend extends RuntimeBackend
      * Publish a message by adding it to the local storage.
      *
      * @param MessageInterface $message
-     *
-     * @return void
      */
     public function publish(MessageInterface $message)
     {
@@ -106,7 +103,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
      */
     public function getStatus()
     {
-        return new Success("Postpone runtime backend", 'Ok (Postpone Runtime)');
+        return new Success('Postpone runtime backend', 'Ok (Postpone Runtime)');
     }
 
     /**

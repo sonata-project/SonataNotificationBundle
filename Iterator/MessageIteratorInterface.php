@@ -13,5 +13,4 @@ namespace Sonata\NotificationBundle\Iterator;
 
 interface MessageIteratorInterface extends \Iterator
 {
-
 }

@@ -12,7 +12,6 @@
 namespace Sonata\NotificationBundle\Backend;
 
 use ZendDiagnostics\Check\AbstractCheck;
-use ZendDiagnostics\Result\Success;
 
 class BackendHealthCheck extends AbstractCheck
 {
@@ -39,7 +38,7 @@ class BackendHealthCheck extends AbstractCheck
      */
     public function getName()
     {
-        return "Sonata Notification Default Backend";
+        return 'Sonata Notification Default Backend';
     }
 
     /**

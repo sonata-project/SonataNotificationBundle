@@ -11,11 +11,9 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
-use Sonata\NotificationBundle\Exception\BackendNotFoundException;
+use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sonata\NotificationBundle\Model\MessageInterface;
-
 use ZendDiagnostics\Result\Success;
 
 /**
@@ -81,7 +79,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
 
         if (!empty($this->dedicatedTypes)) {
             $types = array(
-                'exclude' => $this->dedicatedTypes
+                'exclude' => $this->dedicatedTypes,
             );
         }
 
@@ -125,5 +123,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
     /**
      * {@inheritdoc}
      */
-    public function initialize() {}
+    public function initialize()
+    {
+    }
 }

@@ -16,14 +16,14 @@ use Sonata\NotificationBundle\Model\Message;
 class BaseMessage extends Message
 {
     /**
-     * @var integer $id
+     * @var int
      */
     protected $id;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer $id
+     * @return int $id
      */
     public function getId()
     {
@@ -31,7 +31,7 @@ class BaseMessage extends Message
     }
 
     /**
-     * Override clone in order to avoid duplicating entries in Doctrine
+     * Override clone in order to avoid duplicating entries in Doctrine.
      */
     public function __clone()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -8,28 +9,23 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Sonata\NotificationBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Route;
+use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View as FOSRestView;
-
 use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class MessageController
+ * Class MessageController.
  *
- * @package Sonata\NotificationBundle\Controller\Api
  *
  * @author Hugo Briand <briand@ekino.com>
  */
@@ -46,10 +42,10 @@ class MessageController
     protected $formFactory;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param MessageManagerInterface $messageManager
-     * @param FormFactoryInterface $formFactory
+     * @param FormFactoryInterface    $formFactory
      */
     public function __construct(MessageManagerInterface $messageManager, FormFactoryInterface $formFactory)
     {
@@ -58,7 +54,7 @@ class MessageController
     }
 
     /**
-     * Retrieves the list of messages (paginated)
+     * Retrieves the list of messages (paginated).
      *
      * @ApiDoc(
      *  resource=true,
@@ -79,10 +75,9 @@ class MessageController
      */
     public function getMessagesAction(ParamFetcherInterface $paramFetcher)
     {
-
         $supportedCriteria = array(
-            'state' => "",
-            'type' => "",
+            'state' => '',
+            'type'  => '',
         );
 
         $page     = $paramFetcher->get('page');
@@ -106,7 +101,7 @@ class MessageController
     }
 
     /**
-     * Adds a message
+     * Adds a message.
      *
      * @ApiDoc(
      *  input={"class"="sonata_notification_api_form_message", "name"="", "groups"={"sonata_api_write"}},
@@ -157,5 +152,4 @@ class MessageController
     {
         return $this->messageManager;
     }
-
 }

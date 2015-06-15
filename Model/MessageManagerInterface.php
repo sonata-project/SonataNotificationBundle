@@ -17,13 +17,12 @@ use Sonata\CoreBundle\Model\PageableManagerInterface;
 interface MessageManagerInterface extends ManagerInterface, PageableManagerInterface
 {
     /**
-     * @return integer
+     * @return int
      */
     public function countStates();
 
     /**
      * @param $maxAge
-     * @return void
      */
     public function cleanup($maxAge);
 
@@ -31,8 +30,6 @@ interface MessageManagerInterface extends ManagerInterface, PageableManagerInter
      * Cancels a given Message.
      *
      * @param MessageInterface $message
-     *
-     * @return void
      */
     public function cancel(MessageInterface $message);
 
@@ -46,9 +43,9 @@ interface MessageManagerInterface extends ManagerInterface, PageableManagerInter
     public function restart(MessageInterface $message);
 
     /**
-     * @param array   $types
-     * @param integer $state
-     * @param integer $batchSize
+     * @param array $types
+     * @param int   $state
+     * @param int   $batchSize
      *
      * @return []MessageInterface
      */

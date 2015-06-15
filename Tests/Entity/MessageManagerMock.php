@@ -14,11 +14,9 @@ namespace Sonata\NotificationBundle\Tests\Entity;
 use Sonata\NotificationBundle\Entity\MessageManager;
 
 /**
- *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
  * Class MessageManagerMock
- * @package Sonata\NotificationBundle\Tests\Entity
  */
 class MessageManagerMock extends MessageManager
 {
@@ -30,7 +28,7 @@ class MessageManagerMock extends MessageManager
         $result = array();
         while ($limit !== null && $limit > 0) {
             $result[$limit] = new Message();
-            $limit--;
+            --$limit;
         }
 
         return $result;
@@ -41,7 +39,7 @@ class MessageManagerMock extends MessageManager
         $result = array();
         while ($batchSize !== null && $batchSize > 0) {
             $result[$batchSize] = new Message();
-            $batchSize--;
+            --$batchSize;
         }
 
         return $result;

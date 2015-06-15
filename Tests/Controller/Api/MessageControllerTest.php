@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -8,16 +9,14 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Sonata\NotificationBundle\Tests\Controller\Api;
-use Symfony\Component\HttpFoundation\Request;
-use Sonata\NotificationBundle\Controller\Api\MessageController;
 
+use Sonata\NotificationBundle\Controller\Api\MessageController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class MessageControllerTest
+ * Class MessageControllerTest.
  *
- * @package Sonata\NotificationBundle\Tests\Controller\Api
  *
  * @author Hugo Briand <briand@ekino.com>
  */
@@ -92,6 +91,7 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
         if (null === $formFactory) {
             $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
         }
+
         return new MessageController($messageManager, $formFactory);
     }
 }

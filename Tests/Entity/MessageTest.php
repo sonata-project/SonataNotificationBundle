@@ -13,7 +13,7 @@ namespace Sonata\NotificationBundle\Tests\Entity;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
 
-class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getBodyValues
@@ -29,7 +29,7 @@ class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
 
     public function testClone()
     {
-        $message = new Message;
+        $message = new Message();
         $message->setId(42);
         $message->setState(Message::STATE_ERROR);
 
@@ -44,7 +44,7 @@ class ModelManagerProducerTest extends \PHPUnit_Framework_TestCase
 
     public function testStatuses()
     {
-        $message = new Message;
+        $message = new Message();
 
         $message->setState(MessageInterface::STATE_IN_PROGRESS);
         $this->assertTrue($message->isRunning());

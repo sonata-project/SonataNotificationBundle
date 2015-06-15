@@ -12,7 +12,6 @@
 namespace Sonata\NotificationBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
-
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
@@ -68,7 +67,6 @@ class MessageAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $class = $this->getClass();
@@ -91,7 +89,7 @@ class MessageAdmin extends Admin
         );
 
         $actions['cancelled'] = array(
-            'label'            =>  $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
+            'label'            => $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
             'ask_confirmation' => false,
         );
 
