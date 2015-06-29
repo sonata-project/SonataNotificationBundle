@@ -23,8 +23,7 @@
         "sonata-project/core-bundle": "^2.2.6",
         "sonata-project/datagrid-bundle": "~2.2",
         "friendsofsymfony/rest-bundle": "~1.1",
-        "jms/serializer-bundle": "~0.11",
-        "jms/serializer": "~0.13",
+        "jms/serializer-bundle": "~0.11|~1.0",
         "nelmio/api-doc-bundle": "~2.4"
     },
     "suggest": {
@@ -40,6 +39,9 @@
         "liip/monitor-bundle": "~2.0",
         "symfony/phpunit-bridge": "~2.7|~3.0",
         "fabpot/php-cs-fixer": "~0.5|~1.0"
+    },
+    "conflict": {
+        "jms/serializer": "<0.13"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
