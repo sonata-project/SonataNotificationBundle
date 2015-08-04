@@ -38,7 +38,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -46,7 +46,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -54,7 +54,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -62,7 +62,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -70,7 +70,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rewind()
     {

@@ -20,7 +20,7 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
 class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function save($message, $andFlush = true)
     {
@@ -33,7 +33,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findByTypes(array $types, $state, $batchSize)
     {
@@ -46,7 +46,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10)
     {
@@ -69,7 +69,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function countStates()
     {
@@ -92,7 +92,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function cleanup($maxAge)
     {

@@ -44,7 +44,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -52,7 +52,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -61,7 +61,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -69,7 +69,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -77,7 +77,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rewind()
     {

@@ -69,7 +69,7 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getQueues()
     {
