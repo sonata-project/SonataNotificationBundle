@@ -96,22 +96,35 @@ The last step is to register the service as a consumer in the service container.
 a custom tag : ``sonata.notification.consumer`` with a ``type``. The ``type`` value is the name used when a
 message is receive or created.
 
-.. code-block:: xml
+* XML
 
-    <?xml version="1.0" ?>
+    .. code-block:: xml
 
-    <container xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        <?xml version="1.0" ?>
 
-        <services>
-            <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
-                <tag name="sonata.notification.consumer" type="logger" />
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-                <argument type="service" id="logger" />
-            </service>
-        </services>
-    </container>
+            <services>
+                <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
+                    <tag name="sonata.notification.consumer" type="logger" />
+
+                    <argument type="service" id="logger" />
+                </service>
+            </services>
+        </container>
+
+* YAML
+
+    .. code-block:: yaml
+
+        services:
+            sonata.notification.consumer.logger:
+                class: Sonata\NotificationBundle\Consumer\LoggerConsumer
+                tags:
+                    - { name: sonata.notification.consumer, type: logger }
+                arguments: [ @logger ]
 
 
 Now you can use the created service to send a message to the symfony logger.
