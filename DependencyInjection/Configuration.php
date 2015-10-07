@@ -29,6 +29,13 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sonata_notification')->children();
 
+        $iterationListenersInfo = <<<EOF
+            Listeners attached to the IterateEvent
+            Iterate event is thrown on each command iteration
+
+            Iteration listener class must implement Sonata\NotificationBundle\Event\IterationListener
+EOF;
+
         $rootNode
             ->scalarNode('backend')->defaultValue('sonata.notification.backend.runtime')->end()
             ->append($this->getQueueNode())
@@ -37,10 +44,20 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('doctrine')
                         ->children()
                             ->scalarNode('message_manager')->defaultValue('sonata.notification.manager.message.default')->end()
-                            ->scalarNode('max_age')->defaultValue(86400)->end() # max age in second
-                            ->scalarNode('pause')->defaultValue(500000)->end()  # delay in microseconds
-                            ->scalarNode('batch_size')->defaultValue(10)->end() # number of items on each iteration
+                            ->scalarNode('max_age')
+                                ->info('The max age in seconds')
+                                ->defaultValue(86400)
+                            ->end()
+                            ->scalarNode('pause')
+                                ->info('The delay in microseconds')
+                                ->defaultValue(500000)
+                            ->end()
+                            ->scalarNode('batch_size')
+                                ->info('The number of items on each iteration')
+                                ->defaultValue(10)
+                            ->end()
                             ->arrayNode('states')
+                                ->info('raising errors level')
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('in_progress')->defaultValue('10')->end()
@@ -72,10 +89,14 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('consumers')
                 ->addDefaultsIfNotSet()
                 ->children()
-                    ->booleanNode('register_default')->defaultTrue()->end()
+                    ->booleanNode('register_default')
+                        ->info('If set to true, SwiftMailerConsumer and LoggerConsumer will be registered as services')
+                        ->defaultTrue()
+                    ->end()
                 ->end()
             ->end()
             ->arrayNode('iteration_listeners')
+                ->info($iterationListenersInfo)
                 ->defaultValue(array())
                 ->prototype('scalar')
                 ->end()
@@ -117,16 +138,33 @@ class Configuration implements ConfigurationInterface
 
         $connectionNode
             ->children()
-                ->scalarNode('queue')->cannotBeEmpty()->isRequired()->end() // queue name
-                ->booleanNode('default')->defaultValue(false)->end()        // set the name of the default queue
+                ->scalarNode('queue')
+                    ->info('The name of the queue')
+                    ->cannotBeEmpty()
+                    ->isRequired()
+                ->end()
+                ->booleanNode('default')
+                    ->info('Set the name of the default queue')
+                    ->defaultValue(false)
+                ->end()
 
                 // RabbitMQ configuration
-                ->scalarNode('routing_key')->defaultValue('')->end()        // only used by rabbitmq, direct exchange with routing_key
-                ->booleanNode('recover')->defaultValue(false)->end()        // only used by rabbitmq
-                ->scalarNode('dead_letter_exchange')->defaultValue(null)->end() // only used by rabbitmq
+                ->scalarNode('routing_key')
+                    ->info('only used by rabbitmq, direct exchange with routing_key')
+                    ->defaultValue('')
+                ->end()
+                ->booleanNode('recover')
+                    ->info('only used by rabbitmq')
+                    ->defaultValue(false)
+                ->end()
+                ->scalarNode('dead_letter_exchange')
+                    ->info('only used by rabbitmq')
+                    ->defaultValue(null)
+                ->end()
 
                 // Database configuration (Doctrine)
-                ->arrayNode('types')                                        // defines types handled by the message backend
+                ->arrayNode('types')
+                    ->info('defines types handled by the message backend')
                     ->defaultValue(array())
                     ->prototype('scalar')->end()
                 ->end()
