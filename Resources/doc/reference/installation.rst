@@ -43,7 +43,6 @@ Then add these bundles in the config mapping definition:
                     mappings:
                         # ...
                         SonataNotificationBundle: ~
-                        ApplicationSonataNotificationBundle: ~
 
 Configuration
 -------------
@@ -92,6 +91,21 @@ but you can specify the path with ``--dest=src``
     This will make Entities sharing easier as your models will allow to
     point to a global namespace. For instance the user will be
     ``Application\Sonata\NotificationBundle\Entity\Message``.
+    
+Now add your new application bunde to the config mapping definition:
+
+.. code-block:: yaml
+
+    doctrine:
+        # ...
+        orm:
+            # ...
+            entity_managers:
+                default:
+                        # ...
+                    mappings:
+                        # ...
+                        ApplicationSonataNotificationBundle: ~
 
 Now, add the new `Application` Bundle into the kernel:
 
