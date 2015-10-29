@@ -92,7 +92,7 @@ but you can specify the path with ``--dest=src``
     point to a global namespace. For instance the user will be
     ``Application\Sonata\NotificationBundle\Entity\Message``.
     
-Now add your new application bunde to the config mapping definition:
+Now add your new application bundle to the config mapping definition:
 
 .. code-block:: yaml
 
