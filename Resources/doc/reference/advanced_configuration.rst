@@ -3,68 +3,108 @@ Advanced Configuration
 
 Full configuration options:
 
-.. code-block:: yaml
+.. configuration-block::
 
-    # app/config/config.yml
-    sonata_notification:
-        backend: sonata.notification.backend.runtime
-        #backend: sonata.notification.backend.postpone
-        #backend: sonata.notification.backend.doctrine
-        #backend: sonata.notification.backend.rabbitmq
+    .. code-block:: yaml
 
-        consumer:
-            swift_mailer:
-                path:         %kernel.root_dir%/../vendor/swiftmailer
+        # Default configuration for extension with alias: "sonata_notification"
+        sonata_notification:
 
-        backends:
-            doctrine:
-                message_manager: sonata.notification.manager.message.default
-                max_age:         86400     # max age in second
-                pause:           500000    # delay in microseconds
-                batch_size:      10        # number of messages on each iteration
-                states:                    # raising errors level
-                    in_progress: 10
-                    error:       20
-                    open:        100
-                    done:        10000
-
-            rabbitmq:
-                exchange:     router
-                connection:
-                    host:     localhost
-                    user:     guest
-                    pass:     guest
-                    port:     5672
-                    vhost:    /
-                    console_url : http://some.other.host:55999/api
-        queues:
-            # RABBITMQ CONFIGURATION
-            # if `recover` is set to true, the consumer will respond with a `basic.recover` when an exception occurs
-            # otherwise it will not respond at all and the message will be unacknowledged
+            # Other backends you can use:
             #
-            # if dead_letter_exchange is set,failed messages will be rejected and sent to this exchange
-            - { queue: defaultQueue, recover: true|false, default: true|false, routing_key: the_routing_key, dead_letter_exchange: 'my.dead.letter.exchange'}
-            - { queue: catchall, default: true}
+            # sonata.notification.backend.postpone
+            # sonata.notification.backend.doctrine
+            # sonata.notification.backend.rabbitmq
+            backend:              sonata.notification.backend.runtime
 
-            # DOCTRINE CONFIGURATION
-            - { queue: sonata_page, types: [sonata.page.create_snapshot, sonata.page.create_snapshots]}
-            - { queue: catchall, default: true}
+            # Example for using RabbitMQ
+            #     - { queue: myQueue, recover: true, default: false, routing_key: the_routing_key, dead_letter_exchange: 'my.dead.letter.exchange' }
+            #     - { queue: catchall, default: true }
+            #
+            # Example for using Doctrine
+            #     - { queue: sonata_page, types: [sonata.page.create_snapshot, sonata.page.create_snapshots] }
+            #     - { queue: catchall, default: true }
+            queues:
 
-        # Listeners attached to the IterateEvent
-        # Iterate event is thrown on each command iteration
-        #
-        # iteration listener class must implement Sonata\NotificationBundle\Event\IterationListener
-        iteration_listeners:
-            - the_service_id
-            - the_other_service_id
+                # The name of the queue
+                queue:                ~ # Required
 
-        consumers:
-            register_default: true    # if set to true, SwiftMailerConsumer and LoggerConsumer will be registered as services
+                # Set the name of the default queue
+                default:              false
 
-    doctrine:
-        orm:
-            entity_managers:
-                default:
-                    mappings:
-                        SonataNotificationBundle: ~
-                        ApplicationSonataNotificationBundle: ~
+                # Only used by RabbitMQ
+                #
+                # Direct exchange with routing_key
+                routing_key:          ''
+
+                # Only used by RabbitMQ
+                #
+                # If set to true, the consumer will respond with a `basic.recover` when an exception occurs,
+                # otherwise it will not respond at all and the message will be unacknowledged
+                recover:              false
+
+                # Only used by RabbitMQ
+                #
+                # If is set, failed messages will be rejected and sent to this exchange
+                dead_letter_exchange:  null
+
+                # Only used by Doctrine
+                #
+                # Defines types handled by the message backend
+                types:                []
+            backends:
+                doctrine:
+                    message_manager:      sonata.notification.manager.message.default
+
+                    # The max age in seconds
+                    max_age:              86400
+
+                    # The delay in microseconds
+                    pause:                500000
+
+                    # The number of items on each iteration
+                    batch_size:           10
+
+                    # Raising errors level
+                    states:
+                        in_progress:          10
+                        error:                20
+                        open:                 100
+                        done:                 10000
+                rabbitmq:
+                    exchange:             ~ # Required
+                    connection:
+                        host:                 localhost
+                        port:                 5672
+                        user:                 guest
+                        pass:                 guest
+                        vhost:                guest
+                        console_url:          'http://localhost:55672/api'
+            consumers:
+
+                # If set to true, SwiftMailerConsumer and LoggerConsumer will be registered as services
+                register_default:     true
+
+            # Listeners attached to the IterateEvent
+            # Iterate event is thrown on each command iteration
+            #
+            # Iteration listener class must implement Sonata\NotificationBundle\Event\IterationListener
+            iteration_listeners:  []
+            class:
+                message:              Application\Sonata\NotificationBundle\Entity\Message
+            admin:
+                enabled:              true
+                message:
+                    class:                Sonata\NotificationBundle\Admin\MessageAdmin
+                    controller:           'SonataNotificationBundle:MessageAdmin'
+                    translation:          SonataNotificationBundle
+
+    .. code-block:: yaml
+
+        doctrine:
+            orm:
+                entity_managers:
+                    default:
+                        mappings:
+                            SonataNotificationBundle: ~
+                            ApplicationSonataNotificationBundle: ~
