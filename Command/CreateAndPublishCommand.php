@@ -18,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateAndPublishCommand extends ContainerAwareCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     public function configure()
     {
         $this
@@ -27,6 +30,8 @@ class CreateAndPublishCommand extends ContainerAwareCommand
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      */

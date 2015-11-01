@@ -13,6 +13,9 @@ namespace Sonata\NotificationBundle\Consumer;
 
 class Metadata
 {
+    /**
+     * @var array
+     */
     protected $informations;
 
     /**

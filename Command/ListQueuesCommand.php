@@ -18,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListQueuesCommand extends ContainerAwareCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     public function configure()
     {
         $this->setName('sonata:notification:list-queues');
@@ -25,8 +28,7 @@ class ListQueuesCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

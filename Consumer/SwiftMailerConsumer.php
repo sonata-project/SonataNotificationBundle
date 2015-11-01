@@ -21,7 +21,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     protected $mailer;
 
     /**
-     * @param $mailer
+     * @param \Swift_Mailer $mailer
      */
     public function __construct(\Swift_Mailer $mailer)
     {
@@ -52,7 +52,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     }
 
     /**
-     * @param \Sonata\NotificationBundle\Model\MessageInterface $message
+     * @param MessageInterface $message
      */
     private function sendEmail(MessageInterface $message)
     {

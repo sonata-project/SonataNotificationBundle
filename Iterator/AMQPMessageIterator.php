@@ -16,19 +16,34 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class AMQPMessageIterator implements MessageIteratorInterface
 {
+    /**
+     * @var AMQPChannel
+     */
     protected $channel;
 
+    /**
+     * @var mixed
+     */
     protected $message;
 
+    /**
+     * @var AMQPMessage
+     */
     protected $AMQMessage;
 
+    /**
+     * @var mixed
+     */
     protected $queue;
 
+    /**
+     * @var int
+     */
     protected $counter;
 
     /**
-     * @param \PhpAmqpLib\Channel\AMQPChannel $channel
-     * @param $queue
+     * @param AMQPChannel $channel
+     * @param mixed       $queue
      */
     public function __construct(AMQPChannel $channel, $queue)
     {
@@ -99,7 +114,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     }
 
     /**
-     * @param \PhpAmqpLib\Message\AMQPMessage $AMQMessage
+     * @param AMQPMessage $AMQMessage
      */
     public function receiveMessage(AMQPMessage $AMQMessage)
     {

@@ -18,6 +18,9 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 class NotificationCompilerPass implements CompilerPassInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('sonata.notification.dispatcher')) {

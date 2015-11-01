@@ -17,11 +17,17 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class SonataNotificationBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new NotificationCompilerPass());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function boot()
     {
         if (!defined('AMQP_DEBUG')) {

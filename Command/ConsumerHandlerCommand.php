@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Backend\BackendInterface;
 use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
 use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 use Sonata\NotificationBundle\Event\IterateEvent;
@@ -23,6 +24,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsumerHandlerCommand extends ContainerAwareCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     public function configure()
     {
         $this->setName('sonata:notification:start');
@@ -33,8 +37,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -145,7 +148,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     /**
      * @param string $type
      *
-     * @return \Sonata\NotificationBundle\Backend\BackendInterface
+     * @return BackendInterface
      */
     private function getBackend($type = null)
     {
@@ -179,7 +182,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return EventDispatcherInterface
      */
     private function getNotificationDispatcher()
     {
@@ -187,7 +190,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return EventDispatcherInterface
      */
     private function getEventDispatcher()
     {

@@ -21,8 +21,14 @@ use ZendDiagnostics\Result\Success;
  */
 class MessageManagerBackendDispatcher extends QueueBackendDispatcher
 {
+    /**
+     * @var array
+     */
     protected $dedicatedTypes = array();
 
+    /**
+     * @var BackendInterface
+     */
     protected $default;
 
     /**

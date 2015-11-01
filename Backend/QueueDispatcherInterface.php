@@ -24,7 +24,7 @@ interface QueueDispatcherInterface
      *
      * @param string $type
      *
-     * @throws \Sonata\NotificationBundle\Exception\BackendNotFoundException
+     * @throws BackendNotFoundException
      *
      * @return BackendInterface
      */

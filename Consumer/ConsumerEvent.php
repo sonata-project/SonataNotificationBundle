@@ -16,6 +16,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 class ConsumerEvent extends Event implements ConsumerEventInterface
 {
+    /**
+     * @var MessageInterface
+     */
     protected $message;
 
     /**
@@ -40,7 +43,7 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
     }
 
     /**
-     * @param \Sonata\NotificationBundle\Consumer\ConsumerReturnInfo $returnInfo
+     * @param ConsumerReturnInfo $returnInfo
      */
     public function setReturnInfo($returnInfo)
     {
@@ -48,7 +51,7 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Consumer\ConsumerReturnInfo
+     * @return ConsumerReturnInfo
      */
     public function getReturnInfo()
     {

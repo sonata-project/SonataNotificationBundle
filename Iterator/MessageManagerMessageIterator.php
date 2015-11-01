@@ -16,16 +16,34 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 class MessageManagerMessageIterator implements MessageIteratorInterface
 {
+    /**
+     * @var MessageManagerInterface
+     */
     protected $messageManager;
 
+    /**
+     * @var int
+     */
     protected $counter;
 
+    /**
+     * @var mixed
+     */
     protected $current;
 
+    /**
+     * @var array
+     */
     protected $types;
 
+    /**
+     * @var int
+     */
     protected $batchSize;
 
+    /**
+     * @var array
+     */
     protected $buffer = array();
 
     /**
