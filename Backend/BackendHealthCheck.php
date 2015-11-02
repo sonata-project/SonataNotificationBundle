@@ -15,6 +15,9 @@ use ZendDiagnostics\Check\AbstractCheck;
 
 class BackendHealthCheck extends AbstractCheck
 {
+    /**
+     * @var BackendInterface
+     */
     protected $backend;
 
     /**

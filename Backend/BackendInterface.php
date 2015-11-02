@@ -37,7 +37,7 @@ interface BackendInterface
     public function createAndPublish($type, array $body);
 
     /**
-     * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
+     * @return MessageIteratorInterface
      */
     public function getIterator();
 

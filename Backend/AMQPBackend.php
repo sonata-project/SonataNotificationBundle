@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Exception\HandlingException;
@@ -26,18 +27,36 @@ use ZendDiagnostics\Result\Success;
  */
 class AMQPBackend implements BackendInterface
 {
+    /**
+     * @var string
+     */
     protected $exchange;
 
+    /**
+     * @var string
+     */
     protected $queue;
 
     protected $connection;
 
+    /**
+     * @var string
+     */
     protected $key;
 
+    /**
+     * @var string
+     */
     protected $recover;
 
+    /**
+     * @var null|string
+     */
     protected $deadLetterExchange;
 
+    /**
+     * @var AMQPBackendDispatcher
+     */
     protected $dispatcher = null;
 
     /**
@@ -69,7 +88,7 @@ class AMQPBackend implements BackendInterface
     }
 
     /**
-     * @return \PhpAmqpLib\Channel\AMQPChannel
+     * @return AMQPChannel
      */
     protected function getChannel()
     {

@@ -22,16 +22,25 @@ use Sonata\NotificationBundle\Model\MessageInterface;
  */
 abstract class QueueBackendDispatcher implements QueueDispatcherInterface, BackendInterface
 {
+    /**
+     * @var array
+     */
     protected $queues;
 
+    /**
+     * @var string
+     */
     protected $defaultQueue;
 
+    /**
+     * @var BackendInterface[]
+     */
     protected $backends;
 
     /**
-     * @param array  $queues
-     * @param string $defaultQueue
-     * @param array  $backends
+     * @param array              $queues
+     * @param string             $defaultQueue
+     * @param BackendInterface[] $backends
      */
     public function __construct(array $queues, $defaultQueue, array $backends)
     {

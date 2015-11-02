@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Entity;
 
+use Doctrine\ORM\QueryBuilder;
 use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
@@ -149,7 +150,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
      * @param int   $batchSize
      * @param array $parameters
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     protected function prepareStateQuery($state, $types, $batchSize, &$parameters)
     {

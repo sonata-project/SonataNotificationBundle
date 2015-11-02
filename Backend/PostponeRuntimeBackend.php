@@ -54,9 +54,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     }
 
     /**
-     * Publish a message by adding it to the local storage.
-     *
-     * @param MessageInterface $message
+     * {@inheritdoc}
      */
     public function publish(MessageInterface $message)
     {
@@ -91,7 +89,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Iterator\MessageIteratorInterface
+     * {@inheritdoc}
      */
     public function getIterator()
     {

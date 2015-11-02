@@ -20,10 +20,13 @@ use ZendDiagnostics\Result\Success;
 
 class RuntimeBackend implements BackendInterface
 {
+    /**
+     * @var EventDispatcherInterface
+     */
     protected $dispatcher;
 
     /**
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(EventDispatcherInterface $dispatcher)
     {

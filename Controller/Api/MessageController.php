@@ -18,6 +18,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View as FOSRestView;
 use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sonata\DatagridBundle\Pager\PagerInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -71,7 +72,7 @@ class MessageController
      *
      * @param ParamFetcherInterface $paramFetcher
      *
-     * @return Sonata\DatagridBundle\Pager\PagerInterface
+     * @return PagerInterface
      */
     public function getMessagesAction(ParamFetcherInterface $paramFetcher)
     {

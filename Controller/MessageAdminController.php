@@ -13,6 +13,8 @@ namespace Sonata\NotificationBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\NotificationBundle\Backend\BackendInterface;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -41,7 +43,7 @@ class MessageAdminController extends CRUDController
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $query
+     * @param ProxyQueryInterface $query
      *
      * @throws AccessDeniedException
      *
@@ -61,7 +63,7 @@ class MessageAdminController extends CRUDController
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Model\MessageManagerInterface
+     * @return MessageManagerInterface
      */
     protected function getMessageManager()
     {
@@ -69,7 +71,7 @@ class MessageAdminController extends CRUDController
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Backend\BackendInterface
+     * @return BackendInterface
      */
     protected function getBackend()
     {

@@ -27,6 +27,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class SonataNotificationExtension extends Extension
 {
+    /**
+     * @var int
+     */
     protected $amqpCounter = 0;
 
     /**

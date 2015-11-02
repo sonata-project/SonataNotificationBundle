@@ -23,18 +23,39 @@ use ZendDiagnostics\Result\Warning;
 
 class MessageManagerBackend implements BackendInterface
 {
+    /**
+     * @var MessageManagerInterface
+     */
     protected $messageManager;
 
+    /**
+     * @var array
+     */
     protected $checkLevel;
 
+    /**
+     * @var int
+     */
     protected $pause;
 
+    /**
+     * @var int
+     */
     protected $maxAge;
 
+    /**
+     * @var MessageManagerBackendDispatcher|null
+     */
     protected $dispatcher = null;
 
+    /**
+     * @var array
+     */
     protected $types;
 
+    /**
+     * @var int
+     */
     protected $batchSize;
 
     /**

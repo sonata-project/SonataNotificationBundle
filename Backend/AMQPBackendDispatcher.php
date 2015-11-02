@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -23,10 +24,19 @@ use ZendDiagnostics\Result\Success;
  */
 class AMQPBackendDispatcher extends QueueBackendDispatcher
 {
+    /**
+     * @var array
+     */
     protected $settings;
 
+    /**
+     * @var AMQPChannel
+     */
     protected $channel;
 
+    /**
+     * @var AMQPConnection
+     */
     protected $connection;
 
     /**
@@ -43,7 +53,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
-     * @return \PhpAmqpLib\Channel\AMQPChannel
+     * @return AMQPChannelannel
      */
     public function getChannel()
     {

@@ -18,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CleanupCommand extends ContainerAwareCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     public function configure()
     {
         $this->setName('sonata:notification:cleanup');
@@ -25,8 +28,7 @@ class CleanupCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -38,7 +40,7 @@ class CleanupCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Backend\BackendInterface
+     * @return BackendInterface
      */
     private function getBackend()
     {

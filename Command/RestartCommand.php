@@ -11,8 +11,11 @@
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Backend\BackendInterface;
 use Sonata\NotificationBundle\Event\IterateEvent;
 use Sonata\NotificationBundle\Iterator\ErroneousMessageIterator;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
+use Sonata\NotificationBundle\Selector\ErroneousMessagesSelector;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -89,7 +92,7 @@ class RestartCommand extends ContainerAwareCommand
     /**
      * Return the erroneous message selector service.
      *
-     * @return \Sonata\NotificationBundle\Selector\ErroneousMessagesSelector
+     * @return ErroneousMessagesSelector
      */
     protected function getErroneousMessageSelector()
     {
@@ -97,7 +100,7 @@ class RestartCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Model\MessageManagerInterface
+     * @return MessageManagerInterface
      */
     protected function getMessageManager()
     {
@@ -105,7 +108,7 @@ class RestartCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \Sonata\NotificationBundle\Backend\BackendInterface
+     * @return BackendInterface
      */
     protected function getBackend()
     {

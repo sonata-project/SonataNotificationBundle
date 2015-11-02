@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListHandlerCommand extends ContainerAwareCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     public function configure()
     {
         $this->setName('sonata:notification:list-handler');
@@ -24,8 +27,7 @@ class ListHandlerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

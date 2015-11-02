@@ -16,8 +16,14 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class LoggerConsumer implements ConsumerInterface
 {
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
 
+    /**
+     * @var string[]
+     */
     protected $types = array(
         'emerg',
         'alert',
