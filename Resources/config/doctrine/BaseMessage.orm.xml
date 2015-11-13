@@ -13,8 +13,8 @@
         <field name="completedAt"  type="datetime"   column="completed_at" nullable="true" />
 
         <indexes>
-            <index name="state" columns="state" />
-            <index name="createdAt" columns="created_at" />
+            <index name="notification_message_state_idx" columns="state" />
+            <index name="notification_message_created_at_idx" columns="created_at" />
         </indexes>
     </mapped-superclass>
 </doctrine-mapping>
