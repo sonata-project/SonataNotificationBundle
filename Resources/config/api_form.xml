@@ -6,7 +6,7 @@
 
     <services>
 
-        <service id="sonata.notification.api.form.type.message" class="Sonata\CoreBundle\Form\Type\DoctrineORMSerializationType">
+        <service id="sonata.notification.api.form.type.message" class="Sonata\NotificationBundle\Form\Type\MessageSerializationType">
             <tag name="form.type" alias="sonata_notification_api_form_message" />
 
             <argument type="service" id="jms_serializer.metadata_factory" />
