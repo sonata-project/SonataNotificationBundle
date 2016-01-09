@@ -127,7 +127,7 @@ class MessageController
             'csrf_protection' => false,
         ));
 
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $message = $form->getData();

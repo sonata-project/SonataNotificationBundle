@@ -107,7 +107,7 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
     public static function statusProvider()
     {
         if (!class_exists('ZendDiagnostics\Result\Success')) {
-            return array(array(1,1,1));
+            return array(array(1, 1, 1));
         }
 
         $data = array();
