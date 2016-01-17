@@ -11,8 +11,9 @@
 
 namespace Sonata\NotificationBundle\Consumer;
 
+use Psr\Log\LoggerInterface;
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface as LegacyLoggerInterface;
 
 class LoggerConsumer implements ConsumerInterface
 {
@@ -25,21 +26,24 @@ class LoggerConsumer implements ConsumerInterface
      * @var string[]
      */
     protected $types = array(
-        'emerg',
-        'alert',
-        'crit',
-        'err',
-        'warn',
-        'notice',
-        'info',
-        'debug',
+        'emerg'  => 'emergency',
+        'alert'  => 'alert',
+        'crit'   => 'critical',
+        'err'    => 'error',
+        'warn'   => 'warning',
+        'notice' => 'notice',
+        'info'   => 'info',
+        'debug'  => 'debug',
     );
 
     /**
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|LegacyLoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct($logger)
     {
+        if ($logger instanceof LegacyLoggerInterface) {
+            trigger_error(sprintf('Using an instance of "%s" is deprecated since version 2.3. Use Psr\Log\LoggerInterface instead.', get_class($logger)), E_USER_DEPRECATED);
+        }
         $this->logger = $logger;
     }
 
@@ -50,10 +54,12 @@ class LoggerConsumer implements ConsumerInterface
     {
         $message = $event->getMessage();
 
-        if (!in_array($message->getValue('level'), $this->types)) {
+        if (!array_key_exists($message->getValue('level'), $this->types)) {
             throw new InvalidParameterException();
         }
 
-        call_user_func(array($this->logger, $message->getValue('level')), $message->getValue('message'));
+        $level = $this->types[$message->getValue('level')];
+
+        $this->logger->{$level}($message->getValue('message'));
     }
 }

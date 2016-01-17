@@ -42,7 +42,7 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
         $messageManager->expects($this->once())->method('save')->will($this->returnValue($message));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $form->expects($this->once())->method('bind');
+        $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $form->expects($this->once())->method('getData')->will($this->returnValue($message));
 
@@ -62,7 +62,7 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
         $messageManager->expects($this->never())->method('save')->will($this->returnValue($message));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $form->expects($this->once())->method('bind');
+        $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(false));
 
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
