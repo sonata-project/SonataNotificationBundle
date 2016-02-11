@@ -17,9 +17,9 @@ If you need to change the default URL, you can configure it by setting the ``con
           rabbitmq:
               exchange:     router
               connection:
-                  host:         %rabbitmq_host%
-                  user:         %rabbitmq_user%
-                  pass:         %rabbitmq_pass%
-                  port:         %rabbitmq_port%
-                  vhost:        %rabbitmq_vhost%
+                  host:         "%rabbitmq_host%"
+                  user:         "%rabbitmq_user%"
+                  pass:         "%rabbitmq_pass%"
+                  port:         "%rabbitmq_port%"
+                  vhost:        "%rabbitmq_vhost%"
                   console_url : http://some.other.host:55999/api
