@@ -124,7 +124,7 @@ message is receive or created.
                 class: Sonata\NotificationBundle\Consumer\LoggerConsumer
                 tags:
                     - { name: sonata.notification.consumer, type: logger }
-                arguments: [ @logger ]
+                arguments: [ "@logger" ]
 
 
 Now you can use the created service to send a message to the symfony logger.
