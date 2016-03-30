@@ -35,7 +35,6 @@
         "videlalvaro/php-amqplib": "~2.0",
         "liip/monitor-bundle": "~2.0",
         "symfony/phpunit-bridge": "~2.7|~3.0",
-        "fabpot/php-cs-fixer": "~0.5|~1.0",
         "swiftmailer/swiftmailer": "~4.3|~5",
         "friendsofsymfony/rest-bundle": "~1.1",
         "jms/serializer-bundle": "~0.11|~1.0",
