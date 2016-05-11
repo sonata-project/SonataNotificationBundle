@@ -17,41 +17,40 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "~2.3|~3.0",
-        "sonata-project/doctrine-extensions": "~1.0",
-        "sonata-project/easy-extends-bundle": "~2.1",
-        "sonata-project/core-bundle": "^2.3.10",
-        "sonata-project/datagrid-bundle": "~2.2",
-        "zendframework/zenddiagnostics": "~1.0"
+        "php": "^5.3 || ^7.0",
+        "symfony/framework-bundle": "^2.3 || ^3.0",
+        "sonata-project/doctrine-extensions": "^1.0",
+        "sonata-project/easy-extends-bundle": "^2.1",
+        "sonata-project/core-bundle": "^3.0",
+        "sonata-project/datagrid-bundle": "^2.2",
+        "zendframework/zenddiagnostics": "^1.0"
     },
     "suggest": {
-        "sonata-project/doctrine-orm-admin-bundle": "2.2.*",
+        "sonata-project/doctrine-orm-admin-bundle": "^3.0",
         "guzzle/guzzle" : "*",
-        "liip/monitor-bundle": "~1.0",
+        "liip/monitor-bundle": "^1.0",
         "videlalvaro/php-amqplib": "2.0.*"
     },
     "require-dev": {
-        "sonata-project/doctrine-orm-admin-bundle": "~2.2",
+        "sonata-project/doctrine-orm-admin-bundle": "^3.0",
         "guzzle/guzzle" : "*",
-        "videlalvaro/php-amqplib": "~2.0",
-        "liip/monitor-bundle": "~2.0",
-        "symfony/phpunit-bridge": "~2.7|~3.0",
-        "swiftmailer/swiftmailer": "~4.3|~5",
-        "friendsofsymfony/rest-bundle": "~1.1",
-        "jms/serializer-bundle": "~0.11|~1.0",
-        "nelmio/api-doc-bundle": "~2.4"
+        "videlalvaro/php-amqplib": "^2.0",
+        "liip/monitor-bundle": "^2.0",
+        "symfony/phpunit-bridge": "^2.7 || ^3.0",
+        "swiftmailer/swiftmailer": "^4.3 || ^5",
+        "friendsofsymfony/rest-bundle": "^1.1",
+        "jms/serializer-bundle": "~0.11 || ^1.0",
+        "nelmio/api-doc-bundle": "^2.4"
     },
     "conflict": {
         "jms/serializer": "<0.13"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "autoload": {
         "psr-4": { "Sonata\\NotificationBundle\\": "" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "3.x-dev"
         }
     }
 }
