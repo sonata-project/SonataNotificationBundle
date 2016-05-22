@@ -29,7 +29,7 @@
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
         "guzzle/guzzle" : "^3.9",
         "liip/monitor-bundle": "^1.0",
-        "videlalvaro/php-amqplib": "2.0.*"
+        "videlalvaro/php-amqplib": "^2.0"
     },
     "require-dev": {
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
@@ -37,9 +37,9 @@
         "videlalvaro/php-amqplib": "^2.0",
         "liip/monitor-bundle": "^2.0",
         "symfony/phpunit-bridge": "^2.7 || ^3.0",
-        "swiftmailer/swiftmailer": "^4.3 || ^5",
+        "swiftmailer/swiftmailer": "^4.3 || ^5.0",
         "friendsofsymfony/rest-bundle": "^1.1",
-        "jms/serializer-bundle": "~0.11 || ^1.0",
+        "jms/serializer-bundle": "^1.0",
         "nelmio/api-doc-bundle": "^2.4"
     },
     "conflict": {
