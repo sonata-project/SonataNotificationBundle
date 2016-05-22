@@ -38,11 +38,6 @@ class AMQPBackend implements BackendInterface
     protected $queue;
 
     /**
-     * @deprecated since version 2.4 and will be removed in 3.0.
-     */
-    protected $connection;
-
-    /**
      * @var string
      */
     protected $key;
