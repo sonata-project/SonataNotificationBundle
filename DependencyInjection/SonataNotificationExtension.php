@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -82,6 +82,90 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    public function configureClass(ContainerBuilder $container, $config)
+    {
+        // admin configuration
+        $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
+
+        // manager configuration
+        $container->setParameter('sonata.notification.manager.message.entity', $config['class']['message']);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    public function configureAdmin(ContainerBuilder $container, $config)
+    {
+        $container->setParameter('sonata.notification.admin.message.class', $config['admin']['message']['class']);
+        $container->setParameter('sonata.notification.admin.message.controller', $config['admin']['message']['controller']);
+        $container->setParameter('sonata.notification.admin.message.translation_domain', $config['admin']['message']['translation']);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    public function registerParameters(ContainerBuilder $container, $config)
+    {
+        $container->setParameter('sonata.notification.message.class', $config['class']['message']);
+        $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    public function configureBackends(ContainerBuilder $container, $config)
+    {
+        // set the default value, will be erase if required
+        $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
+
+        if (isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
+            $this->configureRabbitmq($container, $config);
+
+            $container->removeDefinition('sonata.notification.backend.doctrine');
+        } else {
+            $container->removeDefinition('sonata.notification.backend.rabbitmq');
+        }
+
+        if (isset($config['backends']['doctrine']) && $config['backend']  === 'sonata.notification.backend.doctrine') {
+            $checkLevel = array(
+                MessageInterface::STATE_DONE => $config['backends']['doctrine']['states']['done'],
+                MessageInterface::STATE_ERROR => $config['backends']['doctrine']['states']['error'],
+                MessageInterface::STATE_IN_PROGRESS => $config['backends']['doctrine']['states']['in_progress'],
+                MessageInterface::STATE_OPEN => $config['backends']['doctrine']['states']['open'],
+            );
+
+            $pause = $config['backends']['doctrine']['pause'];
+            $maxAge = $config['backends']['doctrine']['max_age'];
+            $batchSize = $config['backends']['doctrine']['batch_size'];
+            $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
+
+            $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
+        }
+    }
+
+    /**
+     * @param array $config
+     */
+    public function registerDoctrineMapping(array $config)
+    {
+        $collector = DoctrineCollector::getInstance();
+
+        $collector->addIndex($config['class']['message'], 'idx_state', array(
+            'state',
+        ));
+
+        $collector->addIndex($config['class']['message'], 'idx_created_at', array(
+            'created_at',
+        ));
+    }
+
+    /**
      * @param array $config
      */
     protected function checkConfiguration(array $config)
@@ -126,74 +210,6 @@ class SonataNotificationExtension extends Extension
     /**
      * @param ContainerBuilder $container
      * @param array            $config
-     */
-    public function configureClass(ContainerBuilder $container, $config)
-    {
-        // admin configuration
-        $container->setParameter('sonata.notification.admin.message.entity',       $config['class']['message']);
-
-        // manager configuration
-        $container->setParameter('sonata.notification.manager.message.entity',     $config['class']['message']);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
-    public function configureAdmin(ContainerBuilder $container, $config)
-    {
-        $container->setParameter('sonata.notification.admin.message.class',              $config['admin']['message']['class']);
-        $container->setParameter('sonata.notification.admin.message.controller',         $config['admin']['message']['controller']);
-        $container->setParameter('sonata.notification.admin.message.translation_domain', $config['admin']['message']['translation']);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
-    public function registerParameters(ContainerBuilder $container, $config)
-    {
-        $container->setParameter('sonata.notification.message.class',        $config['class']['message']);
-        $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
-    public function configureBackends(ContainerBuilder $container, $config)
-    {
-        // set the default value, will be erase if required
-        $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
-
-        if (isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
-            $this->configureRabbitmq($container, $config);
-
-            $container->removeDefinition('sonata.notification.backend.doctrine');
-        } else {
-            $container->removeDefinition('sonata.notification.backend.rabbitmq');
-        }
-
-        if (isset($config['backends']['doctrine']) && $config['backend']  === 'sonata.notification.backend.doctrine') {
-            $checkLevel = array(
-                MessageInterface::STATE_DONE         => $config['backends']['doctrine']['states']['done'],
-                MessageInterface::STATE_ERROR        => $config['backends']['doctrine']['states']['error'],
-                MessageInterface::STATE_IN_PROGRESS  => $config['backends']['doctrine']['states']['in_progress'],
-                MessageInterface::STATE_OPEN         => $config['backends']['doctrine']['states']['open'],
-            );
-
-            $pause = $config['backends']['doctrine']['pause'];
-            $maxAge = $config['backends']['doctrine']['max_age'];
-            $batchSize = $config['backends']['doctrine']['batch_size'];
-            $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
-
-            $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
-        }
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
      * @param bool             $checkLevel
      * @param int              $pause
      * @param int              $maxAge
@@ -211,9 +227,9 @@ class SonataNotificationExtension extends Extension
         // no queue defined, set a default one
         if (count($queues) == 0) {
             $queues = array(array(
-                'queue'   => 'default',
+                'queue' => 'default',
                 'default' => true,
-                'types'   => array(),
+                'types' => array(),
             ));
         }
 
@@ -242,7 +258,7 @@ class SonataNotificationExtension extends Extension
 
             $id = $this->createDoctrineQueueBackend($container, $definition->getArgument(0), $checkLevel, $pause, $maxAge, $batchSize, $queue['queue'], $queue['types']);
             $qBackends[$pos] = array(
-                'types'   => $queue['types'],
+                'types' => $queue['types'],
                 'backend' => new Reference($id),
             );
 
@@ -308,10 +324,10 @@ class SonataNotificationExtension extends Extension
 
         if (count($queues) == 0) {
             $queues = array(array(
-                'queue'                => 'default',
-                'default'              => true,
-                'routing_key'          => '',
-                'recover'              => false,
+                'queue' => 'default',
+                'default' => true,
+                'routing_key' => '',
+                'recover' => false,
                 'dead_letter_exchange' => null,
             ));
         }
@@ -329,7 +345,7 @@ class SonataNotificationExtension extends Extension
             $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['recover'], $queue['routing_key'], $queue['dead_letter_exchange']);
 
             $amqBackends[$pos] = array(
-                'type'    => $queue['routing_key'],
+                'type' => $queue['routing_key'],
                 'backend' => new Reference($id),
             );
 
@@ -373,21 +389,5 @@ class SonataNotificationExtension extends Extension
         $container->setDefinition($id, $definition);
 
         return $id;
-    }
-
-    /**
-     * @param array $config
-     */
-    public function registerDoctrineMapping(array $config)
-    {
-        $collector = DoctrineCollector::getInstance();
-
-        $collector->addIndex($config['class']['message'], 'idx_state', array(
-            'state',
-        ));
-
-        $collector->addIndex($config['class']['message'], 'idx_created_at', array(
-            'created_at',
-        ));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -163,6 +163,32 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function cleanup()
+    {
+        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
+    }
+
+    public function shutdown()
+    {
+        if ($this->channel) {
+            $this->channel->close();
+        }
+
+        if ($this->connection) {
+            $this->connection->close();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize()
+    {
+    }
+
+    /**
      * Calls the rabbitmq management api /api/<vhost>/queues endpoint to list the available queues.
      *
      * @see http://hg.rabbitmq.com/rabbitmq-management/raw-file/3646dee55e02/priv/www-api/help.html
@@ -181,33 +207,5 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         $request->setAuth($this->settings['user'], $this->settings['pass']);
 
         return json_decode($request->send()->getBody(true), true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function cleanup()
-    {
-        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
-    }
-
-    /**
-     */
-    public function shutdown()
-    {
-        if ($this->channel) {
-            $this->channel->close();
-        }
-
-        if ($this->connection) {
-            $this->connection->close();
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initialize()
-    {
     }
 }
