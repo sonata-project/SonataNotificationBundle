@@ -40,7 +40,7 @@
     },
     "require-dev": {
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
-        "guzzle/guzzle" : "^3.9",
+        "guzzle/guzzle" : "^3.8",
         "videlalvaro/php-amqplib": "^2.0",
         "liip/monitor-bundle": "^2.0",
         "symfony/phpunit-bridge": "^2.7 || ^3.0",
