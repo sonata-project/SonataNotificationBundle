@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -48,7 +48,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
     public function __construct(AMQPChannel $channel, $queue)
     {
         $this->channel = $channel;
-        $this->queue   = $queue;
+        $this->queue = $queue;
         $this->counter = 0;
     }
 
@@ -104,15 +104,6 @@ class AMQPMessageIterator implements MessageIteratorInterface
         return $this->message;
     }
 
-    protected function wait()
-    {
-        while ($this->valid()) {
-            $this->channel->wait();
-
-            break;
-        }
-    }
-
     /**
      * @param AMQPMessage $AMQMessage
      */
@@ -131,5 +122,14 @@ class AMQPMessageIterator implements MessageIteratorInterface
         ++$this->counter;
 
         $this->message = $message;
+    }
+
+    protected function wait()
+    {
+        while ($this->valid()) {
+            $this->channel->wait();
+
+            break;
+        }
     }
 }

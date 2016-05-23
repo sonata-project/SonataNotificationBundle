@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -55,11 +55,11 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             }
         }
 
-        $type        = $input->getOption('type');
+        $type = $input->getOption('type');
         $showDetails = $input->getOption('show-details');
 
         $output->write(sprintf('[%s] <info>Retrieving backend</info> ...', $startDate->format('r')));
-        $backend     = $this->getBackend($type);
+        $backend = $this->getBackend($type);
 
         $output->writeln('');
         $output->write(sprintf('[%s] <info>Initialize backend</info> ...', $startDate->format('r')));
@@ -130,6 +130,18 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param string $type
+     * @param string $backend
+     *
+     * @throws \RuntimeException
+     */
+    protected function throwTypeNotFoundException($type, $backend)
+    {
+        throw new \RuntimeException("The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".
+                get_class($backend)."' \nsupports multiple queues and the routing_key is defined. (Currently rabbitmq only)");
+    }
+
+    /**
      * @param $memory
      *
      * @return string
@@ -167,18 +179,6 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         }
 
         return $backend;
-    }
-
-    /**
-     * @param string $type
-     * @param string $backend
-     *
-     * @throws \RuntimeException
-     */
-    protected function throwTypeNotFoundException($type, $backend)
-    {
-        throw new \RuntimeException("The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".
-                get_class($backend)."' \nsupports multiple queues and the routing_key is defined. (Currently rabbitmq only)");
     }
 
     /**

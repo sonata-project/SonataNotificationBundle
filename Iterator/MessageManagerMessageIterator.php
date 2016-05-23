@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -55,10 +55,10 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     public function __construct(MessageManagerInterface $messageManager, $types = array(), $pause = 500000, $batchSize = 10)
     {
         $this->messageManager = $messageManager;
-        $this->counter        = 0;
-        $this->pause          = $pause;
-        $this->types          = $types;
-        $this->batchSize      = $batchSize;
+        $this->counter = 0;
+        $this->pause = $pause;
+        $this->types = $types;
+        $this->batchSize = $batchSize;
     }
 
     /**

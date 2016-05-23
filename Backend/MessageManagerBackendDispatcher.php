@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -77,24 +77,6 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
-     * @return BackendInterface
-     */
-    protected function getDefaultBackend()
-    {
-        $types = array();
-
-        if (!empty($this->dedicatedTypes)) {
-            $types = array(
-                'exclude' => $this->dedicatedTypes,
-            );
-        }
-
-        $this->default->setTypes($types);
-
-        return $this->default;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getIterator()
@@ -131,5 +113,23 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
      */
     public function initialize()
     {
+    }
+
+    /**
+     * @return BackendInterface
+     */
+    protected function getDefaultBackend()
+    {
+        $types = array();
+
+        if (!empty($this->dedicatedTypes)) {
+            $types = array(
+                'exclude' => $this->dedicatedTypes,
+            );
+        }
+
+        $this->default->setTypes($types);
+
+        return $this->default;
     }
 }
