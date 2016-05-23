@@ -1,4 +1,4 @@
-UPGRADE FROM 2.4 to 3.0
+UPGRADE FROM 2.3 to 3.0
 =======================
 
 ### Deprecations
