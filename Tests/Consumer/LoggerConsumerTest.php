@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -30,7 +30,7 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
 
         $message = new Message();
         $message->setBody(array(
-            'level'   => $type,
+            'level' => $type,
             'message' => 'Alert - Area 52 get compromised!!',
         ));
 
@@ -66,7 +66,7 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
 
         $message = new Message();
         $message->setBody(array(
-            'level'   => 'ERROR',
+            'level' => 'ERROR',
             'message' => 'Alert - Area 52 get compromised!!',
         ));
 
