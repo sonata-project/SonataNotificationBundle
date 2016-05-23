@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -79,10 +79,10 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         $stm = $this->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
 
         $states = array(
-            MessageInterface::STATE_DONE        => 0,
-            MessageInterface::STATE_ERROR       => 0,
+            MessageInterface::STATE_DONE => 0,
+            MessageInterface::STATE_ERROR => 0,
             MessageInterface::STATE_IN_PROGRESS => 0,
-            MessageInterface::STATE_OPEN        => 0,
+            MessageInterface::STATE_OPEN => 0,
         );
 
         foreach ($stm->fetch() as $data) {
@@ -145,45 +145,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     }
 
     /**
-     * @param int   $state
-     * @param array $types
-     * @param int   $batchSize
-     * @param array $parameters
-     *
-     * @return QueryBuilder
-     */
-    protected function prepareStateQuery($state, $types, $batchSize, &$parameters)
-    {
-        $query = $this->getRepository()
-            ->createQueryBuilder('m')
-            ->where('m.state = :state')
-            ->orderBy('m.createdAt');
-
-        $parameters['state'] = $state;
-
-        if (count($types) > 0) {
-            if (array_key_exists('exclude', $types) || array_key_exists('include', $types)) {
-                if (array_key_exists('exclude', $types)) {
-                    $query->andWhere('m.type NOT IN (:exclude)');
-                    $parameters['exclude'] = $types['exclude'];
-                }
-
-                if (array_key_exists('include', $types)) {
-                    $query->andWhere('m.type IN (:include)');
-                    $parameters['include'] = $types['include'];
-                }
-            } else { // BC
-                $query->andWhere('m.type IN (:types)');
-                $parameters['types'] = $types;
-            }
-        }
-
-        $query->setMaxResults($batchSize);
-
-        return $query;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
@@ -226,5 +187,44 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         $pager->init();
 
         return $pager;
+    }
+
+    /**
+     * @param int   $state
+     * @param array $types
+     * @param int   $batchSize
+     * @param array $parameters
+     *
+     * @return QueryBuilder
+     */
+    protected function prepareStateQuery($state, $types, $batchSize, &$parameters)
+    {
+        $query = $this->getRepository()
+            ->createQueryBuilder('m')
+            ->where('m.state = :state')
+            ->orderBy('m.createdAt');
+
+        $parameters['state'] = $state;
+
+        if (count($types) > 0) {
+            if (array_key_exists('exclude', $types) || array_key_exists('include', $types)) {
+                if (array_key_exists('exclude', $types)) {
+                    $query->andWhere('m.type NOT IN (:exclude)');
+                    $parameters['exclude'] = $types['exclude'];
+                }
+
+                if (array_key_exists('include', $types)) {
+                    $query->andWhere('m.type IN (:include)');
+                    $parameters['include'] = $types['include'];
+                }
+            } else { // BC
+                $query->andWhere('m.type IN (:types)');
+                $parameters['types'] = $types;
+            }
+        }
+
+        $query->setMaxResults($batchSize);
+
+        return $query;
     }
 }

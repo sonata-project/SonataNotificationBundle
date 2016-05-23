@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -21,16 +21,6 @@ class BaseMessage extends Message
     protected $id;
 
     /**
-     * Get id.
-     *
-     * @return int $id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Override clone in order to avoid duplicating entries in Doctrine.
      */
     public function __clone()
@@ -38,5 +28,15 @@ class BaseMessage extends Message
         parent::__clone();
 
         $this->id = null;
+    }
+
+    /**
+     * Get id.
+     *
+     * @return int $id
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

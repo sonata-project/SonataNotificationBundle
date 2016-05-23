@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -22,6 +22,37 @@ class MessageAdmin extends Admin
     /**
      * {@inheritdoc}
      */
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection
+            ->remove('edit')
+            ->remove('create')
+            ->remove('history')
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBatchActions()
+    {
+        $actions = array();
+        $actions['publish'] = array(
+            'label' => $this->trans($this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message')),
+            'ask_confirmation' => false,
+        );
+
+        $actions['cancelled'] = array(
+            'label' => $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
+            'ask_confirmation' => false,
+        );
+
+        return $actions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
@@ -33,18 +64,6 @@ class MessageAdmin extends Admin
             ->add('getStateName')
             ->add('body')
             ->add('restartCount')
-        ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureRoutes(RouteCollection $collection)
-    {
-        $collection
-            ->remove('edit')
-            ->remove('create')
-            ->remove('history')
         ;
     }
 
@@ -75,24 +94,5 @@ class MessageAdmin extends Admin
             ->add('type')
             ->add('state', null, array(), 'choice', array('choices' => $class::getStateList()))
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBatchActions()
-    {
-        $actions = array();
-        $actions['publish'] = array(
-            'label'            => $this->trans($this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message')),
-            'ask_confirmation' => false,
-        );
-
-        $actions['cancelled'] = array(
-            'label'            => $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
-            'ask_confirmation' => false,
-        );
-
-        return $actions;
     }
 }

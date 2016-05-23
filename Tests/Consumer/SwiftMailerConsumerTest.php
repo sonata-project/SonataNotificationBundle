@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -49,11 +49,11 @@ class SwiftMailerConsumerTest extends \PHPUnit_Framework_TestCase
         $message = new Message();
         $message->setBody(array(
             'subject' => 'subject',
-            'from'    => array(
+            'from' => array(
                 'email' => 'from@mail.fr',
-                'name'  => 'nameFrom',
+                'name' => 'nameFrom',
             ),
-            'to'      => array(
+            'to' => array(
                 'to1@mail.fr',
                 'to2@mail.fr' => 'nameTo2',
             ),
