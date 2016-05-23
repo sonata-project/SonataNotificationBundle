@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -21,7 +21,7 @@ class Metadata
     /**
      * @param array $informations
      */
-    public function __construct(array $informations = array())
+    public function __construct(array $informations = [])
     {
         $this->informations = $informations;
     }

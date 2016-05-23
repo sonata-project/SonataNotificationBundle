@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -46,8 +46,7 @@ class CreateAndPublishCommand extends ContainerAwareCommand
 
         $this->getContainer()
             ->get('sonata.notification.backend')
-            ->createAndPublish($type, $body)
-        ;
+            ->createAndPublish($type, $body);
 
         $output->writeln('<info>Done !</info>');
     }

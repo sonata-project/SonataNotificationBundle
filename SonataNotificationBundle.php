@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -46,8 +46,8 @@ class SonataNotificationBundle extends Bundle
      */
     public function registerFormMapping()
     {
-        FormHelper::registerFormTypeMapping(array(
+        FormHelper::registerFormTypeMapping([
             'sonata_notification_api_form_message' => 'Sonata\NotificationBundle\Form\Type\MessageSerializationType',
-        ));
+        ]);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -68,7 +68,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
 
             $this->channel = $this->connection->channel();
 
-            register_shutdown_function(array($this, 'shutdown'));
+            register_shutdown_function([$this, 'shutdown']);
         }
 
         return $this->channel;
@@ -135,7 +135,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             $this->getChannel();
             $output = $this->getApiQueueStatus();
             $checked = 0;
-            $missingConsumers = array();
+            $missingConsumers = [];
 
             foreach ($this->queues as $queue) {
                 foreach ($output as $q) {
@@ -176,7 +176,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
 
         $client = new \Guzzle\Http\Client();
-        $client->setConfig(array('curl.options' => array(CURLOPT_CONNECTTIMEOUT_MS => 3000)));
+        $client->setConfig(['curl.options' => [CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);
 
@@ -191,8 +191,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     */
     public function shutdown()
     {
         if ($this->channel) {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -37,12 +37,12 @@ class ErroneousMessageIterator extends MessageManagerMessageIterator
      * @param int                     $maxAttempts
      * @param int                     $attemptDelay
      */
-    public function __construct(MessageManagerInterface $messageManager, $types = array(), $pause = 500000, $batchSize = 10, $maxAttempts = 5, $attemptDelay = 10)
+    public function __construct(MessageManagerInterface $messageManager, $types = [], $pause = 500000, $batchSize = 10, $maxAttempts = 5, $attemptDelay = 10)
     {
         parent::__construct($messageManager, $types, $pause, $batchSize);
 
-        $this->maxAttempts    = $maxAttempts;
-        $this->attemptDelay   = $attemptDelay;
+        $this->maxAttempts = $maxAttempts;
+        $this->attemptDelay = $attemptDelay;
     }
 
     /**
