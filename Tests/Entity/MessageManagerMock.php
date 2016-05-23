@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -25,7 +25,7 @@ class MessageManagerMock extends MessageManager
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $result = array();
+        $result = [];
         while ($limit !== null && $limit > 0) {
             $result[$limit] = new Message();
             --$limit;
@@ -36,7 +36,7 @@ class MessageManagerMock extends MessageManager
 
     public function findByTypes(array $types, $state, $batchSize)
     {
-        $result = array();
+        $result = [];
         while ($batchSize !== null && $batchSize > 0) {
             $result[$batchSize] = new Message();
             --$batchSize;
@@ -47,6 +47,5 @@ class MessageManagerMock extends MessageManager
 
     public function save($message, $andFlush = true)
     {
-        return;
     }
 }

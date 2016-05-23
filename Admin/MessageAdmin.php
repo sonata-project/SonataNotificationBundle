@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -32,8 +32,7 @@ class MessageAdmin extends Admin
             ->add('completedAt')
             ->add('getStateName')
             ->add('body')
-            ->add('restartCount')
-        ;
+            ->add('restartCount');
     }
 
     /**
@@ -44,8 +43,7 @@ class MessageAdmin extends Admin
         $collection
             ->remove('edit')
             ->remove('create')
-            ->remove('history')
-        ;
+            ->remove('history');
     }
 
     /**
@@ -54,14 +52,13 @@ class MessageAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id', null, array('route' => array('name' => 'show')))
+            ->addIdentifier('id', null, ['route' => ['name' => 'show']])
             ->add('type')
             ->add('createdAt')
             ->add('startedAt')
             ->add('completedAt')
             ->add('getStateName')
-            ->add('restartCount')
-        ;
+            ->add('restartCount');
     }
 
     /**
@@ -73,8 +70,7 @@ class MessageAdmin extends Admin
 
         $datagridMapper
             ->add('type')
-            ->add('state', null, array(), 'choice', array('choices' => $class::getStateList()))
-        ;
+            ->add('state', null, [], 'choice', ['choices' => $class::getStateList()]);
     }
 
     /**
@@ -82,16 +78,16 @@ class MessageAdmin extends Admin
      */
     public function getBatchActions()
     {
-        $actions = array();
-        $actions['publish'] = array(
+        $actions = [];
+        $actions['publish'] = [
             'label'            => $this->trans($this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message')),
             'ask_confirmation' => false,
-        );
+        ];
 
-        $actions['cancelled'] = array(
+        $actions['cancelled'] = [
             'label'            => $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
             'ask_confirmation' => false,
-        );
+        ];
 
         return $actions;
     }

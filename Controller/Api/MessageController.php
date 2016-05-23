@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -76,14 +76,14 @@ class MessageController
      */
     public function getMessagesAction(ParamFetcherInterface $paramFetcher)
     {
-        $supportedCriteria = array(
+        $supportedCriteria = [
             'state' => '',
             'type'  => '',
-        );
+        ];
 
-        $page     = $paramFetcher->get('page');
-        $limit    = $paramFetcher->get('count');
-        $sort     = $paramFetcher->get('orderBy');
+        $page = $paramFetcher->get('page');
+        $limit = $paramFetcher->get('count');
+        $sort = $paramFetcher->get('orderBy');
         $criteria = array_intersect_key($paramFetcher->all(), $supportedCriteria);
 
         foreach ($criteria as $key => $value) {
@@ -93,9 +93,9 @@ class MessageController
         }
 
         if (!$sort) {
-            $sort = array();
+            $sort = [];
         } elseif (!is_array($sort)) {
-            $sort = array($sort => 'asc');
+            $sort = [$sort => 'asc'];
         }
 
         return $this->getMessageManager()->getPager($criteria, $page, $limit, $sort);
@@ -123,9 +123,9 @@ class MessageController
     {
         $message = null;
 
-        $form = $this->formFactory->createNamed(null, 'sonata_notification_api_form_message', $message, array(
+        $form = $this->formFactory->createNamed(null, 'sonata_notification_api_form_message', $message, [
             'csrf_protection' => false,
-        ));
+        ]);
 
         $form->handleRequest($request);
 
@@ -136,7 +136,7 @@ class MessageController
 
             $view = FOSRestView::create($message);
             $serializationContext = SerializationContext::create();
-            $serializationContext->setGroups(array('sonata_api_read'));
+            $serializationContext->setGroups(['sonata_api_read']);
             $serializationContext->enableMaxDepthChecks();
             $view->setSerializationContext($serializationContext);
 
