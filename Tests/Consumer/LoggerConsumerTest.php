@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -29,10 +29,10 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
         $logger->expects($this->once())->method($calledType);
 
         $message = new Message();
-        $message->setBody(array(
+        $message->setBody([
             'level'   => $type,
             'message' => 'Alert - Area 52 get compromised!!',
-        ));
+        ]);
 
         $event = new ConsumerEvent($message);
 
@@ -45,16 +45,16 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function calledTypeProvider()
     {
-        return array(
-            array('emerg', 'emergency'),
-            array('alert', 'alert'),
-            array('crit', 'critical'),
-            array('err', 'error'),
-            array('warn', 'warning'),
-            array('notice', 'notice'),
-            array('info', 'info'),
-            array('debug', 'debug'),
-        );
+        return [
+            ['emerg', 'emergency'],
+            ['alert', 'alert'],
+            ['crit', 'critical'],
+            ['err', 'error'],
+            ['warn', 'warning'],
+            ['notice', 'notice'],
+            ['info', 'info'],
+            ['debug', 'debug'],
+        ];
     }
 
     /**
@@ -65,10 +65,10 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $message = new Message();
-        $message->setBody(array(
+        $message->setBody([
             'level'   => 'ERROR',
             'message' => 'Alert - Area 52 get compromised!!',
-        ));
+        ]);
 
         $event = new ConsumerEvent($message);
 

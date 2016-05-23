@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -20,10 +20,10 @@ class IteratorProxyMessageIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testIteratorProxiesIteratorMethods()
     {
-        $content = array(
+        $content = [
             'foo',
             'bar',
-        );
+        ];
 
         $actualIterator = $this->getMock('Iterator');
         $this->expectIterator($actualIterator, $content, true);
@@ -42,41 +42,35 @@ class IteratorProxyMessageIteratorTest extends \PHPUnit_Framework_TestCase
     {
         $mock
             ->expects($this->at($counter))
-            ->method('rewind')
-        ;
+            ->method('rewind');
 
         foreach ($content as $key => $value) {
             $mock
                 ->expects($this->at(++$counter))
                 ->method('valid')
-                ->will($this->returnValue(true))
-            ;
+                ->will($this->returnValue(true));
 
             $mock
                 ->expects($this->at(++$counter))
                 ->method('current')
-                ->will($this->returnValue($value))
-            ;
+                ->will($this->returnValue($value));
 
             if ($withKey) {
                 $mock
                     ->expects($this->at(++$counter))
                     ->method('key')
-                    ->will($this->returnValue($key))
-                ;
+                    ->will($this->returnValue($key));
             }
 
             $mock
                 ->expects($this->at(++$counter))
-                ->method('next')
-            ;
+                ->method('next');
         }
 
         $mock
             ->expects($this->at(++$counter))
             ->method('valid')
-            ->will($this->returnValue(false))
-        ;
+            ->will($this->returnValue(false));
 
         return ++$counter;
     }
