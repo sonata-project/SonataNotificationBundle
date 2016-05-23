@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sonata Project package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
@@ -11,35 +20,6 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
             $this->markTestSkipped('AMQP Lib not installed');
         }
-    }
-
-    protected function getMockQueue($queue, $type, $called = null)
-    {
-        $methods = array('createAndPublish');
-        $args = array(array(), '', 'foo', 'message.type.foo');
-        $mock = $this->getMock('Sonata\NotificationBundle\Backend\AMQPBackend', $methods, $args);
-
-        if ($called !== null) {
-            $mock->expects($called)
-                ->method('createAndPublish')
-            ;
-        }
-
-        return $mock;
-    }
-
-    protected function getDispatcher(array $backends, $queue = 'foo', $key = 'message.type.foo')
-    {
-        $queues = array(array('queue' => $queue, 'routing_key' => $key));
-        $settings = array(
-                'host'  => 'foo',
-                'port'  => 'port',
-                'user'  => 'user',
-                'pass'  => 'pass',
-                'vhost' => '/',
-        );
-
-        return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);
     }
 
     public function testQueue()
@@ -80,5 +60,34 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         $mock = $this->getMockQueue('foo', 'message.type.bar');
         $dispatcher = $this->getDispatcher(array(array('type' => 'bar', 'backend' => $mock)), 'foo', 'message.type.bar');
         $dispatcher->createAndPublish('message.type.bar', array());
+    }
+
+    protected function getMockQueue($queue, $type, $called = null)
+    {
+        $methods = array('createAndPublish');
+        $args = array(array(), '', 'foo', 'message.type.foo');
+        $mock = $this->getMock('Sonata\NotificationBundle\Backend\AMQPBackend', $methods, $args);
+
+        if ($called !== null) {
+            $mock->expects($called)
+                ->method('createAndPublish')
+            ;
+        }
+
+        return $mock;
+    }
+
+    protected function getDispatcher(array $backends, $queue = 'foo', $key = 'message.type.foo')
+    {
+        $queues = array(array('queue' => $queue, 'routing_key' => $key));
+        $settings = array(
+                'host' => 'foo',
+                'port' => 'port',
+                'user' => 'user',
+                'pass' => 'pass',
+                'vhost' => '/',
+        );
+
+        return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);
     }
 }
