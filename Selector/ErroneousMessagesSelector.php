@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -33,7 +33,7 @@ class ErroneousMessagesSelector
     public function __construct(ManagerRegistry $registry, $class)
     {
         $this->registry = $registry;
-        $this->class    = $class;
+        $this->class = $class;
     }
 
     /**
@@ -53,7 +53,7 @@ class ErroneousMessagesSelector
 
         $parameters = array(
             'erroneousState' => MessageInterface::STATE_ERROR,
-            'maxAttempts'    => $maxAttempts,
+            'maxAttempts' => $maxAttempts,
         );
 
         if (count($types) > 0) {

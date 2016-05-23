@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -73,8 +73,8 @@ class Message implements MessageInterface
      */
     public function __clone()
     {
-        $this->state       = self::STATE_OPEN;
-        $this->startedAt   = null;
+        $this->state = self::STATE_OPEN;
+        $this->startedAt = null;
         $this->completedAt = null;
 
         $this->createdAt = new \DateTime();
@@ -236,11 +236,11 @@ class Message implements MessageInterface
     public static function getStateList()
     {
         return array(
-            self::STATE_OPEN            => 'open',
-            self::STATE_IN_PROGRESS     => 'in_progress',
-            self::STATE_DONE            => 'done',
-            self::STATE_ERROR           => 'error',
-            self::STATE_CANCELLED       => 'cancelled',
+            self::STATE_OPEN => 'open',
+            self::STATE_IN_PROGRESS => 'in_progress',
+            self::STATE_DONE => 'done',
+            self::STATE_ERROR => 'error',
+            self::STATE_CANCELLED => 'cancelled',
         );
     }
 
