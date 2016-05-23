@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -25,21 +25,21 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
     {
         $backend = new PostponeRuntimeBackend($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true);
 
-        $messages = array();
+        $messages = [];
 
-        $message = $backend->create('foo', array());
+        $message = $backend->create('foo', []);
         $messages[] = $message;
         $backend->publish($message);
 
-        $message = $backend->create('bar', array());
+        $message = $backend->create('bar', []);
         $messages[] = $message;
         $backend->publish($message);
 
-        $message = $backend->create('baz', array());
+        $message = $backend->create('baz', []);
         $messages[] = $message;
         $backend->publish($message);
 
-        $backend->create('not_published', array());
+        $backend->create('not_published', []);
 
         $iterator = $backend->getIterator();
         foreach ($iterator as $eachKey => $eachMessage) {
@@ -49,11 +49,10 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testNoMessagesOnEvent()
     {
-        $backend = $this->getMock('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend', array('handle'), array($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true));
+        $backend = $this->getMock('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend', ['handle'], [$this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), true]);
         $backend
             ->expects($this->never())
-            ->method('handle')
-        ;
+            ->method('handle');
 
         $backend->onEvent();
     }
@@ -62,13 +61,13 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new EventDispatcher();
         $backend = new PostponeRuntimeBackend($dispatcher, true);
-        $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
+        $dispatcher->addListener('kernel.terminate', [$backend, 'onEvent']);
 
-        $message = $backend->create('notification.demo', array());
+        $message = $backend->create('notification.demo', []);
         $backend->publish($message);
 
         // This message will not be handled.
-        $backend->create('notification.demo', array());
+        $backend->create('notification.demo', []);
 
         $phpunit = $this;
         $phpunit->passed = false;
@@ -88,10 +87,10 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new EventDispatcher();
         $backend = new PostponeRuntimeBackend($dispatcher, true);
-        $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
+        $dispatcher->addListener('kernel.terminate', [$backend, 'onEvent']);
 
-        $message1 = $backend->create('notification.demo1', array());
-        $message2 = $backend->create('notification.demo2', array());
+        $message1 = $backend->create('notification.demo1', []);
+        $message2 = $backend->create('notification.demo2', []);
 
         $backend->publish($message1);
 
@@ -136,13 +135,12 @@ class PostponeRuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testOnCliPublishHandlesDirectly()
     {
-        $backend = $this->getMock('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend', array('handle'), array($this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), false));
+        $backend = $this->getMock('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend', ['handle'], [$this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), false]);
         $backend
             ->expects($this->once())
-            ->method('handle')
-        ;
+            ->method('handle');
 
-        $message = $backend->create('notification.demo', array());
+        $message = $backend->create('notification.demo', []);
         $backend->publish($message);
     }
 }

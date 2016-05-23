@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -38,7 +38,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
      */
     public function findByTypes(array $types, $state, $batchSize)
     {
-        $params = array();
+        $params = [];
         $query = $this->prepareStateQuery($state, $types, $batchSize, $params);
 
         $query->setParameters($params);
@@ -51,7 +51,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
      */
     public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10)
     {
-        $params = array();
+        $params = [];
         $query = $this->prepareStateQuery($state, $types, $batchSize, $params);
 
         if ($maxAttempts) {
@@ -78,12 +78,12 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
 
         $stm = $this->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
 
-        $states = array(
+        $states = [
             MessageInterface::STATE_DONE        => 0,
             MessageInterface::STATE_ERROR       => 0,
             MessageInterface::STATE_IN_PROGRESS => 0,
             MessageInterface::STATE_OPEN        => 0,
-        );
+        ];
 
         foreach ($stm->fetch() as $data) {
             $states[$data['state']] = $data['cnt'];
@@ -186,7 +186,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     /**
      * {@inheritdoc}
      */
-    public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
+    public function getPager(array $criteria, $page, $limit = 10, array $sort = [])
     {
         $query = $this->getRepository()
             ->createQueryBuilder('m')
@@ -199,13 +199,13 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
             }
         }
         if (count($sort) == 0) {
-            $sort = array('type' => 'ASC');
+            $sort = ['type' => 'ASC'];
         }
         foreach ($sort as $field => $direction) {
             $query->orderBy(sprintf('m.%s', $field), strtoupper($direction));
         }
 
-        $parameters = array();
+        $parameters = [];
 
         if (isset($criteria['type'])) {
             $query->andWhere('m.type = :type');

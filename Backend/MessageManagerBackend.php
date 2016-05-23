@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -66,14 +66,14 @@ class MessageManagerBackend implements BackendInterface
      * @param int                     $batchSize
      * @param array                   $types
      */
-    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 86400, $batchSize = 10, array $types = array())
+    public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 86400, $batchSize = 10, array $types = [])
     {
         $this->messageManager = $messageManager;
-        $this->checkLevel     = $checkLevel;
-        $this->pause          = $pause;
-        $this->maxAge         = $maxAge;
-        $this->batchSize      = $batchSize;
-        $this->types          = $types;
+        $this->checkLevel = $checkLevel;
+        $this->pause = $pause;
+        $this->maxAge = $maxAge;
+        $this->batchSize = $batchSize;
+        $this->types = $types;
     }
 
     /**

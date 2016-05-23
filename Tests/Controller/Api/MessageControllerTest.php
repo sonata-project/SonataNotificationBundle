@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -25,13 +25,13 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetMessagesAction()
     {
         $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
-        $messageManager->expects($this->once())->method('getPager')->will($this->returnValue(array()));
+        $messageManager->expects($this->once())->method('getPager')->will($this->returnValue([]));
 
         $paramFetcher = $this->getMock('FOS\RestBundle\Request\ParamFetcherInterface');
         $paramFetcher->expects($this->exactly(3))->method('get');
-        $paramFetcher->expects($this->once())->method('all')->will($this->returnValue(array()));
+        $paramFetcher->expects($this->once())->method('all')->will($this->returnValue([]));
 
-        $this->assertEquals(array(), $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
+        $this->assertEquals([], $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
     }
 
     public function testPostMessageAction()
