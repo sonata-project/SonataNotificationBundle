@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sonata_notification')->children();
 
-        $backendInfo = <<<EOF
+        $backendInfo = <<<'EOF'
 Other backends you can use:
 
 sonata.notification.backend.postpone
@@ -184,7 +184,7 @@ EOF;
         $treeBuilder = new TreeBuilder();
         $node = $treeBuilder->root('queues');
 
-        $queuesInfo = <<<EOF
+        $queuesInfo = <<<'EOF'
 Example for using RabbitMQ
     - { queue: myQueue, recover: true, default: false, routing_key: the_routing_key, dead_letter_exchange: 'my.dead.letter.exchange' }
     - { queue: catchall, default: true }
@@ -194,26 +194,26 @@ Example for using Doctrine
     - { queue: catchall, default: true }
 EOF;
 
-        $routingKeyInfo = <<<EOF
+        $routingKeyInfo = <<<'EOF'
 Only used by RabbitMQ
 
 Direct exchange with routing_key
 EOF;
 
-        $recoverInfo = <<<EOF
+        $recoverInfo = <<<'EOF'
 Only used by RabbitMQ
 
 If set to true, the consumer will respond with a `basic.recover` when an exception occurs,
 otherwise it will not respond at all and the message will be unacknowledged
 EOF;
 
-        $deadLetterExchangeInfo = <<<EOF
+        $deadLetterExchangeInfo = <<<'EOF'
 Only used by RabbitMQ
 
 If is set, failed messages will be rejected and sent to this exchange
 EOF;
 
-        $typesInfo = <<<EOF
+        $typesInfo = <<<'EOF'
 Only used by Doctrine
 
 Defines types handled by the message backend
