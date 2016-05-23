@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -31,7 +31,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     /**
      * @var MessageInterface[]
      */
-    protected $messages = array();
+    protected $messages = [];
 
     /**
      * If set to true, you have to fire an event the onEvent method is subscribed to manually!
