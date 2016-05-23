@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -29,7 +29,7 @@ class NotificationCompilerPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('sonata.notification.dispatcher');
 
-        $informations = array();
+        $informations = [];
 
         foreach ($container->findTaggedServiceIds('sonata.notification.consumer') as $id => $events) {
             foreach ($events as $event) {
@@ -40,12 +40,12 @@ class NotificationCompilerPass implements CompilerPassInterface
                 }
 
                 if (!isset($informations[$event['type']])) {
-                    $informations[$event['type']] = array();
+                    $informations[$event['type']] = [];
                 }
 
                 $informations[$event['type']][] = $id;
 
-                $definition->addMethodCall('addListenerService', array($event['type'], array($id, 'process'), $priority));
+                $definition->addMethodCall('addListenerService', [$event['type'], [$id, 'process'], $priority]);
             }
         }
 
@@ -62,7 +62,7 @@ class NotificationCompilerPass implements CompilerPassInterface
                     throw new RuntimeException('Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener');
                 }
 
-                $definition->addTag('kernel.event_listener', array('event' => IterateEvent::EVENT_NAME, 'method' => 'iterate'));
+                $definition->addTag('kernel.event_listener', ['event' => IterateEvent::EVENT_NAME, 'method' => 'iterate']);
             }
         }
     }

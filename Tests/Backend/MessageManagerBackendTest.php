@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -28,14 +28,14 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
         $modelManager->expects($this->once())->method('save')->will($this->returnValue($message));
         $modelManager->expects($this->once())->method('create')->will($this->returnValue($message));
 
-        $backend = new MessageManagerBackend($modelManager, array());
-        $message = $backend->createAndPublish('foo', array('message' => 'salut'));
+        $backend = new MessageManagerBackend($modelManager, []);
+        $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
         $this->assertInstanceOf('Sonata\\NotificationBundle\\Model\\MessageInterface', $message);
         $this->assertEquals(MessageInterface::STATE_OPEN, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
         $this->assertEquals('foo', $message->getType());
-        $this->assertEquals(array('message' => 'salut'), $message->getBody());
+        $this->assertEquals(['message' => 'salut'], $message->getBody());
     }
 
     public function testHandleSuccess()
@@ -47,7 +47,7 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())->method('dispatch');
 
-        $backend = new MessageManagerBackend($modelManager, array());
+        $backend = new MessageManagerBackend($modelManager, []);
 
         $backend->handle($message, $dispatcher);
 
@@ -64,7 +64,7 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
-        $backend = new MessageManagerBackend($modelManager, array());
+        $backend = new MessageManagerBackend($modelManager, []);
 
         $e = false;
         try {
@@ -91,12 +91,12 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
         $modelManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $modelManager->expects($this->exactly(1))->method('countStates')->will($this->returnValue($counts));
 
-        $backend = new MessageManagerBackend($modelManager, array(
+        $backend = new MessageManagerBackend($modelManager, [
             MessageInterface::STATE_IN_PROGRESS => 10,
             MessageInterface::STATE_ERROR       => 30,
             MessageInterface::STATE_OPEN        => 100,
             MessageInterface::STATE_DONE        => 10000,
-        ));
+        ]);
 
         $status = $backend->getStatus();
 
@@ -107,65 +107,65 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
     public static function statusProvider()
     {
         if (!class_exists('ZendDiagnostics\Result\Success')) {
-            return array(array(1, 1, 1));
+            return [[1, 1, 1]];
         }
 
-        $data = array();
+        $data = [];
 
-        $data[] = array(
-            array(
-                MessageInterface::STATE_IN_PROGRESS => 11, #here
+        $data[] = [
+            [
+                MessageInterface::STATE_IN_PROGRESS => 11, //here
                 MessageInterface::STATE_ERROR       => 31,
                 MessageInterface::STATE_OPEN        => 100,
                 MessageInterface::STATE_DONE        => 10000,
-            ),
+            ],
             new Failure(),
             'Too many messages processed at the same time (Database)',
-        );
+        ];
 
-        $data[] = array(
-            array(
+        $data[] = [
+            [
                 MessageInterface::STATE_IN_PROGRESS => 1,
-                MessageInterface::STATE_ERROR       => 31, #here
+                MessageInterface::STATE_ERROR       => 31, //here
                 MessageInterface::STATE_OPEN        => 100,
                 MessageInterface::STATE_DONE        => 10000,
-            ),
+            ],
             new Failure(),
             'Too many errors (Database)',
-        );
+        ];
 
-        $data[] = array(
-            array(
+        $data[] = [
+            [
                 MessageInterface::STATE_IN_PROGRESS => 1,
                 MessageInterface::STATE_ERROR       => 1,
-                MessageInterface::STATE_OPEN        => 101, #here
+                MessageInterface::STATE_OPEN        => 101, //here
                 MessageInterface::STATE_DONE        => 10000,
-            ),
+            ],
             new Warning(),
             'Too many messages waiting to be processed (Database)',
-        );
+        ];
 
-        $data[] = array(
-            array(
+        $data[] = [
+            [
                 MessageInterface::STATE_IN_PROGRESS => 1,
                 MessageInterface::STATE_ERROR       => 1,
                 MessageInterface::STATE_OPEN        => 100,
-                MessageInterface::STATE_DONE        => 10001, #here
-            ),
+                MessageInterface::STATE_DONE        => 10001, //here
+            ],
                 new Warning(),
             'Too many processed messages, please clean the database (Database)',
-        );
+        ];
 
-        $data[] = array(
-            array(
+        $data[] = [
+            [
                 MessageInterface::STATE_IN_PROGRESS => 1,
                 MessageInterface::STATE_ERROR       => 1,
                 MessageInterface::STATE_OPEN        => 1,
                 MessageInterface::STATE_DONE        => 1,
-            ),
+            ],
             new Success(),
             'Ok (Database)',
-        );
+        ];
 
         return $data;
     }

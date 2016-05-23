@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -67,9 +67,9 @@ class AMQPBackend implements BackendInterface
     public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null)
     {
         $this->exchange = $exchange;
-        $this->queue    = $queue;
-        $this->recover  = $recover;
-        $this->key      = $key;
+        $this->queue = $queue;
+        $this->recover = $recover;
+        $this->key = $key;
         $this->deadLetterExchange = $deadLetterExchange;
 
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
@@ -102,10 +102,10 @@ class AMQPBackend implements BackendInterface
      */
     public function initialize()
     {
-        $args = array();
+        $args = [];
 
         if ($this->deadLetterExchange !== null) {
-            $args['x-dead-letter-exchange'] = array('S', $this->deadLetterExchange);
+            $args['x-dead-letter-exchange'] = ['S', $this->deadLetterExchange];
         }
 
         /*
@@ -136,17 +136,17 @@ class AMQPBackend implements BackendInterface
      */
     public function publish(MessageInterface $message)
     {
-        $body = json_encode(array(
+        $body = json_encode([
             'type'      => $message->getType(),
             'body'      => $message->getBody(),
             'createdAt' => $message->getCreatedAt()->format('U'),
             'state'     => $message->getState(),
-        ));
+        ]);
 
-        $amq = new AMQPMessage($body, array(
+        $amq = new AMQPMessage($body, [
             'content_type'  => 'text/plain',
             'delivery_mode' => 2,
-        ));
+        ]);
 
         $this->getChannel()->basic_publish($amq, $this->exchange, $this->key);
     }
