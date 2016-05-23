@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -25,7 +25,7 @@ class LoggerConsumer implements ConsumerInterface
     /**
      * @var string[]
      */
-    protected $types = array(
+    protected $types = [
         'emerg'  => 'emergency',
         'alert'  => 'alert',
         'crit'   => 'critical',
@@ -34,7 +34,7 @@ class LoggerConsumer implements ConsumerInterface
         'notice' => 'notice',
         'info'   => 'info',
         'debug'  => 'debug',
-    );
+    ];
 
     /**
      * @param LoggerInterface|LegacyLoggerInterface $logger

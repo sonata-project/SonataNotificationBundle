@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -26,7 +26,7 @@ class MessageManagerMessageIterator extends Iterator
     {
         parent::__construct(
             new MessageManagerMock('Sonata\NotificationBundle\Model\Message', $registry),
-            array(),
+            [],
             $pause,
             $batchSize);
     }
@@ -34,7 +34,7 @@ class MessageManagerMessageIterator extends Iterator
     /**
      * @param array $types
      */
-    public function _bufferize($types = array())
+    public function _bufferize($types = [])
     {
         $this->bufferize($types);
     }

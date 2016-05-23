@@ -1,13 +1,13 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
-*
-* (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the Sonata Project package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
@@ -23,26 +23,23 @@ class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $testBackend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\MessageManagerBackend')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         $testBackend->expects($this->once())
-            ->method('setDispatcher')
-        ;
+            ->method('setDispatcher');
 
         $message = new Message();
         $message->setType('test');
-        $message->setBody(array());
+        $message->setBody([]);
 
         $testBackend->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($message))
-        ;
+            ->will($this->returnValue($message));
 
         $mMgr = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
 
-        $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, array(), '', array(array('types' => array('test'), 'backend' => $testBackend)));
+        $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, [], '', [['types' => ['test'], 'backend' => $testBackend]]);
 
-        $this->assertEquals($message, $mMgrBackend->create('test', array()));
+        $this->assertEquals($message, $mMgrBackend->create('test', []));
     }
 }
