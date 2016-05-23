@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -43,6 +43,91 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(MessageInterface::STATE_OPEN, $newMessage->getState());
         $this->assertEquals(13, $newMessage->getRestartCount());
+    }
+
+    public function testGetPager()
+    {
+        $self = $this;
+        $this
+            ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->never())->method('andWhere');
+                $qb->expects($self->once())->method('setParameters')->with(array());
+                $qb->expects($self->once())->method('orderBy')->with(
+                    $self->equalTo('m.type'),
+                    $self->equalTo('ASC')
+                );
+            })
+            ->getPager(array(), 1);
+    }
+
+    /**
+     * @expectedException        \RuntimeException
+     * @expectedExceptionMessage Invalid sort field 'invalid' in 'Sonata\NotificationBundle\Entity\BaseMessage' class
+     */
+    public function testGetPagerWithInvalidSort()
+    {
+        $self = $this;
+        $this
+            ->getMessageManager(function ($qb) use ($self) { })
+            ->getPager(array(), 1, 10, array('invalid' => 'ASC'));
+    }
+
+    public function testGetPagerWithMultipleSort()
+    {
+        $self = $this;
+        $this
+            ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->never())->method('andWhere');
+                $qb->expects($self->once())->method('setParameters')->with(array());
+                $qb->expects($self->exactly(2))->method('orderBy')->with(
+                    $self->logicalOr(
+                        $self->equalTo('m.type'),
+                        $self->equalTo('m.state')
+                    ),
+                    $self->logicalOr(
+                        $self->equalTo('ASC'),
+                        $self->equalTo('DESC')
+                    )
+                );
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array()));
+            })
+            ->getPager(array(), 1, 10, array(
+                'type' => 'ASC',
+                'state' => 'DESC',
+            ));
+    }
+
+    public function testGetPagerWithOpenedMessages()
+    {
+        $self = $this;
+        $this
+            ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_OPEN)));
+            })
+            ->getPager(array('state' => MessageInterface::STATE_OPEN), 1);
+    }
+
+    public function testGetPagerWithCanceledMessages()
+    {
+        $self = $this;
+        $this
+            ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_CANCELLED)));
+            })
+            ->getPager(array('state' => MessageInterface::STATE_CANCELLED), 1);
+    }
+
+    public function testGetPagerWithInProgressMessages()
+    {
+        $self = $this;
+        $this
+            ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_IN_PROGRESS)));
+            })
+            ->getPager(array('state' => MessageInterface::STATE_IN_PROGRESS), 1);
     }
 
     /**
@@ -103,90 +188,5 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $message->setState($state);
 
         return $message;
-    }
-
-    public function testGetPager()
-    {
-        $self = $this;
-        $this
-            ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->never())->method('andWhere');
-                $qb->expects($self->once())->method('setParameters')->with(array());
-                $qb->expects($self->once())->method('orderBy')->with(
-                    $self->equalTo('m.type'),
-                    $self->equalTo('ASC')
-                );
-            })
-            ->getPager(array(), 1);
-    }
-
-    /**
-     * @expectedException        \RuntimeException
-     * @expectedExceptionMessage Invalid sort field 'invalid' in 'Sonata\NotificationBundle\Entity\BaseMessage' class
-     */
-    public function testGetPagerWithInvalidSort()
-    {
-        $self = $this;
-        $this
-            ->getMessageManager(function ($qb) use ($self) { })
-            ->getPager(array(), 1, 10, array('invalid' => 'ASC'));
-    }
-
-    public function testGetPagerWithMultipleSort()
-    {
-        $self = $this;
-        $this
-            ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->never())->method('andWhere');
-                $qb->expects($self->once())->method('setParameters')->with(array());
-                $qb->expects($self->exactly(2))->method('orderBy')->with(
-                    $self->logicalOr(
-                        $self->equalTo('m.type'),
-                        $self->equalTo('m.state')
-                    ),
-                    $self->logicalOr(
-                        $self->equalTo('ASC'),
-                        $self->equalTo('DESC')
-                    )
-                );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array()));
-            })
-            ->getPager(array(), 1, 10, array(
-                'type'   => 'ASC',
-                'state'  => 'DESC',
-            ));
-    }
-
-    public function testGetPagerWithOpenedMessages()
-    {
-        $self = $this;
-        $this
-            ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_OPEN)));
-            })
-            ->getPager(array('state' => MessageInterface::STATE_OPEN), 1);
-    }
-
-    public function testGetPagerWithCanceledMessages()
-    {
-        $self = $this;
-        $this
-            ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_CANCELLED)));
-            })
-            ->getPager(array('state' => MessageInterface::STATE_CANCELLED), 1);
-    }
-
-    public function testGetPagerWithInProgressMessages()
-    {
-        $self = $this;
-        $this
-            ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_IN_PROGRESS)));
-            })
-            ->getPager(array('state' => MessageInterface::STATE_IN_PROGRESS), 1);
     }
 }

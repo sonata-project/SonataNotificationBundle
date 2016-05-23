@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -72,9 +72,9 @@ class AMQPBackend implements BackendInterface
     public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null)
     {
         $this->exchange = $exchange;
-        $this->queue    = $queue;
-        $this->recover  = $recover;
-        $this->key      = $key;
+        $this->queue = $queue;
+        $this->recover = $recover;
+        $this->key = $key;
         $this->deadLetterExchange = $deadLetterExchange;
 
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
@@ -88,18 +88,6 @@ class AMQPBackend implements BackendInterface
     public function setDispatcher(AMQPBackendDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
-    }
-
-    /**
-     * @return AMQPChannel
-     */
-    protected function getChannel()
-    {
-        if ($this->dispatcher === null) {
-            throw new \RuntimeException('Unable to retrieve AMQP channel without dispatcher.');
-        }
-
-        return $this->dispatcher->getChannel();
     }
 
     /**
@@ -142,14 +130,14 @@ class AMQPBackend implements BackendInterface
     public function publish(MessageInterface $message)
     {
         $body = json_encode(array(
-            'type'      => $message->getType(),
-            'body'      => $message->getBody(),
+            'type' => $message->getType(),
+            'body' => $message->getBody(),
             'createdAt' => $message->getCreatedAt()->format('U'),
-            'state'     => $message->getState(),
+            'state' => $message->getState(),
         ));
 
         $amq = new AMQPMessage($body, array(
-            'content_type'  => 'text/plain',
+            'content_type' => 'text/plain',
             'delivery_mode' => 2,
         ));
 
@@ -240,5 +228,17 @@ class AMQPBackend implements BackendInterface
     public function cleanup()
     {
         throw new \RuntimeException('Not implemented');
+    }
+
+    /**
+     * @return AMQPChannel
+     */
+    protected function getChannel()
+    {
+        if ($this->dispatcher === null) {
+            throw new \RuntimeException('Unable to retrieve AMQP channel without dispatcher.');
+        }
+
+        return $this->dispatcher->getChannel();
     }
 }
