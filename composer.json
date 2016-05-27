@@ -47,7 +47,8 @@
         "swiftmailer/swiftmailer": "^4.3 || ^5.0",
         "friendsofsymfony/rest-bundle": "^1.1",
         "jms/serializer-bundle": "^0.13 || ^1.0",
-        "nelmio/api-doc-bundle": "^2.4"
+        "nelmio/api-doc-bundle": "^2.4",
+        "sllh/php-cs-fixer-styleci-bridge": "^2.0"
     },
     "conflict": {
         "jms/serializer": "<0.13"
