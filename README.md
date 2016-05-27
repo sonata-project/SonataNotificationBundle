@@ -10,7 +10,9 @@ Symfony SonataNotificationBundle
 [![Monthly Downloads](https://poser.pugx.org/sonata-project/notification-bundle/d/monthly)](https://packagist.org/packages/sonata-project/notification-bundle)
 [![Daily Downloads](https://poser.pugx.org/sonata-project/notification-bundle/d/daily)](https://packagist.org/packages/sonata-project/notification-bundle)
 
-[![Build Status](https://travis-ci.org/sonata-project/SonataNotificationBundle.svg?branch=3.x)](https://travis-ci.org/sonata-project/SonataNotificationBundle)
+3.x status: [![Build Status](https://travis-ci.org/sonata-project/SonataNotificationBundle.svg?branch=3.x)](https://travis-ci.org/sonata-project/SonataNotificationBundle)
+
+master status: [![Build Status](https://travis-ci.org/sonata-project/SonataNotificationBundle.svg?branch=master)](https://travis-ci.org/sonata-project/SonataNotificationBundle)
 
 ## Documentation
 
