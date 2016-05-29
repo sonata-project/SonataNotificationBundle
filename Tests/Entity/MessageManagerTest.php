@@ -68,7 +68,8 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) { })
+            ->getMessageManager(function ($qb) use ($self) {
+            })
             ->getPager(array(), 1, 10, array('invalid' => 'ASC'));
     }
 
