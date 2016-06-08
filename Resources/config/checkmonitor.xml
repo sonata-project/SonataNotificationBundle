@@ -1,13 +1,9 @@
-<?xml version="1.0" ?>
-
-<container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="sonata.notification.backend.heath_check" class="Sonata\NotificationBundle\Backend\BackendHealthCheck">
-            <argument type="service" id="sonata.notification.backend" />
-            <tag name="liip_monitor.check" />
+            <argument type="service" id="sonata.notification.backend"/>
+            <tag name="liip_monitor.check"/>
         </service>
     </services>
 </container>
