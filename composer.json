@@ -33,6 +33,7 @@
         "zendframework/zenddiagnostics": "^1.0"
     },
     "suggest": {
+        "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
         "guzzle/guzzle" : "^3.9",
         "liip/monitor-bundle": "^1.0",
@@ -51,7 +52,8 @@
         "sllh/php-cs-fixer-styleci-bridge": "^2.0"
     },
     "conflict": {
-        "jms/serializer": "<0.13"
+        "jms/serializer": "<0.13",
+        "sonata-project/admin-bundle": "<3.1"
     },
     "autoload": {
         "psr-4": { "Sonata\\NotificationBundle\\": "" }
