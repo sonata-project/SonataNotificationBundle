@@ -11,13 +11,13 @@
 
 namespace Sonata\NotificationBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class MessageAdmin extends Admin
+class MessageAdmin extends AbstractAdmin
 {
     /**
      * {@inheritdoc}
