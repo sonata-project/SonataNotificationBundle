@@ -56,7 +56,13 @@
         "sonata-project/admin-bundle": "<3.1"
     },
     "autoload": {
-        "psr-4": { "Sonata\\NotificationBundle\\": "" }
+        "psr-4": { "Sonata\\NotificationBundle\\": "" },
+        "exclude-from-classmap": [
+            "Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": { "Sonata\\NotificationBundle\\Tests\\": "Tests/" }
     },
     "extra": {
         "branch-alias": {
