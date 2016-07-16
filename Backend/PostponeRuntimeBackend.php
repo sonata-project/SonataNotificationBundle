@@ -44,7 +44,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
      * Constructor.
      *
      * @param EventDispatcherInterface $dispatcher
-     * @param bool                     $postponeOnCli Whether to postpone the messages on the CLI, too.
+     * @param bool                     $postponeOnCli Whether to postpone the messages on the CLI, too
      */
     public function __construct(EventDispatcherInterface $dispatcher, $postponeOnCli = false)
     {
