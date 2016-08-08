@@ -76,7 +76,7 @@ class SwiftMailerConsumer implements ConsumerInterface
         if ($html = $message->getValue(array('message', 'html'))) {
             $mail->addPart($html, 'text/html');
         }
-        
+
         $this->mailer->send($mail);
     }
 }
