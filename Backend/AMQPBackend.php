@@ -73,7 +73,7 @@ class AMQPBackend implements BackendInterface
         $this->deadLetterExchange = $deadLetterExchange;
 
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
-            throw new \RuntimeException('Please install videlalvaro/php-amqplib dependency');
+            throw new \RuntimeException('Please install php-amqplib/php-amqplib dependency');
         }
     }
 
