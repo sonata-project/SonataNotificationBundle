@@ -38,12 +38,14 @@ class MessageAdmin extends AbstractAdmin
     {
         $actions = array();
         $actions['publish'] = array(
-            'label' => $this->trans($this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message')),
+            'label' => $this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message'),
+            'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation' => false,
         );
 
         $actions['cancelled'] = array(
-            'label' => $this->trans($this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message')),
+            'label' => $this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message'),
+            'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation' => false,
         );
 
