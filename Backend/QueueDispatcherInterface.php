@@ -15,7 +15,7 @@ namespace Sonata\NotificationBundle\Backend;
  * A QueueDispatcherInterface acts as a router for different
  * queue types.
  *
- * @see AMQPBackendDispatcher for an eample implementation.
+ * @see AMQPBackendDispatcher for an eample implementation
  */
 interface QueueDispatcherInterface
 {
