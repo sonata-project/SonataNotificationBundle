@@ -53,7 +53,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
-     * @return AMQPChannelannel
+     * @return AMQPChannel
      */
     public function getChannel()
     {
