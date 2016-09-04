@@ -42,7 +42,7 @@ class LoggerConsumer implements ConsumerInterface
     public function __construct($logger)
     {
         if ($logger instanceof LegacyLoggerInterface) {
-            trigger_error(sprintf('Using an instance of "%s" is deprecated since version 2.3. Use Psr\Log\LoggerInterface instead.', get_class($logger)), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Using an instance of "%s" is deprecated since version 2.3. Use Psr\Log\LoggerInterface instead.', get_class($logger)), E_USER_DEPRECATED);
         }
         $this->logger = $logger;
     }

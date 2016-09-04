@@ -53,7 +53,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
-     * @return AMQPChannelannel
+     * @return AMQPChannel
      */
     public function getChannel()
     {
@@ -115,7 +115,9 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function getIterator()
     {
-        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
+        throw new \RuntimeException(
+            'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
+        );
     }
 
     /**
@@ -123,7 +125,9 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
-        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
+        throw new \RuntimeException(
+            'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
+        );
     }
 
     /**
@@ -149,11 +153,16 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             }
 
             if ($checked !== count($this->queues)) {
-                return new Failure('Not all queues for the available notification types registered in the rabbitmq broker. Are the consumer commands running?');
+                return new Failure(
+                    'Not all queues for the available notification types registered in the rabbitmq broker. '
+                    .'Are the consumer commands running?'
+                );
             }
 
             if (count($missingConsumers) > 0) {
-                return new Failure('There are no rabbitmq consumers running for the queues: '.implode(', ', $missingConsumers));
+                return new Failure(
+                    'There are no rabbitmq consumers running for the queues: '.implode(', ', $missingConsumers)
+                );
             }
         } catch (\Exception $e) {
             return new Failure($e->getMessage());
@@ -167,7 +176,9 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function cleanup()
     {
-        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
+        throw new \RuntimeException(
+            'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
+        );
     }
 
     public function shutdown()
@@ -198,7 +209,10 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     protected function getApiQueueStatus()
     {
         if (class_exists('Guzzle\Http\Client') === false) {
-            throw new \RuntimeException('The guzzle http client library is required to run rabbitmq health checks. Make sure to add guzzle/guzzle to your composer.json.');
+            throw new \RuntimeException(
+                'The guzzle http client library is required to run rabbitmq health checks. '
+                .'Make sure to add guzzlehttp/guzzle to your composer.json.'
+            );
         }
 
         $client = new \Guzzle\Http\Client();
