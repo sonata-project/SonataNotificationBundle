@@ -124,7 +124,7 @@ class SonataNotificationExtension extends Extension
         // set the default value, will be erase if required
         $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
 
-        if (isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
+        if (isset($config['backends']['rabbitmq']) && $config['backend'] === 'sonata.notification.backend.rabbitmq') {
             $this->configureRabbitmq($container, $config);
 
             $container->removeDefinition('sonata.notification.backend.doctrine');
@@ -132,7 +132,7 @@ class SonataNotificationExtension extends Extension
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
         }
 
-        if (isset($config['backends']['doctrine']) && $config['backend']  === 'sonata.notification.backend.doctrine') {
+        if (isset($config['backends']['doctrine']) && $config['backend'] === 'sonata.notification.backend.doctrine') {
             $checkLevel = array(
                 MessageInterface::STATE_DONE => $config['backends']['doctrine']['states']['done'],
                 MessageInterface::STATE_ERROR => $config['backends']['doctrine']['states']['error'],
@@ -174,11 +174,11 @@ class SonataNotificationExtension extends Extension
             throw new \RuntimeException('more than one backend configured, you can have only one backend configuration');
         }
 
-        if (!isset($config['backends']['rabbitmq']) && $config['backend']  === 'sonata.notification.backend.rabbitmq') {
+        if (!isset($config['backends']['rabbitmq']) && $config['backend'] === 'sonata.notification.backend.rabbitmq') {
             throw new \RuntimeException('Please configure the sonata_notification.backends.rabbitmq section');
         }
 
-        if (!isset($config['backends']['doctrine']) && $config['backend']  === 'sonata.notification.backend.doctrine') {
+        if (!isset($config['backends']['doctrine']) && $config['backend'] === 'sonata.notification.backend.doctrine') {
             throw new \RuntimeException('Please configure the sonata_notification.backends.doctrine section');
         }
     }
