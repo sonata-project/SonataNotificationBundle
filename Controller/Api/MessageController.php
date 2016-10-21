@@ -70,11 +70,12 @@ class MessageController
      *
      * @View(serializerGroups="sonata_api_read", serializerEnableMaxDepthChecks=true)
      *
+     * @param Request               $request
      * @param ParamFetcherInterface $paramFetcher
      *
      * @return PagerInterface
      */
-    public function getMessagesAction(ParamFetcherInterface $paramFetcher)
+    public function getMessagesAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
         $supportedCriteria = array(
             'state' => '',
