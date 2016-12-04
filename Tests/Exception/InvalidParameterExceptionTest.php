@@ -22,7 +22,7 @@ use Sonata\NotificationBundle\Exception\InvalidParameterException;
 class InvalidParameterExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException Sonata\NotificationBundle\Exception\InvalidParameterException
+     * @expectedException \Sonata\NotificationBundle\Exception\InvalidParameterException
      */
     public function testException()
     {
