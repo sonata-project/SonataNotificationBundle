@@ -14,7 +14,7 @@ namespace Sonata\NotificationBundle\Tests\Iterator;
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 
 /**
- * @covers Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator
+ * @covers \Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator
  */
 class IteratorProxyMessageIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class IteratorProxyMessageIteratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @link https://gist.github.com/2852498
+     * @see https://gist.github.com/2852498
      */
     public function expectIterator($mock, array $content, $withKey = false, $counter = 0)
     {
