@@ -22,7 +22,7 @@ use ZendDiagnostics\Result\Success;
  *
  * It's based on the asynchronous event dispatcher:
  *
- * @link https://gist.github.com/3852361
+ * @see https://gist.github.com/3852361
  *
  * @author Toni Uebernickel <tuebernickel@gmail.com>
  */
