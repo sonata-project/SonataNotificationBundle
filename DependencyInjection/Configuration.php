@@ -213,6 +213,15 @@ Only used by RabbitMQ
 If is set, failed messages will be rejected and sent to this exchange
 EOF;
 
+        $deadLetterRoutingKey = <<<'EOF'
+Only used by RabbitMQ
+
+If is set, failed messages will be routed to the queue using this key by dead-letter-exchange,
+otherwise it will be requeued to the original queue if `dead-letter-exchange` is set
+
+If is set, the queue must be configured with this key as routing_key
+EOF;
+
         $typesInfo = <<<'EOF'
 Only used by Doctrine
 
@@ -248,6 +257,10 @@ EOF;
                 ->end()
                 ->scalarNode('dead_letter_exchange')
                     ->info($deadLetterExchangeInfo)
+                    ->defaultValue(null)
+                ->end()
+                ->scalarNode('dead_letter_routing_key')
+                    ->info($deadLetterRoutingKey)
                     ->defaultValue(null)
                 ->end()
 
