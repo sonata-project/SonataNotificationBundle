@@ -15,7 +15,7 @@ use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
 
 class AMQPBackendDispatcherTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
             $this->markTestSkipped('AMQP Lib not installed');
@@ -41,20 +41,16 @@ class AMQPBackendDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher->createAndPublish('some.other.type', array());
     }
 
-    /**
-     * @expectedException \Sonata\NotificationBundle\Exception\BackendNotFoundException
-     */
     public function testDefaultQueueNotFound()
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->never());
         $fooBackend = array('type' => 'message.type.foo', 'backend' => $mock);
         $dispatcher = $this->getDispatcher(array($fooBackend));
+
+        $this->setExpectedException('\Sonata\NotificationBundle\Exception\BackendNotFoundException');
         $dispatcher->createAndPublish('some.other.type', array());
     }
 
-    /**
-     * @expectedException \Sonata\NotificationBundle\Exception\BackendNotFoundException
-     */
     public function testInvalidQueue()
     {
         $mock = $this->getMockQueue('foo', 'message.type.bar');
@@ -62,6 +58,8 @@ class AMQPBackendDispatcherTest extends \PHPUnit_Framework_TestCase
             array(array('type' => 'bar', 'backend' => $mock)),
             array(array('queue' => 'foo', 'routing_key' => 'message.type.bar'))
         );
+
+        $this->setExpectedException('\Sonata\NotificationBundle\Exception\BackendNotFoundException');
         $dispatcher->createAndPublish('message.type.bar', array());
     }
 
@@ -72,14 +70,18 @@ class AMQPBackendDispatcherTest extends \PHPUnit_Framework_TestCase
             array('queue' => 'bar', 'routing_key' => 'message.type.bar'),
             array('queue' => 'baz', 'routing_key' => 'message.type.baz'),
         );
+
         $backends = array();
+
         foreach ($queues as $queue) {
             $mock = $this->getMockQueue($queue['queue'], $queue['routing_key']);
             $mock->expects($this->once())
                 ->method('initialize');
             $backends[] = array('type' => $queue['routing_key'], 'backend' => $mock);
         }
+
         $dispatcher = $this->getDispatcher($backends, $queues);
+
         $dispatcher->createAndPublish('message.type.foo', array());
         $dispatcher->createAndPublish('message.type.foo', array());
     }

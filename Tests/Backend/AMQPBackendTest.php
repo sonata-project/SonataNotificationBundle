@@ -19,7 +19,7 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
     const DEAD_LETTER_EXCHANGE = 'dlx';
     const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
 
-    public function setUp()
+    protected function setUp()
     {
         if (!class_exists('PhpAmqpLib\Channel\AMQPChannel')) {
             $this->markTestSkipped('AMQP Lib not installed');
@@ -67,6 +67,13 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 array(
                     $this->equalTo(self::EXCHANGE),
+                    $this->equalTo('direct'),
+                    $this->isType('boolean'),
+                    $this->isType('boolean'),
+                    $this->isType('boolean'),
+                ),
+                array(
+                    $this->equalTo(self::DEAD_LETTER_EXCHANGE),
                     $this->equalTo('direct'),
                     $this->isType('boolean'),
                     $this->isType('boolean'),

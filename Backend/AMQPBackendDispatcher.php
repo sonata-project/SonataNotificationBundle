@@ -81,7 +81,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function getBackend($type)
     {
-        if (false === $this->backendsInitialized) {
+        if (!$this->backendsInitialized) {
             foreach ($this->backends as $backend) {
                 $backend['backend']->initialize();
             }
