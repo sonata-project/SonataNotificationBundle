@@ -53,6 +53,11 @@ class AMQPBackend implements BackendInterface
     protected $deadLetterExchange;
 
     /**
+     * @var null|string
+     */
+    protected $deadLetterRoutingKey;
+
+    /**
      * @var AMQPBackendDispatcher
      */
     protected $dispatcher = null;
@@ -63,14 +68,16 @@ class AMQPBackend implements BackendInterface
      * @param string $recover
      * @param string $key
      * @param string $deadLetterExchange
+     * @param string $deadLetterRoutingKey
      */
-    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null)
+    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null)
     {
         $this->exchange = $exchange;
         $this->queue = $queue;
         $this->recover = $recover;
         $this->key = $key;
         $this->deadLetterExchange = $deadLetterExchange;
+        $this->deadLetterRoutingKey = $deadLetterRoutingKey;
 
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
             throw new \RuntimeException('Please install php-amqplib/php-amqplib dependency');
@@ -94,6 +101,10 @@ class AMQPBackend implements BackendInterface
 
         if ($this->deadLetterExchange !== null) {
             $args['x-dead-letter-exchange'] = array('S', $this->deadLetterExchange);
+
+            if ($this->deadLetterRoutingKey !== null) {
+                $args['x-dead-letter-routing-key'] = array('S', $this->deadLetterRoutingKey);
+            }
         }
 
         /*
@@ -117,6 +128,11 @@ class AMQPBackend implements BackendInterface
         $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
 
         $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
+
+        if ($this->deadLetterExchange !== null && $this->deadLetterRoutingKey === null) {
+            $this->getChannel()->exchange_declare($this->deadLetterExchange, 'direct', false, true, false);
+            $this->getChannel()->queue_bind($this->queue, $this->deadLetterExchange, $this->key);
+        }
     }
 
     /**
