@@ -47,7 +47,7 @@ class MessageController
      * Constructor.
      *
      * @param MessageManagerInterface $messageManager
-     * @param FormFactoryInterface    $formFactory
+     * @param FormFactoryInterface $formFactory
      */
     public function __construct(MessageManagerInterface $messageManager, FormFactoryInterface $formFactory)
     {
@@ -152,14 +152,19 @@ class MessageController
 
             if (class_exists('FOS\RestBundle\Context\Context')) {
                 $serializationContext = new Context();
-                $serializationContext->enableMaxDepth();
+                if (method_exists($serializationContext, 'enableMaxDepth')) {
+                    $serializationContext->enableMaxDepth();
+                } else {
+                    $serializationContext->setMaxDepth(10);
+                }
+                $serializationContext->setGroups(array('sonata_api_read'));
+                $view->setContext($serializationContext);
             } else {
                 $serializationContext = SerializationContext::create();
                 $serializationContext->enableMaxDepthChecks();
+                $serializationContext->setGroups(array('sonata_api_read'));
+                $view->setSerializationContext($serializationContext);
             }
-            $serializationContext->setGroups(array('sonata_api_read'));
-
-            $view->setContext($serializationContext);
 
             return $view;
         }
