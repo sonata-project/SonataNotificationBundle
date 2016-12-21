@@ -85,7 +85,7 @@ class MessageController
         if (property_exists($orderByQueryParam, 'map')) {
             $orderByQueryParam->map = true;
         } else {
-           $orderByQueryParam->array = true;
+            $orderByQueryParam->array = true;
         }
 
         $paramFetcher->addParam($orderByQueryParam);
