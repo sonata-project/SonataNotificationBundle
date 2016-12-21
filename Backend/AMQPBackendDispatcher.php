@@ -39,6 +39,8 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     protected $connection;
 
+    protected $backendsInitialized = false;
+
     /**
      * @param array  $settings
      * @param array  $queues
@@ -79,6 +81,13 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function getBackend($type)
     {
+        if (!$this->backendsInitialized) {
+            foreach ($this->backends as $backend) {
+                $backend['backend']->initialize();
+            }
+            $this->backendsInitialized = true;
+        }
+
         $default = null;
 
         if (count($this->queues) === 0) {

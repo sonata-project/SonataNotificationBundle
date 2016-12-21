@@ -9,85 +9,177 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonata\NotificationBundle\Tests\Notification;
-
-use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
+namespace Sonata\NotificationBundle\Tests\Backend;
 
 class AMQPBackendTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    const EXCHANGE = 'exchange';
+    const QUEUE = 'foo';
+    const KEY = 'message.type.foo';
+    const DEAD_LETTER_EXCHANGE = 'dlx';
+    const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
+
+    protected function setUp()
     {
-        if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
+        if (!class_exists('PhpAmqpLib\Channel\AMQPChannel')) {
             $this->markTestSkipped('AMQP Lib not installed');
         }
     }
 
-    public function testQueue()
+    public function testInitializeWithNoDeadLetterExchangeAndNoDeadLetterRoutingKey()
     {
-        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
-        $mock2 = $this->getMockQueue('bar', 'message.type.foo', $this->never());
-        $fooBackend = array('type' => 'message.type.foo', 'backend' => $mock);
-        $barBackend = array('type' => 'message.type.bar', 'backend' => $mock2);
-        $backends = array($fooBackend, $barBackend);
-        $dispatcher = $this->getDispatcher($backends);
-        $dispatcher->createAndPublish('message.type.foo', array());
+        list($backend, $channelMock) = $this->getBackendAndChannelMock();
+
+        $channelMock->expects($this->once())
+            ->method('exchange_declare')
+            ->with($this->equalTo(self::EXCHANGE),
+                   $this->equalTo('direct'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean')
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_declare')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->equalTo(array())
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_bind')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->equalTo(self::EXCHANGE),
+                   $this->equalTo(self::KEY)
+             );
+
+        $backend->initialize();
     }
 
-    public function testDefaultQueue()
+    public function testInitializeWithDeadLetterExchangeAndNoDeadLetterRoutingKey()
     {
-        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
-        $fooBackend = array('type' => 'default', 'backend' => $mock);
-        $dispatcher = $this->getDispatcher(array($fooBackend));
-        $dispatcher->createAndPublish('some.other.type', array());
+        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, self::DEAD_LETTER_EXCHANGE);
+
+        $channelMock->expects($this->exactly(2))
+            ->method('exchange_declare')
+            ->withConsecutive(
+                array(
+                    $this->equalTo(self::EXCHANGE),
+                    $this->equalTo('direct'),
+                    $this->isType('boolean'),
+                    $this->isType('boolean'),
+                    $this->isType('boolean'),
+                ),
+                array(
+                    $this->equalTo(self::DEAD_LETTER_EXCHANGE),
+                    $this->equalTo('direct'),
+                    $this->isType('boolean'),
+                    $this->isType('boolean'),
+                    $this->isType('boolean'),
+                )
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_declare')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->equalTo(array(
+                       'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
+                   ))
+             );
+        $channelMock->expects($this->exactly(2))
+            ->method('queue_bind')
+            ->withConsecutive(
+                array(
+                   $this->equalTo(self::QUEUE),
+                   $this->equalTo(self::EXCHANGE),
+                   $this->equalTo(self::KEY),
+                ),
+                array(
+                   $this->equalTo(self::QUEUE),
+                   $this->equalTo(self::DEAD_LETTER_EXCHANGE),
+                   $this->equalTo(self::KEY),
+                )
+             );
+
+        $backend->initialize();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testDefaultQueueNotFound()
+    public function testInitializeWithDeadLetterExchangeAndDeadLetterRoutingKey()
     {
-        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->never());
-        $fooBackend = array('type' => 'message.type.foo', 'backend' => $mock);
-        $dispatcher = $this->getDispatcher(array($fooBackend));
-        $dispatcher->createAndPublish('some.other.type', array());
+        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, self::DEAD_LETTER_EXCHANGE, self::DEAD_LETTER_ROUTING_KEY);
+
+        $channelMock->expects($this->once())
+            ->method('exchange_declare')
+            ->with($this->equalTo(self::EXCHANGE),
+                   $this->equalTo('direct'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean')
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_declare')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->equalTo(array(
+                       'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
+                       'x-dead-letter-routing-key' => array('S', self::DEAD_LETTER_ROUTING_KEY),
+                   ))
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_bind')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->equalTo(self::EXCHANGE),
+                   $this->equalTo(self::KEY)
+             );
+
+        $backend->initialize();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testInvalidQueue()
+    protected function getBackendAndChannelMock($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null)
     {
-        $mock = $this->getMockQueue('foo', 'message.type.bar');
-        $dispatcher = $this->getDispatcher(array(array('type' => 'bar', 'backend' => $mock)), 'foo', 'message.type.bar');
-        $dispatcher->createAndPublish('message.type.bar', array());
-    }
+        $mock = $this->getMockBuilder('\Sonata\NotificationBundle\Backend\AMQPBackend')
+            ->setConstructorArgs(array(self::EXCHANGE, self::QUEUE, $recover, self::KEY, $deadLetterExchange, $deadLetterRoutingKey))
+            ->setMethods(array('getIterator'))
+            ->getMock();
 
-    protected function getMockQueue($queue, $type, $called = null)
-    {
-        $methods = array('createAndPublish');
-        $args = array(array(), '', 'foo', 'message.type.foo');
-        $mock = $this->getMock('Sonata\NotificationBundle\Backend\AMQPBackend', $methods, $args);
-
-        if ($called !== null) {
-            $mock->expects($called)
-                ->method('createAndPublish')
-            ;
-        }
-
-        return $mock;
-    }
-
-    protected function getDispatcher(array $backends, $queue = 'foo', $key = 'message.type.foo')
-    {
-        $queues = array(array('queue' => $queue, 'routing_key' => $key));
         $settings = array(
-                'host' => 'foo',
-                'port' => 'port',
-                'user' => 'user',
-                'pass' => 'pass',
-                'vhost' => '/',
+            'host' => 'foo',
+            'port' => 'port',
+            'user' => 'user',
+            'pass' => 'pass',
+            'vhost' => '/',
         );
 
-        return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);
+        $queues = array(
+            array('queue' => self::QUEUE, 'routing_key' => self::KEY),
+        );
+
+        $channelMock = $this->getMockBuilder('\PhpAmqpLib\Channel\AMQPChannel')
+            ->disableOriginalConstructor()
+            ->setMethods(array('queue_declare', 'exchange_declare', 'queue_bind'))
+            ->getMock()
+        ;
+
+        $dispatcherMock = $this->getMockBuilder('\Sonata\NotificationBundle\Backend\AMQPBackendDispatcher')
+            ->setConstructorArgs(array($settings, $queues, 'default', array(array('type' => self::KEY, 'backend' => $mock))))
+            ->setMethods(array('getChannel'))
+            ->getMock();
+
+        $dispatcherMock->method('getChannel')
+            ->willReturn($channelMock);
+
+        $mock->setDispatcher($dispatcherMock);
+
+        return array($mock, $channelMock);
     }
 }

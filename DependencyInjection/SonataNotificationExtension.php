@@ -319,7 +319,7 @@ class SonataNotificationExtension extends Extension
     {
         $queues = $config['queues'];
         $connection = $config['backends']['rabbitmq']['connection'];
-        $exchange = $config['backends']['rabbitmq']['exchange'];
+        $baseExchange = $config['backends']['rabbitmq']['exchange'];
         $amqBackends = array();
 
         if (count($queues) == 0) {
@@ -329,7 +329,19 @@ class SonataNotificationExtension extends Extension
                 'routing_key' => '',
                 'recover' => false,
                 'dead_letter_exchange' => null,
+                'dead_letter_routing_key' => null,
             ));
+        }
+
+        $deadLetterRoutingKeys = $this->getQueuesParameters('dead_letter_routing_key', $queues);
+        $routingKeys = $this->getQueuesParameters('routing_key', $queues);
+
+        foreach ($deadLetterRoutingKeys as $key) {
+            if (!in_array($key, $routingKeys)) {
+                throw new \RuntimeException(sprintf(
+                    'You must configure the queue having the routing_key "%s" same as dead_letter_routing_key', $key
+                ));
+            }
         }
 
         $declaredQueues = array();
@@ -342,7 +354,29 @@ class SonataNotificationExtension extends Extension
 
             $declaredQueues[] = $queue['queue'];
 
-            $id = $this->createAMQPBackend($container, $exchange, $queue['queue'], $queue['recover'], $queue['routing_key'], $queue['dead_letter_exchange']);
+            if ($queue['dead_letter_routing_key']) {
+                if (is_null($queue['dead_letter_exchange'])) {
+                    throw new \RuntimeException(
+                        'dead_letter_exchange must be configured when dead_letter_routing_key is set'
+                    );
+                }
+            }
+
+            if (in_array($queue['routing_key'], $deadLetterRoutingKeys)) {
+                $exchange = $this->getAMQPDeadLetterExchangeByRoutingKey($queue['routing_key'], $queues);
+            } else {
+                $exchange = $baseExchange;
+            }
+
+            $id = $this->createAMQPBackend(
+                $container,
+                $exchange,
+                $queue['queue'],
+                $queue['recover'],
+                $queue['routing_key'],
+                $queue['dead_letter_exchange'],
+                $queue['dead_letter_routing_key']
+            );
 
             $amqBackends[$pos] = array(
                 'type' => $queue['routing_key'],
@@ -377,17 +411,63 @@ class SonataNotificationExtension extends Extension
      * @param string           $recover
      * @param string           $key
      * @param string           $deadLetterExchange
+     * @param string           $deadLetterRoutingKey
      *
      * @return string
      */
-    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null)
+    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null, $deadLetterRoutingKey = null)
     {
         $id = 'sonata.notification.backend.rabbitmq.'.$this->amqpCounter++;
 
-        $definition = new Definition('Sonata\NotificationBundle\Backend\AMQPBackend', array($exchange, $name, $recover, $key, $deadLetterExchange));
+        $definition = new Definition(
+            'Sonata\NotificationBundle\Backend\AMQPBackend',
+            array(
+                $exchange,
+                $name,
+                $recover,
+                $key,
+                $deadLetterExchange,
+                $deadLetterRoutingKey,
+            )
+        );
         $definition->setPublic(false);
         $container->setDefinition($id, $definition);
 
         return $id;
+    }
+
+    /**
+     * @param string $name
+     * @param array  $queues
+     *
+     * @return string[]
+     */
+    private function getQueuesParameters($name, array $queues)
+    {
+        $params = array_unique(array_map(function ($q) use ($name) {
+            return $q[$name];
+        }, $queues));
+
+        $idx = array_search(null, $params);
+        if ($idx !== false) {
+            unset($params[$idx]);
+        }
+
+        return $params;
+    }
+
+    /**
+     * @param string $key
+     * @param array  $queues
+     *
+     * @return string
+     */
+    private function getAMQPDeadLetterExchangeByRoutingKey($key, array $queues)
+    {
+        foreach ($queues as $queue) {
+            if ($queue['dead_letter_routing_key'] === $key) {
+                return $queue['dead_letter_exchange'];
+            }
+        }
     }
 }
