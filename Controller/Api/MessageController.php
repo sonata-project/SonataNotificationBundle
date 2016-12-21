@@ -11,12 +11,12 @@
 
 namespace Sonata\NotificationBundle\Controller\Api;
 
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View as FOSRestView;
-use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sonata\DatagridBundle\Pager\PagerInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -64,7 +64,7 @@ class MessageController
      *
      * @QueryParam(name="page", requirements="\d+", default="1", description="Page for message list pagination")
      * @QueryParam(name="count", requirements="\d+", default="10", description="Number of messages by page")
-     * @QueryParam(name="orderBy", array=true, requirements="ASC|DESC", nullable=true, strict=true, description="Order by array (key is field, value is direction)")
+     * @QueryParam(name="orderBy", map=true, requirements="ASC|DESC", nullable=true, strict=true, description="Order by array (key is field, value is direction)")
      * @QueryParam(name="type", nullable=true, description="Message type filter")
      * @QueryParam(name="state", requirements="\d+", strict=true, nullable=true, description="Message status filter")
      *
@@ -135,10 +135,10 @@ class MessageController
             $this->messageManager->save($message);
 
             $view = FOSRestView::create($message);
-            $serializationContext = SerializationContext::create();
+            $serializationContext = new Context();
             $serializationContext->setGroups(array('sonata_api_read'));
-            $serializationContext->enableMaxDepthChecks();
-            $view->setSerializationContext($serializationContext);
+            $serializationContext->enableMaxDepth();
+            $view->setContext($serializationContext);
 
             return $view;
         }
