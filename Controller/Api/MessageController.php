@@ -47,7 +47,7 @@ class MessageController
      * Constructor.
      *
      * @param MessageManagerInterface $messageManager
-     * @param FormFactoryInterface $formFactory
+     * @param FormFactoryInterface    $formFactory
      */
     public function __construct(MessageManagerInterface $messageManager, FormFactoryInterface $formFactory)
     {
