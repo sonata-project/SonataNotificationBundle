@@ -18,6 +18,7 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
     const KEY = 'message.type.foo';
     const DEAD_LETTER_EXCHANGE = 'dlx';
     const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
+    const TTL = 60000;
 
     protected function setUp()
     {
@@ -145,10 +146,52 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
         $backend->initialize();
     }
 
-    protected function getBackendAndChannelMock($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null)
+    public function testInitializeWithTTL()
+    {
+        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, null, null, self::TTL);
+
+        $channelMock->expects($this->once())
+            ->method('exchange_declare')
+            ->with($this->equalTo(self::EXCHANGE),
+                   $this->equalTo('direct'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean')
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_declare')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->isType('boolean'),
+                   $this->equalTo(array(
+                       'x-message-ttl' => array('I', self::TTL),
+                   ))
+             );
+        $channelMock->expects($this->once())
+            ->method('queue_bind')
+            ->with($this->equalTo(self::QUEUE),
+                   $this->equalTo(self::EXCHANGE),
+                   $this->equalTo(self::KEY)
+             );
+
+        $backend->initialize();
+    }
+
+    protected function getBackendAndChannelMock($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null)
     {
         $mock = $this->getMockBuilder('\Sonata\NotificationBundle\Backend\AMQPBackend')
-            ->setConstructorArgs(array(self::EXCHANGE, self::QUEUE, $recover, self::KEY, $deadLetterExchange, $deadLetterRoutingKey))
+            ->setConstructorArgs(array(
+                self::EXCHANGE,
+                self::QUEUE,
+                $recover,
+                self::KEY,
+                $deadLetterExchange,
+                $deadLetterRoutingKey,
+                $ttl,
+            ))
             ->setMethods(array('getIterator'))
             ->getMock();
 

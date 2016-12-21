@@ -222,6 +222,12 @@ otherwise it will be requeued to the original queue if `dead-letter-exchange` is
 If set, the queue must be configured with this key as `routing_key`.
 EOF;
 
+        $ttl = <<<'EOF'
+Only used by RabbitMQ
+
+Defines the per-queue message time-to-live (milliseconds)
+EOF;
+
         $typesInfo = <<<'EOF'
 Only used by Doctrine
 
@@ -261,6 +267,11 @@ EOF;
                 ->end()
                 ->scalarNode('dead_letter_routing_key')
                     ->info($deadLetterRoutingKey)
+                    ->defaultValue(null)
+                ->end()
+                ->integerNode('ttl')
+                    ->info($ttl)
+                    ->min(0)
                     ->defaultValue(null)
                 ->end()
 
