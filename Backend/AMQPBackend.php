@@ -113,6 +113,7 @@ class AMQPBackend implements BackendInterface
                 $args['x-dead-letter-routing-key'] = array('S', $this->deadLetterRoutingKey);
             }
         }
+
         if ($this->ttl !== null) {
             $args['x-message-ttl'] = array('I', $this->ttl);
         }

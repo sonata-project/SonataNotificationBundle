@@ -33,27 +33,30 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
 
         $channelMock->expects($this->once())
             ->method('exchange_declare')
-            ->with($this->equalTo(self::EXCHANGE),
-                   $this->equalTo('direct'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean')
+            ->with(
+                $this->equalTo(self::EXCHANGE),
+                $this->equalTo('direct'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean')
              );
         $channelMock->expects($this->once())
             ->method('queue_declare')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->equalTo(array())
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->equalTo(array())
              );
         $channelMock->expects($this->once())
             ->method('queue_bind')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->equalTo(self::EXCHANGE),
-                   $this->equalTo(self::KEY)
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->equalTo(self::EXCHANGE),
+                $this->equalTo(self::KEY)
              );
 
         $backend->initialize();
@@ -83,15 +86,16 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
              );
         $channelMock->expects($this->once())
             ->method('queue_declare')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->equalTo(array(
-                       'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
-                   ))
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->equalTo(array(
+                    'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
+                ))
              );
         $channelMock->expects($this->exactly(2))
             ->method('queue_bind')
@@ -117,30 +121,33 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
 
         $channelMock->expects($this->once())
             ->method('exchange_declare')
-            ->with($this->equalTo(self::EXCHANGE),
-                   $this->equalTo('direct'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean')
+            ->with(
+                $this->equalTo(self::EXCHANGE),
+                $this->equalTo('direct'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean')
              );
         $channelMock->expects($this->once())
             ->method('queue_declare')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->equalTo(array(
-                       'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
-                       'x-dead-letter-routing-key' => array('S', self::DEAD_LETTER_ROUTING_KEY),
-                   ))
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->equalTo(array(
+                   'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
+                   'x-dead-letter-routing-key' => array('S', self::DEAD_LETTER_ROUTING_KEY),
+                ))
              );
         $channelMock->expects($this->once())
             ->method('queue_bind')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->equalTo(self::EXCHANGE),
-                   $this->equalTo(self::KEY)
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->equalTo(self::EXCHANGE),
+                $this->equalTo(self::KEY)
              );
 
         $backend->initialize();
@@ -152,29 +159,32 @@ class AMQPBackendTest extends \PHPUnit_Framework_TestCase
 
         $channelMock->expects($this->once())
             ->method('exchange_declare')
-            ->with($this->equalTo(self::EXCHANGE),
-                   $this->equalTo('direct'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean')
+            ->with(
+                $this->equalTo(self::EXCHANGE),
+                $this->equalTo('direct'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean')
              );
         $channelMock->expects($this->once())
             ->method('queue_declare')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->isType('boolean'),
-                   $this->equalTo(array(
-                       'x-message-ttl' => array('I', self::TTL),
-                   ))
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->isType('boolean'),
+                $this->equalTo(array(
+                    'x-message-ttl' => array('I', self::TTL),
+                ))
              );
         $channelMock->expects($this->once())
             ->method('queue_bind')
-            ->with($this->equalTo(self::QUEUE),
-                   $this->equalTo(self::EXCHANGE),
-                   $this->equalTo(self::KEY)
+            ->with(
+                $this->equalTo(self::QUEUE),
+                $this->equalTo(self::EXCHANGE),
+                $this->equalTo(self::KEY)
              );
 
         $backend->initialize();
