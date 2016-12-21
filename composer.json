@@ -46,7 +46,7 @@
         "liip/monitor-bundle": "^2.0",
         "symfony/phpunit-bridge": "^2.7 || ^3.0",
         "swiftmailer/swiftmailer": "^4.3 || ^5.0",
-        "friendsofsymfony/rest-bundle": "^1.1 || ^2.1",
+        "friendsofsymfony/rest-bundle": "^1.5 || ^2.1",
         "jms/serializer-bundle": "^0.13 || ^1.0",
         "nelmio/api-doc-bundle": "^2.4",
         "sllh/php-cs-fixer-styleci-bridge": "^2.0"
