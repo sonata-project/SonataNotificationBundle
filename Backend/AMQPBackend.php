@@ -58,19 +58,25 @@ class AMQPBackend implements BackendInterface
     protected $deadLetterRoutingKey;
 
     /**
+     * @var null|int
+     */
+    protected $ttl;
+
+    /**
      * @var AMQPBackendDispatcher
      */
     protected $dispatcher = null;
 
     /**
-     * @param string $exchange
-     * @param string $queue
-     * @param string $recover
-     * @param string $key
-     * @param string $deadLetterExchange
-     * @param string $deadLetterRoutingKey
+     * @param string   $exchange
+     * @param string   $queue
+     * @param string   $recover
+     * @param string   $key
+     * @param string   $deadLetterExchange
+     * @param string   $deadLetterRoutingKey
+     * @param null|int $ttl
      */
-    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null)
+    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null)
     {
         $this->exchange = $exchange;
         $this->queue = $queue;
@@ -78,6 +84,7 @@ class AMQPBackend implements BackendInterface
         $this->key = $key;
         $this->deadLetterExchange = $deadLetterExchange;
         $this->deadLetterRoutingKey = $deadLetterRoutingKey;
+        $this->ttl = $ttl;
 
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
             throw new \RuntimeException('Please install php-amqplib/php-amqplib dependency');
@@ -105,6 +112,10 @@ class AMQPBackend implements BackendInterface
             if ($this->deadLetterRoutingKey !== null) {
                 $args['x-dead-letter-routing-key'] = array('S', $this->deadLetterRoutingKey);
             }
+        }
+
+        if ($this->ttl !== null) {
+            $args['x-message-ttl'] = array('I', $this->ttl);
         }
 
         /*
