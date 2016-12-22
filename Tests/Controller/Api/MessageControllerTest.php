@@ -27,7 +27,9 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
         $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $messageManager->expects($this->once())->method('getPager')->will($this->returnValue(array()));
 
-        $paramFetcher = $this->getMock('FOS\RestBundle\Request\ParamFetcherInterface');
+        $paramFetcher = $this->getMockBuilder('FOS\RestBundle\Request\ParamFetcher')
+            ->disableOriginalConstructor()
+            ->getMock();
         $paramFetcher->expects($this->exactly(3))->method('get');
         $paramFetcher->expects($this->once())->method('all')->will($this->returnValue(array()));
 
