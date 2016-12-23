@@ -213,13 +213,19 @@ Only used by RabbitMQ
 If is set, failed messages will be rejected and sent to this exchange
 EOF;
 
-        $deadLetterRoutingKey = <<<'EOF'
+        $deadLetterRoutingKeyInfo = <<<'EOF'
 Only used by RabbitMQ
 
 If set, failed messages will be routed to the queue using this key by dead-letter-exchange,
 otherwise it will be requeued to the original queue if `dead-letter-exchange` is set.
 
 If set, the queue must be configured with this key as `routing_key`.
+EOF;
+
+        $ttlInfo = <<<'EOF'
+Only used by RabbitMQ
+
+Defines the per-queue message time-to-live (milliseconds)
 EOF;
 
         $typesInfo = <<<'EOF'
@@ -260,7 +266,12 @@ EOF;
                     ->defaultValue(null)
                 ->end()
                 ->scalarNode('dead_letter_routing_key')
-                    ->info($deadLetterRoutingKey)
+                    ->info($deadLetterRoutingKeyInfo)
+                    ->defaultValue(null)
+                ->end()
+                ->integerNode('ttl')
+                    ->info($ttlInfo)
+                    ->min(0)
                     ->defaultValue(null)
                 ->end()
 

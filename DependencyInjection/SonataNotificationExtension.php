@@ -330,6 +330,7 @@ class SonataNotificationExtension extends Extension
                 'recover' => false,
                 'dead_letter_exchange' => null,
                 'dead_letter_routing_key' => null,
+                'ttl' => null,
             ));
         }
 
@@ -375,7 +376,8 @@ class SonataNotificationExtension extends Extension
                 $queue['recover'],
                 $queue['routing_key'],
                 $queue['dead_letter_exchange'],
-                $queue['dead_letter_routing_key']
+                $queue['dead_letter_routing_key'],
+                $queue['ttl']
             );
 
             $amqBackends[$pos] = array(
@@ -412,10 +414,11 @@ class SonataNotificationExtension extends Extension
      * @param string           $key
      * @param string           $deadLetterExchange
      * @param string           $deadLetterRoutingKey
+     * @param int|null         $ttl
      *
      * @return string
      */
-    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null, $deadLetterRoutingKey = null)
+    protected function createAMQPBackend(ContainerBuilder $container, $exchange, $name, $recover, $key = '', $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null)
     {
         $id = 'sonata.notification.backend.rabbitmq.'.$this->amqpCounter++;
 
@@ -428,6 +431,7 @@ class SonataNotificationExtension extends Extension
                 $key,
                 $deadLetterExchange,
                 $deadLetterRoutingKey,
+                $ttl,
             )
         );
         $definition->setPublic(false);
