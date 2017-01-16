@@ -13,8 +13,6 @@ namespace Sonata\NotificationBundle\Tests\Iterator;
 
 /**
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class MessageManagerMessageIteratorTest
  */
 class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
 {

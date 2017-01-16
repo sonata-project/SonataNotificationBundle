@@ -15,8 +15,6 @@ use Sonata\NotificationBundle\Entity\MessageManager;
 
 /**
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class MessageManagerMock
  */
 class MessageManagerMock extends MessageManager
 {

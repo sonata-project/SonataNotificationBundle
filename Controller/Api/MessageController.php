@@ -26,9 +26,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class MessageController.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 class MessageController
@@ -44,8 +41,6 @@ class MessageController
     protected $formFactory;
 
     /**
-     * Constructor.
-     *
      * @param MessageManagerInterface $messageManager
      * @param FormFactoryInterface    $formFactory
      */

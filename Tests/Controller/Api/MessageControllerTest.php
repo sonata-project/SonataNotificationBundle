@@ -15,9 +15,6 @@ use Sonata\NotificationBundle\Controller\Api\MessageController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class MessageControllerTest.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 class MessageControllerTest extends \PHPUnit_Framework_TestCase

@@ -41,8 +41,6 @@ class PostponeRuntimeBackend extends RuntimeBackend
     protected $postponeOnCli = false;
 
     /**
-     * Constructor.
-     *
      * @param EventDispatcherInterface $dispatcher
      * @param bool                     $postponeOnCli Whether to postpone the messages on the CLI, too
      */
