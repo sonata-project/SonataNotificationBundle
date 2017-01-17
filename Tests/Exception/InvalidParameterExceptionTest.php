@@ -14,9 +14,6 @@ namespace Sonata\NotificationBundle\Tests\Exception;
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
 
 /**
- * Class InvalidParameterExceptionTest.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 class InvalidParameterExceptionTest extends \PHPUnit_Framework_TestCase

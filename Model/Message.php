@@ -58,9 +58,6 @@ class Message implements MessageInterface
      */
     protected $completedAt;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->createdAt = new \DateTime();

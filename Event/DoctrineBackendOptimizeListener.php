@@ -19,8 +19,6 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * Used with doctrine backend to clear context taking care of the batch iterations.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class DoctrineOptimizeListener
  */
 class DoctrineBackendOptimizeListener implements IterationListener
 {

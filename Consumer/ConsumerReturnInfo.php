@@ -15,8 +15,6 @@ namespace Sonata\NotificationBundle\Consumer;
  * Return informations for comsumers.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class ConsumerReturnInfo
  */
 class ConsumerReturnInfo
 {
