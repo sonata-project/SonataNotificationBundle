@@ -20,8 +20,6 @@ use Symfony\Component\EventDispatcher\Event;
  * Event for ConsumerHandlerCommand iterations event.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class IterateEvent
  */
 class IterateEvent extends Event
 {

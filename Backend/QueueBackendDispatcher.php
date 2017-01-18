@@ -17,8 +17,6 @@ use Sonata\NotificationBundle\Model\MessageInterface;
  * Base class for queue backent dispatchers.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class QueueBackendDispatcher
  */
 abstract class QueueBackendDispatcher implements QueueDispatcherInterface, BackendInterface
 {

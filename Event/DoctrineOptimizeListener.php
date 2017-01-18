@@ -19,8 +19,6 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * Do not use with doctrine backend, use DoctrineBackendOptimizeListener instead.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class DoctrineOptimizeListener
  */
 class DoctrineOptimizeListener implements IterationListener
 {
