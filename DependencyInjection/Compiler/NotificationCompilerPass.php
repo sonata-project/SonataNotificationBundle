@@ -36,7 +36,10 @@ class NotificationCompilerPass implements CompilerPassInterface
                 $priority = isset($event['priority']) ? $event['priority'] : 0;
 
                 if (!isset($event['type'])) {
-                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "type" attribute on "sonata.notification" tags.', $id));
+                    throw new \InvalidArgumentException(sprintf(
+                        'Service "%s" must define the "type" attribute on "sonata.notification" tags.',
+                        $id
+                    ));
                 }
 
                 if (!isset($informations[$event['type']])) {
@@ -45,7 +48,14 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $informations[$event['type']][] = $id;
 
-                $definition->addMethodCall('addListenerService', array($event['type'], array($id, 'process'), $priority));
+                $definition->addMethodCall(
+                    'addListenerService',
+                    array(
+                        $event['type'],
+                        array($id, 'process'),
+                        $priority,
+                    )
+                );
             }
         }
 
@@ -59,10 +69,15 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $class = new \ReflectionClass($definition->getClass());
                 if (!$class->implementsInterface('Sonata\NotificationBundle\Event\IterationListener')) {
-                    throw new RuntimeException('Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener');
+                    throw new RuntimeException(
+                        'Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener'
+                    );
                 }
 
-                $definition->addTag('kernel.event_listener', array('event' => IterateEvent::EVENT_NAME, 'method' => 'iterate'));
+                $definition->addTag(
+                    'kernel.event_listener',
+                    array('event' => IterateEvent::EVENT_NAME, 'method' => 'iterate')
+                );
             }
         }
     }
