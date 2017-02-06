@@ -48,7 +48,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             $output->writeln(sprintf(' - %s', $type));
             foreach ($listeners as $listener) {
                 if (!$listener[0] instanceof ConsumerInterface) {
-                    throw new \RuntimeException(sprintf('The registered service does not implement the ConsumerInterface (class=%s', get_class($listener[0])));
+                    throw new \RuntimeException(sprintf(
+                        'The registered service does not implement the ConsumerInterface (class=%s',
+                        get_class($listener[0])
+                    ));
                 }
 
                 $output->writeln(sprintf('   > %s', get_class($listener[0])));
@@ -70,9 +73,18 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $output->writeln(' done!');
 
         if ($type === null) {
-            $output->writeln(sprintf('[%s] <info>Starting the backend handler</info> - %s', $startDate->format('r'), get_class($backend)));
+            $output->writeln(sprintf(
+                '[%s] <info>Starting the backend handler</info> - %s',
+                $startDate->format('r'),
+                get_class($backend)
+            ));
         } else {
-            $output->writeln(sprintf('[%s] <info>Starting the backend handler</info> - %s (type: %s)', $startDate->format('r'), get_class($backend), $type));
+            $output->writeln(sprintf(
+                '[%s] <info>Starting the backend handler</info> - %s (type: %s)',
+                $startDate->format('r'),
+                get_class($backend),
+                $type
+            ));
         }
 
         $startMemoryUsage = memory_get_usage(true);
@@ -119,7 +131,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
                 $output->writeln(sprintf('<error>KO! - %s</error>', $e->getMessage()));
             }
 
-            $this->getEventDispatcher()->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($iterator, $backend, $message));
+            $this->getEventDispatcher()->dispatch(
+                IterateEvent::EVENT_NAME,
+                new IterateEvent($iterator, $backend, $message)
+            );
 
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');
@@ -137,8 +152,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      */
     protected function throwTypeNotFoundException($type, $backend)
     {
-        throw new \RuntimeException("The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".
-                get_class($backend)."' \nsupports multiple queues and the routing_key is defined. (Currently rabbitmq only)");
+        throw new \RuntimeException(
+            "The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".
+            get_class($backend)."' \nsupports multiple queues and the routing_key is defined. (Currently rabbitmq only)"
+        );
     }
 
     /**
@@ -171,7 +188,10 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         }
 
         if ($type !== null && !$backend instanceof QueueDispatcherInterface) {
-            throw new \RuntimeException(sprintf('Unable to use the provided type %s with a non QueueDispatcherInterface backend', $type));
+            throw new \RuntimeException(sprintf(
+                'Unable to use the provided type %s with a non QueueDispatcherInterface backend',
+                $type
+            ));
         }
 
         if ($backend instanceof QueueDispatcherInterface) {
