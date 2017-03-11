@@ -50,6 +50,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with(array());
                 $qb->expects($self->once())->method('orderBy')->with(
@@ -78,6 +79,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with(array());
                 $qb->expects($self->exactly(2))->method('orderBy')->with(
@@ -103,6 +105,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_OPEN)));
             })
@@ -114,6 +117,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_CANCELLED)));
             })
@@ -125,6 +129,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_IN_PROGRESS)));
             })
