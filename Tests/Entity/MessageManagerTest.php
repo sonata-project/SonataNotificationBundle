@@ -50,6 +50,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with(array());
                 $qb->expects($self->once())->method('orderBy')->with(
@@ -78,6 +79,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with(array());
                 $qb->expects($self->exactly(2))->method('orderBy')->with(
@@ -103,8 +105,11 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_OPEN)));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array(
+                    'state' => MessageInterface::STATE_OPEN,
+                )));
             })
             ->getPager(array('state' => MessageInterface::STATE_OPEN), 1);
     }
@@ -114,8 +119,11 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_CANCELLED)));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array(
+                    'state' => MessageInterface::STATE_CANCELLED,
+                )));
             })
             ->getPager(array('state' => MessageInterface::STATE_CANCELLED), 1);
     }
@@ -125,8 +133,11 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('state' => MessageInterface::STATE_IN_PROGRESS)));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array(
+                    'state' => MessageInterface::STATE_IN_PROGRESS,
+                )));
             })
             ->getPager(array('state' => MessageInterface::STATE_IN_PROGRESS), 1);
     }
@@ -148,7 +159,15 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMessageManager($qbCallback)
     {
-        $query = $this->getMockForAbstractClass('Doctrine\ORM\AbstractQuery', array(), '', false, true, true, array('execute'));
+        $query = $this->getMockForAbstractClass(
+            'Doctrine\ORM\AbstractQuery',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('execute')
+        );
         $query->expects($this->any())->method('execute')->will($this->returnValue(true));
 
         $qb = $this->getMock('Doctrine\ORM\QueryBuilder', array(), array(
