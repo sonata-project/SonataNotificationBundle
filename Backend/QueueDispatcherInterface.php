@@ -11,6 +11,8 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Sonata\NotificationBundle\Exception\BackendNotFoundException;
+
 /**
  * A QueueDispatcherInterface acts as a router for different
  * queue types.

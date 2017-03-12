@@ -20,11 +20,6 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * This is the class that loads and manages your bundle configuration.
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class SonataNotificationExtension extends Extension
 {
     /**
@@ -60,7 +55,8 @@ class SonataNotificationExtension extends Extension
             $loader->load('api_form.xml');
         }
 
-        if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
+        // for now, only support for ORM
+        if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) {
             $loader->load('admin.xml');
         }
 

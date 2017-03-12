@@ -35,14 +35,20 @@ class ListQueuesCommand extends ContainerAwareCommand
         $backend = $this->getContainer()->get('sonata.notification.backend');
 
         if (!$backend instanceof QueueDispatcherInterface) {
-            $output->writeln('The backend class <info>'.get_class($backend).'</info> does not provide multiple queues.');
+            $output->writeln(
+                'The backend class <info>'.get_class($backend).'</info> does not provide multiple queues.'
+            );
 
             return;
         }
 
         $output->writeln('<info>List of queues available</info>');
         foreach ($backend->getQueues() as $queue) {
-            $output->writeln(sprintf('queue: <info>%s</info> - routing_key: <info>%s</info>', $queue['queue'], $queue['routing_key']));
+            $output->writeln(sprintf(
+                'queue: <info>%s</info> - routing_key: <info>%s</info>',
+                $queue['queue'],
+                $queue['routing_key']
+            ));
         }
     }
 }

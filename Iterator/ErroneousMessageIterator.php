@@ -51,6 +51,12 @@ class ErroneousMessageIterator extends MessageManagerMessageIterator
      */
     protected function findNextMessages($types)
     {
-        return $this->messageManager->findByAttempts($this->types, MessageInterface::STATE_ERROR, $this->batchSize, $this->maxAttempts, $this->attemptDelay);
+        return $this->messageManager->findByAttempts(
+            $this->types,
+            MessageInterface::STATE_ERROR,
+            $this->batchSize,
+            $this->maxAttempts,
+            $this->attemptDelay
+        );
     }
 }
