@@ -65,6 +65,10 @@ class SwiftMailerConsumerTest extends \PHPUnit_Framework_TestCase
                 'cc1@mail.fr',
                 'cc2@mail.fr' => 'nameCc2',
             ),
+            'bcc' => array(
+                'bcc1@mail.fr',
+                'bcc2@mail.fr' => 'nameBcc2',
+            ),
             'message' => array(
                 'text' => 'message text',
                 'html' => 'message html',
@@ -79,6 +83,10 @@ class SwiftMailerConsumerTest extends \PHPUnit_Framework_TestCase
         $mail->expects($this->once())
             ->method('setCc')
             ->with($this->equalTo(array('cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2')))
+            ->willReturnSelf();
+        $mail->expects($this->once())
+            ->method('setBcc')
+            ->with($this->equalTo(array('bcc1@mail.fr', 'bcc2@mail.fr' => 'nameBcc2')))
             ->willReturnSelf();
         $mail->expects($this->exactly(2))
             ->method('addPart')
