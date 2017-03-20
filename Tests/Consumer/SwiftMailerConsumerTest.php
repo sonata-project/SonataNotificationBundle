@@ -61,6 +61,14 @@ class SwiftMailerConsumerTest extends \PHPUnit_Framework_TestCase
                 'replyTo1@mail.fr',
                 'replyTo2@mail.fr' => 'nameReplyTo2',
             ),
+            'cc' => array(
+                'cc1@mail.fr',
+                'cc2@mail.fr' => 'nameCc2',
+            ),
+            'bcc' => array(
+                'bcc1@mail.fr',
+                'bcc2@mail.fr' => 'nameBcc2',
+            ),
             'message' => array(
                 'text' => 'message text',
                 'html' => 'message html',
@@ -72,6 +80,14 @@ class SwiftMailerConsumerTest extends \PHPUnit_Framework_TestCase
         $mail->expects($this->once())->method('setFrom')->with($this->equalTo(array('from@mail.fr' => 'nameFrom')))->willReturnSelf();
         $mail->expects($this->once())->method('setTo')->with($this->equalTo(array('to1@mail.fr', 'to2@mail.fr' => 'nameTo2')))->willReturnSelf();
         $mail->expects($this->once())->method('setReplyTo')->with($this->equalTo(array('replyTo1@mail.fr', 'replyTo2@mail.fr' => 'nameReplyTo2')))->willReturnSelf();
+        $mail->expects($this->once())
+            ->method('setCc')
+            ->with($this->equalTo(array('cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2')))
+            ->willReturnSelf();
+        $mail->expects($this->once())
+            ->method('setBcc')
+            ->with($this->equalTo(array('bcc1@mail.fr', 'bcc2@mail.fr' => 'nameBcc2')))
+            ->willReturnSelf();
         $mail->expects($this->exactly(2))
             ->method('addPart')
             ->withConsecutive(
