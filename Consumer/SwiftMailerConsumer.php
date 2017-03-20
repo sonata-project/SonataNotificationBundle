@@ -65,6 +65,10 @@ class SwiftMailerConsumer implements ConsumerInterface
             $mail->setReplyTo($replyTo);
         }
 
+        if ($cc = $message->getValue('cc')) {
+            $mail->setCc($cc);
+        }
+
         if ($text = $message->getValue(array('message', 'text'))) {
             $mail->addPart($text, 'text/plain');
         }
