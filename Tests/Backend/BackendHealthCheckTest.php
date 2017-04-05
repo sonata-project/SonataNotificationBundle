@@ -12,9 +12,10 @@
 namespace Sonata\NotificationBundle\Tests\Notification;
 
 use Sonata\NotificationBundle\Backend\BackendHealthCheck;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use ZendDiagnostics\Result\Success;
 
-class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
+class BackendHealthCheckTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -27,7 +28,7 @@ class BackendHealthCheckTest extends \PHPUnit_Framework_TestCase
     {
         $result = new Success('Test check', 'OK');
 
-        $backend = $this->getMock('Sonata\NotificationBundle\Backend\BackendInterface');
+        $backend = $this->createMock('Sonata\NotificationBundle\Backend\BackendInterface');
         $backend->expects($this->once())->method('getStatus')->will($this->returnValue($result));
 
         $health = new BackendHealthCheck($backend);

@@ -13,20 +13,19 @@ namespace Sonata\NotificationBundle\Tests\Entity;
 
 use Sonata\NotificationBundle\Event\DoctrineOptimizeListener;
 use Sonata\NotificationBundle\Event\IterateEvent;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class DoctrineOptimizeListenerTest extends \PHPUnit_Framework_TestCase
+class DoctrineOptimizeListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \RuntimeException
      */
     public function testWithClosedManager()
     {
-        $manager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $manager = $this->createMock('Doctrine\ORM\EntityManager');
         $manager->expects($this->once())->method('isOpen')->will($this->returnValue(false));
 
-        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->once())->method('getManagers')->will($this->returnValue(array(
             'default' => $manager,
         )));
@@ -40,26 +39,22 @@ class DoctrineOptimizeListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOptimize()
     {
-        $unitofwork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $unitofwork = $this->createMock('Doctrine\ORM\UnitOfWork');
         $unitofwork->expects($this->once())->method('clear');
 
-        $manager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $manager = $this->createMock('Doctrine\ORM\EntityManager');
         $manager->expects($this->once())->method('isOpen')->will($this->returnValue(true));
         $manager->expects($this->once())->method('getUnitOfWork')->will($this->returnValue($unitofwork));
 
-        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->once())->method('getManagers')->will($this->returnValue(array(
             'default' => $manager,
         )));
 
         $optimizer = new DoctrineOptimizeListener($registry);
         $optimizer->iterate(new IterateEvent(
-            $this->getMock('Sonata\NotificationBundle\Iterator\MessageIteratorInterface'),
-            $this->getMock('Sonata\NotificationBundle\Backend\BackendInterface')
+            $this->createMock('Sonata\NotificationBundle\Iterator\MessageIteratorInterface'),
+            $this->createMock('Sonata\NotificationBundle\Backend\BackendInterface')
         ));
     }
 }

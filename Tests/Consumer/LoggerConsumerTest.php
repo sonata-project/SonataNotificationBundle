@@ -14,8 +14,9 @@ namespace Sonata\NotificationBundle\Tests\Consumer;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Consumer\LoggerConsumer;
 use Sonata\NotificationBundle\Tests\Entity\Message;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
+class LoggerConsumerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider calledTypeProvider
@@ -25,7 +26,7 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($type, $calledType)
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method($calledType);
 
         $message = new Message();
@@ -62,7 +63,7 @@ class LoggerConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidType()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $message = new Message();
         $message->setBody(array(
