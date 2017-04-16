@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="list.label_id">
                 <source>list.label_id</source>
-                <target>Id</target>
+                <target>ID</target>
             </trans-unit>
             <trans-unit id="list.label_type">
                 <source>list.label_type</source>
@@ -40,7 +40,7 @@
             </trans-unit>
             <trans-unit id="show.label_id">
                 <source>show.label_id</source>
-                <target>Id</target>
+                <target>ID</target>
             </trans-unit>
             <trans-unit id="show.label_type">
                 <source>show.label_type</source>
