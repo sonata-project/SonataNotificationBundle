@@ -11,14 +11,27 @@
 
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
+
 /**
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  */
-class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
+class MessageManagerMessageIteratorTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ManagerRegistry
+     */
+    private $registry;
+
+    protected function setUp()
+    {
+        $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+    }
+
     public function testBufferize()
     {
-        $iterator = new MessageManagerMessageIterator($this->getRegistryMock(), 0);
+        $iterator = new MessageManagerMessageIterator($this->registry, 0);
 
         $iterator->_bufferize();
 
@@ -29,7 +42,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
     {
         $size = 10;
 
-        $iterator = new MessageManagerMessageIterator($this->getRegistryMock(), 0);
+        $iterator = new MessageManagerMessageIterator($this->registry, 0);
 
         $iterator->rewind();
         $this->assertTrue($iterator->valid());
@@ -50,7 +63,7 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testLongForeach()
     {
-        $iterator = new MessageManagerMessageIterator($this->getRegistryMock(), 500000, 2);
+        $iterator = new MessageManagerMessageIterator($this->registry, 500000, 2);
 
         $count = 0;
 
@@ -61,12 +74,5 @@ class MessageManagerMessageIteratorTest extends \PHPUnit_Framework_TestCase
                 return;
             }
         }
-    }
-
-    protected function getRegistryMock()
-    {
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-
-        return $registry;
     }
 }

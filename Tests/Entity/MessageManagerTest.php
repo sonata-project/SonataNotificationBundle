@@ -13,8 +13,9 @@ namespace Sonata\NotificationBundle\Tests\Entity;
 
 use Sonata\NotificationBundle\Entity\MessageManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class MessageManagerTest extends \PHPUnit_Framework_TestCase
+class MessageManagerTest extends PHPUnit_Framework_TestCase
 {
     public function testCancel()
     {
@@ -147,7 +148,7 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMessageManagerMock()
     {
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
 
         $manager = new MessageManagerMock('Sonata\notificationBundle\Tests\Entity\Message', $registry);
 
@@ -170,29 +171,29 @@ class MessageManagerTest extends \PHPUnit_Framework_TestCase
         );
         $query->expects($this->any())->method('execute')->will($this->returnValue(true));
 
-        $qb = $this->getMock('Doctrine\ORM\QueryBuilder', array(), array(
-            $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock(),
-        ));
+        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->setConstructorArgs(array($this->createMock('Doctrine\ORM\EntityManager')))
+            ->getMock();
 
         $qb->expects($this->any())->method('select')->will($this->returnValue($qb));
         $qb->expects($this->any())->method('getQuery')->will($this->returnValue($query));
 
         $qbCallback($qb);
 
-        $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
+        $repository = $this->createMock('Doctrine\ORM\EntityRepository');
         $repository->expects($this->any())->method('createQueryBuilder')->will($this->returnValue($qb));
 
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $metadata->expects($this->any())->method('getFieldNames')->will($this->returnValue(array(
             'state',
             'type',
         )));
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $em = $this->createMock('Doctrine\ORM\EntityManager');
         $em->expects($this->any())->method('getRepository')->will($this->returnValue($repository));
         $em->expects($this->any())->method('getClassMetadata')->will($this->returnValue($metadata));
 
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $registry->expects($this->any())->method('getManagerForClass')->will($this->returnValue($em));
 
         return  new MessageManager('Sonata\NotificationBundle\Entity\BaseMessage', $registry);
