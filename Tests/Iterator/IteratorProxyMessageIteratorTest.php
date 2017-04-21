@@ -12,11 +12,12 @@
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * @covers \Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator
  */
-class IteratorProxyMessageIteratorTest extends \PHPUnit_Framework_TestCase
+class IteratorProxyMessageIteratorTest extends PHPUnit_Framework_TestCase
 {
     public function testIteratorProxiesIteratorMethods()
     {
@@ -25,7 +26,7 @@ class IteratorProxyMessageIteratorTest extends \PHPUnit_Framework_TestCase
             'bar',
         );
 
-        $actualIterator = $this->getMock('Iterator');
+        $actualIterator = $this->createMock('Iterator');
         $this->expectIterator($actualIterator, $content, true);
 
         $proxy = new IteratorProxyMessageIterator($actualIterator);
