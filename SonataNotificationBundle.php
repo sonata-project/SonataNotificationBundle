@@ -13,6 +13,7 @@ namespace Sonata\NotificationBundle;
 
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
+use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationRegisterMappingsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -26,6 +27,8 @@ class SonataNotificationBundle extends Bundle
         $container->addCompilerPass(new NotificationCompilerPass());
 
         $this->registerFormMapping();
+
+        $this->addRegisterMappingsPass($container);
     }
 
     /**
@@ -49,5 +52,17 @@ class SonataNotificationBundle extends Bundle
         FormHelper::registerFormTypeMapping(array(
             'sonata_notification_api_form_message' => 'Sonata\NotificationBundle\Form\Type\MessageSerializationType',
         ));
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function addRegisterMappingsPass(ContainerBuilder $container)
+    {
+        $mappings = array(
+            realpath(__DIR__ . '/Resources/config/doctrine') => 'Sonata\NotificationBundle\Document',
+        );
+
+        $container->addCompilerPass(NotificationRegisterMappingsPass::createMongoDBMappingDriver($mappings));
     }
 }

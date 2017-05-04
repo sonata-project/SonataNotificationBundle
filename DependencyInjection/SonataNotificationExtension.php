@@ -43,11 +43,26 @@ class SonataNotificationExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $loader->load('core.xml');
-        $loader->load('doctrine_orm.xml');
+
+        if ('orm' == $config['db_driver']) {
+            $loader->load('doctrine_orm.xml');
+        } else {
+            $loader->load('doctrine_mongodb.xml');
+        }
+
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
         $loader->load('selector.xml');
         $loader->load('event.xml');
+
+        if ('mongodb' == $config['db_driver']) {
+            $optimize_definition = $container->getDefinition('sonata.notification.event.doctrine_optimize');
+            $optimize_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
+            $backend_optimize_definition = $container->getDefinition('sonata.notification.event.doctrine_backend_optimize');
+            $backend_optimize_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
+            $selector_definition = $container->getDefinition('sonata.notification.erroneous_messages_selector');
+            $selector_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
+        }
 
         if ($config['consumers']['register_default']) {
             $loader->load('default_consumers.xml');
@@ -122,7 +137,11 @@ class SonataNotificationExtension extends Extension
     public function configureBackends(ContainerBuilder $container, $config)
     {
         // set the default value, will be erase if required
-        $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
+        if ('orm' == $config['db_driver']) {
+            $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
+        } else {
+            $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.mongodb.message.default');
+        }
 
         if (isset($config['backends']['rabbitmq']) && $config['backend'] === 'sonata.notification.backend.rabbitmq') {
             $this->configureRabbitmq($container, $config);
@@ -143,7 +162,9 @@ class SonataNotificationExtension extends Extension
             $pause = $config['backends']['doctrine']['pause'];
             $maxAge = $config['backends']['doctrine']['max_age'];
             $batchSize = $config['backends']['doctrine']['batch_size'];
-            $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
+            if (!is_null($config['backends']['doctrine']['message_manager'])) {
+                $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
+            }
 
             $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
         }

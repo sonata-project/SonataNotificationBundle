@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <mapped-superclass name="NotificationEngine\Sonata\NotificationBundle\Document\BaseMessage">
+        
+        <field name="type"         type="string"     fieldName="type" length="255"/>
+        <field name="body"         type="collection" fieldName="body" />
+        <field name="state"        type="int"        fieldName="state" index="true" />
+        <field name="restartCount" type="int"        fieldName="restartCount" nullable="true" />
+
+        <field name="createdAt"    type="date"       fieldName="createdAt" index="true" />
+        <field name="updatedAt"    type="date"       fieldName="updatedAt" />
+        <field name="startedAt"    type="date"       fieldName="startedAt" />
+        <field name="completedAt"  type="date"       fieldName="completedAt" />
+
+    </mapped-superclass>
+
+</doctrine-mongo-mapping>

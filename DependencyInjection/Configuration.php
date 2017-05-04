@@ -31,6 +31,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sonata_notification')->children();
 
+        $supportedDrivers = array('orm', 'mongodb');
+
         $backendInfo = <<<'EOF'
 Other backends you can use:
 
@@ -47,6 +49,15 @@ Iteration listener class must implement Sonata\NotificationBundle\Event\Iteratio
 EOF;
 
         $rootNode
+            ->scalarNode('db_driver')
+                ->validate()
+                    ->ifNotInArray($supportedDrivers)
+                    ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
+                ->end()
+                ->cannotBeOverwritten()
+                ->isRequired()
+                ->cannotBeEmpty()
+            ->end()
             ->scalarNode('backend')
                 ->info($backendInfo)
                 ->defaultValue('sonata.notification.backend.runtime')
@@ -56,9 +67,7 @@ EOF;
                 ->children()
                     ->arrayNode('doctrine')
                         ->children()
-                            ->scalarNode('message_manager')
-                                ->defaultValue('sonata.notification.manager.message.default')
-                            ->end()
+                            ->scalarNode('message_manager')->defaultNull()->end()
                             ->scalarNode('max_age')
                                 ->info('The max age in seconds')
                                 ->defaultValue(86400)
