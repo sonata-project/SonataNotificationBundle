@@ -12,15 +12,13 @@
 namespace Sonata\NotificationBundle\Event;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Doctrine context optimizer
  * Used with doctrine backend to clear context taking care of the batch iterations.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class DoctrineOptimizeListener
  */
 class DoctrineBackendOptimizeListener implements IterationListener
 {
@@ -30,9 +28,9 @@ class DoctrineBackendOptimizeListener implements IterationListener
     protected $doctrine;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param ContainerAwareInterface $doctrine
      */
-    public function __construct(RegistryInterface $doctrine)
+    public function __construct(ContainerAwareInterface $doctrine)
     {
         $this->doctrine = $doctrine;
     }
