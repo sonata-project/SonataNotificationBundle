@@ -15,7 +15,6 @@ use Symfony\Bridge\Doctrine\DependencyInjection\CompilerPass\RegisterMappingsPas
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- *
  * @author Salma Khemiri <chakroun.salma@gmail.com>
  */
 class NotificationRegisterMappingsPass extends RegisterMappingsPass

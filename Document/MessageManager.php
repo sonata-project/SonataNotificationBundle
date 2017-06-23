@@ -11,22 +11,21 @@
 
 namespace Sonata\NotificationBundle\Document;
 
+use Doctrine\MongoDB\ArrayIterator;
+use Doctrine\ODM\MongoDB\Cursor;
+use NotificationEngine\Sonata\NotificationBundle\Model\MessageInterface;
+use NotificationEngine\Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\CoreBundle\Model\BaseDocumentManager;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
-use NotificationEngine\Sonata\NotificationBundle\Model\MessageInterface;
-use NotificationEngine\Sonata\NotificationBundle\Model\MessageManagerInterface;
-use Doctrine\ODM\MongoDB\Cursor;
-use Doctrine\MongoDB\ArrayIterator;
 
 /**
- *
  * @author Salma Khemiri <chakroun.salma@gmail.com>
  */
 class MessageManager extends BaseDocumentManager implements MessageManagerInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function save($message, $andFlush = true)
     {
@@ -34,7 +33,7 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
         if ($message->getId() && !$this->dm->getUnitOfWork()->isInIdentityMap($message)) {
             $this->getDocumentManager()->getUnitOfWork()->merge($message);
         }
-        
+
         parent::save($message, $andFlush);
     }
 
@@ -46,11 +45,11 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
         $query = $this->prepareStateQuery($state, $types, $batchSize);
 
         $result = $query->getQuery()->execute();
-        
+
         if ($result instanceof Cursor) {
             $result = $result->toArray();
         }
-        
+
         return $result;
     }
 
@@ -64,11 +63,10 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
         if ($maxAttempts) {
             $now = new \DateTime();
             $delayDate = $now->add(\DateInterval::createFromDateString(($attemptDelay * -1).' second'));
-            
+
             $query
                 ->field('restartCount')->lt($maxAttempts)
                 ->field('updatedAt')->lt($delayDate);
-
         }
 
         $result = $query->getQuery()->execute();
@@ -90,17 +88,17 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
                                         ->reduce('function (curr, result) { result.count++; }')
                                         ->getQuery()
                                         ->execute();
-        
+
         $states = array(
             MessageInterface::STATE_DONE => 0,
             MessageInterface::STATE_ERROR => 0,
             MessageInterface::STATE_IN_PROGRESS => 0,
             MessageInterface::STATE_OPEN => 0,
         );
-        
+
         if ($result instanceof ArrayIterator) {
             $result = $result->toArray();
-            
+
             foreach ($result as $data) {
                 $states[$data['state']] = $data['count'];
             }

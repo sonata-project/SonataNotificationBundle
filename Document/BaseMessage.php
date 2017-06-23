@@ -14,7 +14,6 @@ namespace Sonata\NotificationBundle\Document;
 use Sonata\NotificationBundle\Model\Message;
 
 /**
- *
  * @author Salma Khemiri <chakroun.salma@gmail.com>
  */
 class BaseMessage extends Message
