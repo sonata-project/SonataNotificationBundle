@@ -60,7 +60,7 @@ class SonataNotificationBundle extends Bundle
     private function addRegisterMappingsPass(ContainerBuilder $container)
     {
         $mappings = array(
-            realpath(__DIR__ . '/Resources/config/doctrine') => 'Sonata\NotificationBundle\Document',
+            realpath(__DIR__.'/Resources/config/doctrine') => 'Sonata\NotificationBundle\Document',
         );
 
         $container->addCompilerPass(NotificationRegisterMappingsPass::createMongoDBMappingDriver($mappings));

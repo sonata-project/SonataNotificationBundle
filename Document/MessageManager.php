@@ -4,7 +4,6 @@
  * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
- * (c) Salma Khemiri Chakroun <chakroun.salma@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,6 +19,10 @@ use NotificationEngine\Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\MongoDB\ArrayIterator;
 
+/**
+ *
+ * @author Salma Khemiri <chakroun.salma@gmail.com>
+ */
 class MessageManager extends BaseDocumentManager implements MessageManagerInterface
 {
     /**
@@ -36,7 +39,7 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findByTypes(array $types, $state, $batchSize)
     {
@@ -52,7 +55,7 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10)
     {
@@ -60,28 +63,28 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
 
         if ($maxAttempts) {
             $now = new \DateTime();
-            $delayDate = $now->add(\DateInterval::createFromDateString(($attemptDelay * -1) . ' second'));
+            $delayDate = $now->add(\DateInterval::createFromDateString(($attemptDelay * -1).' second'));
             
             $query
                 ->field('restartCount')->lt($maxAttempts)
                 ->field('updatedAt')->lt($delayDate);
-            
+
         }
 
         $result = $query->getQuery()->execute();
-        
+
         if ($result instanceof Cursor) {
             $result = $result->toArray();
         }
-        
+
         return $result;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function countStates()
-    {        
+    {
         $result = $this->getRepository()->createQueryBuilder('message')
                                         ->group(array('state' => 1), array('count' => 0))
                                         ->reduce('function (curr, result) { result.count++; }')
@@ -89,18 +92,16 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
                                         ->execute();
         
         $states = array(
-            MessageInterface::STATE_DONE        => 0,
-            MessageInterface::STATE_ERROR       => 0,
+            MessageInterface::STATE_DONE => 0,
+            MessageInterface::STATE_ERROR => 0,
             MessageInterface::STATE_IN_PROGRESS => 0,
-            MessageInterface::STATE_OPEN        => 0,
+            MessageInterface::STATE_OPEN => 0,
         );
         
-        if ($result instanceof ArrayIterator) 
-        {
+        if ($result instanceof ArrayIterator) {
             $result = $result->toArray();
             
-            foreach ($result as $data) 
-            {
+            foreach ($result as $data) {
                 $states[$data['state']] = $data['count'];
             }
         }
@@ -109,13 +110,13 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function cleanup($maxAge)
     {
         $date = new \DateTime('now');
         $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
-        
+
         $qb = $this->getRepository()->createQueryBuilder('message')
                                     ->remove()
                                     ->field('state')->equals(MessageInterface::STATE_DONE)
@@ -211,7 +212,7 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
             ->createQueryBuilder('message')
             ->field('state')->equals($state)
             ->sort('createdAt');
-        
+
         if (count($types) > 0) {
             if (array_key_exists('exclude', $types) || array_key_exists('include', $types)) {
                 if (array_key_exists('exclude', $types)) {
