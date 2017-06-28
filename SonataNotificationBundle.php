@@ -11,9 +11,9 @@
 
 namespace Sonata\NotificationBundle;
 
+use Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass;
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
-use Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
