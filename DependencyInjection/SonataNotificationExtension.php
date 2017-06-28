@@ -44,7 +44,7 @@ class SonataNotificationExtension extends Extension
 
         $loader->load('core.xml');
 
-        if ('orm' == $config['db_driver']) {
+        if ('orm' === $config['db_driver']) {
             $loader->load('doctrine_orm.xml');
         } else {
             $loader->load('doctrine_mongodb.xml');
@@ -55,7 +55,7 @@ class SonataNotificationExtension extends Extension
         $loader->load('selector.xml');
         $loader->load('event.xml');
 
-        if ('mongodb' == $config['db_driver']) {
+        if ('mongodb' === $config['db_driver']) {
             $optimize_definition = $container->getDefinition('sonata.notification.event.doctrine_optimize');
             $optimize_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
             $backend_optimize_definition = $container->getDefinition('sonata.notification.event.doctrine_backend_optimize');
@@ -137,7 +137,7 @@ class SonataNotificationExtension extends Extension
     public function configureBackends(ContainerBuilder $container, $config)
     {
         // set the default value, will be erase if required
-        if ('orm' == $config['db_driver']) {
+        if ('orm' === $config['db_driver']) {
             $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
         } else {
             $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.mongodb.message.default');
