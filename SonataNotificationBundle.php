@@ -11,11 +11,11 @@
 
 namespace Sonata\NotificationBundle;
 
-use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationMappingCompilerPass;
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationMappingCompilerPass;
 
 class SonataNotificationBundle extends Bundle
 {
