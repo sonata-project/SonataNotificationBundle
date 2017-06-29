@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sonata.notification.manager.mongodb.message.default" class="Sonata\NotificationBundle\Document\MessageManager">
+            <argument>%sonata.notification.message.class%</argument>
+            <argument type="service" id="doctrine_mongodb"/>
+        </service>
+    </services>
+</container>

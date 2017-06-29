@@ -56,12 +56,12 @@ class SonataNotificationExtension extends Extension
         $loader->load('event.xml');
 
         if ('mongodb' === $config['db_driver']) {
-            $optimize_definition = $container->getDefinition('sonata.notification.event.doctrine_optimize');
-            $optimize_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
-            $backend_optimize_definition = $container->getDefinition('sonata.notification.event.doctrine_backend_optimize');
-            $backend_optimize_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
-            $selector_definition = $container->getDefinition('sonata.notification.erroneous_messages_selector');
-            $selector_definition->replaceArgument(0, new Reference('doctrine_mongodb'));
+            $optimizeDefinition = $container->getDefinition('sonata.notification.event.doctrine_optimize');
+            $optimizeDefinition->replaceArgument(0, new Reference('doctrine_mongodb'));
+            $backendOptimizeDefinition = $container->getDefinition('sonata.notification.event.doctrine_backend_optimize');
+            $backendOptimizeDefinition->replaceArgument(0, new Reference('doctrine_mongodb'));
+            $selectorDefinition = $container->getDefinition('sonata.notification.erroneous_messages_selector');
+            $selectorDefinition->replaceArgument(0, new Reference('doctrine_mongodb'));
         }
 
         if ($config['consumers']['register_default']) {

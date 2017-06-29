@@ -11,7 +11,7 @@
 
 namespace Sonata\NotificationBundle;
 
-use Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass;
+use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationMappingCompilerPass;
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -28,7 +28,9 @@ class SonataNotificationBundle extends Bundle
 
         $this->registerFormMapping();
 
-        $this->addRegisterMappingsPass($container);
+        if (class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
+            $container->addCompilerPass(new NotificationMappingCompilerPass());
+        }
     }
 
     /**
@@ -52,17 +54,5 @@ class SonataNotificationBundle extends Bundle
         FormHelper::registerFormTypeMapping(array(
             'sonata_notification_api_form_message' => 'Sonata\NotificationBundle\Form\Type\MessageSerializationType',
         ));
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    private function addRegisterMappingsPass(ContainerBuilder $container)
-    {
-        $mappings = array(
-            realpath(__DIR__.'/Resources/config/doctrine') => 'Sonata\NotificationBundle\Document',
-        );
-
-        $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mappings, array('doctrine_mongodb.odm.default_document_manager')));
     }
 }

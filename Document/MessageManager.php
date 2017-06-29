@@ -13,8 +13,8 @@ namespace Sonata\NotificationBundle\Document;
 
 use Doctrine\MongoDB\ArrayIterator;
 use Doctrine\ODM\MongoDB\Cursor;
-use NotificationEngine\Sonata\NotificationBundle\Model\MessageInterface;
-use NotificationEngine\Sonata\NotificationBundle\Model\MessageManagerInterface;
+use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\CoreBundle\Model\BaseDocumentManager;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
@@ -83,11 +83,12 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
      */
     public function countStates()
     {
-        $result = $this->getRepository()->createQueryBuilder('message')
-                                        ->group(array('state' => 1), array('count' => 0))
-                                        ->reduce('function (curr, result) { result.count++; }')
-                                        ->getQuery()
-                                        ->execute();
+        $result = $this->getRepository()
+            ->createQueryBuilder('message')
+            ->group(array('state' => 1), array('count' => 0))
+            ->reduce('function (curr, result) { result.count++; }')
+            ->getQuery()
+            ->execute();
 
         $states = array(
             MessageInterface::STATE_DONE => 0,
@@ -115,12 +116,13 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
         $date = new \DateTime('now');
         $date->sub(new \DateInterval(sprintf('PT%sS', $maxAge)));
 
-        $qb = $this->getRepository()->createQueryBuilder('message')
-                                    ->remove()
-                                    ->field('state')->equals(MessageInterface::STATE_DONE)
-                                    ->field('completedAt')->lt($date)
-                                    ->getQuery()
-                                    ->execute();
+        $qb = $this->getRepository()
+            ->createQueryBuilder('message')
+            ->remove()
+            ->field('state')->equals(MessageInterface::STATE_DONE)
+            ->field('completedAt')->lt($date)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -175,19 +177,14 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
         foreach ($sort as $field => $direction) {
             $query->sort(sprintf('m.%s', $field), strtoupper($direction));
         }
-
-        $parameters = array();
-
         if (isset($criteria['type'])) {
             $query->field('type')->equals($criteria['type']);
         }
-
         if (isset($criteria['state'])) {
             $query->field('state')->equals($criteria['state']);
         }
 
         $pager = new Pager();
-
         $pager->setMaxPerPage($limit);
         $pager->setQuery(new ProxyQuery($query));
         $pager->setPage($page);
@@ -200,7 +197,6 @@ class MessageManager extends BaseDocumentManager implements MessageManagerInterf
      * @param int   $state
      * @param array $types
      * @param int   $batchSize
-     * @param array $parameters
      *
      * @return QueryBuilder
      */
