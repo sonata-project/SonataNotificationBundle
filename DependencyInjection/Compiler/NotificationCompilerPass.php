@@ -12,9 +12,11 @@
 namespace Sonata\NotificationBundle\DependencyInjection\Compiler;
 
 use Sonata\NotificationBundle\Event\IterateEvent;
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use Symfony\Component\DependencyInjection\Reference;
 
 class NotificationCompilerPass implements CompilerPassInterface
 {
@@ -49,10 +51,10 @@ class NotificationCompilerPass implements CompilerPassInterface
                 $informations[$event['type']][] = $id;
 
                 $definition->addMethodCall(
-                    'addListenerService',
+                    'addListener',
                     array(
                         $event['type'],
-                        array($id, 'process'),
+                        array(new ServiceClosureArgument(new Reference($id)), 'process'),
                         $priority,
                     )
                 );
