@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Kernel;
 
 class NotificationCompilerPass implements CompilerPassInterface
 {
@@ -50,14 +51,25 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $informations[$event['type']][] = $id;
 
-                $definition->addMethodCall(
-                    'addListener',
-                    array(
-                        $event['type'],
-                        array(new ServiceClosureArgument(new Reference($id)), 'process'),
-                        $priority,
-                    )
-                );
+                if (Kernel::MAJOR_VERSION <= 3 && Kernel::MINOR_VERSION < 3) {
+                    $definition->addMethodCall(
+                        'addListenerService',
+                        array(
+                            $event['type'],
+                            array($id, 'process'),
+                            $priority,
+                        )
+                    );
+                } else {
+                    $definition->addMethodCall(
+                        'addListener',
+                        array(
+                            $event['type'],
+                            array(new ServiceClosureArgument(new Reference($id)), 'process'),
+                            $priority,
+                        )
+                    );
+                }
             }
         }
 
