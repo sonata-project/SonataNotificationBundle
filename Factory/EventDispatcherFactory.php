@@ -16,12 +16,12 @@ use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpKernel\Kernel;
 
-class EventDispatcherFactory
+final class EventDispatcherFactory
 {
-    public static function createEventDispatcher(ContainerInterface $serviceContainer)
+    public static function createEventDispatcher(ContainerInterface $container)
     {
         if (Kernel::MAJOR_VERSION <= 3 && Kernel::MINOR_VERSION < 3) {
-            return new ContainerAwareEventDispatcher($serviceContainer);
+            return new ContainerAwareEventDispatcher($container);
         }
 
         return new EventDispatcher();
