@@ -50,7 +50,7 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $informations[$event['type']][] = $id;
 
-                /**
+                /*
                  * NEXT_MAJOR: Remove check for ServiceClosureArgument and the addListenerService method call.
                  */
                 if (!class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
