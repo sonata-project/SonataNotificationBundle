@@ -37,7 +37,12 @@ class SonataNotificationExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $loader->load('core.xml');
+        if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
+            $loader->load('core.xml');
+        } else {
+            $loader->load('core_legacy.xml');
+        }
+
         $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');

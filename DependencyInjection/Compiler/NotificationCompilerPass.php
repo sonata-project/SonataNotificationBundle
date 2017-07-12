@@ -50,7 +50,7 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $informations[$event['type']][] = $id;
 
-                if (is_callable(array($definition, 'addListenerService'))) {
+                if (!class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
                     $definition->addMethodCall(
                         'addListenerService',
                         array(
