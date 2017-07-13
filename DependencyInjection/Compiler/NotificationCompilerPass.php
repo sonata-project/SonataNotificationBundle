@@ -53,21 +53,21 @@ class NotificationCompilerPass implements CompilerPassInterface
                 /*
                  * NEXT_MAJOR: Remove check for ServiceClosureArgument and the addListenerService method call.
                  */
-                if (!class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
-                    $definition->addMethodCall(
-                        'addListenerService',
-                        array(
-                            $event['type'],
-                            array($id, 'process'),
-                            $priority,
-                        )
-                    );
-                } else {
+                if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
                     $definition->addMethodCall(
                         'addListener',
                         array(
                             $event['type'],
                             array(new ServiceClosureArgument(new Reference($id)), 'process'),
+                            $priority,
+                        )
+                    );
+                } else {
+                    $definition->addMethodCall(
+                        'addListenerService',
+                        array(
+                            $event['type'],
+                            array($id, 'process'),
                             $priority,
                         )
                     );
