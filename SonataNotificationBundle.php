@@ -13,7 +13,7 @@ namespace Sonata\NotificationBundle;
 
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
-use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationMappingCompilerPass;
+use Sonata\NotificationBundle\DependencyInjection\Compiler\MongoDBMappingCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -29,7 +29,7 @@ class SonataNotificationBundle extends Bundle
         $this->registerFormMapping();
 
         if (class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
-            $container->addCompilerPass(new NotificationMappingCompilerPass());
+            $container->addCompilerPass(new MongoDBMappingCompilerPass());
         }
     }
 

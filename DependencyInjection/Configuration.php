@@ -52,7 +52,8 @@ EOF;
             ->scalarNode('db_driver')
                 ->validate()
                     ->ifNotInArray($supportedDrivers)
-                    ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
+                    ->thenInvalid('The driver %s is not supported. Please choose one of '.
+                        ''.json_encode($supportedDrivers))
                 ->end()
                 ->cannotBeOverwritten()
                 ->isRequired()

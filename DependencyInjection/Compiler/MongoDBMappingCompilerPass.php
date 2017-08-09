@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author Salma Chakroun <chakroun.salma@gmail.com>
  */
-class NotificationMappingCompilerPass implements CompilerPassInterface
+class MongoDBMappingCompilerPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
@@ -30,7 +30,11 @@ class NotificationMappingCompilerPass implements CompilerPassInterface
             $modelDir => 'Sonata\NotificationBundle\Document',
         );
 
-        $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mappings, array('doctrine_mongodb.odm.default_document_manager')));
+        $container->addCompilerPass(
+            DoctrineMongoDBMappingsPass::createXmlMappingDriver(
+                $mappings, array('doctrine_mongodb.odm.default_document_manager')
+            )
+        );
     }
 
 }
