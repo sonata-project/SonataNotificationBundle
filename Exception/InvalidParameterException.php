@@ -14,8 +14,6 @@ namespace Sonata\NotificationBundle\Exception;
 use Sonata\CoreBundle\Exception\InvalidParameterException as CoreBundleException;
 
 /**
- * Class InvalidParameterException.
- *
  * @deprecated Use Sonata\CoreBundle\Exception\InvalidParameterException instead
  */
 class InvalidParameterException extends CoreBundleException

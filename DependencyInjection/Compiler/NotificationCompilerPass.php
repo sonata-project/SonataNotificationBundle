@@ -12,9 +12,11 @@
 namespace Sonata\NotificationBundle\DependencyInjection\Compiler;
 
 use Sonata\NotificationBundle\Event\IterateEvent;
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use Symfony\Component\DependencyInjection\Reference;
 
 class NotificationCompilerPass implements CompilerPassInterface
 {
@@ -36,7 +38,10 @@ class NotificationCompilerPass implements CompilerPassInterface
                 $priority = isset($event['priority']) ? $event['priority'] : 0;
 
                 if (!isset($event['type'])) {
-                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "type" attribute on "sonata.notification" tags.', $id));
+                    throw new \InvalidArgumentException(sprintf(
+                        'Service "%s" must define the "type" attribute on "sonata.notification" tags.',
+                        $id
+                    ));
                 }
 
                 if (!isset($informations[$event['type']])) {
@@ -45,7 +50,28 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $informations[$event['type']][] = $id;
 
-                $definition->addMethodCall('addListenerService', array($event['type'], array($id, 'process'), $priority));
+                /*
+                 * NEXT_MAJOR: Remove check for ServiceClosureArgument and the addListenerService method call.
+                 */
+                if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
+                    $definition->addMethodCall(
+                        'addListener',
+                        array(
+                            $event['type'],
+                            array(new ServiceClosureArgument(new Reference($id)), 'process'),
+                            $priority,
+                        )
+                    );
+                } else {
+                    $definition->addMethodCall(
+                        'addListenerService',
+                        array(
+                            $event['type'],
+                            array($id, 'process'),
+                            $priority,
+                        )
+                    );
+                }
             }
         }
 
@@ -59,10 +85,15 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $class = new \ReflectionClass($definition->getClass());
                 if (!$class->implementsInterface('Sonata\NotificationBundle\Event\IterationListener')) {
-                    throw new RuntimeException('Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener');
+                    throw new RuntimeException(
+                        'Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener'
+                    );
                 }
 
-                $definition->addTag('kernel.event_listener', array('event' => IterateEvent::EVENT_NAME, 'method' => 'iterate'));
+                $definition->addTag(
+                    'kernel.event_listener',
+                    array('event' => IterateEvent::EVENT_NAME, 'method' => 'iterate')
+                );
             }
         }
     }

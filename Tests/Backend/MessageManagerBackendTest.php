@@ -15,16 +15,17 @@ use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
 
-class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
+class MessageManagerBackendTest extends PHPUnit_Framework_TestCase
 {
     public function testCreateAndPublish()
     {
         $message = new Message();
-        $modelManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $modelManager->expects($this->once())->method('save')->will($this->returnValue($message));
         $modelManager->expects($this->once())->method('create')->will($this->returnValue($message));
 
@@ -41,10 +42,10 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
     public function testHandleSuccess()
     {
         $message = new Message();
-        $modelManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $modelManager->expects($this->exactly(2))->method('save')->will($this->returnValue($message));
 
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())->method('dispatch');
 
         $backend = new MessageManagerBackend($modelManager, array());
@@ -59,10 +60,10 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
     public function testHandleError()
     {
         $message = new Message();
-        $modelManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $modelManager->expects($this->exactly(2))->method('save')->will($this->returnValue($message));
 
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
         $backend = new MessageManagerBackend($modelManager, array());
 
@@ -88,7 +89,7 @@ class MessageManagerBackendTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
         }
 
-        $modelManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $modelManager->expects($this->exactly(1))->method('countStates')->will($this->returnValue($counts));
 
         $backend = new MessageManagerBackend($modelManager, array(

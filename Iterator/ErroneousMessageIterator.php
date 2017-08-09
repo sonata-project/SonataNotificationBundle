@@ -14,9 +14,6 @@ namespace Sonata\NotificationBundle\Iterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
-/**
- * Class ErroneousMessageIterator.
- */
 class ErroneousMessageIterator extends MessageManagerMessageIterator
 {
     /**
@@ -54,6 +51,12 @@ class ErroneousMessageIterator extends MessageManagerMessageIterator
      */
     protected function findNextMessages($types)
     {
-        return $this->messageManager->findByAttempts($this->types, MessageInterface::STATE_ERROR, $this->batchSize, $this->maxAttempts, $this->attemptDelay);
+        return $this->messageManager->findByAttempts(
+            $this->types,
+            MessageInterface::STATE_ERROR,
+            $this->batchSize,
+            $this->maxAttempts,
+            $this->attemptDelay
+        );
     }
 }
