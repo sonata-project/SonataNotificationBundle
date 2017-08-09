@@ -15,12 +15,13 @@ use Sonata\NotificationBundle\Backend\RuntimeBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
+class RuntimeBackendTest extends PHPUnit_Framework_TestCase
 {
     public function testCreateAndPublish()
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $backend = new RuntimeBackend($dispatcher);
         $message = $backend->createAndPublish('foo', array('message' => 'salut'));
 
@@ -34,7 +35,7 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
 
     public function testIterator()
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $backend = new RuntimeBackend($dispatcher);
 
         $this->assertInstanceOf('Iterator', $backend->getIterator());
@@ -44,7 +45,7 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())->method('dispatch');
 
         $backend = new RuntimeBackend($dispatcher);
@@ -59,7 +60,7 @@ class RuntimeBackendTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
 
         $backend = new RuntimeBackend($dispatcher);

@@ -61,7 +61,10 @@ class RestartCommand extends ContainerAwareCommand
                 $input->getOption('max-attempts'),
                 $input->getOption('attempt-delay'));
         } else {
-            $messages = $this->getErroneousMessageSelector()->getMessages($input->getOption('type'), $input->getOption('max-attempts'));
+            $messages = $this->getErroneousMessageSelector()->getMessages(
+                $input->getOption('type'),
+                $input->getOption('max-attempts')
+            );
         }
 
         if (0 == count($messages)) {
@@ -79,7 +82,13 @@ class RestartCommand extends ContainerAwareCommand
 
             $this->getBackend()->publish($newMessage);
 
-            $output->writeln(sprintf('Reset Message %s <info>#%d</info>, new id %d. Attempt #%d', $newMessage->getType(), $id, $newMessage->getId(), $newMessage->getRestartCount()));
+            $output->writeln(sprintf(
+                'Reset Message %s <info>#%d</info>, new id %d. Attempt #%d',
+                $newMessage->getType(),
+                $id,
+                $newMessage->getId(),
+                $newMessage->getRestartCount()
+            ));
 
             if ($pullMode) {
                 $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($messages, null, $newMessage));

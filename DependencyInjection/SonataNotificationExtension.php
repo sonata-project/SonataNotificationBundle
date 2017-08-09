@@ -20,11 +20,6 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * This is the class that loads and manages your bundle configuration.
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class SonataNotificationExtension extends Extension
 {
     /**
@@ -42,14 +37,21 @@ class SonataNotificationExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $loader->load('core.xml');
+        /*
+         * NEXT_MAJOR: Remove the check for ServiceClosureArgument as well as core_legacy.xml.
+         */
+        if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
+            $loader->load('core.xml');
+        } else {
+            $loader->load('core_legacy.xml');
+        }
 
         if ('orm' === $config['db_driver']) {
             $loader->load('doctrine_orm.xml');
         } else {
             $loader->load('doctrine_mongodb.xml');
         }
-
+        
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
         $loader->load('selector.xml');
@@ -75,7 +77,8 @@ class SonataNotificationExtension extends Extension
             $loader->load('api_form.xml');
         }
 
-        if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) { // for now, only support for ORM
+        // for now, only support for ORM
+        if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) {
             $loader->load('admin.xml');
         }
 

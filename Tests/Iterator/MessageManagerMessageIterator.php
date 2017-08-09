@@ -17,8 +17,6 @@ use Sonata\NotificationBundle\Tests\Entity\MessageManagerMock;
 
 /**
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
- *
- * Class MessageManagerMessageIterator
  */
 class MessageManagerMessageIterator extends Iterator
 {

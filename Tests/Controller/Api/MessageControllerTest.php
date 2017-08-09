@@ -12,24 +12,20 @@
 namespace Sonata\NotificationBundle\Tests\Controller\Api;
 
 use Sonata\NotificationBundle\Controller\Api\MessageController;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class MessageControllerTest.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
-class MessageControllerTest extends \PHPUnit_Framework_TestCase
+class MessageControllerTest extends PHPUnit_Framework_TestCase
 {
     public function testGetMessagesAction()
     {
-        $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $messageManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $messageManager->expects($this->once())->method('getPager')->will($this->returnValue(array()));
 
-        $paramFetcher = $this->getMockBuilder('FOS\RestBundle\Request\ParamFetcher')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paramFetcher = $this->createMock('FOS\RestBundle\Request\ParamFetcher');
         $paramFetcher->expects($this->exactly(3))->method('get');
         $paramFetcher->expects($this->once())->method('all')->will($this->returnValue(array()));
 
@@ -38,17 +34,17 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPostMessageAction()
     {
-        $message = $this->getMock('Sonata\NotificationBundle\Model\MessageInterface');
+        $message = $this->createMock('Sonata\NotificationBundle\Model\MessageInterface');
 
-        $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $messageManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $messageManager->expects($this->once())->method('save')->will($this->returnValue($message));
 
-        $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
+        $form = $this->createMock('Symfony\Component\Form\Form');
         $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $form->expects($this->once())->method('getData')->will($this->returnValue($message));
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
         $view = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
@@ -58,16 +54,16 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPostMessageInvalidAction()
     {
-        $message = $this->getMock('Sonata\NotificationBundle\Model\MessageInterface');
+        $message = $this->createMock('Sonata\NotificationBundle\Model\MessageInterface');
 
-        $messageManager = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $messageManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $messageManager->expects($this->never())->method('save')->will($this->returnValue($message));
 
-        $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
+        $form = $this->createMock('Symfony\Component\Form\Form');
         $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(false));
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
         $view = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
@@ -85,13 +81,13 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
     public function createMessageController($message = null, $messageManager = null, $formFactory = null)
     {
         if (null === $messageManager) {
-            $messageManager = $this->getMock('Sonata\PageBundle\Model\SiteManagerInterface');
+            $messageManager = $this->createMock('Sonata\PageBundle\Model\SiteManagerInterface');
         }
         if (null !== $message) {
             $messageManager->expects($this->once())->method('findOneBy')->will($this->returnValue($message));
         }
         if (null === $formFactory) {
-            $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+            $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         }
 
         return new MessageController($messageManager, $formFactory);

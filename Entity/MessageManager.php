@@ -76,7 +76,9 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     {
         $tableName = $this->getEntityManager()->getClassMetadata($this->class)->table['name'];
 
-        $stm = $this->getConnection()->query(sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName));
+        $stm = $this->getConnection()->query(
+            sprintf('SELECT state, count(state) as cnt FROM %s GROUP BY state', $tableName)
+        );
 
         $states = array(
             MessageInterface::STATE_DONE => 0,

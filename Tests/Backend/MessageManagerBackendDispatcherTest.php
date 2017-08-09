@@ -13,18 +13,16 @@ namespace Sonata\NotificationBundle\Tests\Backend;
 
 use Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher;
 use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
  */
-class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
+class MessageManagerBackendDispatcherTest extends PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $testBackend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\MessageManagerBackend')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $testBackend = $this->createMock('Sonata\NotificationBundle\Backend\MessageManagerBackend');
 
         $testBackend->expects($this->once())
             ->method('setDispatcher')
@@ -39,7 +37,7 @@ class MessageManagerBackendDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($message))
         ;
 
-        $mMgr = $this->getMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $mMgr = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
 
         $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, array(), '', array(array('types' => array('test'), 'backend' => $testBackend)));
 
