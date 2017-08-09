@@ -51,7 +51,7 @@ class SonataNotificationExtension extends Extension
         } else {
             $loader->load('doctrine_mongodb.xml');
         }
-        
+
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
         $loader->load('selector.xml');
