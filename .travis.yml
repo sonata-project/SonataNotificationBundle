@@ -12,7 +12,6 @@ language: php
 php:
   - '7.1'
   - nightly
-  - hhvm
 
 sudo: false
 
@@ -52,6 +51,8 @@ matrix:
       env: SONATA_CORE=dev-master@dev
     - php: '7.1'
       env: SYMFONY_DEPRECATIONS_HELPER=0
+    - php: hhvm
+      dist: trusty
   allow_failures:
     - php: nightly
     - php: hhvm
