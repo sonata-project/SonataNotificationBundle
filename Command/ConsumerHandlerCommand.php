@@ -99,6 +99,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
             if (!$message->getType()) {
                 $output->write('<error>Skipping : no type defined </error>');
+
                 continue;
             }
 

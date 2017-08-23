@@ -38,6 +38,7 @@ class SwiftMailerConsumer implements ConsumerInterface
         }
 
         $exception = false;
+
         try {
             $this->sendEmail($event->getMessage());
         } catch (\Exception $e) {

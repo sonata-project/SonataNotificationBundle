@@ -68,6 +68,7 @@ class MessageManagerBackendTest extends PHPUnit_Framework_TestCase
         $backend = new MessageManagerBackend($modelManager, array());
 
         $e = false;
+
         try {
             $backend->handle($message, $dispatcher);
         } catch (HandlingException $e) {
