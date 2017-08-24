@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author Salma Chakroun <chakroun.salma@gmail.com>
  */
-class MongoDBMappingCompilerPass implements CompilerPassInterface
+final class MongoDBMappingCompilerPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
