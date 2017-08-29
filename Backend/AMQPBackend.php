@@ -121,7 +121,7 @@ class AMQPBackend implements BackendInterface
         /*
          * name: $queue
          * passive: false
-         * durable: true // the queue will survive server restarts
+         * durable: true // the queue will survive server restarts.
          * exclusive: false // the queue can be accessed in other channels
          * auto_delete: false //the queue won't be deleted once the channel is closed.
          * no_wait: false the channel will wait until queue.declare_ok is received
