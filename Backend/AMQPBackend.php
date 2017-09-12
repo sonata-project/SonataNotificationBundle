@@ -70,7 +70,7 @@ class AMQPBackend implements BackendInterface
     /**
      * @var AMQPBackendDispatcher
      */
-    protected $dispatcher = null;
+    private $dispatcher = null;
 
     /**
      * @param string   $exchange
