@@ -28,6 +28,11 @@ use ZendDiagnostics\Result\Success;
 class AMQPBackend implements BackendInterface
 {
     /**
+     * @var AMQPBackendDispatcher
+     */
+    protected $dispatcher = null;
+
+    /**
      * @var string
      */
     protected $exchange;
@@ -66,11 +71,6 @@ class AMQPBackend implements BackendInterface
      * @var null|int
      */
     private $prefetchCount;
-
-    /**
-     * @var AMQPBackendDispatcher
-     */
-    protected $dispatcher = null;
 
     /**
      * @param string   $exchange
