@@ -28,6 +28,11 @@ use ZendDiagnostics\Result\Success;
 class AMQPBackend implements BackendInterface
 {
     /**
+     * @var AMQPBackendDispatcher
+     */
+    protected $dispatcher = null;
+
+    /**
      * @var string
      */
     protected $exchange;
@@ -63,9 +68,9 @@ class AMQPBackend implements BackendInterface
     protected $ttl;
 
     /**
-     * @var AMQPBackendDispatcher
+     * @var null|int
      */
-    protected $dispatcher = null;
+    private $prefetchCount;
 
     /**
      * @param string   $exchange
@@ -76,7 +81,7 @@ class AMQPBackend implements BackendInterface
      * @param string   $deadLetterRoutingKey
      * @param null|int $ttl
      */
-    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null)
+    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
     {
         $this->exchange = $exchange;
         $this->queue = $queue;
@@ -85,6 +90,7 @@ class AMQPBackend implements BackendInterface
         $this->deadLetterExchange = $deadLetterExchange;
         $this->deadLetterRoutingKey = $deadLetterRoutingKey;
         $this->ttl = $ttl;
+        $this->prefetchCount = $prefetchCount;
 
         if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
             throw new \RuntimeException('Please install php-amqplib/php-amqplib dependency');
@@ -192,6 +198,10 @@ class AMQPBackend implements BackendInterface
      */
     public function getIterator()
     {
+        if ($this->prefetchCount !== null) {
+            $this->getChannel()->basic_qos(null, $this->prefetchCount, null);
+        }
+
         return new AMQPMessageIterator($this->getChannel(), $this->queue);
     }
 
