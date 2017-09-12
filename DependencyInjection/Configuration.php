@@ -223,6 +223,12 @@ Only used by RabbitMQ
 Defines the per-queue message time-to-live (milliseconds)
 EOF;
 
+        $prefetchCountInfo = <<<'EOF'
+Only used by RabbitMQ
+
+Defines the number of messages which will be delivered to the customer at a time.
+EOF;
+
         $typesInfo = <<<'EOF'
 Only used by Doctrine
 
@@ -267,6 +273,12 @@ EOF;
                 ->integerNode('ttl')
                     ->info($ttlInfo)
                     ->min(0)
+                    ->defaultValue(null)
+                ->end()
+                ->integerNode('prefetch_count')
+                    ->info($prefetchCountInfo)
+                    ->min(0)
+                    ->max(65535)
                     ->defaultValue(null)
                 ->end()
 
