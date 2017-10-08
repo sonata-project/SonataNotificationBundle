@@ -53,7 +53,7 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
                 $this->isType('boolean'),
                 $this->isType('boolean'),
                 $this->isType('boolean'),
-                $this->equalTo(array())
+                $this->equalTo([])
             );
         $channelMock->expects($this->once())
             ->method('queue_bind')
@@ -73,20 +73,20 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
         $channelMock->expects($this->exactly(2))
             ->method('exchange_declare')
             ->withConsecutive(
-                array(
+                [
                     $this->equalTo(self::EXCHANGE),
                     $this->equalTo('direct'),
                     $this->isType('boolean'),
                     $this->isType('boolean'),
                     $this->isType('boolean'),
-                ),
-                array(
+                ],
+                [
                     $this->equalTo(self::DEAD_LETTER_EXCHANGE),
                     $this->equalTo('direct'),
                     $this->isType('boolean'),
                     $this->isType('boolean'),
                     $this->isType('boolean'),
-                )
+                ]
             );
         $channelMock->expects($this->once())
             ->method('queue_declare')
@@ -97,23 +97,23 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
                 $this->isType('boolean'),
                 $this->isType('boolean'),
                 $this->isType('boolean'),
-                $this->equalTo(array(
-                    'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
-                ))
+                $this->equalTo([
+                    'x-dead-letter-exchange' => ['S', self::DEAD_LETTER_EXCHANGE],
+                ])
             );
         $channelMock->expects($this->exactly(2))
             ->method('queue_bind')
             ->withConsecutive(
-                array(
+                [
                    $this->equalTo(self::QUEUE),
                    $this->equalTo(self::EXCHANGE),
                    $this->equalTo(self::KEY),
-                ),
-                array(
+                ],
+                [
                    $this->equalTo(self::QUEUE),
                    $this->equalTo(self::DEAD_LETTER_EXCHANGE),
                    $this->equalTo(self::KEY),
-                )
+                ]
             );
 
         $backend->initialize();
@@ -141,10 +141,10 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
                 $this->isType('boolean'),
                 $this->isType('boolean'),
                 $this->isType('boolean'),
-                $this->equalTo(array(
-                   'x-dead-letter-exchange' => array('S', self::DEAD_LETTER_EXCHANGE),
-                   'x-dead-letter-routing-key' => array('S', self::DEAD_LETTER_ROUTING_KEY),
-                ))
+                $this->equalTo([
+                   'x-dead-letter-exchange' => ['S', self::DEAD_LETTER_EXCHANGE],
+                   'x-dead-letter-routing-key' => ['S', self::DEAD_LETTER_ROUTING_KEY],
+                ])
             );
         $channelMock->expects($this->once())
             ->method('queue_bind')
@@ -179,9 +179,9 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
                 $this->isType('boolean'),
                 $this->isType('boolean'),
                 $this->isType('boolean'),
-                $this->equalTo(array(
-                    'x-message-ttl' => array('I', self::TTL),
-                ))
+                $this->equalTo([
+                    'x-message-ttl' => ['I', self::TTL],
+                ])
             );
         $channelMock->expects($this->once())
             ->method('queue_bind')
@@ -232,26 +232,26 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
             $prefetchCount
         );
 
-        $settings = array(
+        $settings = [
             'host' => 'foo',
             'port' => 'port',
             'user' => 'user',
             'pass' => 'pass',
             'vhost' => '/',
-        );
+        ];
 
-        $queues = array(
-            array('queue' => self::QUEUE, 'routing_key' => self::KEY),
-        );
+        $queues = [
+            ['queue' => self::QUEUE, 'routing_key' => self::KEY],
+        ];
 
         $channelMock = $this->getMockBuilder('\PhpAmqpLib\Channel\AMQPChannel')
             ->disableOriginalConstructor()
-            ->setMethods(array('queue_declare', 'exchange_declare', 'queue_bind', 'basic_qos'))
+            ->setMethods(['queue_declare', 'exchange_declare', 'queue_bind', 'basic_qos'])
             ->getMock();
 
         $dispatcherMock = $this->getMockBuilder('\Sonata\NotificationBundle\Backend\AMQPBackendDispatcher')
-            ->setConstructorArgs(array($settings, $queues, 'default', array(array('type' => self::KEY, 'backend' => $backend))))
-            ->setMethods(array('getChannel'))
+            ->setConstructorArgs([$settings, $queues, 'default', [['type' => self::KEY, 'backend' => $backend]]])
+            ->setMethods(['getChannel'])
             ->getMock();
 
         $dispatcherMock->method('getChannel')
@@ -259,6 +259,6 @@ class AMQPBackendTest extends PHPUnit_Framework_TestCase
 
         $backend->setDispatcher($dispatcherMock);
 
-        return array($backend, $channelMock);
+        return [$backend, $channelMock];
     }
 }

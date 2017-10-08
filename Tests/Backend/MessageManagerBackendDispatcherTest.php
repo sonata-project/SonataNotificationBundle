@@ -30,7 +30,7 @@ class MessageManagerBackendDispatcherTest extends PHPUnit_Framework_TestCase
 
         $message = new Message();
         $message->setType('test');
-        $message->setBody(array());
+        $message->setBody([]);
 
         $testBackend->expects($this->once())
             ->method('create')
@@ -39,8 +39,8 @@ class MessageManagerBackendDispatcherTest extends PHPUnit_Framework_TestCase
 
         $mMgr = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
 
-        $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, array(), '', array(array('types' => array('test'), 'backend' => $testBackend)));
+        $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, [], '', [['types' => ['test'], 'backend' => $testBackend]]);
 
-        $this->assertEquals($message, $mMgrBackend->create('test', array()));
+        $this->assertEquals($message, $mMgrBackend->create('test', []));
     }
 }

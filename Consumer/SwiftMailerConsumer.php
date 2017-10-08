@@ -59,7 +59,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     {
         $mail = $this->mailer->createMessage()
             ->setSubject($message->getValue('subject'))
-            ->setFrom(array($message->getValue(array('from', 'email')) => $message->getValue(array('from', 'name'))))
+            ->setFrom([$message->getValue(['from', 'email']) => $message->getValue(['from', 'name'])])
             ->setTo($message->getValue('to'));
 
         if ($replyTo = $message->getValue('replyTo')) {
@@ -74,11 +74,11 @@ class SwiftMailerConsumer implements ConsumerInterface
             $mail->setBcc($bcc);
         }
 
-        if ($text = $message->getValue(array('message', 'text'))) {
+        if ($text = $message->getValue(['message', 'text'])) {
             $mail->addPart($text, 'text/plain');
         }
 
-        if ($html = $message->getValue(array('message', 'html'))) {
+        if ($html = $message->getValue(['message', 'html'])) {
             $mail->addPart($html, 'text/html');
         }
 

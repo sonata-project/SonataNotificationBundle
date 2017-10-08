@@ -31,7 +31,7 @@ class NotificationCompilerPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('sonata.notification.dispatcher');
 
-        $informations = array();
+        $informations = [];
 
         foreach ($container->findTaggedServiceIds('sonata.notification.consumer') as $id => $events) {
             foreach ($events as $event) {
@@ -45,7 +45,7 @@ class NotificationCompilerPass implements CompilerPassInterface
                 }
 
                 if (!isset($informations[$event['type']])) {
-                    $informations[$event['type']] = array();
+                    $informations[$event['type']] = [];
                 }
 
                 $informations[$event['type']][] = $id;
@@ -56,20 +56,20 @@ class NotificationCompilerPass implements CompilerPassInterface
                 if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
                     $definition->addMethodCall(
                         'addListener',
-                        array(
+                        [
                             $event['type'],
-                            array(new ServiceClosureArgument(new Reference($id)), 'process'),
+                            [new ServiceClosureArgument(new Reference($id)), 'process'],
                             $priority,
-                        )
+                        ]
                     );
                 } else {
                     $definition->addMethodCall(
                         'addListenerService',
-                        array(
+                        [
                             $event['type'],
-                            array($id, 'process'),
+                            [$id, 'process'],
                             $priority,
-                        )
+                        ]
                     );
                 }
             }
@@ -92,7 +92,7 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $definition->addTag(
                     'kernel.event_listener',
-                    array('event' => IterateEvent::EVENT_NAME, 'method' => 'iterate')
+                    ['event' => IterateEvent::EVENT_NAME, 'method' => 'iterate']
                 );
             }
         }
