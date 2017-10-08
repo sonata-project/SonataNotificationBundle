@@ -23,14 +23,14 @@ class RuntimeBackendTest extends PHPUnit_Framework_TestCase
     {
         $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $backend = new RuntimeBackend($dispatcher);
-        $message = $backend->createAndPublish('foo', array('message' => 'salut'));
+        $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
         $this->assertInstanceOf('Sonata\\NotificationBundle\\Model\\MessageInterface', $message);
 
         $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
         $this->assertEquals('foo', $message->getType());
-        $this->assertEquals(array('message' => 'salut'), $message->getBody());
+        $this->assertEquals(['message' => 'salut'], $message->getBody());
     }
 
     public function testIterator()

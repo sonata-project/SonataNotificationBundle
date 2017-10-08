@@ -21,10 +21,10 @@ class IteratorProxyMessageIteratorTest extends PHPUnit_Framework_TestCase
 {
     public function testIteratorProxiesIteratorMethods()
     {
-        $content = array(
+        $content = [
             'foo',
             'bar',
-        );
+        ];
 
         $actualIterator = $this->createMock('Iterator');
         $this->expectIterator($actualIterator, $content, true);

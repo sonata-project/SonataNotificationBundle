@@ -24,7 +24,7 @@ class MessageManagerMessageIterator extends Iterator
     {
         parent::__construct(
             new MessageManagerMock('Sonata\NotificationBundle\Model\Message', $registry),
-            array(),
+            [],
             $pause,
             $batchSize);
     }
@@ -32,7 +32,7 @@ class MessageManagerMessageIterator extends Iterator
     /**
      * @param array $types
      */
-    public function _bufferize($types = array())
+    public function _bufferize($types = [])
     {
         $this->bufferize($types);
     }

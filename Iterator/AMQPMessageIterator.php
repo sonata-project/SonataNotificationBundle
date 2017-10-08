@@ -96,8 +96,8 @@ class AMQPMessageIterator implements MessageIteratorInterface
             false,
             false,
             false,
-            array($this, 'receiveMessage',
-        ));
+            [$this, 'receiveMessage',
+        ]);
 
         $this->wait();
 

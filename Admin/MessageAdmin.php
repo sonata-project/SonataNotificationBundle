@@ -36,18 +36,18 @@ class MessageAdmin extends AbstractAdmin
      */
     public function getBatchActions()
     {
-        $actions = array();
-        $actions['publish'] = array(
+        $actions = [];
+        $actions['publish'] = [
             'label' => $this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message'),
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation' => false,
-        );
+        ];
 
-        $actions['cancelled'] = array(
+        $actions['cancelled'] = [
             'label' => $this->getLabelTranslatorStrategy()->getLabel('cancelled', 'batch', 'message'),
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation' => false,
-        );
+        ];
 
         return $actions;
     }
@@ -75,7 +75,7 @@ class MessageAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id', null, array('route' => array('name' => 'show')))
+            ->addIdentifier('id', null, ['route' => ['name' => 'show']])
             ->add('type')
             ->add('createdAt')
             ->add('startedAt')
@@ -94,7 +94,7 @@ class MessageAdmin extends AbstractAdmin
 
         $datagridMapper
             ->add('type')
-            ->add('state', null, array(), 'choice', array('choices' => $class::getStateList()))
+            ->add('state', null, [], 'choice', ['choices' => $class::getStateList()])
         ;
     }
 }
