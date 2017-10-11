@@ -100,7 +100,7 @@ class Message implements MessageInterface
     public function getValue($names, $default = null)
     {
         if (!is_array($names)) {
-            $names = array($names);
+            $names = [$names];
         }
 
         $body = $this->getBody();
@@ -232,13 +232,13 @@ class Message implements MessageInterface
      */
     public static function getStateList()
     {
-        return array(
+        return [
             self::STATE_OPEN => 'open',
             self::STATE_IN_PROGRESS => 'in_progress',
             self::STATE_DONE => 'done',
             self::STATE_ERROR => 'error',
             self::STATE_CANCELLED => 'cancelled',
-        );
+        ];
     }
 
     /**

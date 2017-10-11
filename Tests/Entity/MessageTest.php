@@ -65,10 +65,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
      */
     public function getBodyValues()
     {
-        return array(
-            array(array('name' => 'foobar'), array('name'), 'foobar', null),
-            array(array('name' => 'foobar'), array('fake'), 'bar', 'bar'),
-            array(array('name' => array('foo' => 'bar')), array('name', 'foo'), 'bar', null),
-        );
+        return [
+            [['name' => 'foobar'], ['name'], 'foobar', null],
+            [['name' => 'foobar'], ['fake'], 'bar', 'bar'],
+            [['name' => ['foo' => 'bar']], ['name', 'foo'], 'bar', null],
+        ];
     }
 }

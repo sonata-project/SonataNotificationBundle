@@ -44,7 +44,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     /**
      * @var array
      */
-    protected $buffer = array();
+    protected $buffer = [];
 
     /**
      * @param MessageManagerInterface $messageManager
@@ -52,7 +52,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      * @param int                     $pause
      * @param int                     $batchSize
      */
-    public function __construct(MessageManagerInterface $messageManager, $types = array(), $pause = 500000, $batchSize = 10)
+    public function __construct(MessageManagerInterface $messageManager, $types = [], $pause = 500000, $batchSize = 10)
     {
         $this->messageManager = $messageManager;
         $this->counter = 0;
@@ -129,7 +129,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      *
      * @param array $types
      */
-    protected function bufferize($types = array())
+    protected function bufferize($types = [])
     {
         while (true) {
             $this->buffer = $this->findNextMessages($types);

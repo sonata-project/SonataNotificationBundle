@@ -45,52 +45,52 @@ class SwiftMailerConsumerTest extends PHPUnit_Framework_TestCase
     public function testSendEmail()
     {
         $message = new Message();
-        $message->setBody(array(
+        $message->setBody([
             'subject' => 'subject',
-            'from' => array(
+            'from' => [
                 'email' => 'from@mail.fr',
                 'name' => 'nameFrom',
-            ),
-            'to' => array(
+            ],
+            'to' => [
                 'to1@mail.fr',
                 'to2@mail.fr' => 'nameTo2',
-            ),
-            'replyTo' => array(
+            ],
+            'replyTo' => [
                 'replyTo1@mail.fr',
                 'replyTo2@mail.fr' => 'nameReplyTo2',
-            ),
-            'cc' => array(
+            ],
+            'cc' => [
                 'cc1@mail.fr',
                 'cc2@mail.fr' => 'nameCc2',
-            ),
-            'bcc' => array(
+            ],
+            'bcc' => [
                 'bcc1@mail.fr',
                 'bcc2@mail.fr' => 'nameBcc2',
-            ),
-            'message' => array(
+            ],
+            'message' => [
                 'text' => 'message text',
                 'html' => 'message html',
-            ),
-        ));
+            ],
+        ]);
 
         $mail = $this->createMock('Swift_Message');
         $mail->expects($this->once())->method('setSubject')->with($this->equalTo('subject'))->willReturnSelf();
-        $mail->expects($this->once())->method('setFrom')->with($this->equalTo(array('from@mail.fr' => 'nameFrom')))->willReturnSelf();
-        $mail->expects($this->once())->method('setTo')->with($this->equalTo(array('to1@mail.fr', 'to2@mail.fr' => 'nameTo2')))->willReturnSelf();
-        $mail->expects($this->once())->method('setReplyTo')->with($this->equalTo(array('replyTo1@mail.fr', 'replyTo2@mail.fr' => 'nameReplyTo2')))->willReturnSelf();
+        $mail->expects($this->once())->method('setFrom')->with($this->equalTo(['from@mail.fr' => 'nameFrom']))->willReturnSelf();
+        $mail->expects($this->once())->method('setTo')->with($this->equalTo(['to1@mail.fr', 'to2@mail.fr' => 'nameTo2']))->willReturnSelf();
+        $mail->expects($this->once())->method('setReplyTo')->with($this->equalTo(['replyTo1@mail.fr', 'replyTo2@mail.fr' => 'nameReplyTo2']))->willReturnSelf();
         $mail->expects($this->once())
             ->method('setCc')
-            ->with($this->equalTo(array('cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2')))
+            ->with($this->equalTo(['cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2']))
             ->willReturnSelf();
         $mail->expects($this->once())
             ->method('setBcc')
-            ->with($this->equalTo(array('bcc1@mail.fr', 'bcc2@mail.fr' => 'nameBcc2')))
+            ->with($this->equalTo(['bcc1@mail.fr', 'bcc2@mail.fr' => 'nameBcc2']))
             ->willReturnSelf();
         $mail->expects($this->exactly(2))
             ->method('addPart')
             ->withConsecutive(
-                array($this->equalTo('message text'), $this->equalTo('text/plain')),
-                array($this->equalTo('message html'), $this->equalTo('text/html'))
+                [$this->equalTo('message text'), $this->equalTo('text/plain')],
+                [$this->equalTo('message html'), $this->equalTo('text/html')]
             )
             ->willReturnSelf();
 

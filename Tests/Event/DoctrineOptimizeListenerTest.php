@@ -26,9 +26,9 @@ class DoctrineOptimizeListenerTest extends PHPUnit_Framework_TestCase
         $manager->expects($this->once())->method('isOpen')->will($this->returnValue(false));
 
         $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
-        $registry->expects($this->once())->method('getManagers')->will($this->returnValue(array(
+        $registry->expects($this->once())->method('getManagers')->will($this->returnValue([
             'default' => $manager,
-        )));
+        ]));
 
         $optimizer = new DoctrineOptimizeListener($registry);
         $optimizer->iterate(new IterateEvent(
@@ -47,9 +47,9 @@ class DoctrineOptimizeListenerTest extends PHPUnit_Framework_TestCase
         $manager->expects($this->once())->method('getUnitOfWork')->will($this->returnValue($unitofwork));
 
         $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
-        $registry->expects($this->once())->method('getManagers')->will($this->returnValue(array(
+        $registry->expects($this->once())->method('getManagers')->will($this->returnValue([
             'default' => $manager,
-        )));
+        ]));
 
         $optimizer = new DoctrineOptimizeListener($registry);
         $optimizer->iterate(new IterateEvent(

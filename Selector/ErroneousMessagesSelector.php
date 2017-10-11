@@ -51,10 +51,10 @@ class ErroneousMessagesSelector
             ->where('m.state = :erroneousState')
             ->andWhere('m.restartCount < :maxAttempts');
 
-        $parameters = array(
+        $parameters = [
             'erroneousState' => MessageInterface::STATE_ERROR,
             'maxAttempts' => $maxAttempts,
-        );
+        ];
 
         if (count($types) > 0) {
             $query->andWhere('m.type IN (:types)');
