@@ -24,7 +24,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
     /**
      * @var array
      */
-    protected $dedicatedTypes = array();
+    protected $dedicatedTypes = [];
 
     /**
      * @var BackendInterface
@@ -120,12 +120,12 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
      */
     protected function getDefaultBackend()
     {
-        $types = array();
+        $types = [];
 
         if (!empty($this->dedicatedTypes)) {
-            $types = array(
+            $types = [
                 'exclude' => $this->dedicatedTypes,
-            );
+            ];
         }
 
         $this->default->setTypes($types);

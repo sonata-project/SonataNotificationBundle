@@ -51,15 +51,15 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->never())->method('andWhere');
-                $qb->expects($self->once())->method('setParameters')->with(array());
+                $qb->expects($self->once())->method('setParameters')->with([]);
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('m.type'),
                     $self->equalTo('ASC')
                 );
             })
-            ->getPager(array(), 1);
+            ->getPager([], 1);
     }
 
     /**
@@ -72,7 +72,7 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $this
             ->getMessageManager(function ($qb) use ($self) {
             })
-            ->getPager(array(), 1, 10, array('invalid' => 'ASC'));
+            ->getPager([], 1, 10, ['invalid' => 'ASC']);
     }
 
     public function testGetPagerWithMultipleSort()
@@ -80,9 +80,9 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->never())->method('andWhere');
-                $qb->expects($self->once())->method('setParameters')->with(array());
+                $qb->expects($self->once())->method('setParameters')->with([]);
                 $qb->expects($self->exactly(2))->method('orderBy')->with(
                     $self->logicalOr(
                         $self->equalTo('m.type'),
@@ -93,12 +93,12 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
                         $self->equalTo('DESC')
                     )
                 );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array()));
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo([]));
             })
-            ->getPager(array(), 1, 10, array(
+            ->getPager([], 1, 10, [
                 'type' => 'ASC',
                 'state' => 'DESC',
-            ));
+            ]);
     }
 
     public function testGetPagerWithOpenedMessages()
@@ -106,13 +106,13 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array(
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
                     'state' => MessageInterface::STATE_OPEN,
-                )));
+                ]));
             })
-            ->getPager(array('state' => MessageInterface::STATE_OPEN), 1);
+            ->getPager(['state' => MessageInterface::STATE_OPEN], 1);
     }
 
     public function testGetPagerWithCanceledMessages()
@@ -120,13 +120,13 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array(
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
                     'state' => MessageInterface::STATE_CANCELLED,
-                )));
+                ]));
             })
-            ->getPager(array('state' => MessageInterface::STATE_CANCELLED), 1);
+            ->getPager(['state' => MessageInterface::STATE_CANCELLED], 1);
     }
 
     public function testGetPagerWithInProgressMessages()
@@ -134,13 +134,13 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getMessageManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('m')));
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array(
+                $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
                     'state' => MessageInterface::STATE_IN_PROGRESS,
-                )));
+                ]));
             })
-            ->getPager(array('state' => MessageInterface::STATE_IN_PROGRESS), 1);
+            ->getPager(['state' => MessageInterface::STATE_IN_PROGRESS], 1);
     }
 
     /**
@@ -162,17 +162,17 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
     {
         $query = $this->getMockForAbstractClass(
             'Doctrine\ORM\AbstractQuery',
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('execute')
+            ['execute']
         );
         $query->expects($this->any())->method('execute')->will($this->returnValue(true));
 
         $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setConstructorArgs(array($this->createMock('Doctrine\ORM\EntityManager')))
+            ->setConstructorArgs([$this->createMock('Doctrine\ORM\EntityManager')])
             ->getMock();
 
         $qb->expects($this->any())->method('select')->will($this->returnValue($qb));
@@ -184,10 +184,10 @@ class MessageManagerTest extends PHPUnit_Framework_TestCase
         $repository->expects($this->any())->method('createQueryBuilder')->will($this->returnValue($qb));
 
         $metadata = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata->expects($this->any())->method('getFieldNames')->will($this->returnValue(array(
+        $metadata->expects($this->any())->method('getFieldNames')->will($this->returnValue([
             'state',
             'type',
-        )));
+        ]));
 
         $em = $this->createMock('Doctrine\ORM\EntityManager');
         $em->expects($this->any())->method('getRepository')->will($this->returnValue($repository));

@@ -130,7 +130,7 @@ EOF;
             ->end()
             ->arrayNode('iteration_listeners')
                 ->info($iterationListenersInfo)
-                ->defaultValue(array())
+                ->defaultValue([])
                 ->prototype('scalar')->end()
             ->end()
             ->arrayNode('class')
@@ -285,7 +285,7 @@ EOF;
                 // Database configuration (Doctrine)
                 ->arrayNode('types')
                     ->info($typesInfo)
-                    ->defaultValue(array())
+                    ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
             ->end();

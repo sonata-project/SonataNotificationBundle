@@ -29,21 +29,21 @@ class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
             true
         );
 
-        $messages = array();
+        $messages = [];
 
-        $message = $backend->create('foo', array());
+        $message = $backend->create('foo', []);
         $messages[] = $message;
         $backend->publish($message);
 
-        $message = $backend->create('bar', array());
+        $message = $backend->create('bar', []);
         $messages[] = $message;
         $backend->publish($message);
 
-        $message = $backend->create('baz', array());
+        $message = $backend->create('baz', []);
         $messages[] = $message;
         $backend->publish($message);
 
-        $backend->create('not_published', array());
+        $backend->create('not_published', []);
 
         $iterator = $backend->getIterator();
         foreach ($iterator as $eachKey => $eachMessage) {
@@ -54,8 +54,8 @@ class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
     public function testNoMessagesOnEvent()
     {
         $backend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend')
-            ->setMethods(array('handle'))
-            ->setConstructorArgs(array($this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')))
+            ->setMethods(['handle'])
+            ->setConstructorArgs([$this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')])
             ->getMock();
 
         $backend
@@ -70,13 +70,13 @@ class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
     {
         $dispatcher = new EventDispatcher();
         $backend = new PostponeRuntimeBackend($dispatcher, true);
-        $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
+        $dispatcher->addListener('kernel.terminate', [$backend, 'onEvent']);
 
-        $message = $backend->create('notification.demo', array());
+        $message = $backend->create('notification.demo', []);
         $backend->publish($message);
 
         // This message will not be handled.
-        $backend->create('notification.demo', array());
+        $backend->create('notification.demo', []);
 
         $phpunit = $this;
         $phpunit->passed = false;
@@ -96,10 +96,10 @@ class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
     {
         $dispatcher = new EventDispatcher();
         $backend = new PostponeRuntimeBackend($dispatcher, true);
-        $dispatcher->addListener('kernel.terminate', array($backend, 'onEvent'));
+        $dispatcher->addListener('kernel.terminate', [$backend, 'onEvent']);
 
-        $message1 = $backend->create('notification.demo1', array());
-        $message2 = $backend->create('notification.demo2', array());
+        $message1 = $backend->create('notification.demo1', []);
+        $message2 = $backend->create('notification.demo2', []);
 
         $backend->publish($message1);
 
@@ -148,8 +148,8 @@ class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
     public function testOnCliPublishHandlesDirectly()
     {
         $backend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend')
-            ->setMethods(array('handle'))
-            ->setConstructorArgs(array($this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')))
+            ->setMethods(['handle'])
+            ->setConstructorArgs([$this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')])
             ->getMock();
 
         $backend
@@ -157,7 +157,7 @@ class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
             ->method('handle')
         ;
 
-        $message = $backend->create('notification.demo', array());
+        $message = $backend->create('notification.demo', []);
         $backend->publish($message);
     }
 }

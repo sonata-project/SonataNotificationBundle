@@ -85,10 +85,10 @@ class MessageController
 
         $paramFetcher->addParam($orderByQueryParam);
 
-        $supportedCriteria = array(
+        $supportedCriteria = [
             'state' => '',
             'type' => '',
-        );
+        ];
 
         $page = $paramFetcher->get('page');
         $limit = $paramFetcher->get('count');
@@ -102,9 +102,9 @@ class MessageController
         }
 
         if (!$sort) {
-            $sort = array();
+            $sort = [];
         } elseif (!is_array($sort)) {
-            $sort = array($sort => 'asc');
+            $sort = [$sort => 'asc'];
         }
 
         return $this->getMessageManager()->getPager($criteria, $page, $limit, $sort);
@@ -132,9 +132,9 @@ class MessageController
     {
         $message = null;
 
-        $form = $this->formFactory->createNamed(null, 'sonata_notification_api_form_message', $message, array(
+        $form = $this->formFactory->createNamed(null, 'sonata_notification_api_form_message', $message, [
             'csrf_protection' => false,
-        ));
+        ]);
 
         $form->handleRequest($request);
 
@@ -152,12 +152,12 @@ class MessageController
                 } else {
                     $serializationContext->setMaxDepth(10);
                 }
-                $serializationContext->setGroups(array('sonata_api_read'));
+                $serializationContext->setGroups(['sonata_api_read']);
                 $view->setContext($serializationContext);
             } else {
                 $serializationContext = SerializationContext::create();
                 $serializationContext->enableMaxDepthChecks();
-                $serializationContext->setGroups(array('sonata_api_read'));
+                $serializationContext->setGroups(['sonata_api_read']);
                 $view->setSerializationContext($serializationContext);
             }
 
