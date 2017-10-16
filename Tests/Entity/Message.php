@@ -11,9 +11,9 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Entity\BaseMessage;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 class Message extends BaseMessage
 {
@@ -23,7 +23,7 @@ class Message extends BaseMessage
     }
 }
 
-class BaseMessageTest extends PHPUnit_Framework_TestCase
+class BaseMessageTest extends TestCase
 {
     public function testClone()
     {

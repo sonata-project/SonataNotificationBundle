@@ -12,12 +12,12 @@
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  */
-class MessageManagerMessageIteratorTest extends PHPUnit_Framework_TestCase
+class MessageManagerMessageIteratorTest extends TestCase
 {
     /**
      * @var ManagerRegistry

@@ -11,13 +11,13 @@
 
 namespace Sonata\NotificationBundle\Tests\Notification;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\RuntimeBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class RuntimeBackendTest extends PHPUnit_Framework_TestCase
+class RuntimeBackendTest extends TestCase
 {
     public function testCreateAndPublish()
     {

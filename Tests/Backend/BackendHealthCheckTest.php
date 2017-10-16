@@ -11,11 +11,11 @@
 
 namespace Sonata\NotificationBundle\Tests\Notification;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\BackendHealthCheck;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use ZendDiagnostics\Result\Success;
 
-class BackendHealthCheckTest extends PHPUnit_Framework_TestCase
+class BackendHealthCheckTest extends TestCase
 {
     public function setUp()
     {
