@@ -11,16 +11,16 @@
 
 namespace Sonata\NotificationBundle\Tests\Notification;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
 
-class MessageManagerBackendTest extends PHPUnit_Framework_TestCase
+class MessageManagerBackendTest extends TestCase
 {
     public function testCreateAndPublish()
     {

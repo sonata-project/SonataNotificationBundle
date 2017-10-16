@@ -11,14 +11,14 @@
 
 namespace Sonata\NotificationBundle\Tests\Controller\Api;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Controller\Api\MessageController;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
  */
-class MessageControllerTest extends PHPUnit_Framework_TestCase
+class MessageControllerTest extends TestCase
 {
     public function testGetMessagesAction()
     {

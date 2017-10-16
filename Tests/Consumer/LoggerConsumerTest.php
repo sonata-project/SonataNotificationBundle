@@ -11,12 +11,12 @@
 
 namespace Sonata\NotificationBundle\Tests\Consumer;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Consumer\LoggerConsumer;
 use Sonata\NotificationBundle\Tests\Entity\Message;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class LoggerConsumerTest extends PHPUnit_Framework_TestCase
+class LoggerConsumerTest extends TestCase
 {
     /**
      * @dataProvider calledTypeProvider

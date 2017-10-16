@@ -11,14 +11,14 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher;
 use Sonata\NotificationBundle\Model\Message;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
  */
-class MessageManagerBackendDispatcherTest extends PHPUnit_Framework_TestCase
+class MessageManagerBackendDispatcherTest extends TestCase
 {
     public function testCreate()
     {

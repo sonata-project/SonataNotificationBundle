@@ -11,16 +11,16 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\PostponeRuntimeBackend;
 use Sonata\NotificationBundle\Consumer\ConsumerEventInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * @covers \Sonata\NotificationBundle\Backend\PostponeRuntimeBackend
  */
-class PostponeRuntimeBackendTest extends PHPUnit_Framework_TestCase
+class PostponeRuntimeBackendTest extends TestCase
 {
     public function testIteratorContainsPublishedMessages()
     {

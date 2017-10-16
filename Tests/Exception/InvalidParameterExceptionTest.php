@@ -11,13 +11,13 @@
 
 namespace Sonata\NotificationBundle\Tests\Exception;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
  */
-class InvalidParameterExceptionTest extends PHPUnit_Framework_TestCase
+class InvalidParameterExceptionTest extends TestCase
 {
     /**
      * @expectedException \Sonata\NotificationBundle\Exception\InvalidParameterException

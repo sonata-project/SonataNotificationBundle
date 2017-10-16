@@ -11,13 +11,13 @@
 
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * @covers \Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator
  */
-class IteratorProxyMessageIteratorTest extends PHPUnit_Framework_TestCase
+class IteratorProxyMessageIteratorTest extends TestCase
 {
     public function testIteratorProxiesIteratorMethods()
     {
