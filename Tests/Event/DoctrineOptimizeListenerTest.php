@@ -11,11 +11,11 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Event\DoctrineOptimizeListener;
 use Sonata\NotificationBundle\Event\IterateEvent;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class DoctrineOptimizeListenerTest extends PHPUnit_Framework_TestCase
+class DoctrineOptimizeListenerTest extends TestCase
 {
     /**
      * @expectedException \RuntimeException
@@ -32,8 +32,8 @@ class DoctrineOptimizeListenerTest extends PHPUnit_Framework_TestCase
 
         $optimizer = new DoctrineOptimizeListener($registry);
         $optimizer->iterate(new IterateEvent(
-            $this->getMock('Sonata\NotificationBundle\Iterator\MessageIteratorInterface'),
-            $this->getMock('Sonata\NotificationBundle\Backend\BackendInterface')
+            $this->createMock('Sonata\NotificationBundle\Iterator\MessageIteratorInterface'),
+            $this->createMock('Sonata\NotificationBundle\Backend\BackendInterface')
         ));
     }
 

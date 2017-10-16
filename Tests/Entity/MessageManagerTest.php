@@ -11,11 +11,11 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Entity\MessageManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class MessageManagerTest extends PHPUnit_Framework_TestCase
+class MessageManagerTest extends TestCase
 {
     public function testCancel()
     {

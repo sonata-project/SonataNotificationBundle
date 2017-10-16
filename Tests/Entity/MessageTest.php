@@ -11,10 +11,10 @@
 
 namespace Sonata\NotificationBundle\Tests\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class MessageTest extends PHPUnit_Framework_TestCase
+class MessageTest extends TestCase
 {
     /**
      * @dataProvider getBodyValues

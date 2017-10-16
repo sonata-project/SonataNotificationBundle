@@ -11,10 +11,10 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class AMQPBackendTest extends PHPUnit_Framework_TestCase
+class AMQPBackendTest extends TestCase
 {
     const EXCHANGE = 'exchange';
     const QUEUE = 'foo';

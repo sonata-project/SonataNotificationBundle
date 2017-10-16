@@ -11,14 +11,14 @@
 
 namespace Sonata\NotificationBundle\Tests\Consumer;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Consumer\SwiftMailerConsumer;
 use Sonata\NotificationBundle\Model\Message;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * Tests the SwiftMailerConsumer.
  */
-class SwiftMailerConsumerTest extends PHPUnit_Framework_TestCase
+class SwiftMailerConsumerTest extends TestCase
 {
     /**
      * @var SwiftMailerConsumer

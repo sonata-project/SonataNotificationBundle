@@ -11,10 +11,10 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
-use Sonata\NotificationBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class AMQPBackendDispatcherTest extends PHPUnit_Framework_TestCase
+class AMQPBackendDispatcherTest extends TestCase
 {
     protected function setUp()
     {
