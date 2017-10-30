@@ -112,15 +112,15 @@ class AMQPBackend implements BackendInterface
     {
         $args = [];
 
-        if ($this->deadLetterExchange !== null) {
+        if (null !== $this->deadLetterExchange) {
             $args['x-dead-letter-exchange'] = ['S', $this->deadLetterExchange];
 
-            if ($this->deadLetterRoutingKey !== null) {
+            if (null !== $this->deadLetterRoutingKey) {
                 $args['x-dead-letter-routing-key'] = ['S', $this->deadLetterRoutingKey];
             }
         }
 
-        if ($this->ttl !== null) {
+        if (null !== $this->ttl) {
             $args['x-message-ttl'] = ['I', $this->ttl];
         }
 
@@ -146,7 +146,7 @@ class AMQPBackend implements BackendInterface
 
         $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
 
-        if ($this->deadLetterExchange !== null && $this->deadLetterRoutingKey === null) {
+        if (null !== $this->deadLetterExchange && null === $this->deadLetterRoutingKey) {
             $this->getChannel()->exchange_declare($this->deadLetterExchange, 'direct', false, true, false);
             $this->getChannel()->queue_bind($this->queue, $this->deadLetterExchange, $this->key);
         }
@@ -198,7 +198,7 @@ class AMQPBackend implements BackendInterface
      */
     public function getIterator()
     {
-        if ($this->prefetchCount !== null) {
+        if (null !== $this->prefetchCount) {
             $this->getChannel()->basic_qos(null, $this->prefetchCount, null);
         }
 
@@ -230,9 +230,9 @@ class AMQPBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
-            if ($this->recover === true) {
+            if (true === $this->recover) {
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_recover($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
-            } elseif ($this->deadLetterExchange !== null) {
+            } elseif (null !== $this->deadLetterExchange) {
                 $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag'], false);
             }
 
@@ -267,7 +267,7 @@ class AMQPBackend implements BackendInterface
      */
     protected function getChannel()
     {
-        if ($this->dispatcher === null) {
+        if (null === $this->dispatcher) {
             throw new \RuntimeException('Unable to retrieve AMQP channel without dispatcher.');
         }
 

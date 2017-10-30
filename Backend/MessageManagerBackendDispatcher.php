@@ -42,7 +42,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         parent::__construct($queues, $defaultQueue, $backends);
 
         foreach ($this->queues as $queue) {
-            if ($queue['default'] === true) {
+            if (true === $queue['default']) {
                 continue;
             }
 

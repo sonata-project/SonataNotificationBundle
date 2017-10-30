@@ -90,16 +90,16 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
 
         $default = null;
 
-        if (count($this->queues) === 0) {
+        if (0 === count($this->queues)) {
             foreach ($this->backends as $backend) {
-                if ($backend['type'] === 'default') {
+                if ('default' === $backend['type']) {
                     return $backend['backend'];
                 }
             }
         }
 
         foreach ($this->backends as $backend) {
-            if ('all' === $type && $backend['type'] === '') {
+            if ('all' === $type && '' === $backend['type']) {
                 return $backend['backend'];
             }
 
@@ -112,7 +112,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             }
         }
 
-        if ($default === null) {
+        if (null === $default) {
             throw new BackendNotFoundException('Could not find a message backend for the type '.$type);
         }
 
@@ -154,7 +154,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
                 foreach ($output as $q) {
                     if ($q['name'] === $queue['queue']) {
                         ++$checked;
-                        if ($q['consumers'] === 0) {
+                        if (0 === $q['consumers']) {
                             $missingConsumers[] = $queue['queue'];
                         }
                     }
@@ -217,7 +217,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     protected function getApiQueueStatus()
     {
-        if (class_exists('Guzzle\Http\Client') === false) {
+        if (false === class_exists('Guzzle\Http\Client')) {
             throw new \RuntimeException(
                 'The guzzle http client library is required to run rabbitmq health checks. '
                 .'Make sure to add guzzlehttp/guzzle to your composer.json.'
