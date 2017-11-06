@@ -72,7 +72,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
         $output->writeln(' done!');
 
-        if ($type === null) {
+        if (null === $type) {
             $output->writeln(sprintf(
                 '[%s] <info>Starting the backend handler</info> - %s',
                 $startDate->format('r'),
@@ -188,7 +188,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf('The type `%s` does not exist, available types: %s', $type, implode(', ', array_keys($this->getNotificationDispatcher()->getListeners()))));
         }
 
-        if ($type !== null && !$backend instanceof QueueDispatcherInterface) {
+        if (null !== $type && !$backend instanceof QueueDispatcherInterface) {
             throw new \RuntimeException(sprintf(
                 'Unable to use the provided type %s with a non QueueDispatcherInterface backend',
                 $type

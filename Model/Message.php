@@ -272,7 +272,7 @@ class Message implements MessageInterface
      */
     public function isRunning()
     {
-        return $this->state == self::STATE_IN_PROGRESS;
+        return self::STATE_IN_PROGRESS == $this->state;
     }
 
     /**
@@ -280,7 +280,7 @@ class Message implements MessageInterface
      */
     public function isCancelled()
     {
-        return $this->state == self::STATE_CANCELLED;
+        return self::STATE_CANCELLED == $this->state;
     }
 
     /**
@@ -288,7 +288,7 @@ class Message implements MessageInterface
      */
     public function isError()
     {
-        return $this->state == self::STATE_ERROR;
+        return self::STATE_ERROR == $this->state;
     }
 
     /**
@@ -296,6 +296,6 @@ class Message implements MessageInterface
      */
     public function isOpen()
     {
-        return $this->state == self::STATE_OPEN;
+        return self::STATE_OPEN == $this->state;
     }
 }

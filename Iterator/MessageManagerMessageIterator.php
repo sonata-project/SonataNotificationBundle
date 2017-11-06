@@ -117,7 +117,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      */
     protected function setCurrent()
     {
-        if (count($this->buffer) === 0) {
+        if (0 === count($this->buffer)) {
             $this->bufferize($this->types);
         }
 
