@@ -80,6 +80,7 @@ Full configuration options:
                         pass:                 guest
                         vhost:                guest
                         console_url:          'http://localhost:55672/api'
+                        factory_class:        \Enqueue\AmqpLib\AmqpConnectionFactory
             consumers:
 
                 # If set to true, SwiftMailerConsumer and LoggerConsumer will be registered as services
@@ -108,3 +109,35 @@ Full configuration options:
                         mappings:
                             SonataNotificationBundle: ~
                             ApplicationSonataNotificationBundle: ~
+
+
+Changing AMQP transport
+-----------------------
+
+Sonata integrates with `queue interop`_ and by default uses `enqueue/amqp-lib`_.
+Though you can pick your favorite library among:
+
+* `enqueue/amqp-ext`_: use `Enqueue\AmqpExt\AmqpConnectionFactory` class.
+* `enqueue/amqp-lib`_: use `Enqueue\AmqpLib\AmqpConnectionFactory` class.
+* `enqueue/amqp-bunny`_: use `Enqueue\AmqpBunny\AmqpConnectionFactory` class.
+
+For example if you decide to use `enqueue/amqp-bunny`_ transport,
+run `composer require enqueue/amqp-ext:^0.8` and change `factory_class` option in the config:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+
+        sonata_notification:
+            backends:
+                rabbitmq:
+                    connection:
+                        factory_class:        \Enqueue\AmqpExt\AmqpConnectionFactory
+
+
+
+.. _`queue interop`: https://github.com/queue-interop/queue-interop#amqp-interop
+.. _`enqueue/amqp-lib`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/transport/amqp_lib.md
+.. _`enqueue/amqp-ext`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/transport/amqp_ext.md
+.. _`enqueue/amqp-bunny`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/transport/amqp_bunny.md
+

@@ -11,6 +11,11 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Enqueue\AmqpTools\DelayStrategyAware;
+use Enqueue\AmqpTools\RabbitMqDlxDelayStrategy;
+use Guzzle\Http\Client as GuzzleClient;
+use Interop\Amqp\AmqpConnectionFactory;
+use Interop\Amqp\AmqpContext;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use Sonata\NotificationBundle\Exception\BackendNotFoundException;
@@ -30,16 +35,30 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     protected $settings;
 
     /**
+     * @deprecated since 3.2, will be removed in 4.x
+     *
      * @var AMQPChannel
      */
     protected $channel;
 
     /**
+     * @deprecated since 3.2, will be removed in 4.x
+     *
      * @var AMQPConnection
      */
     protected $connection;
 
     protected $backendsInitialized = false;
+
+    /**
+     * @var AmqpConnectionFactory
+     */
+    private $connectionFactory;
+
+    /**
+     * @var AmqpContext
+     */
+    private $context;
 
     /**
      * @param array  $settings
@@ -55,25 +74,72 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
+     * @deprecated since 3.2, will be removed in 4.x
+     *
      * @return AMQPChannel
      */
     public function getChannel()
     {
-        if (!$this->channel) {
-            $this->connection = new AMQPConnection(
-                $this->settings['host'],
-                $this->settings['port'],
-                $this->settings['user'],
-                $this->settings['pass'],
-                $this->settings['vhost']
-            );
+        @trigger_error(sprintf('The method %s is deprecated since version 3.3 and will be removed in 4.0. Use %s::getContext() instead.', __METHOD__, __CLASS__), E_USER_DEPRECATED);
 
-            $this->channel = $this->connection->channel();
+        if (!$this->channel) {
+            if (!$this->context instanceof \Enqueue\AmqpLib\AmqpContext) {
+                throw new \LogicException('The BC layer works only if enqueue/amqp-lib lib is being used.');
+            }
+
+            // load context
+            $this->getContext();
+
+            /** @var \Enqueue\AmqpLib\AmqpContext $context */
+            $context = $this->getContext();
+
+            $this->channel = $context->getLibChannel();
+            $this->connection = $this->channel->getConnection();
+        }
+
+        return $this->channel;
+    }
+
+    /**
+     * @return AmqpContext
+     */
+    final public function getContext()
+    {
+        if (!$this->context) {
+            if (!array_key_exists('factory_class', $this->settings)) {
+                throw new \LogicException('The factory_class option is missing though it is required.');
+            }
+            $factoryClass = $this->settings['factory_class'];
+            if (
+                !class_exists($factoryClass) ||
+                !(new \ReflectionClass($factoryClass))->implementsInterface(AmqpConnectionFactory::class)
+            ) {
+                throw new \LogicException(sprintf(
+                    'The factory_class option "%s" has to be valid class that implements "%s"',
+                    $factoryClass,
+                    AmqpConnectionFactory::class
+                ));
+            }
+
+            /* @var AmqpConnectionFactory $factory */
+            $this->connectionFactory = $factory = new $factoryClass([
+                'host' => $this->settings['host'],
+                'port' => $this->settings['port'],
+                'user' => $this->settings['user'],
+                'pass' => $this->settings['pass'],
+                'vhost' => $this->settings['vhost'],
+            ]);
+
+            if ($factory instanceof DelayStrategyAware) {
+                $factory->setDelayStrategy(new RabbitMqDlxDelayStrategy());
+            }
+
+            $this->context = $factory->createContext();
 
             register_shutdown_function([$this, 'shutdown']);
         }
 
-        return $this->channel;
+        return $this->context;
     }
 
     /**
@@ -145,7 +211,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     public function getStatus()
     {
         try {
-            $this->getChannel();
+            $this->getContext();
             $output = $this->getApiQueueStatus();
             $checked = 0;
             $missingConsumers = [];
@@ -192,12 +258,8 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
 
     public function shutdown()
     {
-        if ($this->channel) {
-            $this->channel->close();
-        }
-
-        if ($this->connection) {
-            $this->connection->close();
+        if ($this->context) {
+            $this->context->close();
         }
     }
 
@@ -217,14 +279,14 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     protected function getApiQueueStatus()
     {
-        if (false === class_exists('Guzzle\Http\Client')) {
+        if (!class_exists(GuzzleClient::class)) {
             throw new \RuntimeException(
                 'The guzzle http client library is required to run rabbitmq health checks. '
                 .'Make sure to add guzzlehttp/guzzle to your composer.json.'
             );
         }
 
-        $client = new \Guzzle\Http\Client();
+        $client = new GuzzleClient();
         $client->setConfig(['curl.options' => [CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);

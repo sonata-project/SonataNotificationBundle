@@ -11,8 +11,13 @@
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Interop\Amqp\AmqpConsumer;
+use Interop\Amqp\AmqpContext;
+use Interop\Amqp\AmqpMessage;
+use Interop\Amqp\AmqpQueue;
+use Interop\Amqp\AmqpTopic;
+use Interop\Amqp\Impl\AmqpBind;
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Message\AMQPMessage;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
@@ -73,6 +78,11 @@ class AMQPBackend implements BackendInterface
     private $prefetchCount;
 
     /**
+     * @var AmqpConsumer
+     */
+    private $consumer;
+
+    /**
      * @param string   $exchange
      * @param string   $queue
      * @param string   $recover
@@ -91,10 +101,6 @@ class AMQPBackend implements BackendInterface
         $this->deadLetterRoutingKey = $deadLetterRoutingKey;
         $this->ttl = $ttl;
         $this->prefetchCount = $prefetchCount;
-
-        if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
-            throw new \RuntimeException('Please install php-amqplib/php-amqplib dependency');
-        }
     }
 
     /**
@@ -111,44 +117,37 @@ class AMQPBackend implements BackendInterface
     public function initialize()
     {
         $args = [];
-
         if (null !== $this->deadLetterExchange) {
-            $args['x-dead-letter-exchange'] = ['S', $this->deadLetterExchange];
+            $args['x-dead-letter-exchange'] = $this->deadLetterExchange;
 
             if (null !== $this->deadLetterRoutingKey) {
-                $args['x-dead-letter-routing-key'] = ['S', $this->deadLetterRoutingKey];
+                $args['x-dead-letter-routing-key'] = $this->deadLetterRoutingKey;
             }
         }
 
         if (null !== $this->ttl) {
-            $args['x-message-ttl'] = ['I', $this->ttl];
+            $args['x-message-ttl'] = $this->ttl;
         }
 
-        /*
-         * name: $queue
-         * passive: false
-         * durable: true // the queue will survive server restarts.
-         * exclusive: false // the queue can be accessed in other channels
-         * auto_delete: false //the queue won't be deleted once the channel is closed.
-         * no_wait: false the channel will wait until queue.declare_ok is received
-         * args: array
-         */
-        $this->getChannel()->queue_declare($this->queue, false, true, false, false, false, $args);
+        $queue = $this->getContext()->createQueue($this->queue);
+        $queue->addFlag(AmqpQueue::FLAG_DURABLE);
+        $queue->setArguments($args);
+        $this->getContext()->declareQueue($queue);
 
-        /*
-         * name: $exchange
-         * type: direct
-         * passive: false
-         * durable: true // the exchange will survive server restarts
-         * auto_delete: false //the exchange won't be deleted once the channel is closed.
-         **/
-        $this->getChannel()->exchange_declare($this->exchange, 'direct', false, true, false);
+        $topic = $this->getContext()->createTopic($this->exchange);
+        $topic->setType(AmqpTopic::TYPE_DIRECT);
+        $topic->addFlag(AmqpTopic::FLAG_DURABLE);
+        $this->getContext()->declareTopic($topic);
 
-        $this->getChannel()->queue_bind($this->queue, $this->exchange, $this->key);
+        $this->getContext()->bind(new AmqpBind($queue, $topic, $this->key));
 
         if (null !== $this->deadLetterExchange && null === $this->deadLetterRoutingKey) {
-            $this->getChannel()->exchange_declare($this->deadLetterExchange, 'direct', false, true, false);
-            $this->getChannel()->queue_bind($this->queue, $this->deadLetterExchange, $this->key);
+            $deadLetterTopic = $this->getContext()->createTopic($this->deadLetterExchange);
+            $deadLetterTopic->setType(AmqpTopic::TYPE_DIRECT);
+            $deadLetterTopic->addFlag(AmqpTopic::FLAG_DURABLE);
+            $this->getContext()->declareTopic($deadLetterTopic);
+
+            $this->getContext()->bind(new AmqpBind($queue, $deadLetterTopic, $this->key));
         }
     }
 
@@ -164,12 +163,15 @@ class AMQPBackend implements BackendInterface
             'state' => $message->getState(),
         ]);
 
-        $amq = new AMQPMessage($body, [
-            'content_type' => 'text/plain',
-            'delivery_mode' => 2,
-        ]);
+        $amqpMessage = $this->getContext()->createMessage($body);
+        $amqpMessage->setContentType('text/plain'); // application/json ?
+        $amqpMessage->setTimestamp($message->getCreatedAt()->format('U'));
+        $amqpMessage->setDeliveryMode(AmqpMessage::DELIVERY_MODE_PERSISTENT);
+        $amqpMessage->setRoutingKey($this->key);
 
-        $this->getChannel()->basic_publish($amq, $this->exchange, $this->key);
+        $topic = $this->getContext()->createTopic($this->exchange);
+
+        $this->getContext()->createProducer()->send($topic, $amqpMessage);
     }
 
     /**
@@ -198,11 +200,16 @@ class AMQPBackend implements BackendInterface
      */
     public function getIterator()
     {
+        $context = $this->getContext();
+
         if (null !== $this->prefetchCount) {
-            $this->getChannel()->basic_qos(null, $this->prefetchCount, null);
+            $context->setQos(null, $this->prefetchCount, false);
         }
 
-        return new AMQPMessageIterator($this->getChannel(), $this->queue);
+        $this->consumer = $this->getContext()->createConsumer($this->getContext()->createQueue($this->queue));
+        $this->consumer->setConsumerTag('sonata_notification_'.uniqid());
+
+        return new AMQPMessageIterator($this->getChannel(), $this->consumer);
     }
 
     /**
@@ -212,10 +219,13 @@ class AMQPBackend implements BackendInterface
     {
         $event = new ConsumerEvent($message);
 
+        /** @var AmqpMessage $amqpMessage */
+        $amqpMessage = $message->getValue('interopMessage');
+
         try {
             $dispatcher->dispatch($message->getType(), $event);
 
-            $message->getValue('AMQMessage')->delivery_info['channel']->basic_ack($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
+            $this->consumer->acknowledge($amqpMessage);
 
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);
@@ -223,18 +233,14 @@ class AMQPBackend implements BackendInterface
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
-            $message->getValue('AMQMessage')->delivery_info['channel']->basic_ack($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
+            $this->consumer->acknowledge($amqpMessage);
 
             throw new HandlingException('Error while handling a message', 0, $e);
         } catch (\Exception $e) {
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_ERROR);
 
-            if (true === $this->recover) {
-                $message->getValue('AMQMessage')->delivery_info['channel']->basic_recover($message->getValue('AMQMessage')->delivery_info['delivery_tag']);
-            } elseif (null !== $this->deadLetterExchange) {
-                $message->getValue('AMQMessage')->delivery_info['channel']->basic_reject($message->getValue('AMQMessage')->delivery_info['delivery_tag'], false);
-            }
+            $this->consumer->reject($amqpMessage, $this->recover);
 
             throw new HandlingException('Error while handling a message', 0, $e);
         }
@@ -246,7 +252,7 @@ class AMQPBackend implements BackendInterface
     public function getStatus()
     {
         try {
-            $this->getChannel();
+            $this->getContext();
         } catch (\Exception $e) {
             return new Failure($e->getMessage());
         }
@@ -263,6 +269,8 @@ class AMQPBackend implements BackendInterface
     }
 
     /**
+     * @deprecated since 3.2, will be removed in 4.x
+     *
      * @return AMQPChannel
      */
     protected function getChannel()
@@ -272,5 +280,17 @@ class AMQPBackend implements BackendInterface
         }
 
         return $this->dispatcher->getChannel();
+    }
+
+    /**
+     * @return AmqpContext
+     */
+    private function getContext()
+    {
+        if (null === $this->dispatcher) {
+            throw new \RuntimeException('Unable to retrieve AMQP context without dispatcher.');
+        }
+
+        return $this->dispatcher->getContext();
     }
 }

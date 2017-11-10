@@ -6,7 +6,7 @@ To begin, add the dependent bundles:
 .. code-block:: bash
 
     php composer.phar require sonata-project/notification-bundle
-    php composer.phar require php-amqplib/php-amqplib --no-update # optional
+    php composer.phar require enqueue/amqp-lib --no-update # optional
     php composer.phar require liip/monitor-bundle --no-update     # optional
     php composer.phar require friendsofsymfony/rest-bundle  --no-update # optional when using api
     php composer.phar require nelmio/api-doc-bundle  --no-update # optional when using api

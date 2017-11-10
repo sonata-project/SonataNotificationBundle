@@ -11,6 +11,7 @@
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
+use Enqueue\AmqpLib\AmqpConnectionFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -112,6 +113,12 @@ EOF;
                                     ->end()
                                     ->scalarNode('console_url')
                                         ->defaultValue('http://localhost:55672/api')
+                                    ->end()
+                                    ->scalarNode('factory_class')
+                                        ->cannotBeEmpty()
+                                        ->isRequired()
+                                        ->defaultValue(AmqpConnectionFactory::class)
+                                        ->info('This option defines an AMQP connection factory to be used to establish a connection with RabbitMQ.')
                                     ->end()
                                 ->end()
                             ->end()
