@@ -11,12 +11,16 @@
 
 namespace Sonata\NotificationBundle\Iterator;
 
+use Interop\Amqp\AmqpConsumer;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
+use Sonata\NotificationBundle\Model\Message;
 
 class AMQPMessageIterator implements MessageIteratorInterface
 {
     /**
+     * @deprecated since 3.2, will be removed in 4.x
+     *
      * @var AMQPChannel
      */
     protected $channel;
@@ -27,12 +31,16 @@ class AMQPMessageIterator implements MessageIteratorInterface
     protected $message;
 
     /**
+     * @deprecated since 3.2, will be removed in 4.x
+     *
      * @var AMQPMessage
      */
     protected $AMQMessage;
 
     /**
-     * @var mixed
+     * @deprecated since 3.2, will be removed in 4.x
+     *
+     * @var string
      */
     protected $queue;
 
@@ -42,14 +50,34 @@ class AMQPMessageIterator implements MessageIteratorInterface
     protected $counter;
 
     /**
-     * @param AMQPChannel $channel
-     * @param mixed       $queue
+     * @var \Interop\Amqp\AmqpMessage
      */
-    public function __construct(AMQPChannel $channel, $queue)
+    private $interopMessage;
+
+    /**
+     * @var int
+     */
+    private $timeout;
+
+    /**
+     * @var AmqpConsumer
+     */
+    private $consumer;
+
+    /**
+     * @var bool
+     */
+    private $isValid;
+
+    public function __construct(AMQPChannel $channel, AmqpConsumer $consumer)
     {
-        $this->channel = $channel;
-        $this->queue = $queue;
+        $this->consumer = $consumer;
         $this->counter = 0;
+        $this->timeout = 0;
+        $this->isValid = true;
+
+        $this->channel = $channel;
+        $this->queue = $consumer->getQueue()->getQueueName();
     }
 
     /**
@@ -65,7 +93,26 @@ class AMQPMessageIterator implements MessageIteratorInterface
      */
     public function next()
     {
-        $this->wait();
+        $this->isValid = false;
+
+        if ($amqpMessage = $this->consumer->receive($this->timeout)) {
+            $this->AMQMessage = $this->convertToAmqpLibMessage($amqpMessage);
+
+            $data = json_decode($amqpMessage->getBody(), true);
+            $data['body']['interopMessage'] = $amqpMessage;
+
+            // @deprecated
+            $data['body']['AMQMessage'] = $this->AMQMessage;
+
+            $message = new Message();
+            $message->setBody($data['body']);
+            $message->setType($data['type']);
+            $message->setState($data['state']);
+            $this->message = $message;
+
+            ++$this->counter;
+            $this->isValid = true;
+        }
     }
 
     /**
@@ -81,7 +128,7 @@ class AMQPMessageIterator implements MessageIteratorInterface
      */
     public function valid()
     {
-        return count($this->channel->callbacks);
+        return $this->isValid;
     }
 
     /**
@@ -89,47 +136,31 @@ class AMQPMessageIterator implements MessageIteratorInterface
      */
     public function rewind()
     {
-        $this->channel->basic_consume(
-            $this->queue,
-            'sonata_notification_'.uniqid(),
-            false,
-            false,
-            false,
-            false,
-            [$this, 'receiveMessage',
-        ]);
-
-        $this->wait();
-
-        return $this->message;
+        $this->isValid = true;
+        $this->next();
     }
 
     /**
-     * @param AMQPMessage $AMQMessage
+     * @deprecated since 3.2, will be removed in 4.x
+     *
+     * @param \Interop\Amqp\AmqpMessage $amqpMessage
+     *
+     * @return AMQPMessage
      */
-    public function receiveMessage(AMQPMessage $AMQMessage)
+    private function convertToAmqpLibMessage(\Interop\Amqp\AmqpMessage $amqpMessage)
     {
-        $this->AMQMessage = $AMQMessage;
+        $amqpLibProperties = $amqpMessage->getHeaders();
+        $amqpLibProperties['application_headers'] = $amqpMessage->getProperties();
 
-        $data = json_decode($this->AMQMessage->body, true);
+        $amqpLibMessage = new AMQPMessage($amqpMessage->getBody(), $amqpLibProperties);
+        $amqpLibMessage->delivery_info = [
+            'consumer_tag' => $this->consumer->getConsumerTag(),
+            'delivery_tag' => $amqpMessage->getDeliveryTag(),
+            'redelivered' => $amqpMessage->isRedelivered(),
+            'routing_key' => $amqpMessage->getRoutingKey(),
+            'channel' => $this->channel,
+        ];
 
-        $message = new \Sonata\NotificationBundle\Model\Message();
-        $data['body']['AMQMessage'] = $AMQMessage;
-        $message->setBody($data['body']);
-        $message->setType($data['type']);
-        $message->setState($data['state']);
-
-        ++$this->counter;
-
-        $this->message = $message;
-    }
-
-    protected function wait()
-    {
-        while ($this->valid()) {
-            $this->channel->wait();
-
-            break;
-        }
+        return $amqpLibMessage;
     }
 }

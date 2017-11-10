@@ -11,16 +11,103 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use Enqueue\AmqpLib\AmqpConnectionFactory;
+use Interop\Amqp\AmqpContext;
+use MyProject\Proxies\__CG__\stdClass;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
+use Sonata\NotificationBundle\Exception\BackendNotFoundException;
+use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
 
 class AMQPBackendDispatcherTest extends TestCase
 {
     protected function setUp()
     {
-        if (!class_exists('PhpAmqpLib\Message\AMQPMessage')) {
-            $this->markTestSkipped('AMQP Lib not installed');
+        if (!class_exists(AmqpConnectionFactory::class)) {
+            $this->markTestSkipped('enqueue/amqp-lib library is not installed');
         }
+
+        AmqpConnectionFactoryStub::$config = null;
+        AmqpConnectionFactoryStub::$context = null;
+    }
+
+    public function testThrowIfSettingsMissFactoryClassOptionOnGetContext()
+    {
+        $dispatcher = new AMQPBackendDispatcher([], [], 'default', []);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The factory_class option is missing though it is required.');
+        $dispatcher->getContext();
+    }
+
+    public function testThrowIfFactoryClassIsNotRealClass()
+    {
+        $dispatcher = new AMQPBackendDispatcher(['factory_class' => 'anInvalidClass'], [], 'default', []);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The factory_class option "anInvalidClass" has to be valid class that implements "Interop\Amqp\AmqpConnectionFactory"');
+        $dispatcher->getContext();
+    }
+
+    public function testThrowIfFactoryClassIsNotInstanceOfAmqpConnectionFactoryInterface()
+    {
+        $dispatcher = new AMQPBackendDispatcher(['factory_class' => \stdClass::class], [], 'default', []);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The factory_class option "stdClass" has to be valid class that implements "Interop\Amqp\AmqpConnectionFactory"');
+        $dispatcher->getContext();
+    }
+
+    public function testShouldPassExpectedOptionsToAmqpConnectionFactoryConstructor()
+    {
+        $dispatcher = new AMQPBackendDispatcher(
+            [
+                'host' => 'theHost',
+                'port' => 'thePort',
+                'user' => 'theUser',
+                'pass' => 'thePass',
+                'vhost' => 'theVhost',
+                'factory_class' => AmqpConnectionFactoryStub::class,
+            ],
+            [],
+            'default',
+            []
+        );
+
+        $dispatcher->getContext();
+
+        $this->assertSame([
+            'host' => 'theHost',
+            'port' => 'thePort',
+            'user' => 'theUser',
+            'pass' => 'thePass',
+            'vhost' => 'theVhost',
+        ], AmqpConnectionFactoryStub::$config);
+    }
+
+    public function testShouldReturnExpectedAmqpContext()
+    {
+        $expectedContext = $this->createMock(AmqpContext::class);
+
+        $dispatcher = new AMQPBackendDispatcher(
+            [
+                'host' => 'aHost',
+                'port' => 'aPort',
+                'user' => 'aUser',
+                'pass' => 'aPass',
+                'vhost' => 'aVhost',
+                'factory_class' => AmqpConnectionFactoryStub::class,
+            ],
+            [],
+            'default',
+            []
+        );
+
+        AmqpConnectionFactoryStub::$context = $expectedContext;
+
+        $actualContext = $dispatcher->getContext();
+
+        $this->assertSame($expectedContext, $actualContext);
     }
 
     public function testQueue()
@@ -48,7 +135,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $fooBackend = ['type' => 'message.type.foo', 'backend' => $mock];
         $dispatcher = $this->getDispatcher([$fooBackend]);
 
-        $this->setExpectedException('\Sonata\NotificationBundle\Exception\BackendNotFoundException');
+        $this->expectException(BackendNotFoundException::class);
         $dispatcher->createAndPublish('some.other.type', []);
     }
 
@@ -60,7 +147,7 @@ class AMQPBackendDispatcherTest extends TestCase
             [['queue' => 'foo', 'routing_key' => 'message.type.bar']]
         );
 
-        $this->setExpectedException('\Sonata\NotificationBundle\Exception\BackendNotFoundException');
+        $this->expectException(BackendNotFoundException::class);
         $dispatcher->createAndPublish('message.type.bar', []);
     }
 
