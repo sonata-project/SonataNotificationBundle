@@ -1,6 +1,16 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.2 to 3.3
+=======================
+
+### AMQP
+
+You might face some issues (though we tried to keep everything BC) if you are extending `AMQPBackend`, `AMQPBackendDispatcher` or `AMQPMessageIterator` classes 
+or rely on their `__construct` method signature.
+
+If you want to migrate to another amqp interop compatible transport, say `enqueue/amqp-ext`, the BC layer want work and the exception is thrown.
+
 UPGRADE FROM 3.0 to 3.1
 =======================
 

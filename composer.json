@@ -18,6 +18,7 @@
     ],
     "require": {
         "php": "^5.6 || ^7.0",
+        "enqueue/amqp-lib": "^0.8",
         "symfony/config": "^2.8 || ^3.2",
         "symfony/console": "^2.8 || ^3.2",
         "symfony/dependency-injection": "^2.8 || ^3.2",
@@ -37,12 +38,11 @@
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
         "guzzlehttp/guzzle" : "If you want to get a status report when using the rabbitMQ backend.",
         "liip/monitor-bundle": "^1.0",
-        "php-amqplib/php-amqplib": "^2.0"
+        "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8"
     },
     "require-dev": {
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
         "guzzlehttp/guzzle" : "^3.8",
-        "php-amqplib/php-amqplib": "^2.0",
         "liip/monitor-bundle": "^2.0",
         "symfony/phpunit-bridge": "^3.3",
         "swiftmailer/swiftmailer": "^4.3 || ^5.0",

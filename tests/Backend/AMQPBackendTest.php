@@ -11,8 +11,21 @@
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use Enqueue\AmqpLib\AmqpConnectionFactory;
+use Interop\Amqp\AmqpBind;
+use Interop\Amqp\AmqpConsumer;
+use Interop\Amqp\AmqpContext;
+use Interop\Amqp\AmqpQueue;
+use Interop\Amqp\AmqpTopic;
+use Interop\Amqp\Impl\AmqpBind as ImplAmqpBind;
+use Interop\Amqp\Impl\AmqpQueue as ImplAmqpQueue;
+use Interop\Amqp\Impl\AmqpTopic as ImplAmqpTopic;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
+use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
+use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
+use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
 
 class AMQPBackendTest extends TestCase
 {
@@ -26,200 +39,268 @@ class AMQPBackendTest extends TestCase
 
     protected function setUp()
     {
-        if (!class_exists('PhpAmqpLib\Channel\AMQPChannel')) {
-            $this->markTestSkipped('AMQP Lib not installed');
+        if (!class_exists(AmqpConnectionFactory::class)) {
+            $this->markTestSkipped('enqueue/amqp-lib library is not installed');
         }
+
+        AmqpConnectionFactoryStub::$context = null;
+        AmqpConnectionFactoryStub::$config = null;
     }
 
     public function testInitializeWithNoDeadLetterExchangeAndNoDeadLetterRoutingKey()
     {
-        list($backend, $channelMock) = $this->getBackendAndChannelMock();
+        $backend = $this->buildBackend();
 
-        $channelMock->expects($this->once())
-            ->method('exchange_declare')
-            ->with(
-                $this->equalTo(self::EXCHANGE),
-                $this->equalTo('direct'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean')
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_declare')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->equalTo([])
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_bind')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->equalTo(self::EXCHANGE),
-                $this->equalTo(self::KEY)
-            );
+        $queue = new ImplAmqpQueue(self::QUEUE);
+        $topic = new ImplAmqpTopic(self::EXCHANGE);
+
+        $contextMock = $this->createMock(AmqpContext::class);
+        $contextMock->expects($this->once())
+            ->method('createQueue')
+            ->with($this->identicalTo(self::QUEUE))
+            ->willReturn($queue);
+
+        $contextMock->expects($this->once())
+            ->method('declareQueue')
+            ->with($this->identicalTo($queue))
+            ->willReturnCallback(function (AmqpQueue $queue) {
+                $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
+                $this->assertSame([], $queue->getArguments());
+            });
+
+        $contextMock->expects($this->once())
+            ->method('createTopic')
+            ->with($this->identicalTo(self::EXCHANGE))
+            ->willReturn($topic);
+
+        $contextMock->expects($this->once())
+            ->method('declareTopic')
+            ->with($this->identicalTo($topic))
+            ->willReturnCallback(function (AmqpTopic $topic) {
+                $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
+                $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
+                $this->assertSame([], $topic->getArguments());
+            });
+
+        $contextMock->expects($this->once())
+            ->method('bind')
+            ->with($this->isInstanceOf(AmqpBind::class))
+            ->willReturnCallback(function (ImplAmqpBind $bind) use ($queue, $topic) {
+                $this->assertSame($queue, $bind->getTarget());
+                $this->assertSame($topic, $bind->getSource());
+                $this->assertSame(self::KEY, $bind->getRoutingKey());
+            });
+
+        AmqpConnectionFactoryStub::$context = $contextMock;
 
         $backend->initialize();
     }
 
     public function testInitializeWithDeadLetterExchangeAndNoDeadLetterRoutingKey()
     {
-        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, self::DEAD_LETTER_EXCHANGE);
+        $backend = $this->buildBackend(false, self::DEAD_LETTER_EXCHANGE);
 
-        $channelMock->expects($this->exactly(2))
-            ->method('exchange_declare')
-            ->withConsecutive(
-                [
-                    $this->equalTo(self::EXCHANGE),
-                    $this->equalTo('direct'),
-                    $this->isType('boolean'),
-                    $this->isType('boolean'),
-                    $this->isType('boolean'),
-                ],
-                [
-                    $this->equalTo(self::DEAD_LETTER_EXCHANGE),
-                    $this->equalTo('direct'),
-                    $this->isType('boolean'),
-                    $this->isType('boolean'),
-                    $this->isType('boolean'),
-                ]
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_declare')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->equalTo([
-                    'x-dead-letter-exchange' => ['S', self::DEAD_LETTER_EXCHANGE],
-                ])
-            );
-        $channelMock->expects($this->exactly(2))
-            ->method('queue_bind')
-            ->withConsecutive(
-                [
-                   $this->equalTo(self::QUEUE),
-                   $this->equalTo(self::EXCHANGE),
-                   $this->equalTo(self::KEY),
-                ],
-                [
-                   $this->equalTo(self::QUEUE),
-                   $this->equalTo(self::DEAD_LETTER_EXCHANGE),
-                   $this->equalTo(self::KEY),
-                ]
-            );
+        $queue = new ImplAmqpQueue(self::QUEUE);
+        $topic = new ImplAmqpTopic(self::EXCHANGE);
+        $deadLetterTopic = new ImplAmqpTopic(self::DEAD_LETTER_EXCHANGE);
+
+        $contextMock = $this->createMock(AmqpContext::class);
+        $contextMock->expects($this->at(0))
+            ->method('createQueue')
+            ->with($this->identicalTo(self::QUEUE))
+            ->willReturn($queue);
+
+        $contextMock->expects($this->at(1))
+            ->method('declareQueue')
+            ->with($this->identicalTo($queue))
+            ->willReturnCallback(function (AmqpQueue $queue) {
+                $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
+                $this->assertSame(['x-dead-letter-exchange' => self::DEAD_LETTER_EXCHANGE], $queue->getArguments());
+            });
+
+        $contextMock->expects($this->at(2))
+            ->method('createTopic')
+            ->with($this->identicalTo(self::EXCHANGE))
+            ->willReturn($topic);
+
+        $contextMock->expects($this->at(3))
+            ->method('declareTopic')
+            ->with($this->identicalTo($topic));
+
+        $contextMock->expects($this->at(4))
+            ->method('bind')
+            ->with($this->isInstanceOf(AmqpBind::class));
+
+        $contextMock->expects($this->at(5))
+            ->method('createTopic')
+            ->with($this->identicalTo(self::DEAD_LETTER_EXCHANGE))
+            ->willReturn($deadLetterTopic);
+
+        $contextMock->expects($this->at(6))
+            ->method('declareTopic')
+            ->with($this->identicalTo($deadLetterTopic))
+            ->willReturnCallback(function (AmqpTopic $topic) {
+                $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
+                $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
+                $this->assertSame([], $topic->getArguments());
+            });
+
+        AmqpConnectionFactoryStub::$context = $contextMock;
 
         $backend->initialize();
     }
 
     public function testInitializeWithDeadLetterExchangeAndDeadLetterRoutingKey()
     {
-        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, self::DEAD_LETTER_EXCHANGE, self::DEAD_LETTER_ROUTING_KEY);
+        $backend = $this->buildBackend(false, self::DEAD_LETTER_EXCHANGE, self::DEAD_LETTER_ROUTING_KEY);
 
-        $channelMock->expects($this->once())
-            ->method('exchange_declare')
-            ->with(
-                $this->equalTo(self::EXCHANGE),
-                $this->equalTo('direct'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean')
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_declare')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->equalTo([
-                   'x-dead-letter-exchange' => ['S', self::DEAD_LETTER_EXCHANGE],
-                   'x-dead-letter-routing-key' => ['S', self::DEAD_LETTER_ROUTING_KEY],
-                ])
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_bind')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->equalTo(self::EXCHANGE),
-                $this->equalTo(self::KEY)
-            );
+        $queue = new ImplAmqpQueue(self::QUEUE);
+        $topic = new ImplAmqpTopic(self::EXCHANGE);
+        $deadLetterTopic = new ImplAmqpTopic(self::DEAD_LETTER_EXCHANGE);
+
+        $contextMock = $this->createMock(AmqpContext::class);
+        $contextMock->expects($this->at(0))
+            ->method('createQueue')
+            ->with($this->identicalTo(self::QUEUE))
+            ->willReturn($queue);
+
+        $contextMock->expects($this->at(1))
+            ->method('declareQueue')
+            ->with($this->identicalTo($queue))
+            ->willReturnCallback(function (AmqpQueue $queue) {
+                $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
+                $this->assertSame(
+                    [
+                        'x-dead-letter-exchange' => self::DEAD_LETTER_EXCHANGE,
+                        'x-dead-letter-routing-key' => self::DEAD_LETTER_ROUTING_KEY,
+                    ],
+                    $queue->getArguments()
+                );
+            });
+
+        $contextMock->expects($this->at(2))
+            ->method('createTopic')
+            ->with($this->identicalTo(self::EXCHANGE))
+            ->willReturn($topic);
+
+        $contextMock->expects($this->at(3))
+            ->method('declareTopic')
+            ->with($this->identicalTo($topic));
+
+        $contextMock->expects($this->at(4))
+            ->method('bind')
+            ->with($this->isInstanceOf(AmqpBind::class));
+
+        AmqpConnectionFactoryStub::$context = $contextMock;
 
         $backend->initialize();
     }
 
     public function testInitializeWithTTL()
     {
-        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, null, null, self::TTL);
+        $backend = $this->buildBackend(false, null, null, self::TTL);
 
-        $channelMock->expects($this->once())
-            ->method('exchange_declare')
-            ->with(
-                $this->equalTo(self::EXCHANGE),
-                $this->equalTo('direct'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean')
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_declare')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->isType('boolean'),
-                $this->equalTo([
-                    'x-message-ttl' => ['I', self::TTL],
-                ])
-            );
-        $channelMock->expects($this->once())
-            ->method('queue_bind')
-            ->with(
-                $this->equalTo(self::QUEUE),
-                $this->equalTo(self::EXCHANGE),
-                $this->equalTo(self::KEY)
-            );
+        $queue = new ImplAmqpQueue(self::QUEUE);
+        $topic = new ImplAmqpTopic(self::EXCHANGE);
+
+        $contextMock = $this->createMock(AmqpContext::class);
+        $contextMock->expects($this->once())
+            ->method('createQueue')
+            ->with($this->identicalTo(self::QUEUE))
+            ->willReturn($queue);
+
+        $contextMock->expects($this->once())
+            ->method('declareQueue')
+            ->with($this->identicalTo($queue))
+            ->willReturnCallback(function (AmqpQueue $queue) {
+                $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
+                $this->assertSame(['x-message-ttl' => self::TTL], $queue->getArguments());
+            });
+
+        $contextMock->expects($this->once())
+            ->method('createTopic')
+            ->with($this->identicalTo(self::EXCHANGE))
+            ->willReturn($topic);
+
+        $contextMock->expects($this->once())
+            ->method('declareTopic')
+            ->with($this->identicalTo($topic));
+
+        $contextMock->expects($this->once())
+            ->method('bind')
+            ->with($this->isInstanceOf(AmqpBind::class));
+
+        AmqpConnectionFactoryStub::$context = $contextMock;
 
         $backend->initialize();
     }
 
     public function testGetIteratorWithNoPrefetchCount()
     {
-        list($backend, $channelMock) = $this->getBackendAndChannelMock();
+        $backend = $this->buildBackend();
 
-        $channelMock->expects($this->never())
-            ->method('basic_qos');
+        $queue = new ImplAmqpQueue('aQueue');
 
-        $backend->getIterator();
+        $consumerMock = $this->createMock(AmqpConsumer::class);
+        $consumerMock->expects($this->once())
+            ->method('getQueue')
+            ->willReturn($queue);
+
+        $contextMock = $this->createMock(AmqpContext::class);
+        $contextMock->expects($this->never())
+            ->method('setQos');
+
+        $contextMock->expects($this->once())
+            ->method('createQueue')
+            ->willReturn($queue);
+
+        $contextMock->expects($this->once())
+            ->method('createConsumer')
+            ->with($this->identicalTo($queue))
+            ->willReturn($consumerMock);
+
+        AmqpConnectionFactoryStub::$context = $contextMock;
+
+        $iterator = $backend->getIterator();
+
+        $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
     public function testGetIteratorWithPrefetchCount()
     {
-        list($backend, $channelMock) = $this->getBackendAndChannelMock(false, null, null, null, self::PREFETCH_COUNT);
+        $backend = $this->buildBackend(false, null, null, null, self::PREFETCH_COUNT);
 
-        $channelMock->expects($this->once())
-            ->method('basic_qos')
-            ->with(
-                $this->isNull(),
-                $this->equalTo(self::PREFETCH_COUNT),
-                $this->isNull()
-            );
+        $queue = new ImplAmqpQueue('aQueue');
+        $consumerMock = $this->createMock(AmqpConsumer::class);
+        $consumerMock->expects($this->once())
+            ->method('getQueue')
+            ->willReturn($queue);
 
-        $backend->getIterator();
+        $contextMock = $this->createMock(AmqpContext::class);
+        $contextMock->expects($this->once())
+            ->method('setQos')
+            ->with($this->isNull(), $this->identicalTo(self::PREFETCH_COUNT), $this->isFalse());
+
+        $contextMock->expects($this->once())
+            ->method('createQueue')
+            ->willReturn($queue);
+
+        $contextMock->expects($this->once())
+            ->method('createConsumer')
+            ->with($this->identicalTo($queue))
+            ->willReturn($consumerMock);
+
+        AmqpConnectionFactoryStub::$context = $contextMock;
+
+        $iterator = $backend->getIterator();
+
+        $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
-    protected function getBackendAndChannelMock($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
+    /**
+     * @return AMQPBackend
+     */
+    protected function buildBackend($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
     {
         $backend = new AMQPBackend(
             self::EXCHANGE,
@@ -238,27 +319,26 @@ class AMQPBackendTest extends TestCase
             'user' => 'user',
             'pass' => 'pass',
             'vhost' => '/',
+            'factory_class' => AmqpConnectionFactoryStub::class,
         ];
 
         $queues = [
             ['queue' => self::QUEUE, 'routing_key' => self::KEY],
         ];
 
-        $channelMock = $this->getMockBuilder('\PhpAmqpLib\Channel\AMQPChannel')
-            ->disableOriginalConstructor()
-            ->setMethods(['queue_declare', 'exchange_declare', 'queue_bind', 'basic_qos'])
-            ->getMock();
-
-        $dispatcherMock = $this->getMockBuilder('\Sonata\NotificationBundle\Backend\AMQPBackendDispatcher')
+        $dispatcherMock = $this->getMockBuilder(AMQPBackendDispatcher::class)
             ->setConstructorArgs([$settings, $queues, 'default', [['type' => self::KEY, 'backend' => $backend]]])
             ->setMethods(['getChannel'])
             ->getMock();
 
-        $dispatcherMock->method('getChannel')
-            ->willReturn($channelMock);
+        $dispatcherMock
+            ->expects($this->any())
+            ->method('getChannel')
+            ->willReturn($this->createMock(AMQPChannel::class))
+        ;
 
         $backend->setDispatcher($dispatcherMock);
 
-        return [$backend, $channelMock];
+        return $backend;
     }
 }
