@@ -4,7 +4,7 @@ UPGRADE FROM 3.x to 4.0
 ### Closed API
 
 * `AMQPBackendDispatcher` and `AMQPMessageIterator` classes are final. You cannot extend them.
-* `AMQPBackend` properties are private now. You cannot overwrite them.
+* `AMQPBackend` properties are private now.
 
 ### AMQP
 
