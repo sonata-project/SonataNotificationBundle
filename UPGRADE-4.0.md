@@ -11,6 +11,3 @@ UPGRADE FROM 3.x to 4.0
 * `AMQPMessageIterator::AMQMessage` property was removed. Consider removing dependency on it or use `Sonata\NotificationBundle\Model\Message::getValue('interopMessage')`.
 * `Sonata\NotificationBundle\Model\Message::getValue('AMQMessage')` is not available any more. Consider removing dependency on it or use `Sonata\NotificationBundle\Model\Message::getValue('interopMessage')`.
 *  `AMQPBackend::getChannel()` method was removed. Consider removing dependency on it or use `AMQPBackend::getContext()` method.
-
-
-
