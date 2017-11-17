@@ -20,7 +20,6 @@ use Interop\Amqp\AmqpTopic;
 use Interop\Amqp\Impl\AmqpBind as ImplAmqpBind;
 use Interop\Amqp\Impl\AmqpQueue as ImplAmqpQueue;
 use Interop\Amqp\Impl\AmqpTopic as ImplAmqpTopic;
-use PhpAmqpLib\Channel\AMQPChannel;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
