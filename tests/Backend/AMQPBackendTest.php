@@ -242,9 +242,6 @@ class AMQPBackendTest extends TestCase
         $queue = new ImplAmqpQueue('aQueue');
 
         $consumerMock = $this->createMock(AmqpConsumer::class);
-        $consumerMock->expects($this->once())
-            ->method('getQueue')
-            ->willReturn($queue);
 
         $contextMock = $this->createMock(AmqpContext::class);
         $contextMock->expects($this->never())
@@ -272,9 +269,6 @@ class AMQPBackendTest extends TestCase
 
         $queue = new ImplAmqpQueue('aQueue');
         $consumerMock = $this->createMock(AmqpConsumer::class);
-        $consumerMock->expects($this->once())
-            ->method('getQueue')
-            ->willReturn($queue);
 
         $contextMock = $this->createMock(AmqpContext::class);
         $contextMock->expects($this->once())
@@ -326,16 +320,12 @@ class AMQPBackendTest extends TestCase
             ['queue' => self::QUEUE, 'routing_key' => self::KEY],
         ];
 
-        $dispatcherMock = $this->getMockBuilder(AMQPBackendDispatcher::class)
-            ->setConstructorArgs([$settings, $queues, 'default', [['type' => self::KEY, 'backend' => $backend]]])
-            ->setMethods(['getChannel'])
-            ->getMock();
-
-        $dispatcherMock
-            ->expects($this->any())
-            ->method('getChannel')
-            ->willReturn($this->createMock(AMQPChannel::class))
-        ;
+        $dispatcherMock = new AMQPBackendDispatcher(
+            $settings,
+            $queues,
+            'default',
+            [['type' => self::KEY, 'backend' => $backend]]
+        );
 
         $backend->setDispatcher($dispatcherMock);
 
