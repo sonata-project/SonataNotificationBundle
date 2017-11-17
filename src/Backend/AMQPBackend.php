@@ -34,42 +34,42 @@ class AMQPBackend implements BackendInterface
     /**
      * @var AMQPBackendDispatcher
      */
-    protected $dispatcher = null;
+    private $dispatcher = null;
 
     /**
      * @var string
      */
-    protected $exchange;
+    private $exchange;
 
     /**
      * @var string
      */
-    protected $queue;
+    private $queue;
 
     /**
      * @var string
      */
-    protected $key;
+    private $key;
 
     /**
      * @var string
      */
-    protected $recover;
+    private $recover;
 
     /**
      * @var null|string
      */
-    protected $deadLetterExchange;
+    private $deadLetterExchange;
 
     /**
      * @var null|string
      */
-    protected $deadLetterRoutingKey;
+    private $deadLetterRoutingKey;
 
     /**
      * @var null|int
      */
-    protected $ttl;
+    private $ttl;
 
     /**
      * @var null|int

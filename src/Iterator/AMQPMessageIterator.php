@@ -14,17 +14,17 @@ namespace Sonata\NotificationBundle\Iterator;
 use Interop\Amqp\AmqpConsumer;
 use Sonata\NotificationBundle\Model\Message;
 
-class AMQPMessageIterator implements MessageIteratorInterface
+final class AMQPMessageIterator implements MessageIteratorInterface
 {
     /**
      * @var mixed
      */
-    protected $message;
+    private $message;
 
     /**
      * @var int
      */
-    protected $counter;
+    private $counter;
 
     /**
      * @var int

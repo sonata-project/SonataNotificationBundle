@@ -25,14 +25,14 @@ use ZendDiagnostics\Result\Success;
 /**
  * Producer side of the rabbitmq backend.
  */
-class AMQPBackendDispatcher extends QueueBackendDispatcher
+final class AMQPBackendDispatcher extends QueueBackendDispatcher
 {
     /**
      * @var array
      */
-    protected $settings;
+    private $settings;
 
-    protected $backendsInitialized = false;
+    private $backendsInitialized = false;
 
     /**
      * @var AmqpConnectionFactory
@@ -60,7 +60,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * @return AmqpContext
      */
-    final public function getContext()
+    public function getContext()
     {
         if (!$this->context) {
             if (!array_key_exists('factory_class', $this->settings)) {
