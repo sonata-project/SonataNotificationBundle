@@ -17,7 +17,6 @@ use Interop\Amqp\AmqpMessage;
 use Interop\Amqp\AmqpQueue;
 use Interop\Amqp\AmqpTopic;
 use Interop\Amqp\Impl\AmqpBind;
-use PhpAmqpLib\Channel\AMQPChannel;
 use Sonata\NotificationBundle\Consumer\ConsumerEvent;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
@@ -209,7 +208,7 @@ class AMQPBackend implements BackendInterface
         $this->consumer = $this->getContext()->createConsumer($this->getContext()->createQueue($this->queue));
         $this->consumer->setConsumerTag('sonata_notification_'.uniqid());
 
-        return new AMQPMessageIterator($this->getChannel(), $this->consumer);
+        return new AMQPMessageIterator($this->consumer);
     }
 
     /**
@@ -266,20 +265,6 @@ class AMQPBackend implements BackendInterface
     public function cleanup()
     {
         throw new \RuntimeException('Not implemented');
-    }
-
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @return AMQPChannel
-     */
-    protected function getChannel()
-    {
-        if (null === $this->dispatcher) {
-            throw new \RuntimeException('Unable to retrieve AMQP channel without dispatcher.');
-        }
-
-        return $this->dispatcher->getChannel();
     }
 
     /**

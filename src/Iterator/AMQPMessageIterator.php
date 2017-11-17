@@ -12,47 +12,19 @@
 namespace Sonata\NotificationBundle\Iterator;
 
 use Interop\Amqp\AmqpConsumer;
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Message\AMQPMessage;
 use Sonata\NotificationBundle\Model\Message;
 
 class AMQPMessageIterator implements MessageIteratorInterface
 {
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @var AMQPChannel
-     */
-    protected $channel;
-
     /**
      * @var mixed
      */
     protected $message;
 
     /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @var AMQPMessage
-     */
-    protected $AMQMessage;
-
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @var string
-     */
-    protected $queue;
-
-    /**
      * @var int
      */
     protected $counter;
-
-    /**
-     * @var \Interop\Amqp\AmqpMessage
-     */
-    private $interopMessage;
 
     /**
      * @var int
@@ -69,15 +41,12 @@ class AMQPMessageIterator implements MessageIteratorInterface
      */
     private $isValid;
 
-    public function __construct(AMQPChannel $channel, AmqpConsumer $consumer)
+    public function __construct(AmqpConsumer $consumer)
     {
         $this->consumer = $consumer;
         $this->counter = 0;
         $this->timeout = 0;
         $this->isValid = true;
-
-        $this->channel = $channel;
-        $this->queue = $consumer->getQueue()->getQueueName();
     }
 
     /**
@@ -96,13 +65,8 @@ class AMQPMessageIterator implements MessageIteratorInterface
         $this->isValid = false;
 
         if ($amqpMessage = $this->consumer->receive($this->timeout)) {
-            $this->AMQMessage = $this->convertToAmqpLibMessage($amqpMessage);
-
             $data = json_decode($amqpMessage->getBody(), true);
             $data['body']['interopMessage'] = $amqpMessage;
-
-            // @deprecated
-            $data['body']['AMQMessage'] = $this->AMQMessage;
 
             $message = new Message();
             $message->setBody($data['body']);
@@ -138,29 +102,5 @@ class AMQPMessageIterator implements MessageIteratorInterface
     {
         $this->isValid = true;
         $this->next();
-    }
-
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @param \Interop\Amqp\AmqpMessage $amqpMessage
-     *
-     * @return AMQPMessage
-     */
-    private function convertToAmqpLibMessage(\Interop\Amqp\AmqpMessage $amqpMessage)
-    {
-        $amqpLibProperties = $amqpMessage->getHeaders();
-        $amqpLibProperties['application_headers'] = $amqpMessage->getProperties();
-
-        $amqpLibMessage = new AMQPMessage($amqpMessage->getBody(), $amqpLibProperties);
-        $amqpLibMessage->delivery_info = [
-            'consumer_tag' => $this->consumer->getConsumerTag(),
-            'delivery_tag' => $amqpMessage->getDeliveryTag(),
-            'redelivered' => $amqpMessage->isRedelivered(),
-            'routing_key' => $amqpMessage->getRoutingKey(),
-            'channel' => $this->channel,
-        ];
-
-        return $amqpLibMessage;
     }
 }

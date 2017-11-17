@@ -16,8 +16,6 @@ use Enqueue\AmqpTools\RabbitMqDlxDelayStrategy;
 use Guzzle\Http\Client as GuzzleClient;
 use Interop\Amqp\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPConnection;
 use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -33,20 +31,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      * @var array
      */
     protected $settings;
-
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @var AMQPChannel
-     */
-    protected $channel;
-
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @var AMQPConnection
-     */
-    protected $connection;
 
     protected $backendsInitialized = false;
 
@@ -71,33 +55,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         parent::__construct($queues, $defaultQueue, $backends);
 
         $this->settings = $settings;
-    }
-
-    /**
-     * @deprecated since 3.2, will be removed in 4.x
-     *
-     * @return AMQPChannel
-     */
-    public function getChannel()
-    {
-        @trigger_error(sprintf('The method %s is deprecated since version 3.3 and will be removed in 4.0. Use %s::getContext() instead.', __METHOD__, __CLASS__), E_USER_DEPRECATED);
-
-        if (!$this->channel) {
-            if (!$this->context instanceof \Enqueue\AmqpLib\AmqpContext) {
-                throw new \LogicException('The BC layer works only if enqueue/amqp-lib lib is being used.');
-            }
-
-            // load context
-            $this->getContext();
-
-            /** @var \Enqueue\AmqpLib\AmqpContext $context */
-            $context = $this->getContext();
-
-            $this->channel = $context->getLibChannel();
-            $this->connection = $this->channel->getConnection();
-        }
-
-        return $this->channel;
     }
 
     /**
