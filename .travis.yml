@@ -48,8 +48,6 @@ matrix:
       env: SYMFONY=3.3.*
     - php: '7.1'
       env: SYMFONY='dev-master as 3.3'
-    - php: 7.1
-      env: DEPENDENCIES=beta
     - php: '7.1'
       env: SONATA_CORE=3.*
     - php: '7.1'
