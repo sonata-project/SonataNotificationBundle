@@ -58,11 +58,10 @@ class LoggerConsumerTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException \Sonata\NotificationBundle\Exception\InvalidParameterException
-     */
     public function testInvalidType()
     {
+        $this->expectException(\Sonata\NotificationBundle\Exception\InvalidParameterException::class);
+
         $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $message = new Message();

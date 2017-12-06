@@ -17,11 +17,10 @@ use Sonata\NotificationBundle\Event\IterateEvent;
 
 class DoctrineOptimizeListenerTest extends TestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testWithClosedManager()
     {
+        $this->expectException(\RuntimeException::class);
+
         $manager = $this->createMock('Doctrine\ORM\EntityManager');
         $manager->expects($this->once())->method('isOpen')->will($this->returnValue(false));
 
