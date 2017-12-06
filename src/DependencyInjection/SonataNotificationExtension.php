@@ -58,7 +58,7 @@ class SonataNotificationExtension extends Extension
 
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (isset($bundles['FOSRestBundle']) && isset($bundles['NelmioApiDocBundle'])) {
+        if (isset($bundles['FOSRestBundle'], $bundles['NelmioApiDocBundle'])) {
             $loader->load('api_controllers.xml');
             $loader->load('api_form.xml');
         }
@@ -361,7 +361,7 @@ class SonataNotificationExtension extends Extension
             $declaredQueues[] = $queue['queue'];
 
             if ($queue['dead_letter_routing_key']) {
-                if (is_null($queue['dead_letter_exchange'])) {
+                if (null === $queue['dead_letter_exchange']) {
                     throw new \RuntimeException(
                         'dead_letter_exchange must be configured when dead_letter_routing_key is set'
                     );
