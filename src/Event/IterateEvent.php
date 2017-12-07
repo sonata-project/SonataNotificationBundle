@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -23,7 +25,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class IterateEvent extends Event
 {
-    const EVENT_NAME = 'sonata.notification.event.message_iterate_event';
+    public const EVENT_NAME = 'sonata.notification.event.message_iterate_event';
 
     /**
      * @var MessageIteratorInterface

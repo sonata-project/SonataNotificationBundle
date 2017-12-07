@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,7 +21,7 @@ class MessageTest extends TestCase
     /**
      * @dataProvider getBodyValues
      */
-    public function testGetValue($body, $names, $expected, $default)
+    public function testGetValue($body, $names, $expected, $default): void
     {
         $message = new Message();
 
@@ -28,7 +30,7 @@ class MessageTest extends TestCase
         $this->assertEquals($expected, $message->getValue($names, $default));
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $message = new Message();
         $message->setId(42);
@@ -43,7 +45,7 @@ class MessageTest extends TestCase
         $this->assertNull($newMessage->getId());
     }
 
-    public function testStatuses()
+    public function testStatuses(): void
     {
         $message = new Message();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,7 +22,7 @@ use Sonata\NotificationBundle\Model\Message;
  */
 class MessageManagerBackendDispatcherTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $testBackend = $this->createMock('Sonata\NotificationBundle\Backend\MessageManagerBackend');
 

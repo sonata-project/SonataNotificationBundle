@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,7 +21,7 @@ use Sonata\NotificationBundle\Exception\InvalidParameterException;
  */
 class InvalidParameterExceptionTest extends TestCase
 {
-    public function testException()
+    public function testException(): void
     {
         $this->expectException(\Sonata\NotificationBundle\Exception\InvalidParameterException::class);
 

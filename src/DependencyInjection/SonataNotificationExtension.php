@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -30,7 +32,7 @@ class SonataNotificationExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -89,7 +91,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    public function configureClass(ContainerBuilder $container, $config)
+    public function configureClass(ContainerBuilder $container, $config): void
     {
         // admin configuration
         $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
@@ -102,7 +104,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    public function configureAdmin(ContainerBuilder $container, $config)
+    public function configureAdmin(ContainerBuilder $container, $config): void
     {
         $container->setParameter('sonata.notification.admin.message.class', $config['admin']['message']['class']);
         $container->setParameter('sonata.notification.admin.message.controller', $config['admin']['message']['controller']);
@@ -113,7 +115,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    public function registerParameters(ContainerBuilder $container, $config)
+    public function registerParameters(ContainerBuilder $container, $config): void
     {
         $container->setParameter('sonata.notification.message.class', $config['class']['message']);
         $container->setParameter('sonata.notification.admin.message.entity', $config['class']['message']);
@@ -123,7 +125,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    public function configureBackends(ContainerBuilder $container, $config)
+    public function configureBackends(ContainerBuilder $container, $config): void
     {
         // set the default value, will be erase if required
         $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
@@ -156,7 +158,7 @@ class SonataNotificationExtension extends Extension
     /**
      * @param array $config
      */
-    public function registerDoctrineMapping(array $config)
+    public function registerDoctrineMapping(array $config): void
     {
         $collector = DoctrineCollector::getInstance();
 
@@ -172,7 +174,7 @@ class SonataNotificationExtension extends Extension
     /**
      * @param array $config
      */
-    protected function checkConfiguration(array $config)
+    protected function checkConfiguration(array $config): void
     {
         if (isset($config['backends']) && count($config['backends']) > 1) {
             throw new \RuntimeException('more than one backend configured, you can have only one backend configuration');
@@ -191,7 +193,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    protected function configureListeners(ContainerBuilder $container, array $config)
+    protected function configureListeners(ContainerBuilder $container, array $config): void
     {
         $ids = $config['iteration_listeners'];
 
@@ -221,7 +223,7 @@ class SonataNotificationExtension extends Extension
      *
      * @throws \RuntimeException
      */
-    protected function configureDoctrineBackends(ContainerBuilder $container, array $config, $checkLevel, $pause, $maxAge, $batchSize)
+    protected function configureDoctrineBackends(ContainerBuilder $container, array $config, $checkLevel, $pause, $maxAge, $batchSize): void
     {
         $queues = $config['queues'];
         $qBackends = [];
@@ -319,7 +321,7 @@ class SonataNotificationExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    protected function configureRabbitmq(ContainerBuilder $container, array $config)
+    protected function configureRabbitmq(ContainerBuilder $container, array $config): void
     {
         $queues = $config['queues'];
         $connection = $config['backends']['rabbitmq']['connection'];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -32,7 +34,7 @@ class MessageManagerMessageIterator extends Iterator
     /**
      * @param array $types
      */
-    public function _bufferize($types = [])
+    public function _bufferize($types = []): void
     {
         $this->bufferize($types);
     }

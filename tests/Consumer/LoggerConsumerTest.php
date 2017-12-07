@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -24,7 +26,7 @@ class LoggerConsumerTest extends TestCase
      * @param $type
      * @param $calledType
      */
-    public function testProcess($type, $calledType)
+    public function testProcess($type, $calledType): void
     {
         $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method($calledType);
@@ -58,7 +60,7 @@ class LoggerConsumerTest extends TestCase
         ];
     }
 
-    public function testInvalidType()
+    public function testInvalidType(): void
     {
         $this->expectException(\Sonata\NotificationBundle\Exception\InvalidParameterException::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -60,7 +62,7 @@ final class AMQPMessageIterator implements MessageIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         $this->isValid = false;
 
@@ -82,7 +84,7 @@ final class AMQPMessageIterator implements MessageIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function key()
+    public function key(): void
     {
         $this->counter;
     }
@@ -98,7 +100,7 @@ final class AMQPMessageIterator implements MessageIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->isValid = true;
         $this->next();
