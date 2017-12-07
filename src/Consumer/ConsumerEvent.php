@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -45,7 +47,7 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
     /**
      * @param ConsumerReturnInfo $returnInfo
      */
-    public function setReturnInfo($returnInfo)
+    public function setReturnInfo($returnInfo): void
     {
         $this->returnInfo = $returnInfo;
     }

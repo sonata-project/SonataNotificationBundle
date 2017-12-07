@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -23,7 +25,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     /**
      * {@inheritdoc}
      */
-    public function save($message, $andFlush = true)
+    public function save($message, $andFlush = true): void
     {
         //Hack for ConsumerHandlerCommand->optimize()
         if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
@@ -97,7 +99,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     /**
      * {@inheritdoc}
      */
-    public function cleanup($maxAge)
+    public function cleanup($maxAge): void
     {
         $tableName = $this->getEntityManager()->getClassMetadata($this->class)->table['name'];
 
@@ -117,7 +119,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     /**
      * {@inheritdoc}
      */
-    public function cancel(MessageInterface $message, $force = false)
+    public function cancel(MessageInterface $message, $force = false): void
     {
         if (($message->isRunning() || $message->isError()) && !$force) {
             return;

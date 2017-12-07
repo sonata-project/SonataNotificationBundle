@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MessageControllerTest extends TestCase
 {
-    public function testGetMessagesAction()
+    public function testGetMessagesAction(): void
     {
         $messageManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
         $messageManager->expects($this->once())->method('getPager')->will($this->returnValue([]));
@@ -32,7 +34,7 @@ class MessageControllerTest extends TestCase
         $this->assertEquals([], $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
     }
 
-    public function testPostMessageAction()
+    public function testPostMessageAction(): void
     {
         $message = $this->createMock('Sonata\NotificationBundle\Model\MessageInterface');
 
@@ -52,7 +54,7 @@ class MessageControllerTest extends TestCase
         $this->assertInstanceOf('FOS\RestBundle\View\View', $view);
     }
 
-    public function testPostMessageInvalidAction()
+    public function testPostMessageInvalidAction(): void
     {
         $message = $this->createMock('Sonata\NotificationBundle\Model\MessageInterface');
 

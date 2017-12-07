@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -54,7 +56,7 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     /**
      * {@inheritdoc}
      */
-    public function publish(MessageInterface $message)
+    public function publish(MessageInterface $message): void
     {
         $this->getBackend($message->getType())->publish($message);
     }
@@ -70,7 +72,7 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     /**
      * {@inheritdoc}
      */
-    public function createAndPublish($type, array $body)
+    public function createAndPublish($type, array $body): void
     {
         $this->getBackend($type)->createAndPublish($type, $body);
     }

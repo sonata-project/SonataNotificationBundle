@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,7 +21,7 @@ use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
  */
 class IteratorProxyMessageIteratorTest extends TestCase
 {
-    public function testIteratorProxiesIteratorMethods()
+    public function testIteratorProxiesIteratorMethods(): void
     {
         $content = [
             'foo',

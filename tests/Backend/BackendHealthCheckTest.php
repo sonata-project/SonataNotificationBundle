@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,14 +19,14 @@ use ZendDiagnostics\Result\Success;
 
 class BackendHealthCheckTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('ZendDiagnostics\Result\Success')) {
             $this->markTestSkipped('ZendDiagnostics\Result\Success does not exist');
         }
     }
 
-    public function testCheck()
+    public function testCheck(): void
     {
         $result = new Success('Test check', 'OK');
 

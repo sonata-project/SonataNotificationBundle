@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -21,7 +23,7 @@ class ListQueuesCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this->setName('sonata:notification:list-queues');
         $this->setDescription('List all queues available');
@@ -30,7 +32,7 @@ class ListQueuesCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
         $backend = $this->getContainer()->get('sonata.notification.backend');
 

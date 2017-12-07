@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -81,7 +83,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setBody(array $body)
+    public function setBody(array $body): void
     {
         $this->body = $body;
     }
@@ -118,7 +120,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setCompletedAt(\DateTime $completedAt = null)
+    public function setCompletedAt(\DateTime $completedAt = null): void
     {
         $this->completedAt = $completedAt;
     }
@@ -134,7 +136,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(\DateTime $createdAt = null): void
     {
         $this->createdAt = $createdAt;
     }
@@ -150,7 +152,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setGroup($group)
+    public function setGroup($group): void
     {
         $this->group = $group;
     }
@@ -166,7 +168,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setType($type)
+    public function setType($type): void
     {
         $this->type = $type;
     }
@@ -182,7 +184,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setState($state)
+    public function setState($state): void
     {
         $this->state = $state;
     }
@@ -198,7 +200,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setRestartCount($restartCount)
+    public function setRestartCount($restartCount): void
     {
         $this->restartCount = $restartCount;
     }
@@ -214,7 +216,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(\DateTime $updatedAt = null): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -244,7 +246,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setStartedAt(\DateTime $startedAt = null)
+    public function setStartedAt(\DateTime $startedAt = null): void
     {
         $this->startedAt = $startedAt;
     }

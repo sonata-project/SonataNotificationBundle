@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,7 +21,7 @@ use Sonata\NotificationBundle\Tests\Entity\Message;
 
 class RuntimeBackendTest extends TestCase
 {
-    public function testCreateAndPublish()
+    public function testCreateAndPublish(): void
     {
         $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $backend = new RuntimeBackend($dispatcher);
@@ -33,7 +35,7 @@ class RuntimeBackendTest extends TestCase
         $this->assertEquals(['message' => 'salut'], $message->getBody());
     }
 
-    public function testIterator()
+    public function testIterator(): void
     {
         $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $backend = new RuntimeBackend($dispatcher);
@@ -41,7 +43,7 @@ class RuntimeBackendTest extends TestCase
         $this->assertInstanceOf('Iterator', $backend->getIterator());
     }
 
-    public function testHandleSuccess()
+    public function testHandleSuccess(): void
     {
         $message = new Message();
 
@@ -56,7 +58,7 @@ class RuntimeBackendTest extends TestCase
         $this->assertNotNull($message->getCompletedAt());
     }
 
-    public function testHandleError()
+    public function testHandleError(): void
     {
         $message = new Message();
 

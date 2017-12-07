@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,7 +19,7 @@ use Sonata\NotificationBundle\Event\IterateEvent;
 
 class DoctrineOptimizeListenerTest extends TestCase
 {
-    public function testWithClosedManager()
+    public function testWithClosedManager(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -36,7 +38,7 @@ class DoctrineOptimizeListenerTest extends TestCase
         ));
     }
 
-    public function testOptimize()
+    public function testOptimize(): void
     {
         $unitofwork = $this->createMock('Doctrine\ORM\UnitOfWork');
         $unitofwork->expects($this->once())->method('clear');

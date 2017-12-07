@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -38,7 +40,7 @@ class DoctrineBackendOptimizeListener implements IterationListener
     /**
      * {@inheritdoc}
      */
-    public function iterate(IterateEvent $event)
+    public function iterate(IterateEvent $event): void
     {
         if (!method_exists($event->getIterator(), 'isBufferEmpty')) {
             throw new \LogicException('You can\'t use DoctrineOptimizeListener with this iterator');
