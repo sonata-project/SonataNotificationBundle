@@ -19,11 +19,10 @@ use Sonata\NotificationBundle\Exception\InvalidParameterException;
  */
 class InvalidParameterExceptionTest extends TestCase
 {
-    /**
-     * @expectedException \Sonata\NotificationBundle\Exception\InvalidParameterException
-     */
     public function testException()
     {
+        $this->expectException(\Sonata\NotificationBundle\Exception\InvalidParameterException::class);
+
         throw new InvalidParameterException();
     }
 }

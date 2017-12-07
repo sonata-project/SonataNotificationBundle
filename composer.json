@@ -19,41 +19,43 @@
     "require": {
         "php": "^5.6 || ^7.0",
         "enqueue/amqp-lib": "^0.8",
-        "symfony/config": "^2.8 || ^3.2",
-        "symfony/console": "^2.8 || ^3.2",
-        "symfony/dependency-injection": "^2.8 || ^3.2",
-        "symfony/event-dispatcher": "^2.8 || ^3.2",
-        "symfony/form": "^2.8 || ^3.2",
-        "symfony/http-foundation": "^2.8 || ^3.2",
-        "symfony/http-kernel": "^2.8 || ^3.2",
-        "symfony/security": "^2.8 || ^3.2",
-        "sonata-project/doctrine-extensions": "^1.0",
-        "sonata-project/easy-extends-bundle": "^2.2",
         "sonata-project/core-bundle": "^3.0",
         "sonata-project/datagrid-bundle": "^2.2.1",
+        "sonata-project/doctrine-extensions": "^1.0",
+        "sonata-project/easy-extends-bundle": "^2.2",
+        "symfony/config": "^2.8 || ^3.2 || ^4.0",
+        "symfony/console": "^2.8 || ^3.2 || ^4.0",
+        "symfony/dependency-injection": "^2.8 || ^3.2 || ^4.0",
+        "symfony/event-dispatcher": "^2.8 || ^3.2 || ^4.0",
+        "symfony/form": "^2.8 || ^3.2 || ^4.0",
+        "symfony/http-foundation": "^2.8 || ^3.2 || ^4.0",
+        "symfony/http-kernel": "^2.8 || ^3.2 || ^4.0",
+        "symfony/security": "^2.8 || ^3.2 || ^4.0",
         "zendframework/zenddiagnostics": "^1.0"
     },
-    "suggest": {
-        "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
+    "require-dev": {
+        "friendsofsymfony/rest-bundle": "^1.5 || ^2.1",
+        "guzzlehttp/guzzle" : "^3.8",
+        "jms/serializer-bundle": "^0.13 || ^1.0",
+        "liip/monitor-bundle": "^2.0",
+        "nelmio/api-doc-bundle": "^2.4",
         "sonata-project/doctrine-orm-admin-bundle": "^3.0",
+        "swiftmailer/swiftmailer": "^4.3 || ^5.0",
+        "symfony/phpunit-bridge": "^3.3 || ^4.0"
+    },
+    "suggest": {
         "guzzlehttp/guzzle" : "If you want to get a status report when using the rabbitMQ backend.",
         "liip/monitor-bundle": "^1.0",
-        "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8"
-    },
-    "require-dev": {
-        "sonata-project/doctrine-orm-admin-bundle": "^3.0",
-        "guzzlehttp/guzzle" : "^3.8",
-        "liip/monitor-bundle": "^2.0",
-        "symfony/phpunit-bridge": "^3.3",
-        "swiftmailer/swiftmailer": "^4.3 || ^5.0",
-        "friendsofsymfony/rest-bundle": "^1.5 || ^2.1",
-        "jms/serializer-bundle": "^0.13 || ^1.0",
-        "nelmio/api-doc-bundle": "^2.4",
-        "sllh/php-cs-fixer-styleci-bridge": "^2.0"
+        "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
+        "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
+        "sonata-project/doctrine-orm-admin-bundle": "^3.0"
     },
     "conflict": {
         "jms/serializer": "<0.13",
         "sonata-project/admin-bundle": "<3.1"
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": { "Sonata\\NotificationBundle\\": "src/" }
