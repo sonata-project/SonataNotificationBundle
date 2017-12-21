@@ -34,6 +34,9 @@ class NotificationCompilerPass implements CompilerPassInterface
         $informations = [];
 
         foreach ($container->findTaggedServiceIds('sonata.notification.consumer') as $id => $events) {
+            $definition = $container->getDefinition($id);
+            $definition->setPublic(true);
+
             foreach ($events as $event) {
                 $priority = isset($event['priority']) ? $event['priority'] : 0;
 
