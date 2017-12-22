@@ -12,6 +12,7 @@
 namespace Sonata\NotificationBundle\DependencyInjection\Compiler;
 
 use Sonata\NotificationBundle\Event\IterateEvent;
+use Sonata\NotificationBundle\Event\IterationListener;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -56,7 +57,7 @@ class NotificationCompilerPass implements CompilerPassInterface
                 /*
                  * NEXT_MAJOR: Remove check for ServiceClosureArgument and the addListenerService method call.
                  */
-                if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
+                if (class_exists(ServiceClosureArgument::class)) {
                     $definition->addMethodCall(
                         'addListener',
                         [
@@ -87,7 +88,7 @@ class NotificationCompilerPass implements CompilerPassInterface
                 $definition = $container->getDefinition($serviceId);
 
                 $class = new \ReflectionClass($definition->getClass());
-                if (!$class->implementsInterface('Sonata\NotificationBundle\Event\IterationListener')) {
+                if (!$class->implementsInterface(IterationListener::class)) {
                     throw new RuntimeException(
                         'Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener'
                     );

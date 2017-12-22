@@ -12,8 +12,10 @@
 namespace Sonata\NotificationBundle\Tests\Backend;
 
 use PHPUnit\Framework\TestCase;
+use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher;
 use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
@@ -22,7 +24,7 @@ class MessageManagerBackendDispatcherTest extends TestCase
 {
     public function testCreate()
     {
-        $testBackend = $this->createMock('Sonata\NotificationBundle\Backend\MessageManagerBackend');
+        $testBackend = $this->createMock(MessageManagerBackend::class);
 
         $testBackend->expects($this->once())
             ->method('setDispatcher')
@@ -37,7 +39,7 @@ class MessageManagerBackendDispatcherTest extends TestCase
             ->will($this->returnValue($message))
         ;
 
-        $mMgr = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $mMgr = $this->createMock(MessageManagerInterface::class);
 
         $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, [], '', [['types' => ['test'], 'backend' => $testBackend]]);
 

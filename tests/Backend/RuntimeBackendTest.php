@@ -16,16 +16,17 @@ use Sonata\NotificationBundle\Backend\RuntimeBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RuntimeBackendTest extends TestCase
 {
     public function testCreateAndPublish()
     {
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $backend = new RuntimeBackend($dispatcher);
         $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
-        $this->assertInstanceOf('Sonata\\NotificationBundle\\Model\\MessageInterface', $message);
+        $this->assertInstanceOf(MessageInterface::class, $message);
 
         $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
@@ -35,7 +36,7 @@ class RuntimeBackendTest extends TestCase
 
     public function testIterator()
     {
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $backend = new RuntimeBackend($dispatcher);
 
         $this->assertInstanceOf('Iterator', $backend->getIterator());
@@ -45,7 +46,7 @@ class RuntimeBackendTest extends TestCase
     {
         $message = new Message();
 
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher->expects($this->once())->method('dispatch');
 
         $backend = new RuntimeBackend($dispatcher);
@@ -60,7 +61,7 @@ class RuntimeBackendTest extends TestCase
     {
         $message = new Message();
 
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
 
         $backend = new RuntimeBackend($dispatcher);
@@ -72,7 +73,7 @@ class RuntimeBackendTest extends TestCase
         } catch (HandlingException $e) {
         }
 
-        $this->assertInstanceOf('Sonata\NotificationBundle\Exception\HandlingException', $e);
+        $this->assertInstanceOf(HandlingException::class, $e);
 
         $this->assertEquals(MessageInterface::STATE_ERROR, $message->getState());
         $this->assertNotNull($message->getCreatedAt());

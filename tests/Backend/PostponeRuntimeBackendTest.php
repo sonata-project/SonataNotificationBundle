@@ -16,6 +16,8 @@ use Sonata\NotificationBundle\Backend\PostponeRuntimeBackend;
 use Sonata\NotificationBundle\Consumer\ConsumerEventInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ZendDiagnostics\Result\Success;
 
 /**
  * @covers \Sonata\NotificationBundle\Backend\PostponeRuntimeBackend
@@ -25,7 +27,7 @@ class PostponeRuntimeBackendTest extends TestCase
     public function testIteratorContainsPublishedMessages()
     {
         $backend = new PostponeRuntimeBackend(
-            $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'),
+            $this->createMock(EventDispatcherInterface::class),
             true
         );
 
@@ -53,9 +55,9 @@ class PostponeRuntimeBackendTest extends TestCase
 
     public function testNoMessagesOnEvent()
     {
-        $backend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend')
+        $backend = $this->getMockBuilder(PostponeRuntimeBackend::class)
             ->setMethods(['handle'])
-            ->setConstructorArgs([$this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')])
+            ->setConstructorArgs([$this->createMock(EventDispatcherInterface::class)])
             ->getMock();
 
         $backend
@@ -132,24 +134,24 @@ class PostponeRuntimeBackendTest extends TestCase
 
     public function testStatusIsOk()
     {
-        if (!class_exists('ZendDiagnostics\Result\Success')) {
+        if (!class_exists(Success::class)) {
             $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
         }
 
         $backend = new PostponeRuntimeBackend(
-            $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'),
+            $this->createMock(EventDispatcherInterface::class),
             true
         );
 
         $status = $backend->getStatus();
-        $this->assertInstanceOf('ZendDiagnostics\Result\Success', $status);
+        $this->assertInstanceOf(Success::class, $status);
     }
 
     public function testOnCliPublishHandlesDirectly()
     {
-        $backend = $this->getMockBuilder('Sonata\NotificationBundle\Backend\PostponeRuntimeBackend')
+        $backend = $this->getMockBuilder(PostponeRuntimeBackend::class)
             ->setMethods(['handle'])
-            ->setConstructorArgs([$this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')])
+            ->setConstructorArgs([$this->createMock(EventDispatcherInterface::class)])
             ->getMock();
 
         $backend

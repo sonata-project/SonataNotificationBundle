@@ -21,7 +21,7 @@ class InvalidParameterExceptionTest extends TestCase
 {
     public function testException()
     {
-        $this->expectException(\Sonata\NotificationBundle\Exception\InvalidParameterException::class);
+        $this->expectException(InvalidParameterException::class);
 
         throw new InvalidParameterException();
     }
