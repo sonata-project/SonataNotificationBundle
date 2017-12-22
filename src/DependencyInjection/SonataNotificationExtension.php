@@ -12,8 +12,11 @@
 namespace Sonata\NotificationBundle\DependencyInjection;
 
 use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
+use Sonata\NotificationBundle\Backend\AMQPBackend;
+use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
@@ -40,7 +43,7 @@ class SonataNotificationExtension extends Extension
         /*
          * NEXT_MAJOR: Remove the check for ServiceClosureArgument as well as core_legacy.xml.
          */
-        if (class_exists('Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument')) {
+        if (class_exists(ServiceClosureArgument::class)) {
             $loader->load('core.xml');
         } else {
             $loader->load('core_legacy.xml');
@@ -307,7 +310,7 @@ class SonataNotificationExtension extends Extension
             $id = 'sonata.notification.backend.doctrine.'.$key;
         }
 
-        $definition = new Definition('Sonata\NotificationBundle\Backend\MessageManagerBackend', [$manager, $checkLevel, $pause, $maxAge, $batchSize, $types]);
+        $definition = new Definition(MessageManagerBackend::class, [$manager, $checkLevel, $pause, $maxAge, $batchSize, $types]);
         $definition->setPublic(false);
 
         $container->setDefinition($id, $definition);
@@ -430,7 +433,7 @@ class SonataNotificationExtension extends Extension
         $id = 'sonata.notification.backend.rabbitmq.'.$this->amqpCounter++;
 
         $definition = new Definition(
-            'Sonata\NotificationBundle\Backend\AMQPBackend',
+            AMQPBackend::class,
             [
                 $exchange,
                 $name,

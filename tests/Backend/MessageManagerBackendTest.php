@@ -15,7 +15,9 @@ use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
@@ -25,14 +27,14 @@ class MessageManagerBackendTest extends TestCase
     public function testCreateAndPublish()
     {
         $message = new Message();
-        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock(MessageManagerInterface::class);
         $modelManager->expects($this->once())->method('save')->will($this->returnValue($message));
         $modelManager->expects($this->once())->method('create')->will($this->returnValue($message));
 
         $backend = new MessageManagerBackend($modelManager, []);
         $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
-        $this->assertInstanceOf('Sonata\\NotificationBundle\\Model\\MessageInterface', $message);
+        $this->assertInstanceOf(MessageInterface::class, $message);
         $this->assertEquals(MessageInterface::STATE_OPEN, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
         $this->assertEquals('foo', $message->getType());
@@ -42,10 +44,10 @@ class MessageManagerBackendTest extends TestCase
     public function testHandleSuccess()
     {
         $message = new Message();
-        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock(MessageManagerInterface::class);
         $modelManager->expects($this->exactly(2))->method('save')->will($this->returnValue($message));
 
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher->expects($this->once())->method('dispatch');
 
         $backend = new MessageManagerBackend($modelManager, []);
@@ -60,10 +62,10 @@ class MessageManagerBackendTest extends TestCase
     public function testHandleError()
     {
         $message = new Message();
-        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock(MessageManagerInterface::class);
         $modelManager->expects($this->exactly(2))->method('save')->will($this->returnValue($message));
 
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
         $backend = new MessageManagerBackend($modelManager, []);
 
@@ -74,7 +76,7 @@ class MessageManagerBackendTest extends TestCase
         } catch (HandlingException $e) {
         }
 
-        $this->assertInstanceOf('Sonata\NotificationBundle\Exception\HandlingException', $e);
+        $this->assertInstanceOf(HandlingException::class, $e);
 
         $this->assertEquals(MessageInterface::STATE_ERROR, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
@@ -86,11 +88,11 @@ class MessageManagerBackendTest extends TestCase
      */
     public function testStatus($counts, $expectedStatus, $message)
     {
-        if (!class_exists('ZendDiagnostics\Result\Success')) {
+        if (!class_exists(Success::class)) {
             $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
         }
 
-        $modelManager = $this->createMock('Sonata\NotificationBundle\Model\MessageManagerInterface');
+        $modelManager = $this->createMock(MessageManagerInterface::class);
         $modelManager->expects($this->exactly(1))->method('countStates')->will($this->returnValue($counts));
 
         $backend = new MessageManagerBackend($modelManager, [
@@ -108,7 +110,7 @@ class MessageManagerBackendTest extends TestCase
 
     public static function statusProvider()
     {
-        if (!class_exists('ZendDiagnostics\Result\Success')) {
+        if (!class_exists(Success::class)) {
             return [[1, 1, 1]];
         }
 
