@@ -15,13 +15,14 @@ namespace Sonata\NotificationBundle\Tests\Notification;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\BackendHealthCheck;
+use Sonata\NotificationBundle\Backend\BackendInterface;
 use ZendDiagnostics\Result\Success;
 
 class BackendHealthCheckTest extends TestCase
 {
     public function setUp(): void
     {
-        if (!class_exists('ZendDiagnostics\Result\Success')) {
+        if (!class_exists(Success::class)) {
             $this->markTestSkipped('ZendDiagnostics\Result\Success does not exist');
         }
     }
@@ -30,7 +31,7 @@ class BackendHealthCheckTest extends TestCase
     {
         $result = new Success('Test check', 'OK');
 
-        $backend = $this->createMock('Sonata\NotificationBundle\Backend\BackendInterface');
+        $backend = $this->createMock(BackendInterface::class);
         $backend->expects($this->once())->method('getStatus')->will($this->returnValue($result));
 
         $health = new BackendHealthCheck($backend);

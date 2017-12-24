@@ -15,6 +15,7 @@ namespace Sonata\NotificationBundle;
 
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
+use Sonata\NotificationBundle\Form\Type\MessageSerializationType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -49,7 +50,7 @@ class SonataNotificationBundle extends Bundle
     public function registerFormMapping(): void
     {
         FormHelper::registerFormTypeMapping([
-            'sonata_notification_api_form_message' => 'Sonata\NotificationBundle\Form\Type\MessageSerializationType',
+            'sonata_notification_api_form_message' => MessageSerializationType::class,
         ]);
     }
 }

@@ -28,7 +28,7 @@ class MessageManagerMessageIteratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry = $this->createMock(ManagerRegistry::class);
     }
 
     public function testBufferize(): void

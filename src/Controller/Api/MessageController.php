@@ -147,7 +147,7 @@ class MessageController
 
             $view = FOSRestView::create($message);
 
-            if (class_exists('FOS\RestBundle\Context\Context')) {
+            if (class_exists(Context::class)) {
                 $serializationContext = new Context();
                 if (method_exists($serializationContext, 'enableMaxDepth')) {
                     $serializationContext->enableMaxDepth();

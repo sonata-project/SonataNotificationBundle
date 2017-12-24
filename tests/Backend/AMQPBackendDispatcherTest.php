@@ -17,6 +17,7 @@ use Enqueue\AmqpLib\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
 use MyProject\Proxies\__CG__\stdClass;
 use PHPUnit\Framework\TestCase;
+use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
 use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
@@ -180,7 +181,7 @@ class AMQPBackendDispatcherTest extends TestCase
     {
         $methods = ['createAndPublish', 'initialize'];
         $args = ['', 'foo', false, 'message.type.foo'];
-        $mock = $this->getMockBuilder('Sonata\NotificationBundle\Backend\AMQPBackend')
+        $mock = $this->getMockBuilder(AMQPBackend::class)
                      ->setConstructorArgs($args)
                      ->setMethods($methods)
                      ->getMock();
