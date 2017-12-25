@@ -118,7 +118,6 @@ EOF;
                                     ->end()
                                     ->scalarNode('factory_class')
                                         ->cannotBeEmpty()
-                                        ->isRequired()
                                         ->defaultValue(AmqpConnectionFactory::class)
                                         ->info('This option defines an AMQP connection factory to be used to establish a connection with RabbitMQ.')
                                     ->end()
