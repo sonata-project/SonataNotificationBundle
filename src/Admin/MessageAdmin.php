@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class MessageAdmin extends AbstractAdmin
 {
@@ -97,7 +97,7 @@ class MessageAdmin extends AbstractAdmin
 
         $datagridMapper
             ->add('type')
-            ->add('state', null, [], ChoiceFilter::class, ['choices' => $class::getStateList()])
+            ->add('state', null, [], ChoiceType::class, ['choices' => $class::getStateList()])
         ;
     }
 }
