@@ -78,6 +78,8 @@ class SonataNotificationExtension extends Extension
         $this->checkConfiguration($config);
 
         $container->setAlias('sonata.notification.backend', $config['backend']);
+        // NEXT_MAJOR: remove this getter when requiring sf3.4+
+        $container->getAlias('sonata.notification.backend')->setPublic(true);
         $container->setParameter('sonata.notification.backend', $config['backend']);
 
         $this->registerDoctrineMapping($config);
@@ -154,6 +156,9 @@ class SonataNotificationExtension extends Extension
 
             $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
         }
+
+        // NEXT_MAJOR: remove this getter when requiring sf3.4+
+        $container->getAlias('sonata.notification.manager.message')->setPublic(true);
     }
 
     /**
