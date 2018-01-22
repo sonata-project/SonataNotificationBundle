@@ -2,7 +2,11 @@
     "name": "sonata-project/notification-bundle",
     "type": "symfony-bundle",
     "description": "Symfony SonataNotificationBundle",
-    "keywords": ["page", "sonata", "cms"],
+    "keywords": [
+        "page",
+        "sonata",
+        "cms"
+    ],
     "homepage": "https://sonata-project.org/bundles/page",
     "license": "MIT",
     "authors": [
@@ -33,9 +37,13 @@
         "symfony/security": "^2.8 || ^3.2 || ^4.0",
         "zendframework/zenddiagnostics": "^1.0"
     },
+    "conflict": {
+        "jms/serializer": "<0.13",
+        "sonata-project/admin-bundle": "<3.1"
+    },
     "require-dev": {
         "friendsofsymfony/rest-bundle": "^1.5 || ^2.1",
-        "guzzlehttp/guzzle" : "^3.8",
+        "guzzlehttp/guzzle": "^3.8",
         "jms/serializer-bundle": "^0.13 || ^1.0",
         "liip/monitor-bundle": "^2.0",
         "nelmio/api-doc-bundle": "^2.4",
@@ -44,28 +52,28 @@
         "symfony/phpunit-bridge": "^3.3 || ^4.0"
     },
     "suggest": {
-        "guzzlehttp/guzzle" : "If you want to get a status report when using the rabbitMQ backend.",
+        "guzzlehttp/guzzle": "If you want to get a status report when using the rabbitMQ backend.",
         "liip/monitor-bundle": "^1.0",
         "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
         "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
         "sonata-project/doctrine-orm-admin-bundle": "^3.0"
     },
-    "conflict": {
-        "jms/serializer": "<0.13",
-        "sonata-project/admin-bundle": "<3.1"
-    },
     "config": {
         "sort-packages": true
-    },
-    "autoload": {
-        "psr-4": { "Sonata\\NotificationBundle\\": "src/" }
-    },
-    "autoload-dev": {
-        "psr-4": { "Sonata\\NotificationBundle\\Tests\\": "tests/" }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "4.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Sonata\\NotificationBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sonata\\NotificationBundle\\Tests\\": "tests/"
         }
     }
 }
