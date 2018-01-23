@@ -81,9 +81,9 @@ class PostponeRuntimeBackend extends RuntimeBackend
 
         foreach ($this->messages as $key => $message) {
             $this->handle($message, $this->dispatcher);
-
-            unset($this->messages[$key]);
         }
+
+        $this->messages = [];
     }
 
     /**
