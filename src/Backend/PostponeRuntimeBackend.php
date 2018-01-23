@@ -79,7 +79,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     {
         reset($this->messages);
 
-        while (list($key, $message) = each($this->messages)) {
+        foreach ($this->messages as $key => $message) {
             $this->handle($message, $this->dispatcher);
 
             unset($this->messages[$key]);
