@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.3.1](https://github.com/sonata-project/SonataNotificationBundle/compare/3.3.0...3.3.1) - 2018-01-26
+### Changed
+- Auto-register all aliases as public
+- Auto-register consumer as public service
+ 
+### Fixed
+- `isRequired()` was removed since a default is specified
+- MessageAdmin loads correct ChoiceType for the state filter (instead of ChoiceFilter)
+
 ## [3.3.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.2.0...3.3.0) - 2017-12-07
 ### Added
 - Added Russian translations
