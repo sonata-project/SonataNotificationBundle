@@ -5,19 +5,38 @@ To begin, add the dependent bundles:
 
 .. code-block:: bash
 
-    php composer.phar require sonata-project/notification-bundle
-    php composer.phar require enqueue/amqp-lib --no-update # optional
-    php composer.phar require liip/monitor-bundle --no-update     # optional
-    php composer.phar require friendsofsymfony/rest-bundle  --no-update # optional when using api
-    php composer.phar require nelmio/api-doc-bundle  --no-update # optional when using api
-    php composer.phar update
+    composer require sonata-project/notification-bundle
+    composer require enqueue/amqp-lib --no-update # optional
+    composer require liip/monitor-bundle --no-update     # optional
+    composer require friendsofsymfony/rest-bundle  --no-update # optional when using api
+    composer require nelmio/api-doc-bundle  --no-update # optional when using api
+    composer update
 
 
-Now, add the new `SonataNotificationBundle` Bundle to the kernel
+Now, add the new `SonataNotificationBundle` Bundle to ``bundles.php`` file:
 
 .. code-block:: php
 
     <?php
+
+    // config/bundles.php
+
+    return [
+        //...
+        Sonata\NotificationBundle\SonataNotificationBundle::class => ['all' => true],
+    ];
+
+.. note::
+    If you are not using Symfony Flex, you should enable bundles in your
+    ``AppKernel.php``.
+
+
+.. code-block:: php
+
+    <?php
+
+    // app/AppKernel.php
+
     public function registerbundles()
     {
         return array(
@@ -26,33 +45,20 @@ Now, add the new `SonataNotificationBundle` Bundle to the kernel
         );
     }
 
-Then add these bundles in the config mapping definition:
-
-.. code-block:: yaml
-
-    doctrine:
-        dbal:
-            # ...
-
-            types:
-                json: Sonata\Doctrine\Types\JsonType
-
-        orm:
-            # ...
-            entity_managers:
-                default:
-                        # ...
-                    mappings:
-                        # ...
-                        SonataNotificationBundle: ~
-
 Configuration
 -------------
+
+.. note::
+    If you are not using Symfony Flex, all configuration in this section should
+    be added to ``app/config/config.yml``.
+
+SonataNotificationBundle Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To use the ``SonataNotificationBundle``, add the following lines to your application configuration
 file.
 
-Backend availables :
+Backend options:
 
  * ``sonata.notification.backend.runtime`` : direct call, no benefit but useful for testing purpose
  * ``sonata.notification.backend.postpone``: post-pone the messages to be dispatched on kernel.terminate
@@ -61,7 +67,8 @@ Backend availables :
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # config/packages/sonata.yaml
+
     sonata_notification:
         backend: sonata.notification.backend.runtime
 
@@ -69,10 +76,31 @@ You can disable the admin if you don't need it :
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # config/packages/sonata.yaml
+
     sonata_notification:
         admin:
             enabled: false
+
+Doctrine Configuration
+~~~~~~~~~~~~~~~~~~~~~~
+Add these bundles in the config mapping definition (or enable `auto_mapping`_):
+
+.. code-block:: yaml
+
+    # config/packages/doctrine.yaml
+
+    doctrine:
+        orm:
+            entity_managers:
+                default:
+                    mappings:
+                        ApplicationSonataNotificationBundle: ~
+                        SonataNotificationBundle: ~
+
+        dbal:
+            types:
+                json: Sonata\Doctrine\Types\JsonType
 
 Extending the Bundle
 --------------------
@@ -81,41 +109,47 @@ generate the correct entities for the media:
 
 .. code-block:: bash
 
-    php app/console sonata:easy-extends:generate SonataNotificationBundle
+    bin/console sonata:easy-extends:generate SonataNotificationBundle --dest=src --namespace_prefix=App
 
-If you specify no parameters, the files will be generated in app/Application/Sonata...
-but you can specify the path with ``--dest=src``
+.. note::
+    If you are not using Symfony Flex, use command without ``--namespace_prefix=App``.
+
+With provided parameters, the files are generated in ``src/Application/Sonata/NotificationBundle``.
 
 .. note::
 
-    The command will generate domain objects in ``Application`` namespace.
+    The command will generate domain objects in ``App\Application`` namespace.
     So you can point entities' associations to a global and common namespace.
     This will make Entities sharing easier as your models will allow to
-    point to a global namespace. For instance the user will be
-    ``Application\Sonata\NotificationBundle\Entity\Message``.
-    
-Now add your new application bundle to the config mapping definition:
+    point to a global namespace. For instance the message will be
+    ``App\Application\Sonata\NotificationBundle\Entity\Message``.
 
-.. code-block:: yaml
+.. note::
+    If you are not using Symfony Flex, the namespace will be ``Application\Sonata\NotificationBundle\Entity``.
 
-    doctrine:
-        # ...
-        orm:
-            # ...
-            entity_managers:
-                default:
-                        # ...
-                    mappings:
-                        # ...
-                        ApplicationSonataNotificationBundle: ~
-
-Now, add the new `Application` Bundle into the kernel:
+Now, add the new ``Application`` Bundle into the ``bundles.php``:
 
 .. code-block:: php
 
     <?php
 
-    // AppKernel.php
+    // config/bundles.php
+
+    return [
+        //...
+        App\Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle::class => ['all' => true],
+    ];
+
+.. note::
+    If you are not using Symfony Flex, add the new ``Application`` Bundle into your
+    ``AppKernel.php``.
+
+.. code-block:: php
+
+    <?php
+
+    // app/AppKernel.php
+
     class AppKernel {
         public function registerbundles()
         {
@@ -128,3 +162,26 @@ Now, add the new `Application` Bundle into the kernel:
             )
         }
     }
+
+And configure ``SonataNotificationBundle`` to use the newly generated Message class:
+
+.. code-block:: php
+
+    # config/packages/sonata.yaml
+
+    sonata_notification:
+        #..
+        class:
+            message: App\Application\Sonata\NotificationBundle\Entity\Message
+
+.. note::
+    If you are not using Symfony Flex, add classes without the ``App\``
+    part and this configuration should be added to ``app/config/config.yml``
+
+The only thing left is to update your schema:
+
+.. code-block:: bash
+
+    php bin/console doctrine:schema:update --force
+
+.. _`auto_mapping`: http://symfony.com/doc/2.0/reference/configuration/doctrine.html#configuration-overview
