@@ -40,6 +40,8 @@ class SonataNotificationExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
+        $this->checkConfiguration($config);
+
         /*
          * NEXT_MAJOR: Remove the check for ServiceClosureArgument as well as core_legacy.xml.
          */
@@ -49,12 +51,15 @@ class SonataNotificationExtension extends Extension
             $loader->load('core_legacy.xml');
         }
 
-        $loader->load('doctrine_orm.xml');
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
-        $loader->load('selector.xml');
-        $loader->load('event.xml');
         $loader->load('command.xml');
+
+        if ('sonata.notification.backend.doctrine' === $config['backend']) {
+            $loader->load('doctrine_orm.xml');
+            $loader->load('selector.xml');
+            $loader->load('event.xml');
+        }
 
         if ($config['consumers']['register_default']) {
             $loader->load('default_consumers.xml');
@@ -75,8 +80,6 @@ class SonataNotificationExtension extends Extension
         if (isset($bundles['LiipMonitorBundle'])) {
             $loader->load('checkmonitor.xml');
         }
-
-        $this->checkConfiguration($config);
 
         $container->setAlias('sonata.notification.backend', $config['backend']);
         // NEXT_MAJOR: remove this getter when requiring sf3.4+
@@ -131,13 +134,8 @@ class SonataNotificationExtension extends Extension
      */
     public function configureBackends(ContainerBuilder $container, $config)
     {
-        // set the default value, will be erase if required
-        $container->setAlias('sonata.notification.manager.message', 'sonata.notification.manager.message.default');
-
         if (isset($config['backends']['rabbitmq']) && 'sonata.notification.backend.rabbitmq' === $config['backend']) {
             $this->configureRabbitmq($container, $config);
-
-            $container->removeDefinition('sonata.notification.backend.doctrine');
         } else {
             $container->removeDefinition('sonata.notification.backend.rabbitmq');
         }
@@ -156,10 +154,12 @@ class SonataNotificationExtension extends Extension
             $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
 
             $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
-        }
 
-        // NEXT_MAJOR: remove this getter when requiring sf3.4+
-        $container->getAlias('sonata.notification.manager.message')->setPublic(true);
+            // NEXT_MAJOR: remove this getter when requiring sf3.4+
+            $container->getAlias('sonata.notification.manager.message')->setPublic(true);
+        } else {
+            $container->removeDefinition('sonata.notification.backend.doctrine');
+        }
     }
 
     /**
@@ -204,17 +204,18 @@ class SonataNotificationExtension extends Extension
     {
         $ids = $config['iteration_listeners'];
 
-        // this one clean the unit of work after every iteration
-        // it must be set on any backend ...
-        $ids[] = 'sonata.notification.event.doctrine_optimize';
+        if ('sonata.notification.backend.doctrine' === $config['backend']) {
+            // this one clean the unit of work after every iteration
+            $ids[] = 'sonata.notification.event.doctrine_optimize';
 
-        if (isset($config['backends']['doctrine']) && $config['backends']['doctrine']['batch_size'] > 1) {
-            // if the backend is doctrine and the batch size > 1, then
-            // the unit of work must be cleaned wisely to avoid any issue
-            // while persisting entities
-            $ids = [
-                'sonata.notification.event.doctrine_backend_optimize',
-            ];
+            if ($config['backends']['doctrine']['batch_size'] > 1) {
+                // if the backend is doctrine and the batch size > 1, then
+                // the unit of work must be cleaned wisely to avoid any issue
+                // while persisting entities
+                $ids = [
+                    'sonata.notification.event.doctrine_backend_optimize',
+                ];
+            }
         }
 
         $container->setParameter('sonata.notification.event.iteration_listeners', $ids);
