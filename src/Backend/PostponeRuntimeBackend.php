@@ -77,13 +77,11 @@ class PostponeRuntimeBackend extends RuntimeBackend
      */
     public function onEvent(Event $event = null)
     {
-        reset($this->messages);
+        while(!empty($this->messages)) {
+            $message = array_shift($this->messages);
 
-        foreach ($this->messages as $key => $message) {
             $this->handle($message, $this->dispatcher);
         }
-
-        $this->messages = [];
     }
 
     /**
