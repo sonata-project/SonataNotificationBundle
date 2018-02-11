@@ -54,6 +54,7 @@ class SonataNotificationExtension extends Extension
         $loader->load('consumer.xml');
         $loader->load('selector.xml');
         $loader->load('event.xml');
+        $loader->load('command.xml');
 
         if ($config['consumers']['register_default']) {
             $loader->load('default_consumers.xml');
