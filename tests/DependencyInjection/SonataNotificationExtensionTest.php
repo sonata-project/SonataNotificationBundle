@@ -11,10 +11,15 @@
 
 namespace Sonata\NotificationBundle\Tests\DependencyInjection;
 
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
 use Sonata\NotificationBundle\DependencyInjection\SonataNotificationExtension;
 use Sonata\NotificationBundle\SonataNotificationBundle;
+use Symfony\Bridge\Monolog\Logger;
+use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SonataNotificationExtensionTest extends TestCase
@@ -32,8 +37,8 @@ class SonataNotificationExtensionTest extends TestCase
     public function testEmptyConfig()
     {
         $container = $this->getContainerBuilder([
-            'MonologBundle' => 'Symfony\Bundle\MonologBundle\MonologBundle',
-            'SwiftmailerBundle' => 'Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle',
+            'MonologBundle' => MonologBundle::class,
+            'SwiftmailerBundle' => SwiftmailerBundle::class,
         ]);
         $extension = new SonataNotificationExtension();
         $extension->load([], $container);
@@ -76,7 +81,7 @@ class SonataNotificationExtensionTest extends TestCase
         $this->expectExceptionMessage('Please configure the sonata_notification.backends.doctrine section');
 
         $container = $this->getContainerBuilder([
-            'DoctrineBundle' => 'Doctrine\Bundle\DoctrineBundle\DoctrineBundle',
+            'DoctrineBundle' => DoctrineBundle::class,
         ]);
         $extension = new SonataNotificationExtension();
 
@@ -90,7 +95,7 @@ class SonataNotificationExtensionTest extends TestCase
     public function testDoctrineBackend()
     {
         $container = $this->getContainerBuilder([
-            'DoctrineBundle' => 'Doctrine\Bundle\DoctrineBundle\DoctrineBundle',
+            'DoctrineBundle' => DoctrineBundle::class,
         ]);
         $extension = new SonataNotificationExtension();
         $extension->load([
@@ -174,17 +179,17 @@ class SonataNotificationExtensionTest extends TestCase
 
         if (isset($containerBundles['MonologBundle'])) {
             $container->register('logger')
-                ->setClass('Symfony\Bridge\Monolog\Logger')
+                ->setClass(Logger::class)
                 ->setPublic(true);
         }
         if (isset($containerBundles['SwiftmailerBundle'])) {
             $container->register('mailer')
-                ->setClass('Swift_Mailer')
+                ->setClass(\Swift_Mailer::class)
                 ->setPublic(true);
         }
         if (isset($containerBundles['DoctrineBundle'])) {
             $container->register('doctrine')
-                ->setClass('Doctrine\Bundle\DoctrineBundle\Registry')
+                ->setClass(Registry::class)
                 ->setPublic(true);
         }
 
