@@ -11,13 +11,10 @@
 
 namespace Sonata\NotificationBundle\Controller\Api;
 
-use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use FOS\RestBundle\View\View as FOSRestView;
-use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sonata\DatagridBundle\Pager\PagerInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -55,15 +52,16 @@ class MessageController
      *
      * @ApiDoc(
      *  resource=true,
-     *  output={"class"="Sonata\DatagridBundle\Pager\PagerInterface", "groups"="sonata_api_read"}
+     *  output={"class"="Sonata\DatagridBundle\Pager\PagerInterface", "groups"={"sonata_api_read"}}
      * )
      *
      * @QueryParam(name="page", requirements="\d+", default="1", description="Page for message list pagination")
      * @QueryParam(name="count", requirements="\d+", default="10", description="Number of messages by page")
      * @QueryParam(name="type", nullable=true, description="Message type filter")
      * @QueryParam(name="state", requirements="\d+", strict=true, nullable=true, description="Message status filter")
+     * @QueryParam(name="orderBy", map=true, requirements="ASC|DESC", nullable=true, strict=true, description="Query groups order by clause (key is field, value is direction)")
      *
-     * @View(serializerGroups="sonata_api_read", serializerEnableMaxDepthChecks=true)
+     * @View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
      *
      * @param ParamFetcherInterface $paramFetcher
      *
@@ -71,20 +69,6 @@ class MessageController
      */
     public function getMessagesAction(ParamFetcherInterface $paramFetcher)
     {
-        $orderByQueryParam = new QueryParam();
-        $orderByQueryParam->name = 'orderBy';
-        $orderByQueryParam->requirements = 'ASC|DESC';
-        $orderByQueryParam->nullable = true;
-        $orderByQueryParam->strict = true;
-        $orderByQueryParam->description = 'Query groups order by clause (key is field, value is direction)';
-        if (property_exists($orderByQueryParam, 'map')) {
-            $orderByQueryParam->map = true;
-        } else {
-            $orderByQueryParam->array = true;
-        }
-
-        $paramFetcher->addParam($orderByQueryParam);
-
         $supportedCriteria = [
             'state' => '',
             'type' => '',
@@ -122,6 +106,8 @@ class MessageController
      *  }
      * )
      *
+     * @View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * @param Request $request A Symfony request
@@ -140,28 +126,9 @@ class MessageController
 
         if ($form->isValid()) {
             $message = $form->getData();
-
             $this->messageManager->save($message);
 
-            $view = FOSRestView::create($message);
-
-            if (class_exists(Context::class)) {
-                $serializationContext = new Context();
-                if (method_exists($serializationContext, 'enableMaxDepth')) {
-                    $serializationContext->enableMaxDepth();
-                } else {
-                    $serializationContext->setMaxDepth(10);
-                }
-                $serializationContext->setGroups(['sonata_api_read']);
-                $view->setContext($serializationContext);
-            } else {
-                $serializationContext = SerializationContext::create();
-                $serializationContext->enableMaxDepthChecks();
-                $serializationContext->setGroups(['sonata_api_read']);
-                $view->setSerializationContext($serializationContext);
-            }
-
-            return $view;
+            return $message;
         }
 
         return $form;

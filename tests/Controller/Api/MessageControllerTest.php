@@ -55,9 +55,9 @@ class MessageControllerTest extends TestCase
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
-        $view = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
+        $message = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
 
-        $this->assertInstanceOf(View::class, $view);
+        $this->assertInstanceOf(MessageInterface::class, $message);
     }
 
     public function testPostMessageInvalidAction()
@@ -74,9 +74,9 @@ class MessageControllerTest extends TestCase
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
-        $view = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
+        $form = $this->createMessageController(null, $messageManager, $formFactory)->postMessageAction(new Request());
 
-        $this->assertInstanceOf(FormInterface::class, $view);
+        $this->assertInstanceOf(FormInterface::class, $form);
     }
 
     /**
