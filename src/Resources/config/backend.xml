@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sonata.notification.backend.runtime" class="Sonata\NotificationBundle\Backend\RuntimeBackend">
+        <service id="sonata.notification.backend.runtime" class="Sonata\NotificationBundle\Backend\RuntimeBackend" public="true">
             <argument type="service" id="sonata.notification.dispatcher"/>
         </service>
-        <service id="sonata.notification.backend.postpone" class="Sonata\NotificationBundle\Backend\PostponeRuntimeBackend">
+        <service id="sonata.notification.backend.postpone" class="Sonata\NotificationBundle\Backend\PostponeRuntimeBackend" public="true">
             <tag name="kernel.event_listener" event="kernel.terminate" method="onEvent"/>
             <argument type="service" id="sonata.notification.dispatcher"/>
         </service>
-        <service id="sonata.notification.backend.doctrine" class="Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher">
+        <service id="sonata.notification.backend.doctrine" class="Sonata\NotificationBundle\Backend\MessageManagerBackendDispatcher" public="true">
             <argument type="service" id="sonata.notification.manager.message"/>
             <argument/>
             <argument/>
             <argument/>
         </service>
-        <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackendDispatcher">
+        <service id="sonata.notification.backend.rabbitmq" class="Sonata\NotificationBundle\Backend\AMQPBackendDispatcher" public="true">
             <argument/>
             <argument/>
             <argument/>
