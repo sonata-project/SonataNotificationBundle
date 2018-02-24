@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.4.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.3.1...3.4.0) - 2018-02-23
+### Changed
+- Require symfony/security-core instead of symfony/security
+- Refactored bundle configuration
+- Notification backend services are marked as public
+
+### Fixed
+- `each()` is deprecated since PHP 7.2
+- Remove var **definition** override
+- Commands not working on symfony4
+
+### Removed
+- Removed compatibility with older versions of FOSRestBundle (<2.1)
+
 ## [3.3.1](https://github.com/sonata-project/SonataNotificationBundle/compare/3.3.0...3.3.1) - 2018-01-26
 ### Changed
 - Auto-register all aliases as public
