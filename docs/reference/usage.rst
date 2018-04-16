@@ -25,6 +25,10 @@ Calling an existing consumer
             'text' => 'hello'
         ),
         'subject' => 'Contact form',
+        'attachment' => array(
+            'file' => '/path/to/file',
+            'name' => 'fileName'
+        ),
     ));
 
 
