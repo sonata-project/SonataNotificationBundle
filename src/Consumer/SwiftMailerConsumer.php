@@ -82,6 +82,12 @@ class SwiftMailerConsumer implements ConsumerInterface
             $mail->addPart($html, 'text/html');
         }
 
+        if ($attachment = $message->getValue(['attachment', 'file'])) {
+            $attachmentName = $message->getValue(['attachment', 'name']);
+
+            $mail->attach(new \Swift_Attachment($attachment, $attachmentName));
+        }
+
         $this->mailer->send($mail);
     }
 }

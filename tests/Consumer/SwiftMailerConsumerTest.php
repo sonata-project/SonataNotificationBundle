@@ -71,6 +71,10 @@ class SwiftMailerConsumerTest extends TestCase
                 'text' => 'message text',
                 'html' => 'message html',
             ],
+            'attachment' => [
+                'file' => 'path to file',
+                'name' => 'file name',
+            ],
         ]);
 
         $mail = $this->createMock('Swift_Message');
@@ -92,6 +96,9 @@ class SwiftMailerConsumerTest extends TestCase
                 [$this->equalTo('message text'), $this->equalTo('text/plain')],
                 [$this->equalTo('message html'), $this->equalTo('text/html')]
             )
+            ->willReturnSelf();
+        $mail->expects($this->once())
+            ->method('attach')
             ->willReturnSelf();
 
         $this->mailer->expects($this->once())->method('createMessage')->will($this->returnValue($mail));
