@@ -87,7 +87,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
             MessageInterface::STATE_OPEN => 0,
         ];
 
-        foreach ($stm->fetch() as $data) {
+        while ($data = $stm->fetch()) {
             $states[$data['state']] = $data['cnt'];
         }
 
