@@ -99,7 +99,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
      */
     public function getStatus()
     {
-        return new Success('Channel is running (RabbitMQ) and consumers for all queues available.');
+        return new Success('Channel is running (Database) and consumers for all queues available.');
     }
 
     /**
