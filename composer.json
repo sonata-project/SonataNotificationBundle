@@ -22,7 +22,6 @@
     ],
     "require": {
         "php": "^5.6 || ^7.0",
-        "enqueue/amqp-lib": "^0.8",
         "sonata-project/core-bundle": "^3.9",
         "sonata-project/datagrid-bundle": "^2.3",
         "sonata-project/doctrine-extensions": "^1.0",
@@ -43,6 +42,7 @@
         "sonata-project/admin-bundle": "<3.1"
     },
     "require-dev": {
+        "enqueue/amqp-lib": "^0.8",
         "friendsofsymfony/rest-bundle": "^2.1",
         "guzzlehttp/guzzle": "^3.8",
         "jms/serializer-bundle": "^1.0 || ^2.0",
