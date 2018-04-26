@@ -6,6 +6,8 @@ SonataNotificationBundle embeds a Controller to provide an API through FOSRestBu
 Setup
 -----
 
+API is only available with ``sonata.notification.backend.doctrine`` as notification backend.
+
 If you wish to use it, you must first follow the installation instructions of both bundles:
 
 * `FOSRestBundle <https://github.com/FriendsOfSymfony/FOSRestBundle>`_

@@ -8,8 +8,8 @@ To begin, add the dependent bundles:
     composer require sonata-project/notification-bundle
     composer require enqueue/amqp-lib --no-update # optional
     composer require liip/monitor-bundle --no-update     # optional
-    composer require friendsofsymfony/rest-bundle  --no-update # optional when using api
-    composer require nelmio/api-doc-bundle  --no-update # optional when using api
+    composer require friendsofsymfony/rest-bundle  --no-update # optional when using api with doctrine backend
+    composer require nelmio/api-doc-bundle  --no-update # optional when using api with doctrine backend
     composer update
 
 
