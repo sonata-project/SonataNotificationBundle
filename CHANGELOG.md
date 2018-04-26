@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.4.0...3.5.0) - 2018-04-26
+### Added
+- Added possibility to add an attachment to SwiftMailer Consumer
+
+### Fixed
+- Data fetched from stats counts are now properly manipulated (in case of doctrine backend is used)
+- Typo in message status
+
 ## [3.4.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.3.1...3.4.0) - 2018-02-23
 ### Changed
 - Require symfony/security-core instead of symfony/security
