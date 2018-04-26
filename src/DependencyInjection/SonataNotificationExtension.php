@@ -55,26 +55,26 @@ class SonataNotificationExtension extends Extension
         $loader->load('consumer.xml');
         $loader->load('command.xml');
 
+        $bundles = $container->getParameter('kernel.bundles');
+
         if ('sonata.notification.backend.doctrine' === $config['backend']) {
             $loader->load('doctrine_orm.xml');
             $loader->load('selector.xml');
             $loader->load('event.xml');
+
+            if (isset($bundles['FOSRestBundle'], $bundles['NelmioApiDocBundle'])) {
+                $loader->load('api_controllers.xml');
+                $loader->load('api_form.xml');
+            }
+
+            // for now, only support for ORM
+            if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) {
+                $loader->load('admin.xml');
+            }
         }
 
         if ($config['consumers']['register_default']) {
             $loader->load('default_consumers.xml');
-        }
-
-        $bundles = $container->getParameter('kernel.bundles');
-
-        if (isset($bundles['FOSRestBundle'], $bundles['NelmioApiDocBundle'])) {
-            $loader->load('api_controllers.xml');
-            $loader->load('api_form.xml');
-        }
-
-        // for now, only support for ORM
-        if ($config['admin']['enabled'] && isset($bundles['SonataDoctrineORMAdminBundle'])) {
-            $loader->load('admin.xml');
         }
 
         if (isset($bundles['LiipMonitorBundle'])) {
