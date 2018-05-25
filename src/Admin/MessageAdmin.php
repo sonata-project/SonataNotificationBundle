@@ -22,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class MessageAdmin extends AbstractAdmin
 {
+    protected $classnameLabel = 'Message';
+
     /**
      * {@inheritdoc}
      */
