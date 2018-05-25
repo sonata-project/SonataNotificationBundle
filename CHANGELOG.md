@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.1](https://github.com/sonata-project/SonataNotificationBundle/compare/3.5.0...3.5.1) - 2018-05-25
+# Changed
+- Force use existing translation strings in breadcrumb for Message entity in Admin panel
+- `enqueue/amqp-lib` is an optional dependency now
+
+# Fixed
+- API and Admin services are only available when using Doctrine as a backend
+
 ## [3.5.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.4.0...3.5.0) - 2018-04-26
 ### Added
 - Added possibility to add an attachment to SwiftMailer Consumer
