@@ -1,13 +1,23 @@
 Installation
 ============
 
-To begin, add the dependent bundles:
+Retrieve the bundle with composer:
 
 .. code-block:: bash
 
     composer require sonata-project/notification-bundle
+
+
+Or if you wish to use doctrine backend, execute ``composer require sonata-project/notification-orm-pack``.
+Symfony Flex will download recipes and install all necessary configuration
+files and an entity class for notification messages.
+
+Next, add the dependent bundles:
+
+.. code-block:: bash
+
     composer require enqueue/amqp-lib --no-update # optional
-    composer require liip/monitor-bundle --no-update     # optional
+    composer require liip/monitor-bundle --no-update # optional
     composer require friendsofsymfony/rest-bundle  --no-update # optional when using api with doctrine backend
     composer require nelmio/api-doc-bundle  --no-update # optional when using api with doctrine backend
     composer update
@@ -104,6 +114,10 @@ Add these bundles in the config mapping definition (or enable `auto_mapping`_):
 
 Extending the Bundle
 --------------------
+.. note::
+    You can skip this section if you are using Flex and installed a bundle
+    with ``sonata-project/notification-orm-pack``.
+
 At this point, the bundle is functional, but not quite ready yet. You need to
 generate the correct entities for the media:
 
