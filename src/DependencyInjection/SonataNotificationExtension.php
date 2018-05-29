@@ -11,7 +11,6 @@
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
-use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -86,7 +85,6 @@ class SonataNotificationExtension extends Extension
         $container->getAlias('sonata.notification.backend')->setPublic(true);
         $container->setParameter('sonata.notification.backend', $config['backend']);
 
-        $this->registerDoctrineMapping($config);
         $this->registerParameters($container, $config);
         $this->configureBackends($container, $config);
         $this->configureClass($container, $config);
@@ -163,19 +161,14 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param array $config
+     * NEXT_MAJOR: remove this method, since all Doctrine mappings are already
+     *             described in Resources/config/doctrine/BaseMessage.orm.xml.
+     *
+     * @deprecated Since version 3.x, to be removed in 4.0.
+     *             EasyExtends should be used only for associations between entities.
      */
     public function registerDoctrineMapping(array $config)
     {
-        $collector = DoctrineCollector::getInstance();
-
-        $collector->addIndex($config['class']['message'], 'idx_state', [
-            'state',
-        ]);
-
-        $collector->addIndex($config['class']['message'], 'idx_created_at', [
-            'created_at',
-        ]);
     }
 
     /**
