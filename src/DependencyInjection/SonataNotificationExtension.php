@@ -169,6 +169,9 @@ class SonataNotificationExtension extends Extension
      */
     public function registerDoctrineMapping(array $config)
     {
+        @trigger_error(sprintf(
+            'Registering doctrine mappings in %s is deprecated. Use XML mapping instead.', __METHOD__
+        ), E_USER_DEPRECATED);
     }
 
     /**
