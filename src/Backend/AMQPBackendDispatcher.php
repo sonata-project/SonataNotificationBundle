@@ -54,7 +54,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * @var RabbitMQQueueStatusProviderInterface
      */
-    protected $statusProvider;
+    private $statusProvider;
 
     /**
      * @var AmqpConnectionFactory
@@ -219,7 +219,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         if (null === $this->statusProvider) {
             return new Failure(
                 sprintf(
-                    'Service that implements interface %s is not available. Couldn\'t resolve RabbitMQ status.',
+                    'Service that implements interface %s is not available. Can not get RabbitMQ status',
                     RabbitMQQueueStatusProviderInterface::class
                 )
             );
@@ -286,9 +286,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     {
     }
 
-    /**
-     * @param RabbitMQQueueStatusProviderInterface $statusProvider
-     */
     public function setStatusProvider(RabbitMQQueueStatusProviderInterface $statusProvider)
     {
         $this->statusProvider = $statusProvider;

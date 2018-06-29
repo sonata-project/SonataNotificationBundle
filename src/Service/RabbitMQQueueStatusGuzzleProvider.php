@@ -15,8 +15,6 @@ use Guzzle\Http\Client as GuzzleClient;
 use Sonata\NotificationBundle\Exception\MonitoringException;
 
 /**
- * Class RabbitMQQueueStatusGuzzleProvider.
- *
  * @deprecated Create for BC. Use Sonata\NotificationBundle\Service\RabbitMQQueueStatusHttpProvider instead
  *
  * NEXT_MAJOR: remove this and use Sonata\NotificationBundle\Service\RabbitMQQueueStatusHttpProvider
