@@ -54,8 +54,8 @@
         "symfony/phpunit-bridge": "^4.0"
     },
     "suggest": {
-        "php-http/httplug-bundle": "If you want to get a status report when using the rabbitMQ backend.",
         "liip/monitor-bundle": "^1.0",
+        "php-http/httplug-bundle": "If you want to get a status report when using the rabbitMQ backend.",
         "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
         "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
         "sonata-project/doctrine-orm-admin-bundle": "^3.0"
