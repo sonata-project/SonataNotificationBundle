@@ -21,6 +21,7 @@ use Symfony\Bridge\Monolog\Logger;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class SonataNotificationExtensionTest extends TestCase
 {
@@ -162,6 +163,34 @@ class SonataNotificationExtensionTest extends TestCase
         $this->assertHasNoDefinition('sonata.notification.event.doctrine_backend_optimize');
 
         $this->assertParameter([], 'sonata.notification.event.iteration_listeners');
+
+        $container->compile();
+    }
+
+    public function testRabbitMQMonitoringProviders()
+    {
+        $this->expectException(ServiceNotFoundException::class);
+        $this->expectExceptionMessage('The service "sonata.notification.backend.rabbitmq" has a dependency on a non-existent service "httplug.client"');
+
+        $container = $this->getContainerBuilder();
+        $bundles = $container->getParameter('kernel.bundles');
+        $bundles['HttplugBundle'] = 'Http\HttplugBundle\HttplugBundle';
+        $container->setParameter('kernel.bundles', $bundles);
+        $extension = new SonataNotificationExtension();
+        $extension->load([
+            [
+                'backend' => 'sonata.notification.backend.rabbitmq',
+                'backends' => [
+                    'rabbitmq' => [
+                        'exchange' => 'logs',
+                    ],
+                ],
+            ],
+        ], $container);
+
+        // NEXT_MAJOR: remove this assert
+        $this->assertHasDefinition('sonata.notification.rabbitmq.queue_status.guzzle_provider');
+        $this->assertHasDefinition('sonata.notification.rabbitmq.queue_status.http_provider');
 
         $container->compile();
     }

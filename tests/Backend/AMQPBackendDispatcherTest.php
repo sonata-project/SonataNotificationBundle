@@ -13,7 +13,6 @@ namespace Sonata\NotificationBundle\Tests\Backend;
 
 use Enqueue\AmqpLib\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
-use MyProject\Proxies\__CG__\stdClass;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;

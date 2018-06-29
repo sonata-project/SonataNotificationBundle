@@ -13,13 +13,14 @@ namespace Sonata\NotificationBundle\Backend;
 
 use Enqueue\AmqpTools\DelayStrategyAware;
 use Enqueue\AmqpTools\RabbitMqDlxDelayStrategy;
-use Guzzle\Http\Client as GuzzleClient;
 use Interop\Amqp\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use Sonata\NotificationBundle\Exception\BackendNotFoundException;
+use Sonata\NotificationBundle\Exception\MonitoringException;
 use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Service\RabbitMQQueueStatusProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
@@ -49,6 +50,11 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     protected $connection;
 
     protected $backendsInitialized = false;
+
+    /**
+     * @var RabbitMQQueueStatusProviderInterface
+     */
+    protected $statusProvider;
 
     /**
      * @var AmqpConnectionFactory
@@ -210,9 +216,19 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function getStatus()
     {
+        if (null === $this->statusProvider) {
+            return new Failure(
+                sprintf(
+                    'Service that implements interface %s is not available. Couldn\'t resolve RabbitMQ status.',
+                    RabbitMQQueueStatusProviderInterface::class
+                )
+            );
+        }
+
         try {
             $this->getContext();
-            $output = $this->getApiQueueStatus();
+            $output = $this->statusProvider->getApiQueueStatus();
+
             $checked = 0;
             $missingConsumers = [];
 
@@ -239,7 +255,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
                     'There are no rabbitmq consumers running for the queues: '.implode(', ', $missingConsumers)
                 );
             }
-        } catch (\Exception $e) {
+        } catch (MonitoringException $e) {
             return new Failure($e->getMessage());
         }
 
@@ -271,26 +287,10 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     }
 
     /**
-     * Calls the rabbitmq management api /api/<vhost>/queues endpoint to list the available queues.
-     *
-     * @see http://hg.rabbitmq.com/rabbitmq-management/raw-file/3646dee55e02/priv/www-api/help.html
-     *
-     * @return array
+     * @param RabbitMQQueueStatusProviderInterface $statusProvider
      */
-    protected function getApiQueueStatus()
+    public function setStatusProvider(RabbitMQQueueStatusProviderInterface $statusProvider)
     {
-        if (!class_exists(GuzzleClient::class)) {
-            throw new \RuntimeException(
-                'The guzzle http client library is required to run rabbitmq health checks. '
-                .'Make sure to add guzzlehttp/guzzle to your composer.json.'
-            );
-        }
-
-        $client = new GuzzleClient();
-        $client->setConfig(['curl.options' => [CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
-        $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
-        $request->setAuth($this->settings['user'], $this->settings['pass']);
-
-        return json_decode($request->send()->getBody(true), true);
+        $this->statusProvider = $statusProvider;
     }
 }

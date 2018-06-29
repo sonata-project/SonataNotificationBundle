@@ -44,16 +44,17 @@
     "require-dev": {
         "enqueue/amqp-lib": "^0.8",
         "friendsofsymfony/rest-bundle": "^2.1",
-        "guzzlehttp/guzzle": "^3.8",
         "jms/serializer-bundle": "^1.0 || ^2.0",
         "liip/monitor-bundle": "^2.0",
         "nelmio/api-doc-bundle": "^2.4",
+        "php-http/httplug-bundle": "^1.10",
+        "php-http/mock-client": "^1.1",
         "sonata-project/doctrine-orm-admin-bundle": "^3.4",
         "swiftmailer/swiftmailer": "^5.0 || ^6.0",
         "symfony/phpunit-bridge": "^4.0"
     },
     "suggest": {
-        "guzzlehttp/guzzle": "If you want to get a status report when using the rabbitMQ backend.",
+        "php-http/httplug-bundle": "If you want to get a status report when using the rabbitMQ backend.",
         "liip/monitor-bundle": "^1.0",
         "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
         "sonata-project/admin-bundle": "To be able to use MessageAdmin.",

@@ -81,6 +81,15 @@ class SonataNotificationExtension extends Extension
             $loader->load('checkmonitor.xml');
         }
 
+        if ('sonata.notification.backend.rabbitmq' === $config['backend'] && isset($config['backends']['rabbitmq'])) {
+            // NEXT_MAJOR: remove this and load only rabbitmq_status_http_provider.xml
+            $loader->load('rabbitmq_status_guzzle_provider.xml');
+
+            if (isset($bundles['HttplugBundle'])) {
+                $loader->load('rabbitmq_status_http_provider.xml');
+            }
+        }
+
         $container->setAlias('sonata.notification.backend', $config['backend']);
         // NEXT_MAJOR: remove this getter when requiring sf3.4+
         $container->getAlias('sonata.notification.backend')->setPublic(true);
@@ -413,6 +422,19 @@ class SonataNotificationExtension extends Extension
         if (false === $defaultSet) {
             throw new \RuntimeException('You need to specify a valid default queue for the rabbitmq backend!');
         }
+
+        $container->getDefinition('sonata.notification.rabbitmq.queue_status.guzzle_provider')
+            ->replaceArgument(0, $connection);
+        $queueStatusProvider = 'sonata.notification.rabbitmq.queue_status.guzzle_provider';
+
+        if ($container->hasDefinition('sonata.notification.rabbitmq.queue_status.http_provider')) {
+            $container->getDefinition('sonata.notification.rabbitmq.queue_status.http_provider')
+                ->replaceArgument(0, $connection);
+            $queueStatusProvider = 'sonata.notification.rabbitmq.queue_status.http_provider';
+        }
+
+        $container->getDefinition('sonata.notification.backend.rabbitmq')
+            ->addMethodCall('setStatusProvider', [new Reference($queueStatusProvider)]);
 
         $container->getDefinition('sonata.notification.backend.rabbitmq')
             ->replaceArgument(0, $connection)
