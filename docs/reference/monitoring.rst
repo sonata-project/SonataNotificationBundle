@@ -4,9 +4,6 @@ Monitoring
 The bundle ships with built-in health checks to be used by the `LiipMonitorBundle <https://github.com/liip/LiipMonitorBundle>`_ ,
 see the ``sonata.notification.backend.heath_check`` service.
 
-Before use, you need to install `HttplugBundle <http://docs.php-http.org/en/latest/integrations/symfony-bundle.html#installation>`_
-and configure it for use with any `HttpClient <https://packagist.org/providers/php-http/client-implementation>`_
-
 The rabbitmq backend uses the default URL for the `Management plugin <http://www.rabbitmq.com/management.html>`_ API (http://localhost:55672/api)
 
 If you need to change the default URL, you can configure it by setting the ``console_url`` configuration value:
