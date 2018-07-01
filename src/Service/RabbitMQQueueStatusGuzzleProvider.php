@@ -19,14 +19,14 @@ use Sonata\NotificationBundle\Exception\MonitoringException;
  *
  * NEXT_MAJOR: remove this and use Sonata\NotificationBundle\Service\RabbitMQQueueStatusHttpProvider
  */
-class RabbitMQQueueStatusGuzzleProvider implements RabbitMQQueueStatusProviderInterface
+final class RabbitMQQueueStatusGuzzleProvider implements RabbitMQQueueStatusProviderInterface
 {
     /**
      * Array with RabbitMQ connection settings.
      *
      * @var array
      */
-    protected $settings;
+    private $settings;
 
     public function __construct(array $settings)
     {

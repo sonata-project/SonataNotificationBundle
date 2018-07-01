@@ -82,11 +82,11 @@ class SonataNotificationExtension extends Extension
         }
 
         if ('sonata.notification.backend.rabbitmq' === $config['backend'] && isset($config['backends']['rabbitmq'])) {
-            // NEXT_MAJOR: remove this and load only rabbitmq_status_http_provider.xml
-            $loader->load('rabbitmq_status_guzzle_provider.xml');
+            // NEXT_MAJOR: remove this and load only http.xml
+            $loader->load('rabbitmq_status_provider/guzzle.xml');
 
             if (isset($bundles['HttplugBundle'])) {
-                $loader->load('rabbitmq_status_http_provider.xml');
+                $loader->load('rabbitmq_status_provider/http.xml');
             }
         }
 

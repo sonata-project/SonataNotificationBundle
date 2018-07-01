@@ -18,24 +18,24 @@ use Http\Message\Authentication\BasicAuth;
 use Http\Message\MessageFactory;
 use Sonata\NotificationBundle\Exception\MonitoringException;
 
-class RabbitMQQueueStatusHttpProvider implements RabbitMQQueueStatusProviderInterface
+final class RabbitMQQueueStatusHttpProvider implements RabbitMQQueueStatusProviderInterface
 {
     /**
      * @var HttpClient
      */
-    protected $client;
+    private $client;
 
     /**
      * @var MessageFactory
      */
-    protected $messageFactory;
+    private $messageFactory;
 
     /**
      * Array with RabbitMQ connection settings.
      *
      * @var array
      */
-    protected $settings;
+    private $settings;
 
     public function __construct(array $settings, HttpClient $client, MessageFactory $messageFactory)
     {
