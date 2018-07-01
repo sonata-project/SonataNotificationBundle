@@ -13,6 +13,8 @@ namespace Sonata\NotificationBundle\Tests\DependencyInjection;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Http\HttplugBundle\HttplugBundle;
+use Liip\MonitorBundle\LiipMonitorBundle;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
 use Sonata\NotificationBundle\DependencyInjection\SonataNotificationExtension;
@@ -170,12 +172,11 @@ class SonataNotificationExtensionTest extends TestCase
     public function testRabbitMQMonitoringProviders()
     {
         $this->expectException(ServiceNotFoundException::class);
-        $this->expectExceptionMessage('The service "sonata.notification.backend.rabbitmq" has a dependency on a non-existent service "httplug.client"');
 
-        $container = $this->getContainerBuilder();
-        $bundles = $container->getParameter('kernel.bundles');
-        $bundles['HttplugBundle'] = 'Http\HttplugBundle\HttplugBundle';
-        $container->setParameter('kernel.bundles', $bundles);
+        $container = $this->getContainerBuilder([
+            'LiipMonitorBundle' => LiipMonitorBundle::class,
+            'HttplugBundle' => HttplugBundle::class,
+        ]);
         $extension = new SonataNotificationExtension();
         $extension->load([
             [
@@ -185,12 +186,17 @@ class SonataNotificationExtensionTest extends TestCase
                         'exchange' => 'logs',
                     ],
                 ],
+                'consumers' => [
+                    'register_default' => false,
+                ],
             ],
         ], $container);
 
         // NEXT_MAJOR: remove this assert
         $this->assertHasDefinition('sonata.notification.rabbitmq.queue_status.guzzle_provider');
+
         $this->assertHasDefinition('sonata.notification.rabbitmq.queue_status.http_provider');
+        $this->assertHasDefinition('sonata.notification.backend.heath_check');
 
         $container->compile();
     }
