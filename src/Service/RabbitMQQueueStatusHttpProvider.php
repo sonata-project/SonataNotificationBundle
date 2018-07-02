@@ -18,6 +18,9 @@ use Http\Message\Authentication\BasicAuth;
 use Http\Message\MessageFactory;
 use Sonata\NotificationBundle\Exception\MonitoringException;
 
+/**
+ * @author Nikolay Mitrofanov <mitrofanovnk@gmail.com>
+ */
 final class RabbitMQQueueStatusHttpProvider implements RabbitMQQueueStatusProviderInterface
 {
     /**
@@ -31,32 +34,27 @@ final class RabbitMQQueueStatusHttpProvider implements RabbitMQQueueStatusProvid
     private $messageFactory;
 
     /**
-     * Array with RabbitMQ connection settings.
-     *
      * @var array
      */
-    private $settings;
+    private $connectionSettings;
 
     public function __construct(array $settings, HttpClient $client, MessageFactory $messageFactory)
     {
-        $this->settings = $settings;
+        $this->connectionSettings = $settings;
         $this->messageFactory = $messageFactory;
 
         $this->client = new PluginClient(
             $client,
             [new AuthenticationPlugin(
-                new BasicAuth($this->settings['user'], $this->settings['pass'])
+                new BasicAuth($this->connectionSettings['user'], $this->connectionSettings['pass'])
             )]
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getApiQueueStatus()
     {
         try {
-            $request = $this->messageFactory->createRequest('GET', sprintf('%s/queues', $this->settings['console_url']));
+            $request = $this->messageFactory->createRequest('GET', sprintf('%s/queues', $this->connectionSettings['console_url']));
             $response = $this->client->sendRequest($request);
         } catch (\Exception $exception) {
             throw new MonitoringException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());

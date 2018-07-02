@@ -13,6 +13,9 @@ namespace Sonata\NotificationBundle\Service;
 
 use Sonata\NotificationBundle\Exception\MonitoringException;
 
+/**
+ * @author Nikolay Mitrofanov <mitrofanovnk@gmail.com>
+ */
 interface RabbitMQQueueStatusProviderInterface
 {
     /**
