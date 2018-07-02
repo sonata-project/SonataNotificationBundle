@@ -424,7 +424,7 @@ class SonataNotificationExtension extends Extension
         }
 
         $container->getDefinition('sonata.notification.rabbitmq.queue_status.guzzle_provider')
-            ->replaceArgument(0, $connection);
+            ->addArgument($connection);
         $queueStatusProvider = 'sonata.notification.rabbitmq.queue_status.guzzle_provider';
 
         if ($container->hasDefinition('sonata.notification.rabbitmq.queue_status.http_provider')) {
