@@ -192,7 +192,7 @@ class SonataNotificationExtensionTest extends TestCase
             ],
         ], $container);
 
-        // NEXT_MAJOR: remove this assert
+        // NEXT_MAJOR: remove this assertion
         $this->assertHasDefinition('sonata.notification.rabbitmq.queue_status.guzzle_provider');
 
         $this->assertHasDefinition('sonata.notification.rabbitmq.queue_status.http_provider');
