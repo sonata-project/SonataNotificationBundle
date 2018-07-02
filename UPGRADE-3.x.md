@@ -1,6 +1,17 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.5 to 3.6
+=======================
+
+### RabbitMQ status provider
+
+Usage `"guzzlehttp/guzzle": "^3.8"` client for providing status of RabbitMQ queue  tagged as deprecated, but still works (for BC).
+
+You need to install [HttplugBundle](http://docs.php-http.org/en/latest/integrations/symfony-bundle.html#installation)
+and configure it for use with any [HttpClient](https://packagist.org/providers/php-http/client-implementation) 
+to enable use of an abstract php-http client for providing status of RabbitMQ queue.
+
 UPGRADE FROM 3.2 to 3.3
 =======================
 
