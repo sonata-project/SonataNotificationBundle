@@ -34,9 +34,9 @@ class SonataNotificationBundle extends Bundle
      */
     public function boot()
     {
-        if (!defined('AMQP_DEBUG')) {
+        if (!\defined('AMQP_DEBUG')) {
             //            define('AMQP_DEBUG', $this->container->getParameter('kernel.debug'));
-            define('AMQP_DEBUG', false);
+            \define('AMQP_DEBUG', false);
         }
 
         $this->registerFormMapping();

@@ -36,7 +36,7 @@ class ListQueuesCommand extends ContainerAwareCommand
 
         if (!$backend instanceof QueueDispatcherInterface) {
             $output->writeln(
-                'The backend class <info>'.get_class($backend).'</info> does not provide multiple queues.'
+                'The backend class <info>'.\get_class($backend).'</info> does not provide multiple queues.'
             );
 
             return;
