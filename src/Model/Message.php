@@ -101,7 +101,7 @@ class Message implements MessageInterface
      */
     public function getValue($names, $default = null)
     {
-        if (!is_array($names)) {
+        if (!\is_array($names)) {
             $names = [$names];
         }
 

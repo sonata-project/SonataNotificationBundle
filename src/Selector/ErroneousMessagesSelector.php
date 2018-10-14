@@ -58,7 +58,7 @@ class ErroneousMessagesSelector
             'maxAttempts' => $maxAttempts,
         ];
 
-        if (count($types) > 0) {
+        if (\count($types) > 0) {
             $query->andWhere('m.type IN (:types)');
             $parameters['types'] = $types;
         }

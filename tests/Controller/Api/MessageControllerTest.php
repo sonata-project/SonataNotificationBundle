@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Tests\Controller\Api;
 
 use FOS\RestBundle\Request\ParamFetcher;
-use FOS\RestBundle\View\View;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Controller\Api\MessageController;
 use Sonata\NotificationBundle\Model\MessageInterface;

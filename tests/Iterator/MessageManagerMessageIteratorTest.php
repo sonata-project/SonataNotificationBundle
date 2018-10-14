@@ -37,7 +37,7 @@ class MessageManagerMessageIteratorTest extends TestCase
 
         $iterator->_bufferize();
 
-        $this->assertEquals(10, count($iterator->getBuffer()));
+        $this->assertCount(10, $iterator->getBuffer());
     }
 
     public function testIterations(): void

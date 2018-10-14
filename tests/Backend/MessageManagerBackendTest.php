@@ -106,7 +106,7 @@ class MessageManagerBackendTest extends TestCase
 
         $status = $backend->getStatus();
 
-        $this->assertInstanceOf(get_class($expectedStatus), $status);
+        $this->assertInstanceOf(\get_class($expectedStatus), $status);
         $this->assertEquals($message, $status->getMessage());
     }
 

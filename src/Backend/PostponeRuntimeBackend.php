@@ -109,6 +109,6 @@ class PostponeRuntimeBackend extends RuntimeBackend
      */
     protected function isCommandLineInterface()
     {
-        return 'cli' === PHP_SAPI;
+        return 'cli' === \PHP_SAPI;
     }
 }

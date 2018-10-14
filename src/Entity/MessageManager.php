@@ -159,11 +159,11 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
 
         $fields = $this->getEntityManager()->getClassMetadata($this->class)->getFieldNames();
         foreach ($sort as $field => $direction) {
-            if (!in_array($field, $fields)) {
+            if (!\in_array($field, $fields)) {
                 throw new \RuntimeException(sprintf("Invalid sort field '%s' in '%s' class", $field, $this->class));
             }
         }
-        if (0 == count($sort)) {
+        if (0 == \count($sort)) {
             $sort = ['type' => 'ASC'];
         }
         foreach ($sort as $field => $direction) {
@@ -210,7 +210,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
 
         $parameters['state'] = $state;
 
-        if (count($types) > 0) {
+        if (\count($types) > 0) {
             if (array_key_exists('exclude', $types) || array_key_exists('include', $types)) {
                 if (array_key_exists('exclude', $types)) {
                     $query->andWhere('m.type NOT IN (:exclude)');

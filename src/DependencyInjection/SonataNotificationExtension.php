@@ -185,7 +185,7 @@ class SonataNotificationExtension extends Extension
      */
     protected function checkConfiguration(array $config): void
     {
-        if (isset($config['backends']) && count($config['backends']) > 1) {
+        if (isset($config['backends']) && \count($config['backends']) > 1) {
             throw new \RuntimeException('more than one backend configured, you can have only one backend configuration');
         }
 
@@ -241,7 +241,7 @@ class SonataNotificationExtension extends Extension
         $definition = $container->getDefinition('sonata.notification.backend.doctrine');
 
         // no queue defined, set a default one
-        if (0 == count($queues)) {
+        if (0 == \count($queues)) {
             $queues = [[
                 'queue' => 'default',
                 'default' => true,
@@ -253,14 +253,14 @@ class SonataNotificationExtension extends Extension
         $declaredQueues = [];
 
         foreach ($queues as $pos => &$queue) {
-            if (in_array($queue['queue'], $declaredQueues)) {
+            if (\in_array($queue['queue'], $declaredQueues)) {
                 throw new \RuntimeException('The doctrine backend does not support 2 identicals queue name, please rename one queue');
             }
 
             $declaredQueues[] = $queue['queue'];
 
             // make the configuration compatible with old code and rabbitmq
-            if (isset($queue['routing_key']) && strlen($queue['routing_key']) > 0) {
+            if (isset($queue['routing_key']) && \strlen($queue['routing_key']) > 0) {
                 $queue['types'] = [$queue['routing_key']];
             }
 
@@ -338,7 +338,7 @@ class SonataNotificationExtension extends Extension
         $baseExchange = $config['backends']['rabbitmq']['exchange'];
         $amqBackends = [];
 
-        if (0 == count($queues)) {
+        if (0 == \count($queues)) {
             $queues = [[
                 'queue' => 'default',
                 'default' => true,
@@ -355,7 +355,7 @@ class SonataNotificationExtension extends Extension
         $routingKeys = $this->getQueuesParameters('routing_key', $queues);
 
         foreach ($deadLetterRoutingKeys as $key) {
-            if (!in_array($key, $routingKeys)) {
+            if (!\in_array($key, $routingKeys)) {
                 throw new \RuntimeException(sprintf(
                     'You must configure the queue having the routing_key "%s" same as dead_letter_routing_key', $key
                 ));
@@ -366,7 +366,7 @@ class SonataNotificationExtension extends Extension
 
         $defaultSet = false;
         foreach ($queues as $pos => $queue) {
-            if (in_array($queue['queue'], $declaredQueues)) {
+            if (\in_array($queue['queue'], $declaredQueues)) {
                 throw new \RuntimeException('The RabbitMQ backend does not support 2 identicals queue name, please rename one queue');
             }
 
@@ -380,7 +380,7 @@ class SonataNotificationExtension extends Extension
                 }
             }
 
-            if (in_array($queue['routing_key'], $deadLetterRoutingKeys)) {
+            if (\in_array($queue['routing_key'], $deadLetterRoutingKeys)) {
                 $exchange = $this->getAMQPDeadLetterExchangeByRoutingKey($queue['routing_key'], $queues);
             } else {
                 $exchange = $baseExchange;

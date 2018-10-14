@@ -115,7 +115,7 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
 
         $default = null;
 
-        if (0 === count($this->queues)) {
+        if (0 === \count($this->queues)) {
             foreach ($this->backends as $backend) {
                 if ('default' === $backend['type']) {
                     return $backend['backend'];
@@ -186,14 +186,14 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
                 }
             }
 
-            if ($checked !== count($this->queues)) {
+            if ($checked !== \count($this->queues)) {
                 return new Failure(
                     'Not all queues for the available notification types registered in the rabbitmq broker. '
                     .'Are the consumer commands running?'
                 );
             }
 
-            if (count($missingConsumers) > 0) {
+            if (\count($missingConsumers) > 0) {
                 return new Failure(
                     'There are no rabbitmq consumers running for the queues: '.implode(', ', $missingConsumers)
                 );
