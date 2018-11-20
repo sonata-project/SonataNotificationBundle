@@ -12,9 +12,9 @@
 namespace Sonata\NotificationBundle\Tests\Backend;
 
 use Enqueue\AmqpLib\AmqpConnectionFactory;
+use Enqueue\AmqpLib\AmqpConsumer;
+use Enqueue\AmqpLib\AmqpContext;
 use Interop\Amqp\AmqpBind;
-use Interop\Amqp\AmqpConsumer;
-use Interop\Amqp\AmqpContext;
 use Interop\Amqp\AmqpQueue;
 use Interop\Amqp\AmqpTopic;
 use Interop\Amqp\Impl\AmqpBind as ImplAmqpBind;
@@ -259,6 +259,10 @@ class AMQPBackendTest extends TestCase
             ->with($this->identicalTo($queue))
             ->willReturn($consumerMock);
 
+        $contextMock->expects($this->once())
+            ->method('getLibChannel')
+            ->willReturn($this->createMock(AMQPChannel::class));
+
         AmqpConnectionFactoryStub::$context = $contextMock;
 
         $iterator = $backend->getIterator();
@@ -289,6 +293,10 @@ class AMQPBackendTest extends TestCase
             ->method('createConsumer')
             ->with($this->identicalTo($queue))
             ->willReturn($consumerMock);
+
+        $contextMock->expects($this->once())
+            ->method('getLibChannel')
+            ->willReturn($this->createMock(AMQPChannel::class));
 
         AmqpConnectionFactoryStub::$context = $contextMock;
 
@@ -328,14 +336,7 @@ class AMQPBackendTest extends TestCase
 
         $dispatcherMock = $this->getMockBuilder(AMQPBackendDispatcher::class)
             ->setConstructorArgs([$settings, $queues, 'default', [['type' => self::KEY, 'backend' => $backend]]])
-            ->setMethods(['getChannel'])
             ->getMock();
-
-        $dispatcherMock
-            ->expects($this->any())
-            ->method('getChannel')
-            ->willReturn($this->createMock(AMQPChannel::class))
-        ;
 
         $backend->setDispatcher($dispatcherMock);
 

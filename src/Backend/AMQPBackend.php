@@ -209,7 +209,11 @@ class AMQPBackend implements BackendInterface
         $this->consumer = $this->getContext()->createConsumer($this->getContext()->createQueue($this->queue));
         $this->consumer->setConsumerTag('sonata_notification_'.uniqid());
 
-        return new AMQPMessageIterator($this->getChannel(), $this->consumer);
+        if (!$context instanceof \Enqueue\AmqpLib\AmqpContext) {
+            throw new \LogicException('The BC layer works only if enqueue/amqp-lib lib is being used.');
+        }
+
+        return new AMQPMessageIterator($context->getLibChannel(), $this->consumer);
     }
 
     /**
