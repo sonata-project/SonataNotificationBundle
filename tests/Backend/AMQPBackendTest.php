@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Tests\Backend;
 
 use Enqueue\AmqpLib\AmqpConnectionFactory;
+use Enqueue\AmqpLib\AmqpConsumer;
+use Enqueue\AmqpLib\AmqpContext;
 use Interop\Amqp\AmqpBind;
-use Interop\Amqp\AmqpConsumer;
-use Interop\Amqp\AmqpContext;
 use Interop\Amqp\AmqpQueue;
 use Interop\Amqp\AmqpTopic;
 use Interop\Amqp\Impl\AmqpBind as ImplAmqpBind;
