@@ -24,8 +24,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sonata_notification')->children();
+        $treeBuilder = new TreeBuilder('sonata_notification');
+
+        // Keep compatibility with symfony/config < 4.2
+        if (!\method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->root('sonata_notification')->children();
+        } else {
+            $rootNode = $treeBuilder->getRootNode()->children();
+        }
 
         $backendInfo = <<<'EOF'
 Other backends you can use:
@@ -182,8 +188,14 @@ EOF;
      */
     protected function getQueueNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('queues');
+        $treeBuilder = new TreeBuilder('queues');
+
+        // Keep compatibility with symfony/config < 4.2
+        if (!\method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->root('queues');
+        } else {
+            $node = $treeBuilder->getRootNode();
+        }
 
         $queuesInfo = <<<'EOF'
 Example for using RabbitMQ
