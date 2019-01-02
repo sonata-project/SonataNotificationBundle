@@ -17,7 +17,8 @@ To enable multiple queues, simply define a `queues` node in your configuration:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # config/packages/sonata_notification.yaml
+
     sonata_notification:
         backend: sonata.notification.backend.rabbitmq
         queues:
@@ -55,7 +56,8 @@ To enable multiple queues, simply define a `queues` node in your configuration:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # config/packages/sonata_notification.yaml
+
     sonata_notification:
         backend: sonata.notification.backend.doctrine
         backends:
