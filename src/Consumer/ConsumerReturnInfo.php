@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -26,7 +28,7 @@ class ConsumerReturnInfo
     /**
      * @param string $returnMessage
      */
-    public function setReturnMessage($returnMessage)
+    public function setReturnMessage($returnMessage): void
     {
         $this->returnMessage = $returnMessage;
     }

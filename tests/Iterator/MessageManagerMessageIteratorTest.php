@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -24,12 +26,12 @@ class MessageManagerMessageIteratorTest extends TestCase
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createMock(ManagerRegistry::class);
     }
 
-    public function testBufferize()
+    public function testBufferize(): void
     {
         $iterator = new MessageManagerMessageIterator($this->registry, 0);
 
@@ -38,7 +40,7 @@ class MessageManagerMessageIteratorTest extends TestCase
         $this->assertCount(10, $iterator->getBuffer());
     }
 
-    public function testIterations()
+    public function testIterations(): void
     {
         $size = 10;
 
@@ -61,7 +63,7 @@ class MessageManagerMessageIteratorTest extends TestCase
         $this->assertNotNull($iterator->current());
     }
 
-    public function testLongForeach()
+    public function testLongForeach(): void
     {
         $iterator = new MessageManagerMessageIterator($this->registry, 500000, 2);
 

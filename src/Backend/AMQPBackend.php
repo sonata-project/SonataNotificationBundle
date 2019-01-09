@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -58,22 +60,22 @@ class AMQPBackend implements BackendInterface
     protected $recover;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $deadLetterExchange;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $deadLetterRoutingKey;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     protected $ttl;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $prefetchCount;
 
@@ -89,7 +91,7 @@ class AMQPBackend implements BackendInterface
      * @param string   $key
      * @param string   $deadLetterExchange
      * @param string   $deadLetterRoutingKey
-     * @param null|int $ttl
+     * @param int|null $ttl
      */
     public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
     {
@@ -106,7 +108,7 @@ class AMQPBackend implements BackendInterface
     /**
      * @param AMQPBackendDispatcher $dispatcher
      */
-    public function setDispatcher(AMQPBackendDispatcher $dispatcher)
+    public function setDispatcher(AMQPBackendDispatcher $dispatcher): void
     {
         $this->dispatcher = $dispatcher;
     }
@@ -114,7 +116,7 @@ class AMQPBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function initialize()
+    public function initialize(): void
     {
         $args = [];
         if (null !== $this->deadLetterExchange) {
@@ -154,7 +156,7 @@ class AMQPBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function publish(MessageInterface $message)
+    public function publish(MessageInterface $message): void
     {
         $body = json_encode([
             'type' => $message->getType(),
@@ -190,7 +192,7 @@ class AMQPBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function createAndPublish($type, array $body)
+    public function createAndPublish($type, array $body): void
     {
         $this->publish($this->create($type, $body));
     }
@@ -219,7 +221,7 @@ class AMQPBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
+    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         $event = new ConsumerEvent($message);
 
@@ -267,7 +269,7 @@ class AMQPBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function cleanup()
+    public function cleanup(): void
     {
         throw new \RuntimeException('Not implemented');
     }

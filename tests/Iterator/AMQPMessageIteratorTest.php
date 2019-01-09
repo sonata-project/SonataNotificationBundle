@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -25,19 +27,19 @@ use Sonata\NotificationBundle\Model\Message;
  */
 class AMQPMessageIteratorTest extends TestCase
 {
-    public function testShouldImplementMessageIteratorInterface()
+    public function testShouldImplementMessageIteratorInterface(): void
     {
         $rc = new \ReflectionClass(AMQPMessageIterator::class);
 
         $this->assertTrue($rc->implementsInterface(MessageIteratorInterface::class));
     }
 
-    public function testCouldBeConstructedWithChannelAndContextAsArguments()
+    public function testCouldBeConstructedWithChannelAndContextAsArguments(): void
     {
         new AMQPMessageIterator($this->createChannelMock(), $this->createConsumerStub());
     }
 
-    public function testShouldIterateOverThreeMessagesAndExit()
+    public function testShouldIterateOverThreeMessagesAndExit(): void
     {
         $firstMessage = new AmqpMessage('{"body": {"value": "theFirstMessageBody"}, "type": "aType", "state": "aState"}');
         $secondMessage = new AmqpMessage('{"body": {"value": "theSecondMessageBody"}, "type": "aType", "state": "aState"}');

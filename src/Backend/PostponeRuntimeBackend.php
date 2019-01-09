@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -54,7 +56,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     /**
      * {@inheritdoc}
      */
-    public function publish(MessageInterface $message)
+    public function publish(MessageInterface $message): void
     {
         // if the message is generated from the cli the message is handled
         // directly as there is no kernel.terminate in cli
@@ -75,7 +77,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
      *
      * @param Event|null $event
      */
-    public function onEvent(Event $event = null)
+    public function onEvent(Event $event = null): void
     {
         while (!empty($this->messages)) {
             $message = array_shift($this->messages);

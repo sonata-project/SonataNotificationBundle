@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -27,7 +29,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this->setName('sonata:notification:start');
         $this->setDescription('Listen for incoming messages');
@@ -39,7 +41,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
         $startDate = new \DateTime();
 
@@ -151,7 +153,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      *
      * @throws \RuntimeException
      */
-    protected function throwTypeNotFoundException($type, $backend)
+    protected function throwTypeNotFoundException($type, $backend): void
     {
         throw new \RuntimeException(
             "The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".

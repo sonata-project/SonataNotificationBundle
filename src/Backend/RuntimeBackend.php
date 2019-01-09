@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -75,21 +77,21 @@ class RuntimeBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function cleanup()
+    public function cleanup(): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
+    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         $event = new ConsumerEvent($message);
 

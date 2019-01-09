@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -21,7 +23,7 @@ class CreateAndPublishCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this
             ->setName('sonata:notification:create-and-publish')
@@ -35,7 +37,7 @@ class CreateAndPublishCommand extends ContainerAwareCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
         $type = $input->getArgument('type');
         $body = json_decode($input->getArgument('body'), true);

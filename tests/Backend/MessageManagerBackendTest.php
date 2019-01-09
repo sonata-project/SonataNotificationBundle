@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -24,7 +26,7 @@ use ZendDiagnostics\Result\Warning;
 
 class MessageManagerBackendTest extends TestCase
 {
-    public function testCreateAndPublish()
+    public function testCreateAndPublish(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
@@ -41,7 +43,7 @@ class MessageManagerBackendTest extends TestCase
         $this->assertEquals(['message' => 'salut'], $message->getBody());
     }
 
-    public function testHandleSuccess()
+    public function testHandleSuccess(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
@@ -59,7 +61,7 @@ class MessageManagerBackendTest extends TestCase
         $this->assertNotNull($message->getCompletedAt());
     }
 
-    public function testHandleError()
+    public function testHandleError(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
@@ -86,7 +88,7 @@ class MessageManagerBackendTest extends TestCase
     /**
      * @dataProvider statusProvider
      */
-    public function testStatus($counts, $expectedStatus, $message)
+    public function testStatus($counts, $expectedStatus, $message): void
     {
         if (!class_exists(Success::class)) {
             $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');

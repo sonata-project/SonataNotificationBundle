@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -24,7 +26,7 @@ class NotificationCompilerPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('sonata.notification.dispatcher')) {
             return;
@@ -38,7 +40,7 @@ class NotificationCompilerPass implements CompilerPassInterface
             $container->getDefinition($id)->setPublic(true);
 
             foreach ($events as $event) {
-                $priority = isset($event['priority']) ? $event['priority'] : 0;
+                $priority = $event['priority'] ?? 0;
 
                 if (!isset($event['type'])) {
                     throw new \InvalidArgumentException(sprintf(

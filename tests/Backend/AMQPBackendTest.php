@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -29,15 +31,15 @@ use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
 
 class AMQPBackendTest extends TestCase
 {
-    const EXCHANGE = 'exchange';
-    const QUEUE = 'foo';
-    const KEY = 'message.type.foo';
-    const DEAD_LETTER_EXCHANGE = 'dlx';
-    const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
-    const TTL = 60000;
-    const PREFETCH_COUNT = 1;
+    public const EXCHANGE = 'exchange';
+    public const QUEUE = 'foo';
+    public const KEY = 'message.type.foo';
+    public const DEAD_LETTER_EXCHANGE = 'dlx';
+    public const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
+    public const TTL = 60000;
+    public const PREFETCH_COUNT = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(AmqpConnectionFactory::class)) {
             $this->markTestSkipped('enqueue/amqp-lib library is not installed');
@@ -47,7 +49,7 @@ class AMQPBackendTest extends TestCase
         AmqpConnectionFactoryStub::$config = null;
     }
 
-    public function testInitializeWithNoDeadLetterExchangeAndNoDeadLetterRoutingKey()
+    public function testInitializeWithNoDeadLetterExchangeAndNoDeadLetterRoutingKey(): void
     {
         $backend = $this->buildBackend();
 
@@ -63,7 +65,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->once())
             ->method('declareQueue')
             ->with($this->identicalTo($queue))
-            ->willReturnCallback(function (AmqpQueue $queue) {
+            ->willReturnCallback(function (AmqpQueue $queue): void {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame([], $queue->getArguments());
             });
@@ -76,7 +78,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->once())
             ->method('declareTopic')
             ->with($this->identicalTo($topic))
-            ->willReturnCallback(function (AmqpTopic $topic) {
+            ->willReturnCallback(function (AmqpTopic $topic): void {
                 $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
                 $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
                 $this->assertSame([], $topic->getArguments());
@@ -85,7 +87,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->once())
             ->method('bind')
             ->with($this->isInstanceOf(AmqpBind::class))
-            ->willReturnCallback(function (ImplAmqpBind $bind) use ($queue, $topic) {
+            ->willReturnCallback(function (ImplAmqpBind $bind) use ($queue, $topic): void {
                 $this->assertSame($queue, $bind->getTarget());
                 $this->assertSame($topic, $bind->getSource());
                 $this->assertSame(self::KEY, $bind->getRoutingKey());
@@ -96,7 +98,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testInitializeWithDeadLetterExchangeAndNoDeadLetterRoutingKey()
+    public function testInitializeWithDeadLetterExchangeAndNoDeadLetterRoutingKey(): void
     {
         $backend = $this->buildBackend(false, self::DEAD_LETTER_EXCHANGE);
 
@@ -113,7 +115,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->at(1))
             ->method('declareQueue')
             ->with($this->identicalTo($queue))
-            ->willReturnCallback(function (AmqpQueue $queue) {
+            ->willReturnCallback(function (AmqpQueue $queue): void {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame(['x-dead-letter-exchange' => self::DEAD_LETTER_EXCHANGE], $queue->getArguments());
             });
@@ -139,7 +141,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->at(6))
             ->method('declareTopic')
             ->with($this->identicalTo($deadLetterTopic))
-            ->willReturnCallback(function (AmqpTopic $topic) {
+            ->willReturnCallback(function (AmqpTopic $topic): void {
                 $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
                 $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
                 $this->assertSame([], $topic->getArguments());
@@ -150,7 +152,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testInitializeWithDeadLetterExchangeAndDeadLetterRoutingKey()
+    public function testInitializeWithDeadLetterExchangeAndDeadLetterRoutingKey(): void
     {
         $backend = $this->buildBackend(false, self::DEAD_LETTER_EXCHANGE, self::DEAD_LETTER_ROUTING_KEY);
 
@@ -167,7 +169,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->at(1))
             ->method('declareQueue')
             ->with($this->identicalTo($queue))
-            ->willReturnCallback(function (AmqpQueue $queue) {
+            ->willReturnCallback(function (AmqpQueue $queue): void {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame(
                     [
@@ -196,7 +198,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testInitializeWithTTL()
+    public function testInitializeWithTTL(): void
     {
         $backend = $this->buildBackend(false, null, null, self::TTL);
 
@@ -212,7 +214,7 @@ class AMQPBackendTest extends TestCase
         $contextMock->expects($this->once())
             ->method('declareQueue')
             ->with($this->identicalTo($queue))
-            ->willReturnCallback(function (AmqpQueue $queue) {
+            ->willReturnCallback(function (AmqpQueue $queue): void {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame(['x-message-ttl' => self::TTL], $queue->getArguments());
             });
@@ -235,7 +237,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testGetIteratorWithNoPrefetchCount()
+    public function testGetIteratorWithNoPrefetchCount(): void
     {
         $backend = $this->buildBackend();
 
@@ -270,7 +272,7 @@ class AMQPBackendTest extends TestCase
         $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
-    public function testGetIteratorWithPrefetchCount()
+    public function testGetIteratorWithPrefetchCount(): void
     {
         $backend = $this->buildBackend(false, null, null, null, self::PREFETCH_COUNT);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -29,12 +31,12 @@ class SonataNotificationExtensionTest extends TestCase
      */
     private $container;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->container);
     }
 
-    public function testEmptyConfig()
+    public function testEmptyConfig(): void
     {
         $container = $this->getContainerBuilder([
             'MonologBundle' => MonologBundle::class,
@@ -51,7 +53,7 @@ class SonataNotificationExtensionTest extends TestCase
         $container->compile();
     }
 
-    public function testDoNotRegisterDefaultConsumers()
+    public function testDoNotRegisterDefaultConsumers(): void
     {
         $container = $this->getContainerBuilder();
         $extension = new SonataNotificationExtension();
@@ -75,7 +77,7 @@ class SonataNotificationExtensionTest extends TestCase
         $container->compile();
     }
 
-    public function testDoctrineBackendNoConfig()
+    public function testDoctrineBackendNoConfig(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Please configure the sonata_notification.backends.doctrine section');
@@ -92,7 +94,7 @@ class SonataNotificationExtensionTest extends TestCase
         ], $container);
     }
 
-    public function testDoctrineBackend()
+    public function testDoctrineBackend(): void
     {
         $container = $this->getContainerBuilder([
             'DoctrineBundle' => DoctrineBundle::class,
@@ -123,7 +125,7 @@ class SonataNotificationExtensionTest extends TestCase
         $container->compile();
     }
 
-    public function testRabbitMQBackendNoConfig()
+    public function testRabbitMQBackendNoConfig(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Please configure the sonata_notification.backends.rabbitmq section');
@@ -138,7 +140,7 @@ class SonataNotificationExtensionTest extends TestCase
         ], $container);
     }
 
-    public function testRabbitMQBackend()
+    public function testRabbitMQBackend(): void
     {
         $container = $this->getContainerBuilder();
         $extension = new SonataNotificationExtension();
@@ -196,28 +198,28 @@ class SonataNotificationExtensionTest extends TestCase
         return $this->container = $container;
     }
 
-    private function assertAlias($alias, $service)
+    private function assertAlias($alias, $service): void
     {
         $this->assertSame(
             $alias, (string) $this->container->getAlias($service), sprintf('%s alias is correct', $service)
         );
     }
 
-    private function assertParameter($expectedValue, $name)
+    private function assertParameter($expectedValue, $name): void
     {
         $this->assertSame(
             $expectedValue, $this->container->getParameter($name), sprintf('%s parameter is correct', $name)
         );
     }
 
-    private function assertHasDefinition($definition)
+    private function assertHasDefinition($definition): void
     {
         $this->assertTrue(
             $this->container->hasDefinition($definition) ? true : $this->container->hasAlias($definition)
         );
     }
 
-    private function assertHasNoDefinition($service)
+    private function assertHasNoDefinition($service): void
     {
         $this->assertFalse(
             $this->container->hasDefinition($service) ? true : $this->container->hasAlias($service)

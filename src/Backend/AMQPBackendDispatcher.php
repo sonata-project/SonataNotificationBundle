@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -188,7 +190,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): void
     {
         throw new \RuntimeException(
             'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
@@ -198,7 +200,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * {@inheritdoc}
      */
-    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
+    public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         throw new \RuntimeException(
             'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
@@ -249,14 +251,14 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * {@inheritdoc}
      */
-    public function cleanup()
+    public function cleanup(): void
     {
         throw new \RuntimeException(
             'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
         );
     }
 
-    public function shutdown()
+    public function shutdown(): void
     {
         if ($this->context) {
             $this->context->close();
@@ -266,7 +268,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     /**
      * {@inheritdoc}
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 

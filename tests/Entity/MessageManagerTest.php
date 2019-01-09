@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -24,7 +26,7 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 
 class MessageManagerTest extends TestCase
 {
-    public function testCancel()
+    public function testCancel(): void
     {
         $manager = $this->getMessageManagerMock();
 
@@ -35,7 +37,7 @@ class MessageManagerTest extends TestCase
         $this->assertTrue($message->isCancelled());
     }
 
-    public function testRestart()
+    public function testRestart(): void
     {
         $manager = $this->getMessageManagerMock();
 
@@ -53,11 +55,11 @@ class MessageManagerTest extends TestCase
         $this->assertEquals(13, $newMessage->getRestartCount());
     }
 
-    public function testGetPager()
+    public function testGetPager(): void
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(function ($qb) use ($self): void {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with([]);
@@ -69,23 +71,23 @@ class MessageManagerTest extends TestCase
             ->getPager([], 1);
     }
 
-    public function testGetPagerWithInvalidSort()
+    public function testGetPagerWithInvalidSort(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Invalid sort field \'invalid\' in \'Sonata\\NotificationBundle\\Entity\\BaseMessage\' class');
 
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(function ($qb) use ($self): void {
             })
             ->getPager([], 1, 10, ['invalid' => 'ASC']);
     }
 
-    public function testGetPagerWithMultipleSort()
+    public function testGetPagerWithMultipleSort(): void
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(function ($qb) use ($self): void {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with([]);
@@ -107,11 +109,11 @@ class MessageManagerTest extends TestCase
             ]);
     }
 
-    public function testGetPagerWithOpenedMessages()
+    public function testGetPagerWithOpenedMessages(): void
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(function ($qb) use ($self): void {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
@@ -121,11 +123,11 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_OPEN], 1);
     }
 
-    public function testGetPagerWithCanceledMessages()
+    public function testGetPagerWithCanceledMessages(): void
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(function ($qb) use ($self): void {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
@@ -135,11 +137,11 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_CANCELLED], 1);
     }
 
-    public function testGetPagerWithInProgressMessages()
+    public function testGetPagerWithInProgressMessages(): void
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(function ($qb) use ($self): void {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([

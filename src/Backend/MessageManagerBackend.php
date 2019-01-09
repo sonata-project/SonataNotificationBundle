@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -79,7 +81,7 @@ class MessageManagerBackend implements BackendInterface
     /**
      * @param array $types
      */
-    public function setTypes($types)
+    public function setTypes($types): void
     {
         $this->types = $types;
     }
@@ -126,14 +128,14 @@ class MessageManagerBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 
     /**
      * @param MessageManagerBackendDispatcher $dispatcher
      */
-    public function setDispatcher(MessageManagerBackendDispatcher $dispatcher)
+    public function setDispatcher(MessageManagerBackendDispatcher $dispatcher): void
     {
         $this->dispatcher = $dispatcher;
     }
@@ -200,7 +202,7 @@ class MessageManagerBackend implements BackendInterface
     /**
      * {@inheritdoc}
      */
-    public function cleanup()
+    public function cleanup(): void
     {
         $this->messageManager->cleanup($this->maxAge);
     }

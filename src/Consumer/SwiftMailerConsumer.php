@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -31,7 +33,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ConsumerEvent $event)
+    public function process(ConsumerEvent $event): void
     {
         if (!$this->mailer->getTransport()->isStarted()) {
             $this->mailer->getTransport()->start();
@@ -55,7 +57,7 @@ class SwiftMailerConsumer implements ConsumerInterface
     /**
      * @param MessageInterface $message
      */
-    private function sendEmail(MessageInterface $message)
+    private function sendEmail(MessageInterface $message): void
     {
         $mail = $this->mailer->createMessage()
             ->setSubject($message->getValue('subject'))

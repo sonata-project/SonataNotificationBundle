@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -21,7 +23,7 @@ use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
 
 class AMQPBackendDispatcherTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(AmqpConnectionFactory::class)) {
             $this->markTestSkipped('enqueue/amqp-lib library is not installed');
@@ -31,7 +33,7 @@ class AMQPBackendDispatcherTest extends TestCase
         AmqpConnectionFactoryStub::$context = null;
     }
 
-    public function testThrowIfSettingsMissFactoryClassOptionOnGetContext()
+    public function testThrowIfSettingsMissFactoryClassOptionOnGetContext(): void
     {
         $dispatcher = new AMQPBackendDispatcher([], [], 'default', []);
 
@@ -40,7 +42,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->getContext();
     }
 
-    public function testThrowIfFactoryClassIsNotRealClass()
+    public function testThrowIfFactoryClassIsNotRealClass(): void
     {
         $dispatcher = new AMQPBackendDispatcher(['factory_class' => 'anInvalidClass'], [], 'default', []);
 
@@ -49,7 +51,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->getContext();
     }
 
-    public function testThrowIfFactoryClassIsNotInstanceOfAmqpConnectionFactoryInterface()
+    public function testThrowIfFactoryClassIsNotInstanceOfAmqpConnectionFactoryInterface(): void
     {
         $dispatcher = new AMQPBackendDispatcher(['factory_class' => \stdClass::class], [], 'default', []);
 
@@ -58,7 +60,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->getContext();
     }
 
-    public function testShouldPassExpectedOptionsToAmqpConnectionFactoryConstructor()
+    public function testShouldPassExpectedOptionsToAmqpConnectionFactoryConstructor(): void
     {
         $dispatcher = new AMQPBackendDispatcher(
             [
@@ -85,7 +87,7 @@ class AMQPBackendDispatcherTest extends TestCase
         ], AmqpConnectionFactoryStub::$config);
     }
 
-    public function testShouldReturnExpectedAmqpContext()
+    public function testShouldReturnExpectedAmqpContext(): void
     {
         $expectedContext = $this->createMock(AmqpContext::class);
 
@@ -110,7 +112,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $this->assertSame($expectedContext, $actualContext);
     }
 
-    public function testQueue()
+    public function testQueue(): void
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
         $mock2 = $this->getMockQueue('bar', 'message.type.foo', $this->never());
@@ -121,7 +123,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->createAndPublish('message.type.foo', []);
     }
 
-    public function testDefaultQueue()
+    public function testDefaultQueue(): void
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
         $fooBackend = ['type' => 'default', 'backend' => $mock];
@@ -129,7 +131,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->createAndPublish('some.other.type', []);
     }
 
-    public function testDefaultQueueNotFound()
+    public function testDefaultQueueNotFound(): void
     {
         $mock = $this->getMockQueue('foo', 'message.type.foo', $this->never());
         $fooBackend = ['type' => 'message.type.foo', 'backend' => $mock];
@@ -139,7 +141,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->createAndPublish('some.other.type', []);
     }
 
-    public function testInvalidQueue()
+    public function testInvalidQueue(): void
     {
         $mock = $this->getMockQueue('foo', 'message.type.bar');
         $dispatcher = $this->getDispatcher(
@@ -151,7 +153,7 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->createAndPublish('message.type.bar', []);
     }
 
-    public function testAllQueueInitializeOnce()
+    public function testAllQueueInitializeOnce(): void
     {
         $queues = [
             ['queue' => 'foo', 'routing_key' => 'message.type.foo'],

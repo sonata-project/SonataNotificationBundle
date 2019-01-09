@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -22,7 +24,7 @@ class SonataNotificationBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new NotificationCompilerPass());
 
@@ -32,7 +34,7 @@ class SonataNotificationBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function boot()
+    public function boot(): void
     {
         if (!\defined('AMQP_DEBUG')) {
             //            define('AMQP_DEBUG', $this->container->getParameter('kernel.debug'));
@@ -45,7 +47,7 @@ class SonataNotificationBundle extends Bundle
     /**
      * Register form mapping information.
      */
-    public function registerFormMapping()
+    public function registerFormMapping(): void
     {
         FormHelper::registerFormTypeMapping([
             'sonata_notification_api_form_message' => MessageSerializationType::class,

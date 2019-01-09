@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -72,7 +74,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         $this->setCurrent();
         ++$this->counter;
@@ -97,7 +99,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->setCurrent();
     }
@@ -115,7 +117,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     /**
      * Assign current pointer a message.
      */
-    protected function setCurrent()
+    protected function setCurrent(): void
     {
         if (0 === \count($this->buffer)) {
             $this->bufferize($this->types);
@@ -129,7 +131,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
      *
      * @param array $types
      */
-    protected function bufferize($types = [])
+    protected function bufferize($types = []): void
     {
         while (true) {
             $this->buffer = $this->findNextMessages($types);

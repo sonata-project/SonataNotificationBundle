@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -33,7 +35,7 @@ class SwiftMailerConsumerTest extends TestCase
     /**
      * Initializes some dependencies used by tests.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mailer = $this->createMock('Swift_Mailer');
         $this->consumer = new SwiftMailerConsumer($this->mailer);
@@ -42,7 +44,7 @@ class SwiftMailerConsumerTest extends TestCase
     /**
      * Tests the sendEmail method.
      */
-    public function testSendEmail()
+    public function testSendEmail(): void
     {
         $message = new Message();
         $message->setBody([
