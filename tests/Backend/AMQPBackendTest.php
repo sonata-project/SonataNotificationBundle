@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -29,13 +31,13 @@ use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
 
 class AMQPBackendTest extends TestCase
 {
-    const EXCHANGE = 'exchange';
-    const QUEUE = 'foo';
-    const KEY = 'message.type.foo';
-    const DEAD_LETTER_EXCHANGE = 'dlx';
-    const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
-    const TTL = 60000;
-    const PREFETCH_COUNT = 1;
+    public const EXCHANGE = 'exchange';
+    public const QUEUE = 'foo';
+    public const KEY = 'message.type.foo';
+    public const DEAD_LETTER_EXCHANGE = 'dlx';
+    public const DEAD_LETTER_ROUTING_KEY = 'message.type.dl';
+    public const TTL = 60000;
+    public const PREFETCH_COUNT = 1;
 
     protected function setUp()
     {

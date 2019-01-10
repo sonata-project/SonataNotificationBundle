@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,11 +15,11 @@ namespace Sonata\NotificationBundle\Model;
 
 interface MessageInterface
 {
-    const STATE_OPEN = 0;
-    const STATE_IN_PROGRESS = 1;
-    const STATE_DONE = 2;
-    const STATE_ERROR = -1;
-    const STATE_CANCELLED = -2;
+    public const STATE_OPEN = 0;
+    public const STATE_IN_PROGRESS = 1;
+    public const STATE_DONE = 2;
+    public const STATE_ERROR = -1;
+    public const STATE_CANCELLED = -2;
 
     /**
      * @param array $body
