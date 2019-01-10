@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -58,22 +60,22 @@ class AMQPBackend implements BackendInterface
     protected $recover;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $deadLetterExchange;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $deadLetterRoutingKey;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     protected $ttl;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $prefetchCount;
 
@@ -89,7 +91,7 @@ class AMQPBackend implements BackendInterface
      * @param string   $key
      * @param string   $deadLetterExchange
      * @param string   $deadLetterRoutingKey
-     * @param null|int $ttl
+     * @param int|null $ttl
      */
     public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
     {
