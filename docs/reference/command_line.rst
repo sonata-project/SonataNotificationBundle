@@ -5,7 +5,7 @@ The notification bundle comes with one command which will listen to new incoming
 
 .. code-block:: bash
 
-    app/console sonata:notification:start --env=prod --iteration=250
+    bin/console sonata:notification:start --env=prod --iteration=250
 
 This command must be started in production environment to limit memory usage produced by
 debugging information.
@@ -20,10 +20,12 @@ Monitoring process : Supervisord
 This command cannot be used or started as it is on a production server. The task must be supervised by a process control system.
 There are many solutions available, here a solution with ``supervisord``:
 
-Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems::
+Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems
+
+.. code-block:: ini
 
     [program:sonata_production_sonata_notification]
-    command=/home/org.sonata-project.demo/current/app/console sonata:notification:start --env=notification --iteration=250
+    command=/home/org.sonata-project.demo/current/bin/console sonata:notification:start --env=notification --iteration=250
     autorestart=true
     user=www-data
     redirect_stderr=false
@@ -44,7 +46,6 @@ If you are deploying with Capistrano, you can restart the supervisor process wit
     long run processes as each log entry will be stacked into memory. So the notification process can stop
     with a memory usage error. To solve this, just create a new env called notification without this handler.
 
-
 Clean up messages
 -----------------
 
@@ -52,7 +53,7 @@ You might want to clean old messages from different backend (if ever a backend h
 
 .. code-block:: bash
 
-    app/console sonata:notification:cleanup --env=prod
+    bin/console sonata:notification:cleanup --env=prod
 
 Restart erroneous messages
 --------------------------
@@ -62,18 +63,20 @@ the next iteration (this command must be used for the database backend):
 
 .. code-block:: bash
 
-    app/console sonata:notification:restart --type="xxx" --max-attempts=10
+    bin/console sonata:notification:restart --type="xxx" --max-attempts=10
 
 You can get this command to run continuously with the --pulling option and you can set the delay between the time the
 message has been set to error and the time the message can be reprocess with --attempt-delay option (in seconds):
 
 .. code-block:: bash
 
-    app/console sonata:notification:restart --type="xxx" --pulling --max-attempts=10 --attempt-delay=60 --pause=500000 --batch-size=10
+    bin/console sonata:notification:restart --type="xxx" --pulling --max-attempts=10 --attempt-delay=60 --pause=500000 --batch-size=10
 
 Create and publish messages
 ---------------------------
 
-For testing purpose, you might want to manually create and publish messages::
+For testing purpose, you might want to manually create and publish messages
 
-    app/console sonata:notification:create-and-publish logger '{"level":"debug","message":"Hello world!"}'
+... code-block:: bash
+
+    bin/console sonata:notification:create-and-publish logger '{"level":"debug","message":"Hello world!"}'
