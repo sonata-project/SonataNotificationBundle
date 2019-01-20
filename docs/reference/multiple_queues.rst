@@ -27,14 +27,13 @@ To enable multiple queues, simply define a `queues` node in your configuration:
 
         backends:
             rabbitmq:
-                exchange:     router
+                exchange: router
                 connection:
-                    host:     "%rabbitmq_host%"
-                    user:     "%rabbitmq_user%"
-                    pass:     "%rabbitmq_pass%"
-                    port:     "%rabbitmq_port%"
-                    vhost:    "%rabbitmq_vhost%"
-
+                    host: '%rabbitmq_host%'
+                    user: '%rabbitmq_user%'
+                    pass: '%rabbitmq_pass%'
+                    port: '%rabbitmq_port%'
+                    vhost: '%rabbitmq_vhost%'
 
 This will define 2 different queues: `transcoder` and `catchall` and where the `transcoder` queue is bound to a routing key:
 
@@ -42,9 +41,13 @@ This will define 2 different queues: `transcoder` and `catchall` and where the `
 
 In the above example you will need to start 2 processes, where each process will handle messages sent by a specific queue:
 
-    - ``php app/console sonata:notification:start --env=prod --iteration=250 --type=start.transcode.video``
-    - ``php app/console sonata:notification:start --env=prod --iteration=250``
+.. code-block:: bash
 
+    bin/console sonata:notification:start --env=prod --iteration=250 --type=start.transcode.video
+
+.. code-block:: bash
+
+    bin/console sonata:notification:start --env=prod --iteration=250
 
 Messages published with the ``start.transcode.video`` type will be handled by the first consumer.
 Any other message types will be handled by the ``catchall`` consumer, as it has been set as the default one.
@@ -62,9 +65,9 @@ To enable multiple queues, simply define a `queues` node in your configuration:
         backend: sonata.notification.backend.doctrine
         backends:
             doctrine:
-                max_age:      86400     # max age in second
-                pause:        500000    # delay in microseconds
-                states:                 # raising errors level
+                max_age:   86400     # max age in second
+                pause:     500000    # delay in microseconds
+                states:              # raising errors level
                     in_progress: 10
                     error:       20
                     open:        100
@@ -81,9 +84,13 @@ This will define 2 different queues: `sonata_page` and `catchall` and where the 
 
 In the above example you will need to create 2 processes, where each process will handle messages sent by a specific queue:
 
-    - ``php app/console sonata:notification:start --env=prod --iteration=250 --type=sonata.page.create_snapshot``
-    - ``php app/console sonata:notification:start --env=prod --iteration=250``
+.. code-block:: bash
 
+    bin/console sonata:notification:start --env=prod --iteration=250 --type=sonata.page.create_snapshot
+
+.. code-block:: bash
+
+    bin/console sonata:notification:start --env=prod --iteration=250
 
 Messages published with `sonata.page.create_snapshot` or `sonata.page.create_snapshots` types will be handled by the first consumer.
 Any other message types will be handled by the `catchall` consumer, as it has been set as the default one.

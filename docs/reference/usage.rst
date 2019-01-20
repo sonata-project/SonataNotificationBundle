@@ -6,31 +6,29 @@ Calling an existing consumer
 
 .. code-block:: php
 
-    <?php
     // retrieve the notification backend
     $backend = $container->get('sonata.notification.backend');
 
     // create and publish a message
-    $backend->createAndPublish('mailer', array(
-        'from' => array(
+    $backend->createAndPublish('mailer', [
+        'from' => [
             'email' => 'no-reply@sonata-project.org',
-            'name'  => 'No Reply'
-        ),
-        'to'   => array(
+            'name'  => 'No Reply',
+        ],
+        'to' => [
             'myuser@example.org' => 'My User',
             'myuser1@example.org' => 'My User 1',
-        ),
-        'message' => array(
+        ],
+        'message' => [
             'html' => '<b>hello</b>',
-            'text' => 'hello'
-        ),
+            'text' => 'hello',
+        ],
         'subject' => 'Contact form',
-        'attachment' => array(
+        'attachment' => [
             'file' => '/path/to/file',
-            'name' => 'fileName'
-        ),
-    ));
-
+            'name' => 'fileName',
+        ],
+    ]);
 
 Custom consumer
 ----------------
@@ -40,29 +38,26 @@ In order to create a consumer, you have to take these two steps :
 * Create a consumer class
 * Define the consumer in the service container
 
-
 The consumer class must implement the ``ConsumerInterface`` interface, which defines
 only one method ``process``. The ``process`` method will receive a ``ConsumerEvent`` as an
 argument. The ``ConsumerEvent`` object is a standard Symfony Event from the ``EventDispatcher``
 Component. So it is possible to stop the event propagation from the consumer.
 
 The current example is not meant to be used in production, however it is a good example of
-logger consumer creation.
+logger consumer creation::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\NotificationBundle\Consumer;
 
+    use Sonata\NotificationBundle\Consumer\ConsumerInterface;
+    use Sonata\NotificationBundle\Exception\InvalidParameterException;
     use Sonata\NotificationBundle\Model\MessageInterface;
     use Symfony\Component\HttpKernel\Log\LoggerInterface;
-    use Sonata\NotificationBundle\Exception\InvalidParameterException;
 
-    class LoggerConsumer implements ConsumerInterface
+    final class LoggerConsumer implements ConsumerInterface
     {
-        protected $logger;
+        private $logger;
 
-        protected $types = array(
+        private $types = [
             'emerg',
             'alert',
             'crit',
@@ -71,19 +66,13 @@ logger consumer creation.
             'notice',
             'info',
             'debug',
-        );
+        ];
 
-        /**
-         * @param \Symfony\Component\HttpKernel\Log\LoggerInterface $logger
-         */
         public function __construct(LoggerInterface $logger)
         {
             $this->logger = $logger;
         }
 
-        /**
-         * {@inheritdoc}
-         */
         public function process(ConsumerEvent $event)
         {
             $message = $event->getMessage();
@@ -92,7 +81,7 @@ logger consumer creation.
                 throw new InvalidParameterException();
             }
 
-            call_user_func(array($this->logger, $message->getValue('level')), $message->getValue('message'));
+            call_user_func([$this->logger, $message->getValue('level')], $message->getValue('message'));
         }
     }
 
@@ -100,44 +89,32 @@ The last step is to register the service as a consumer in the service container.
 a custom tag : ``sonata.notification.consumer`` with a ``type``. The ``type`` value is the name used when a
 message is receive or created.
 
-* XML
+.. configuration-block::
 
     .. code-block:: xml
 
-        <?xml version="1.0" ?>
+        <!-- config/services.xml -->
 
-        <container xmlns="http://symfony.com/schema/dic/services"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-            <services>
-                <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
-                    <tag name="sonata.notification.consumer" type="logger" />
-
-                    <argument type="service" id="logger" />
-                </service>
-            </services>
-        </container>
-
-* YAML
+        <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
+            <argument type="service" id="logger" />
+            <tag name="sonata.notification.consumer" type="logger" />
+        </service>
 
     .. code-block:: yaml
+
+        # config/services.yaml
 
         services:
             sonata.notification.consumer.logger:
                 class: Sonata\NotificationBundle\Consumer\LoggerConsumer
+                arguments: ['@logger']
                 tags:
                     - { name: sonata.notification.consumer, type: logger }
-                arguments: [ "@logger" ]
 
+Now you can use the created service to send a message to the Symfony logger::
 
-Now you can use the created service to send a message to the symfony logger.
-
-.. code-block:: php
-
-    <?php
-    $this->get('sonata.notification.backend')->createAndPublish('logger', array(
+    $this->get('sonata.notification.backend')->createAndPublish('logger', [
         'level' => 'debug',
-        'message' => 'Hello world!'
-    ));
+        'message' => 'Hello world!',
+    ]);
 

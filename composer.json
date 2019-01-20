@@ -50,7 +50,7 @@
         "nelmio/api-doc-bundle": "^2.4",
         "sonata-project/doctrine-orm-admin-bundle": "^3.4",
         "swiftmailer/swiftmailer": "^5.0 || ^6.0",
-        "symfony/phpunit-bridge": "^4.1.8"
+        "symfony/phpunit-bridge": "^4.2"
     },
     "suggest": {
         "guzzlehttp/guzzle": "If you want to get a status report when using the rabbitMQ backend.",

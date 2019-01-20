@@ -102,6 +102,8 @@ Full configuration options:
 
     .. code-block:: yaml
 
+        # config/packages/doctrine.yaml
+
         doctrine:
             orm:
                 entity_managers:
@@ -109,7 +111,6 @@ Full configuration options:
                         mappings:
                             SonataNotificationBundle: ~
                             ApplicationSonataNotificationBundle: ~
-
 
 Changing AMQP transport
 -----------------------
@@ -128,13 +129,13 @@ run `composer require enqueue/amqp-ext:^0.8` and change `factory_class` option i
 
     .. code-block:: yaml
 
+        # config/packages/sonata_notification.yaml
+
         sonata_notification:
             backends:
                 rabbitmq:
                     connection:
-                        factory_class:        \Enqueue\AmqpExt\AmqpConnectionFactory
-
-
+                        factory_class: Enqueue\AmqpExt\AmqpConnectionFactory
 
 .. _`queue interop`: https://github.com/queue-interop/queue-interop#amqp-interop
 .. _`enqueue/amqp-lib`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/transport/amqp_lib.md
