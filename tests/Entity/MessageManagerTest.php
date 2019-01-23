@@ -151,6 +151,21 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_IN_PROGRESS], 1);
     }
 
+    public function testFindByTypes(): void
+    {
+        $this
+            ->getMessageManager(function ($qb): void {
+                $qb->expects($this->never())->method('andWhere');
+                $qb->expects($this->once())->method('where')->willReturnSelf();
+                $qb->expects($this->once())->method('setParameters')
+                    ->with(['state' => MessageInterface::STATE_OPEN]);
+                $qb->expects($this->once())->method('orderBy')->with(
+                    $this->equalTo('m.createdAt')
+                )->willReturnSelf();
+            })
+            ->findByTypes([], MessageInterface::STATE_OPEN, 10);
+    }
+
     /**
      * @return MessageManagerMock
      */

@@ -123,7 +123,7 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
             $this->bufferize($this->types);
         }
 
-        $this->current = array_pop($this->buffer);
+        $this->current = array_shift($this->buffer);
     }
 
     /**

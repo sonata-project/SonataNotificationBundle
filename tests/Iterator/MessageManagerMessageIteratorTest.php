@@ -15,6 +15,9 @@ namespace Sonata\NotificationBundle\Tests\Iterator;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
+use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator as MessageManagerMessageIteratorObject;
+use Sonata\NotificationBundle\Model\Message;
+use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 /**
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
@@ -76,5 +79,28 @@ class MessageManagerMessageIteratorTest extends TestCase
                 return;
             }
         }
+    }
+
+    public function testMessageConsumptionOrder(): void
+    {
+        $now = new \DateTime();
+        $olderDate = (clone $now)->modify('-1 hour');
+        $oldMessage = new Message();
+        $oldMessage->setCreatedAt($olderDate);
+        $oldMessage->setType('older.message');
+
+        $newMessage = new Message();
+        $newMessage->setCreatedAt($now);
+        $newMessage->setType('newer.message');
+
+        $messageManager = $this->createMock(MessageManagerInterface::class);
+        $messageManager->expects($this->once())->method('findByTypes')->willReturn([$oldMessage, $newMessage]);
+
+        $iterator = new MessageManagerMessageIteratorObject($messageManager, [], 500000, 2);
+
+        $iterator->next();
+        $this->assertSame($oldMessage, $iterator->current());
+        $iterator->next();
+        $this->assertSame($newMessage, $iterator->current());
     }
 }

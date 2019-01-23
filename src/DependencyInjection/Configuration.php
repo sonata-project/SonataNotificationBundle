@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('sonata_notification');
 
         // Keep compatibility with symfony/config < 4.2
-        if (!\method_exists($treeBuilder, 'getRootNode')) {
+        if (!method_exists($treeBuilder, 'getRootNode')) {
             $rootNode = $treeBuilder->root('sonata_notification')->children();
         } else {
             $rootNode = $treeBuilder->getRootNode()->children();
@@ -193,7 +193,7 @@ EOF;
         $treeBuilder = new TreeBuilder('queues');
 
         // Keep compatibility with symfony/config < 4.2
-        if (!\method_exists($treeBuilder, 'getRootNode')) {
+        if (!method_exists($treeBuilder, 'getRootNode')) {
             $node = $treeBuilder->root('queues');
         } else {
             $node = $treeBuilder->getRootNode();
