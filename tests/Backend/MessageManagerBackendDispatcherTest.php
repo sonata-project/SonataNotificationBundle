@@ -45,6 +45,6 @@ class MessageManagerBackendDispatcherTest extends TestCase
 
         $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, [], '', [['types' => ['test'], 'backend' => $testBackend]]);
 
-        $this->assertEquals($message, $mMgrBackend->create('test', []));
+        $this->assertSame($message, $mMgrBackend->create('test', []));
     }
 }

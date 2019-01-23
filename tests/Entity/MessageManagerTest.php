@@ -51,8 +51,8 @@ class MessageManagerTest extends TestCase
 
         $newMessage = $manager->restart($message);
 
-        $this->assertEquals(MessageInterface::STATE_OPEN, $newMessage->getState());
-        $this->assertEquals(13, $newMessage->getRestartCount());
+        $this->assertSame(MessageInterface::STATE_OPEN, $newMessage->getState());
+        $this->assertSame(13, $newMessage->getRestartCount());
     }
 
     public function testGetPager()
