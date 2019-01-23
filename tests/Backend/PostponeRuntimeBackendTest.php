@@ -93,7 +93,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $dispatcher->dispatch('kernel.terminate');
 
         $this->assertTrue($phpunit->passed);
-        $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
+        $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
     }
 
     public function testRecursiveMessage()
@@ -130,8 +130,8 @@ class PostponeRuntimeBackendTest extends TestCase
         $this->assertTrue($phpunit->passed1);
         $this->assertTrue($phpunit->passed2);
 
-        $this->assertEquals(MessageInterface::STATE_DONE, $message1->getState());
-        $this->assertEquals(MessageInterface::STATE_DONE, $message2->getState());
+        $this->assertSame(MessageInterface::STATE_DONE, $message1->getState());
+        $this->assertSame(MessageInterface::STATE_DONE, $message2->getState());
     }
 
     public function testStatusIsOk()

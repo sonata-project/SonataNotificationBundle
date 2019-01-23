@@ -70,7 +70,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         }
 
         foreach ($this->backends as $backend) {
-            if (\in_array($type, $backend['types'])) {
+            if (\in_array($type, $backend['types'], true)) {
                 return $backend['backend'];
             }
         }
