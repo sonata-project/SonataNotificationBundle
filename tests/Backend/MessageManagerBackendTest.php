@@ -37,10 +37,10 @@ class MessageManagerBackendTest extends TestCase
         $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
         $this->assertInstanceOf(MessageInterface::class, $message);
-        $this->assertEquals(MessageInterface::STATE_OPEN, $message->getState());
+        $this->assertSame(MessageInterface::STATE_OPEN, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
-        $this->assertEquals('foo', $message->getType());
-        $this->assertEquals(['message' => 'salut'], $message->getBody());
+        $this->assertSame('foo', $message->getType());
+        $this->assertSame(['message' => 'salut'], $message->getBody());
     }
 
     public function testHandleSuccess()
@@ -56,7 +56,7 @@ class MessageManagerBackendTest extends TestCase
 
         $backend->handle($message, $dispatcher);
 
-        $this->assertEquals(MessageInterface::STATE_DONE, $message->getState());
+        $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
         $this->assertNotNull($message->getCompletedAt());
     }
@@ -80,7 +80,7 @@ class MessageManagerBackendTest extends TestCase
 
         $this->assertInstanceOf(HandlingException::class, $e);
 
-        $this->assertEquals(MessageInterface::STATE_ERROR, $message->getState());
+        $this->assertSame(MessageInterface::STATE_ERROR, $message->getState());
         $this->assertNotNull($message->getCreatedAt());
         $this->assertNotNull($message->getCompletedAt());
     }
@@ -107,7 +107,7 @@ class MessageManagerBackendTest extends TestCase
         $status = $backend->getStatus();
 
         $this->assertInstanceOf(\get_class($expectedStatus), $status);
-        $this->assertEquals($message, $status->getMessage());
+        $this->assertSame($message, $status->getMessage());
     }
 
     public static function statusProvider()
