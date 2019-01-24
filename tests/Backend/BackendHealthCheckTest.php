@@ -36,6 +36,6 @@ class BackendHealthCheckTest extends TestCase
 
         $health = new BackendHealthCheck($backend);
 
-        $this->assertEquals($result, $health->check());
+        $this->assertSame($result, $health->check());
     }
 }

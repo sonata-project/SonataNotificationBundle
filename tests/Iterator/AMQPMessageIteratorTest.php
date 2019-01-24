@@ -61,6 +61,6 @@ class AMQPMessageIteratorTest extends TestCase
             $values[] = $message->getValue('value');
         }
 
-        $this->assertEquals(['theFirstMessageBody', 'theSecondMessageBody', 'theThirdMessageBody'], $values);
+        $this->assertSame(['theFirstMessageBody', 'theSecondMessageBody', 'theThirdMessageBody'], $values);
     }
 }

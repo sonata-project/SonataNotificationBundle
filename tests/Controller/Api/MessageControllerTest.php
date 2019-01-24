@@ -38,7 +38,7 @@ class MessageControllerTest extends TestCase
         $paramFetcher->expects($this->exactly(3))->method('get');
         $paramFetcher->expects($this->once())->method('all')->will($this->returnValue([]));
 
-        $this->assertEquals([], $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
+        $this->assertSame([], $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
     }
 
     public function testPostMessageAction(): void

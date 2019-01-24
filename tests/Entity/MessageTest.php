@@ -27,7 +27,7 @@ class MessageTest extends TestCase
 
         $message->setBody($body);
 
-        $this->assertEquals($expected, $message->getValue($names, $default));
+        $this->assertSame($expected, $message->getValue($names, $default));
     }
 
     public function testClone(): void
@@ -37,7 +37,7 @@ class MessageTest extends TestCase
         $message->setState(Message::STATE_ERROR);
 
         $this->assertTrue($message->isError());
-        $this->assertEquals(42, $message->getId());
+        $this->assertSame(42, $message->getId());
 
         $newMessage = clone $message;
 
