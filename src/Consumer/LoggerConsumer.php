@@ -62,7 +62,7 @@ class LoggerConsumer implements ConsumerInterface
     {
         $message = $event->getMessage();
 
-        if (!array_key_exists($message->getValue('level'), $this->types)) {
+        if (!\array_key_exists($message->getValue('level'), $this->types)) {
             throw new InvalidParameterException();
         }
 
