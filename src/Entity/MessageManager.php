@@ -211,13 +211,13 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         $parameters['state'] = $state;
 
         if (\count($types) > 0) {
-            if (array_key_exists('exclude', $types) || array_key_exists('include', $types)) {
-                if (array_key_exists('exclude', $types)) {
+            if (\array_key_exists('exclude', $types) || \array_key_exists('include', $types)) {
+                if (\array_key_exists('exclude', $types)) {
                     $query->andWhere('m.type NOT IN (:exclude)');
                     $parameters['exclude'] = $types['exclude'];
                 }
 
-                if (array_key_exists('include', $types)) {
+                if (\array_key_exists('include', $types)) {
                     $query->andWhere('m.type IN (:include)');
                     $parameters['include'] = $types['include'];
                 }
