@@ -65,7 +65,7 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
     public function getContext()
     {
         if (!$this->context) {
-            if (!array_key_exists('factory_class', $this->settings)) {
+            if (!\array_key_exists('factory_class', $this->settings)) {
                 throw new \LogicException('The factory_class option is missing though it is required.');
             }
             $factoryClass = $this->settings['factory_class'];

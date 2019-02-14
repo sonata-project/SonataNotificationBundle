@@ -186,7 +186,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
     {
         $backend = $this->getContainer()->get('sonata.notification.backend');
 
-        if ($type && !array_key_exists($type, $this->getNotificationDispatcher()->getListeners())) {
+        if ($type && !\array_key_exists($type, $this->getNotificationDispatcher()->getListeners())) {
             throw new \RuntimeException(sprintf('The type `%s` does not exist, available types: %s', $type, implode(', ', array_keys($this->getNotificationDispatcher()->getListeners()))));
         }
 
