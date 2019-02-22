@@ -67,7 +67,6 @@ class SwiftMailerConsumer implements ConsumerInterface
         if ($replyTo = $message->getValue('replyTo')) {
             $mail->setReplyTo($replyTo);
         }
-        
         if ($returnPath = $message->getValue('returnPath')) {
             $mail->setReturnPath($returnPath);
         }
