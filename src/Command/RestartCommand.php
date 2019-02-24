@@ -67,12 +67,17 @@ class RestartCommand extends ContainerAwareCommand
                 $input->getOption('type'),
                 $input->getOption('max-attempts')
             );
-        }
 
-        if (0 === \count($messages)) {
-            $output->writeln('Nothing to restart, bye.');
+            /*
+             * Check messages count only for not pulling mode
+             * to avoid PHP warning message
+             * since ErroneousMessageIterator does not implement Countable.
+             */
+            if (0 === \count($messages)) {
+                $output->writeln('Nothing to restart, bye.');
 
-            return;
+                return;
+            }
         }
 
         $eventDispatcher = $this->getContainer()->get('event_dispatcher');

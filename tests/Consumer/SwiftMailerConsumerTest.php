@@ -61,6 +61,9 @@ class SwiftMailerConsumerTest extends TestCase
                 'replyTo1@mail.fr',
                 'replyTo2@mail.fr' => 'nameReplyTo2',
             ],
+            'returnPath' => [
+                'email' => 'returnPath@mail.fr',
+            ],
             'cc' => [
                 'cc1@mail.fr',
                 'cc2@mail.fr' => 'nameCc2',
@@ -84,6 +87,7 @@ class SwiftMailerConsumerTest extends TestCase
         $mail->expects($this->once())->method('setFrom')->with($this->equalTo(['from@mail.fr' => 'nameFrom']))->willReturnSelf();
         $mail->expects($this->once())->method('setTo')->with($this->equalTo(['to1@mail.fr', 'to2@mail.fr' => 'nameTo2']))->willReturnSelf();
         $mail->expects($this->once())->method('setReplyTo')->with($this->equalTo(['replyTo1@mail.fr', 'replyTo2@mail.fr' => 'nameReplyTo2']))->willReturnSelf();
+        $mail->expects($this->once())->method('setReturnPath')->with($this->equalTo(['email' => 'returnPath@mail.fr']))->willReturnSelf();
         $mail->expects($this->once())
             ->method('setCc')
             ->with($this->equalTo(['cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2']))
