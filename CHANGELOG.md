@@ -2,6 +2,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.6.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.5.1...3.6.0) - 2018-05-25
+
+### Added
+- Added `Sonata\NotificationBundle\Backend\BackendInterface` service alias
+- Added `Sonata\NotificationBundle\Entity\MessageManager` service alias
+
+### Changed
+- Update RestartCommand check count message only for not pulling mode
+- sendEmail function to allow for the setting of a return path
+- Do not use deprecated `AMQPBackendDispatcher::getChannel` method.
+- made the `sonata.notification.dispatcher` service public to fix a bug when running `sonata:notification:start`
+
+### Fixed
+- Fix deprecation for symfony/config 4.2+
+- Make services public
+
+### Removed
+- support for php 5 and php 7.0
+
 ## [3.5.1](https://github.com/sonata-project/SonataNotificationBundle/compare/3.5.0...3.5.1) - 2018-05-25
 # Changed
 - Force use existing translation strings in breadcrumb for Message entity in Admin panel
