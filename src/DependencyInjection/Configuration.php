@@ -159,7 +159,7 @@ EOF;
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->booleanNode('enabled')
-                        ->defaultTrue()
+                        ->defaultFalse()
                     ->end()
                     ->arrayNode('message')
                         ->addDefaultsIfNotSet()
