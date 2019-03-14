@@ -166,7 +166,7 @@ class AMQPBackend implements BackendInterface
 
         $amqpMessage = $this->getContext()->createMessage($body);
         $amqpMessage->setContentType('text/plain'); // application/json ?
-        $amqpMessage->setTimestamp($message->getCreatedAt()->format('U'));
+        $amqpMessage->setTimestamp($message->getCreatedAt()->getTimestamp());
         $amqpMessage->setDeliveryMode(AmqpMessage::DELIVERY_MODE_PERSISTENT);
         $amqpMessage->setRoutingKey($this->key);
 
