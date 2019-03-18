@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Model;
 
 use Sonata\CoreBundle\Model\ManagerInterface;
-use Sonata\CoreBundle\Model\PageableInterface;
+use Sonata\DatagridBundle\Pager\PageableInterface;
 
 interface MessageManagerInterface extends ManagerInterface, PageableInterface
 {
