@@ -76,6 +76,10 @@ logger consumer creation::
         {
             $message = $event->getMessage();
 
+            if (!in_array($message->getValue('level'), $this->types)) {
+                throw new \RuntimeException();
+            }
+
             call_user_func([$this->logger, $message->getValue('level')], $message->getValue('message'));
         }
     }
