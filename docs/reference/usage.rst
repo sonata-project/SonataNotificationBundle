@@ -49,7 +49,6 @@ logger consumer creation::
     namespace Sonata\NotificationBundle\Consumer;
 
     use Sonata\NotificationBundle\Consumer\ConsumerInterface;
-    use Sonata\NotificationBundle\Exception\InvalidParameterException;
     use Sonata\NotificationBundle\Model\MessageInterface;
     use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
@@ -78,7 +77,7 @@ logger consumer creation::
             $message = $event->getMessage();
 
             if (!in_array($message->getValue('level'), $this->types)) {
-                throw new InvalidParameterException();
+                throw new \RuntimeException();
             }
 
             call_user_func([$this->logger, $message->getValue('level')], $message->getValue('message'));
