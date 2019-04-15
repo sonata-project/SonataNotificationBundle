@@ -142,3 +142,10 @@ run `composer require enqueue/amqp-ext:^0.8` and change `factory_class` option i
 .. _`enqueue/amqp-ext`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/transport/amqp_ext.md
 .. _`enqueue/amqp-bunny`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/transport/amqp_bunny.md
 
+
+Disabling mailer spool
+-----------------------
+
+If you use mailer consumer, you should disable spool by [removing spool entry in configuration file](https://github.com/symfony/symfony-docs/issues/2899).
+
+See https://github.com/sonata-project/SonataNotificationBundle/pull/80
