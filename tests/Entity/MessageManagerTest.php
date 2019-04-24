@@ -59,7 +59,7 @@ class MessageManagerTest extends TestCase
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) use ($self) {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with([]);
@@ -78,7 +78,7 @@ class MessageManagerTest extends TestCase
 
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) use ($self) {
             })
             ->getPager([], 1, 10, ['invalid' => 'ASC']);
     }
@@ -87,7 +87,7 @@ class MessageManagerTest extends TestCase
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) use ($self) {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with([]);
@@ -113,7 +113,7 @@ class MessageManagerTest extends TestCase
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) use ($self) {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
@@ -127,7 +127,7 @@ class MessageManagerTest extends TestCase
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) use ($self) {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
@@ -141,7 +141,7 @@ class MessageManagerTest extends TestCase
     {
         $self = $this;
         $this
-            ->getMessageManager(function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) use ($self) {
                 $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
