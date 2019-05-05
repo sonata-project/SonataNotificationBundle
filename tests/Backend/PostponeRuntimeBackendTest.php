@@ -84,7 +84,7 @@ class PostponeRuntimeBackendTest extends TestCase
 
         $phpunit = $this;
         $phpunit->passed = false;
-        $dispatcher->addListener('notification.demo', function (ConsumerEventInterface $event) use ($phpunit, $message): void {
+        $dispatcher->addListener('notification.demo', static function (ConsumerEventInterface $event) use ($phpunit, $message): void {
             $phpunit->assertSame($message, $event->getMessage());
 
             $phpunit->passed = true;
@@ -111,7 +111,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $phpunit->passed1 = false;
         $phpunit->passed2 = false;
 
-        $dispatcher->addListener('notification.demo1', function (ConsumerEventInterface $event) use ($phpunit, $message1, $message2, $backend, $dispatcher): void {
+        $dispatcher->addListener('notification.demo1', static function (ConsumerEventInterface $event) use ($phpunit, $message1, $message2, $backend, $dispatcher): void {
             $phpunit->assertSame($message1, $event->getMessage());
 
             $phpunit->passed1 = true;
@@ -119,7 +119,7 @@ class PostponeRuntimeBackendTest extends TestCase
             $backend->publish($message2);
         });
 
-        $dispatcher->addListener('notification.demo2', function (ConsumerEventInterface $event) use ($phpunit, $message2): void {
+        $dispatcher->addListener('notification.demo2', static function (ConsumerEventInterface $event) use ($phpunit, $message2): void {
             $phpunit->assertSame($message2, $event->getMessage());
 
             $phpunit->passed2 = true;

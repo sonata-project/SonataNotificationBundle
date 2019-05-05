@@ -468,7 +468,7 @@ class SonataNotificationExtension extends Extension
      */
     private function getQueuesParameters($name, array $queues)
     {
-        $params = array_unique(array_map(function ($q) use ($name) {
+        $params = array_unique(array_map(static function ($q) use ($name) {
             return $q[$name];
         }, $queues));
 
