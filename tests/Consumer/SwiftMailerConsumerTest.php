@@ -107,7 +107,7 @@ class SwiftMailerConsumerTest extends TestCase
             ->method('attach')
             ->willReturnSelf();
 
-        $this->mailer->expects($this->once())->method('createMessage')->will($this->returnValue($mail));
+        $this->mailer->expects($this->once())->method('createMessage')->willReturn($mail);
 
         $method = new \ReflectionMethod($this->consumer, 'sendEmail');
         $method->setAccessible(true);
