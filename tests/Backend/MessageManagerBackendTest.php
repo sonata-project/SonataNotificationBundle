@@ -30,8 +30,8 @@ class MessageManagerBackendTest extends TestCase
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->once())->method('save')->will($this->returnValue($message));
-        $modelManager->expects($this->once())->method('create')->will($this->returnValue($message));
+        $modelManager->expects($this->once())->method('save')->willReturn($message);
+        $modelManager->expects($this->once())->method('create')->willReturn($message);
 
         $backend = new MessageManagerBackend($modelManager, []);
         $message = $backend->createAndPublish('foo', ['message' => 'salut']);
@@ -47,7 +47,7 @@ class MessageManagerBackendTest extends TestCase
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->exactly(2))->method('save')->will($this->returnValue($message));
+        $modelManager->expects($this->exactly(2))->method('save')->willReturn($message);
 
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher->expects($this->once())->method('dispatch');
@@ -65,7 +65,7 @@ class MessageManagerBackendTest extends TestCase
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->exactly(2))->method('save')->will($this->returnValue($message));
+        $modelManager->expects($this->exactly(2))->method('save')->willReturn($message);
 
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
@@ -95,7 +95,7 @@ class MessageManagerBackendTest extends TestCase
         }
 
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->exactly(1))->method('countStates')->will($this->returnValue($counts));
+        $modelManager->expects($this->exactly(1))->method('countStates')->willReturn($counts);
 
         $backend = new MessageManagerBackend($modelManager, [
             MessageInterface::STATE_IN_PROGRESS => 10,
