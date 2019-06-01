@@ -52,20 +52,20 @@ class IteratorProxyMessageIteratorTest extends TestCase
             $mock
                 ->expects($this->at(++$counter))
                 ->method('valid')
-                ->will($this->returnValue(true))
+                ->willReturn(true)
             ;
 
             $mock
                 ->expects($this->at(++$counter))
                 ->method('current')
-                ->will($this->returnValue($value))
+                ->willReturn($value)
             ;
 
             if ($withKey) {
                 $mock
                     ->expects($this->at(++$counter))
                     ->method('key')
-                    ->will($this->returnValue($key))
+                    ->willReturn($key)
                 ;
             }
 
@@ -78,7 +78,7 @@ class IteratorProxyMessageIteratorTest extends TestCase
         $mock
             ->expects($this->at(++$counter))
             ->method('valid')
-            ->will($this->returnValue(false))
+            ->willReturn(false)
         ;
 
         return ++$counter;
