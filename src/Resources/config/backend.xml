@@ -20,6 +20,9 @@
             <argument/>
             <argument/>
             <argument/>
+            <call method="setDelayStrategy">
+                <argument type="service" id="sonata.notification.backend.rabbitmq.delay_strategy" on-invalid="ignore"/>
+            </call>
         </service>
     </services>
 </container>

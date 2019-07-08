@@ -416,6 +416,10 @@ class SonataNotificationExtension extends Extension
             throw new \RuntimeException('You need to specify a valid default queue for the rabbitmq backend!');
         }
 
+        if (class_exists('Enqueue\AmqpTools\RabbitMqDlxDelayStrategy')) {
+            $container->setDefinition('sonata.notification.backend.rabbitmq.delay_strategy', new Definition('Enqueue\AmqpTools\RabbitMqDlxDelayStrategy'));
+        }
+
         $container->getDefinition('sonata.notification.backend.rabbitmq')
             ->replaceArgument(0, $connection)
             ->replaceArgument(1, $queues)

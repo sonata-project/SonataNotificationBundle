@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Enqueue\AmqpTools\DelayStrategy;
 use Enqueue\AmqpTools\DelayStrategyAware;
-use Enqueue\AmqpTools\RabbitMqDlxDelayStrategy;
 use Guzzle\Http\Client as GuzzleClient;
 use Interop\Amqp\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
@@ -61,6 +61,11 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      * @var AmqpContext
      */
     private $context;
+
+    /**
+     * @var DelayStrategy|null
+     */
+    private $delayStrategy;
 
     /**
      * @param array  $settings
@@ -133,7 +138,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
             ]);
 
             if ($factory instanceof DelayStrategyAware) {
-                $factory->setDelayStrategy(new RabbitMqDlxDelayStrategy());
+                $factory->setDelayStrategy($this->delayStrategy);
             }
 
             $this->context = $factory->createContext();
@@ -270,6 +275,11 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function initialize()
     {
+    }
+
+    public function setDelayStrategy(?DelayStrategy $delayStrategy): void
+    {
+        $this->delayStrategy = $delayStrategy;
     }
 
     /**
