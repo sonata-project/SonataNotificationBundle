@@ -22,9 +22,6 @@ class BackendHealthCheck extends AbstractCheck
      */
     protected $backend;
 
-    /**
-     * @param BackendInterface $backend
-     */
     public function __construct(BackendInterface $backend)
     {
         $this->backend = $backend;

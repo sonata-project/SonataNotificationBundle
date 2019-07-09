@@ -145,8 +145,6 @@ class AMQPMessageIterator implements MessageIteratorInterface
     /**
      * @deprecated since 3.2, will be removed in 4.x
      *
-     * @param \Interop\Amqp\AmqpMessage $amqpMessage
-     *
      * @return AMQPMessage
      */
     private function convertToAmqpLibMessage(\Interop\Amqp\AmqpMessage $amqpMessage)
