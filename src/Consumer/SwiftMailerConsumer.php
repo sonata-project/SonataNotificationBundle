@@ -22,9 +22,6 @@ class SwiftMailerConsumer implements ConsumerInterface
      */
     protected $mailer;
 
-    /**
-     * @param \Swift_Mailer $mailer
-     */
     public function __construct(\Swift_Mailer $mailer)
     {
         $this->mailer = $mailer;
@@ -54,9 +51,6 @@ class SwiftMailerConsumer implements ConsumerInterface
         }
     }
 
-    /**
-     * @param MessageInterface $message
-     */
     private function sendEmail(MessageInterface $message)
     {
         $mail = $this->mailer->createMessage()

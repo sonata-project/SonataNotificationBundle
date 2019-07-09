@@ -20,9 +20,6 @@ class Metadata
      */
     protected $informations;
 
-    /**
-     * @param array $informations
-     */
     public function __construct(array $informations = [])
     {
         $this->informations = $informations;

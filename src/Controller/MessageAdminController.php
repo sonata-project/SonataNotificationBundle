@@ -23,8 +23,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class MessageAdminController extends CRUDController
 {
     /**
-     * @param ProxyQueryInterface $query
-     *
      * @throws AccessDeniedException
      *
      * @return RedirectResponse
@@ -45,8 +43,6 @@ class MessageAdminController extends CRUDController
     }
 
     /**
-     * @param ProxyQueryInterface $query
-     *
      * @throws AccessDeniedException
      *
      * @return RedirectResponse

@@ -17,8 +17,6 @@ interface ConsumerInterface
 {
     /**
      * Process a ConsumerEvent.
-     *
-     * @param ConsumerEvent $event
      */
     public function process(ConsumerEvent $event);
 }

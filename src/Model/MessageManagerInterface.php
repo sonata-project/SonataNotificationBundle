@@ -30,35 +30,30 @@ interface MessageManagerInterface extends ManagerInterface, PageableManagerInter
 
     /**
      * Cancels a given Message.
-     *
-     * @param MessageInterface $message
      */
     public function cancel(MessageInterface $message);
 
     /**
      * Restarts a given message (cancels it and returns a new one, ready for publication).
      *
-     * @param MessageInterface $message
      *
      * @return MessageInterface $message
      */
     public function restart(MessageInterface $message);
 
     /**
-     * @param array $types
-     * @param int   $state
-     * @param int   $batchSize
+     * @param int $state
+     * @param int $batchSize
      *
      * @return MessageInterface[]
      */
     public function findByTypes(array $types, $state, $batchSize);
 
     /**
-     * @param array $types
-     * @param       $state
-     * @param       $batchSize
-     * @param null  $maxAttempts
-     * @param int   $attemptDelay
+     * @param      $state
+     * @param      $batchSize
+     * @param null $maxAttempts
+     * @param int  $attemptDelay
      *
      * @return mixed
      */
