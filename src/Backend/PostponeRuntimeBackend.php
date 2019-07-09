@@ -43,8 +43,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
     protected $postponeOnCli = false;
 
     /**
-     * @param EventDispatcherInterface $dispatcher
-     * @param bool                     $postponeOnCli Whether to postpone the messages on the CLI, too
+     * @param bool $postponeOnCli Whether to postpone the messages on the CLI, too
      */
     public function __construct(EventDispatcherInterface $dispatcher, $postponeOnCli = false)
     {
@@ -74,8 +73,6 @@ class PostponeRuntimeBackend extends RuntimeBackend
      *
      * Actually, an event is not necessary, you can call this method manually, to.
      * The event is not processed in any way.
-     *
-     * @param Event|null $event
      */
     public function onEvent(Event $event = null)
     {

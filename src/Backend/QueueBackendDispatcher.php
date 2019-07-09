@@ -38,7 +38,6 @@ abstract class QueueBackendDispatcher implements QueueDispatcherInterface, Backe
     protected $backends;
 
     /**
-     * @param array              $queues
      * @param string             $defaultQueue
      * @param BackendInterface[] $backends
      */

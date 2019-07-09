@@ -105,9 +105,6 @@ class AMQPBackend implements BackendInterface
         $this->prefetchCount = $prefetchCount;
     }
 
-    /**
-     * @param AMQPBackendDispatcher $dispatcher
-     */
     public function setDispatcher(AMQPBackendDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;

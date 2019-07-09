@@ -28,9 +28,6 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
      */
     protected $returnInfo;
 
-    /**
-     * @param MessageInterface $message
-     */
     public function __construct(MessageInterface $message)
     {
         $this->message = $message;

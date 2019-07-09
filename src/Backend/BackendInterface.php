@@ -19,14 +19,10 @@ use ZendDiagnostics\Result\ResultInterface;
 
 interface BackendInterface
 {
-    /**
-     * @param MessageInterface $message
-     */
     public function publish(MessageInterface $message);
 
     /**
      * @param string $type
-     * @param array  $body
      *
      * @return MessageInterface
      */
@@ -34,7 +30,6 @@ interface BackendInterface
 
     /**
      * @param string $type
-     * @param array  $body
      */
     public function createAndPublish($type, array $body);
 
@@ -49,9 +44,6 @@ interface BackendInterface
     public function initialize();
 
     /**
-     * @param MessageInterface         $message
-     * @param EventDispatcherInterface $dispatcher
-     *
      * @return mixed
      */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher);

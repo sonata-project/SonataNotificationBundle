@@ -63,10 +63,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     private $context;
 
     /**
-     * @param array  $settings
-     * @param array  $queues
      * @param string $defaultQueue
-     * @param array  $backends
      */
     public function __construct(array $settings, array $queues, $defaultQueue, array $backends)
     {

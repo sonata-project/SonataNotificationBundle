@@ -97,8 +97,7 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * @param array $config
      */
     public function configureClass(ContainerBuilder $container, $config)
     {
@@ -110,8 +109,7 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * @param array $config
      */
     public function configureAdmin(ContainerBuilder $container, $config)
     {
@@ -121,8 +119,7 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * @param array $config
      */
     public function registerParameters(ContainerBuilder $container, $config)
     {
@@ -131,8 +128,7 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * @param array $config
      */
     public function configureBackends(ContainerBuilder $container, $config)
     {
@@ -164,9 +160,6 @@ class SonataNotificationExtension extends Extension
         }
     }
 
-    /**
-     * @param array $config
-     */
     public function registerDoctrineMapping(array $config)
     {
         $collector = DoctrineCollector::getInstance();
@@ -180,9 +173,6 @@ class SonataNotificationExtension extends Extension
         ]);
     }
 
-    /**
-     * @param array $config
-     */
     protected function checkConfiguration(array $config)
     {
         if (isset($config['backends']) && \count($config['backends']) > 1) {
@@ -198,10 +188,6 @@ class SonataNotificationExtension extends Extension
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     protected function configureListeners(ContainerBuilder $container, array $config)
     {
         $ids = $config['iteration_listeners'];
@@ -224,12 +210,10 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     * @param bool             $checkLevel
-     * @param int              $pause
-     * @param int              $maxAge
-     * @param int              $batchSize
+     * @param bool $checkLevel
+     * @param int  $pause
+     * @param int  $maxAge
+     * @param int  $batchSize
      *
      * @throws \RuntimeException
      */
@@ -300,14 +284,12 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $manager
-     * @param bool             $checkLevel
-     * @param int              $pause
-     * @param int              $maxAge
-     * @param int              $batchSize
-     * @param string           $key
-     * @param array            $types
+     * @param string $manager
+     * @param bool   $checkLevel
+     * @param int    $pause
+     * @param int    $maxAge
+     * @param int    $batchSize
+     * @param string $key
      *
      * @return string
      */
@@ -327,10 +309,6 @@ class SonataNotificationExtension extends Extension
         return $id;
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     protected function configureRabbitmq(ContainerBuilder $container, array $config)
     {
         $queues = $config['queues'];
@@ -425,15 +403,14 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $exchange
-     * @param string           $name
-     * @param string           $recover
-     * @param string           $key
-     * @param string           $deadLetterExchange
-     * @param string           $deadLetterRoutingKey
-     * @param int|null         $ttl
-     * @param int|null         $prefetchCount
+     * @param string   $exchange
+     * @param string   $name
+     * @param string   $recover
+     * @param string   $key
+     * @param string   $deadLetterExchange
+     * @param string   $deadLetterRoutingKey
+     * @param int|null $ttl
+     * @param int|null $prefetchCount
      *
      * @return string
      */
@@ -462,7 +439,6 @@ class SonataNotificationExtension extends Extension
 
     /**
      * @param string $name
-     * @param array  $queues
      *
      * @return string[]
      */
@@ -482,7 +458,6 @@ class SonataNotificationExtension extends Extension
 
     /**
      * @param string $key
-     * @param array  $queues
      *
      * @return string
      */

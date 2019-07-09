@@ -22,8 +22,6 @@ interface MessageInterface
     public const STATE_CANCELLED = -2;
 
     /**
-     * @param array $body
-     *
      * @return array
      */
     public function setBody(array $body);
