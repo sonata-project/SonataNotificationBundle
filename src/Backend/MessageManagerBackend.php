@@ -61,12 +61,9 @@ class MessageManagerBackend implements BackendInterface
     protected $batchSize;
 
     /**
-     * @param MessageManagerInterface $messageManager
-     * @param array                   $checkLevel
-     * @param int                     $pause
-     * @param int                     $maxAge
-     * @param int                     $batchSize
-     * @param array                   $types
+     * @param int $pause
+     * @param int $maxAge
+     * @param int $batchSize
      */
     public function __construct(MessageManagerInterface $messageManager, array $checkLevel, $pause = 500000, $maxAge = 86400, $batchSize = 10, array $types = [])
     {
@@ -132,9 +129,6 @@ class MessageManagerBackend implements BackendInterface
     {
     }
 
-    /**
-     * @param MessageManagerBackendDispatcher $dispatcher
-     */
     public function setDispatcher(MessageManagerBackendDispatcher $dispatcher): void
     {
         $this->dispatcher = $dispatcher;

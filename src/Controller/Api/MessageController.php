@@ -39,10 +39,6 @@ class MessageController
      */
     protected $formFactory;
 
-    /**
-     * @param MessageManagerInterface $messageManager
-     * @param FormFactoryInterface    $formFactory
-     */
     public function __construct(MessageManagerInterface $messageManager, FormFactoryInterface $formFactory)
     {
         $this->messageManager = $messageManager;
@@ -64,8 +60,6 @@ class MessageController
      * @QueryParam(name="orderBy", map=true, requirements="ASC|DESC", nullable=true, strict=true, description="Query groups order by clause (key is field, value is direction)")
      *
      * @View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
-     *
-     * @param ParamFetcherInterface $paramFetcher
      *
      * @return PagerInterface
      */

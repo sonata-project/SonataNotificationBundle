@@ -49,10 +49,9 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     protected $buffer = [];
 
     /**
-     * @param MessageManagerInterface $messageManager
-     * @param array                   $types
-     * @param int                     $pause
-     * @param int                     $batchSize
+     * @param array $types
+     * @param int   $pause
+     * @param int   $batchSize
      */
     public function __construct(MessageManagerInterface $messageManager, $types = [], $pause = 500000, $batchSize = 10)
     {

@@ -33,9 +33,6 @@ class CreateAndPublishCommand extends ContainerAwareCommand
 
     /**
      * {@inheritdoc}
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output): void
     {

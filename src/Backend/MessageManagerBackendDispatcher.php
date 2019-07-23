@@ -35,9 +35,7 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
 
     /**
      * @param MessageManagerInterface $messageManager Only used in compiler pass
-     * @param array                   $queues
      * @param string                  $defaultQueue
-     * @param array                   $backends
      */
     public function __construct(MessageManagerInterface $messageManager, array $queues, $defaultQueue, array $backends)
     {

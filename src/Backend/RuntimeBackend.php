@@ -27,9 +27,6 @@ class RuntimeBackend implements BackendInterface
      */
     protected $dispatcher;
 
-    /**
-     * @param EventDispatcherInterface $dispatcher
-     */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;

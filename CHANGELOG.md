@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.6.2](https://github.com/sonata-project/SonataNotificationBundle/compare/3.6.1...3.6.2) - 2019-07-20
+### Changed
+- Make `sonata.notification.consumer.metadata` service public
+
 ## [3.6.1](https://github.com/sonata-project/SonataNotificationBundle/compare/3.6.0...3.6.1) - 2019-03-13
 ### Fixed
 `TypeError` when `AMQPBackend`'s `publish` method is called.

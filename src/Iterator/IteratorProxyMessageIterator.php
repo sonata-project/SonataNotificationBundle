@@ -23,9 +23,6 @@ class IteratorProxyMessageIterator implements MessageIteratorInterface
      */
     protected $iterator;
 
-    /**
-     * @param \Iterator $iterator
-     */
     public function __construct(\Iterator $iterator)
     {
         $this->iterator = $iterator;
