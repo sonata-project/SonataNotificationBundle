@@ -43,10 +43,7 @@ class NotificationCompilerPass implements CompilerPassInterface
                 $priority = $event['priority'] ?? 0;
 
                 if (!isset($event['type'])) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Service "%s" must define the "type" attribute on "sonata.notification" tags.',
-                        $id
-                    ));
+                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "type" attribute on "sonata.notification" tags.', $id));
                 }
 
                 if (!isset($informations[$event['type']])) {
@@ -90,9 +87,7 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $class = new \ReflectionClass($definition->getClass());
                 if (!$class->implementsInterface(IterationListener::class)) {
-                    throw new RuntimeException(
-                        'Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener'
-                    );
+                    throw new RuntimeException('Iteration listeners must implement Sonata\NotificationBundle\Event\IterationListener');
                 }
 
                 $definition->addTag(

@@ -113,11 +113,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
                 !class_exists($factoryClass) ||
                 !(new \ReflectionClass($factoryClass))->implementsInterface(AmqpConnectionFactory::class)
             ) {
-                throw new \LogicException(sprintf(
-                    'The factory_class option "%s" has to be valid class that implements "%s"',
-                    $factoryClass,
-                    AmqpConnectionFactory::class
-                ));
+                throw new \LogicException(sprintf('The factory_class option "%s" has to be valid class that implements "%s"', $factoryClass, AmqpConnectionFactory::class));
             }
 
             /* @var AmqpConnectionFactory $factory */
@@ -189,9 +185,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function getIterator()
     {
-        throw new \RuntimeException(
-            'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
-        );
+        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
     }
 
     /**
@@ -199,9 +193,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
-        throw new \RuntimeException(
-            'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
-        );
+        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
     }
 
     /**
@@ -250,9 +242,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function cleanup()
     {
-        throw new \RuntimeException(
-            'You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.'
-        );
+        throw new \RuntimeException('You need to use a specific rabbitmq backend supporting the selected queue to run a consumer.');
     }
 
     public function shutdown()
@@ -279,10 +269,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
     protected function getApiQueueStatus()
     {
         if (!class_exists(GuzzleClient::class)) {
-            throw new \RuntimeException(
-                'The guzzle http client library is required to run rabbitmq health checks. '
-                .'Make sure to add guzzlehttp/guzzle to your composer.json.'
-            );
+            throw new \RuntimeException('The guzzle http client library is required to run rabbitmq health checks. '.'Make sure to add guzzlehttp/guzzle to your composer.json.');
         }
 
         $client = new GuzzleClient();

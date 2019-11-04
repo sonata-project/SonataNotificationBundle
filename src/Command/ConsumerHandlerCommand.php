@@ -50,10 +50,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             $output->writeln(sprintf(' - %s', $type));
             foreach ($listeners as $listener) {
                 if (!$listener[0] instanceof ConsumerInterface) {
-                    throw new \RuntimeException(sprintf(
-                        'The registered service does not implement the ConsumerInterface (class=%s',
-                        \get_class($listener[0])
-                    ));
+                    throw new \RuntimeException(sprintf('The registered service does not implement the ConsumerInterface (class=%s', \get_class($listener[0])));
                 }
 
                 $output->writeln(sprintf('   > %s', \get_class($listener[0])));
@@ -155,10 +152,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      */
     protected function throwTypeNotFoundException($type, $backend)
     {
-        throw new \RuntimeException(
-            "The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".
-            \get_class($backend)."' \nsupports multiple queues and the routing_key is defined. (Currently rabbitmq only)"
-        );
+        throw new \RuntimeException("The requested backend for the type '".$type." 'does not exist. \nMake sure the backend '".\get_class($backend)."' \nsupports multiple queues and the routing_key is defined. (Currently rabbitmq only)");
     }
 
     /**
@@ -191,10 +185,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         }
 
         if (null !== $type && !$backend instanceof QueueDispatcherInterface) {
-            throw new \RuntimeException(sprintf(
-                'Unable to use the provided type %s with a non QueueDispatcherInterface backend',
-                $type
-            ));
+            throw new \RuntimeException(sprintf('Unable to use the provided type %s with a non QueueDispatcherInterface backend', $type));
         }
 
         if ($backend instanceof QueueDispatcherInterface) {

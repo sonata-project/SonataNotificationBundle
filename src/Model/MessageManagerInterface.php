@@ -36,7 +36,6 @@ interface MessageManagerInterface extends ManagerInterface, PageableManagerInter
     /**
      * Restarts a given message (cancels it and returns a new one, ready for publication).
      *
-     *
      * @return MessageInterface $message
      */
     public function restart(MessageInterface $message);
