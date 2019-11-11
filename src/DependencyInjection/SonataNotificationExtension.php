@@ -18,7 +18,6 @@ use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
@@ -44,14 +43,7 @@ class SonataNotificationExtension extends Extension
 
         $this->checkConfiguration($config);
 
-        /*
-         * NEXT_MAJOR: Remove the check for ServiceClosureArgument as well as core_legacy.xml.
-         */
-        if (class_exists(ServiceClosureArgument::class)) {
-            $loader->load('core.xml');
-        } else {
-            $loader->load('core_legacy.xml');
-        }
+        $loader->load('core.xml');
 
         $loader->load('backend.xml');
         $loader->load('consumer.xml');
@@ -83,9 +75,7 @@ class SonataNotificationExtension extends Extension
             $loader->load('checkmonitor.xml');
         }
 
-        $container->setAlias('sonata.notification.backend', $config['backend']);
-        // NEXT_MAJOR: remove this getter when requiring sf3.4+
-        $container->getAlias('sonata.notification.backend')->setPublic(true);
+        $container->setAlias('sonata.notification.backend', $config['backend'])->setPublic(true);
         $container->setParameter('sonata.notification.backend', $config['backend']);
 
         $this->registerDoctrineMapping($config);
@@ -149,12 +139,11 @@ class SonataNotificationExtension extends Extension
             $pause = $config['backends']['doctrine']['pause'];
             $maxAge = $config['backends']['doctrine']['max_age'];
             $batchSize = $config['backends']['doctrine']['batch_size'];
-            $container->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager']);
+            $container
+                ->setAlias('sonata.notification.manager.message', $config['backends']['doctrine']['message_manager'])
+                ->setPublic(true);
 
             $this->configureDoctrineBackends($container, $config, $checkLevel, $pause, $maxAge, $batchSize);
-
-            // NEXT_MAJOR: remove this getter when requiring sf3.4+
-            $container->getAlias('sonata.notification.manager.message')->setPublic(true);
         } else {
             $container->removeDefinition('sonata.notification.backend.doctrine');
         }
