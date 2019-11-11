@@ -55,28 +55,14 @@ class NotificationCompilerPass implements CompilerPassInterface
 
                 $informations[$event['type']][] = $id;
 
-                /*
-                 * NEXT_MAJOR: Remove check for ServiceClosureArgument and the addListenerService method call.
-                 */
-                if (class_exists(ServiceClosureArgument::class)) {
-                    $definition->addMethodCall(
-                        'addListener',
-                        [
-                            $event['type'],
-                            [new ServiceClosureArgument(new Reference($id)), 'process'],
-                            $priority,
-                        ]
-                    );
-                } else {
-                    $definition->addMethodCall(
-                        'addListenerService',
-                        [
-                            $event['type'],
-                            [$id, 'process'],
-                            $priority,
-                        ]
-                    );
-                }
+                $definition->addMethodCall(
+                    'addListener',
+                    [
+                        $event['type'],
+                        [new ServiceClosureArgument(new Reference($id)), 'process'],
+                        $priority,
+                    ]
+                );
             }
         }
 
