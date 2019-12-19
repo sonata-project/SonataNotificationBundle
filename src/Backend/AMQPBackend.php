@@ -97,6 +97,8 @@ class AMQPBackend implements BackendInterface
      * @param string   $deadLetterExchange
      * @param string   $deadLetterRoutingKey
      * @param int|null $ttl
+     * @param int|null $prefetchCount
+     * @param int $prefetchSize
      */
     public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null, $prefetchSize = 0)
     {
