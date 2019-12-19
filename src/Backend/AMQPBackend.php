@@ -78,6 +78,11 @@ class AMQPBackend implements BackendInterface
      * @var int|null
      */
     private $prefetchCount;
+    
+    /**
+     * @var int|null
+     */
+    private $prefetchSize;
 
     /**
      * @var AmqpConsumer
@@ -93,7 +98,7 @@ class AMQPBackend implements BackendInterface
      * @param string   $deadLetterRoutingKey
      * @param int|null $ttl
      */
-    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
+    public function __construct($exchange, $queue, $recover, $key, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null, $prefetchSize = 0)
     {
         $this->exchange = $exchange;
         $this->queue = $queue;
@@ -103,6 +108,7 @@ class AMQPBackend implements BackendInterface
         $this->deadLetterRoutingKey = $deadLetterRoutingKey;
         $this->ttl = $ttl;
         $this->prefetchCount = $prefetchCount;
+        $this->prefetchSize = $prefetchSize;
     }
 
     public function setDispatcher(AMQPBackendDispatcher $dispatcher)
@@ -202,7 +208,7 @@ class AMQPBackend implements BackendInterface
         $context = $this->getContext();
 
         if (null !== $this->prefetchCount) {
-            $context->setQos(null, $this->prefetchCount, false);
+            $context->setQos($this->prefetchSize, $this->prefetchCount, false);
         }
 
         $this->consumer = $this->getContext()->createConsumer($this->getContext()->createQueue($this->queue));

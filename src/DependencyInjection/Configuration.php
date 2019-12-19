@@ -248,7 +248,13 @@ Only used by RabbitMQ
 
 Defines the number of messages which will be delivered to the customer at a time.
 EOF;
+        $prefetchSizeInfo = <<<'EOF'
+Only used by RabbitMQ
 
+Defines the prefetch window size in octets.
+
+The server will send a message in advance if it is equal to or smaller in size than the available prefetch size (and also falls into other prefetch limits). May be set to zero, meaning "no specific limit", although other prefetch limits may still apply.
+EOF;
         $typesInfo = <<<'EOF'
 Only used by Doctrine
 
@@ -297,6 +303,12 @@ EOF;
                 ->end()
                 ->integerNode('prefetch_count')
                     ->info($prefetchCountInfo)
+                    ->min(0)
+                    ->max(65535)
+                    ->defaultValue(null)
+                ->end()
+                ->integerNode('prefetch_size')
+                    ->info($prefetchSizeInfo)
                     ->min(0)
                     ->max(65535)
                     ->defaultValue(null)

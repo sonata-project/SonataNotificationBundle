@@ -315,6 +315,7 @@ class SonataNotificationExtension extends Extension
                 'dead_letter_routing_key' => null,
                 'ttl' => null,
                 'prefetch_count' => null,
+                'prefetch_size' => 0
             ]];
         }
 
@@ -362,7 +363,8 @@ class SonataNotificationExtension extends Extension
                 $queue['dead_letter_exchange'],
                 $queue['dead_letter_routing_key'],
                 $queue['ttl'],
-                $queue['prefetch_count']
+                $queue['prefetch_count'],
+                $queue['prefetch_size']
             );
 
             $amqBackends[$pos] = [
