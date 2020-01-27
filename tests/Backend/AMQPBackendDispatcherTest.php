@@ -23,7 +23,7 @@ use Sonata\NotificationBundle\Tests\Mock\AmqpConnectionFactoryStub;
 
 class AMQPBackendDispatcherTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(AmqpConnectionFactory::class)) {
             $this->markTestSkipped('enqueue/amqp-lib library is not installed');

@@ -35,7 +35,7 @@ class SwiftMailerConsumerTest extends TestCase
     /**
      * Initializes some dependencies used by tests.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mailer = $this->createMock('Swift_Mailer');
         $this->consumer = new SwiftMailerConsumer($this->mailer);

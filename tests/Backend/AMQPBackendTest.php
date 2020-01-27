@@ -39,7 +39,7 @@ class AMQPBackendTest extends TestCase
     public const TTL = 60000;
     public const PREFETCH_COUNT = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(AmqpConnectionFactory::class)) {
             $this->markTestSkipped('enqueue/amqp-lib library is not installed');
