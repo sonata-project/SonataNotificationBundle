@@ -20,7 +20,7 @@ use ZendDiagnostics\Result\Success;
 
 class BackendHealthCheckTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         if (!class_exists(Success::class)) {
             $this->markTestSkipped('ZendDiagnostics\Result\Success does not exist');
