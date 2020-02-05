@@ -90,15 +90,6 @@ message is receive or created.
 
 .. configuration-block::
 
-    .. code-block:: xml
-
-        <!-- config/services.xml -->
-
-        <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
-            <argument type="service" id="logger" />
-            <tag name="sonata.notification.consumer" type="logger" />
-        </service>
-
     .. code-block:: yaml
 
         # config/services.yaml
@@ -109,6 +100,15 @@ message is receive or created.
                 arguments: ['@logger']
                 tags:
                     - { name: sonata.notification.consumer, type: logger }
+
+    .. code-block:: xml
+
+        <!-- config/services.xml -->
+
+        <service id="sonata.notification.consumer.logger" class="Sonata\NotificationBundle\Consumer\LoggerConsumer">
+            <argument type="service" id="logger"/>
+            <tag name="sonata.notification.consumer" type="logger"/>
+        </service>
 
 Now you can use the created service to send a message to the Symfony logger::
 

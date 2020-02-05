@@ -116,9 +116,7 @@ Now, add the new ``Application`` Bundle into the ``bundles.php``::
         App\Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle::class => ['all' => true],
     ];
 
-And configure ``SonataNotificationBundle`` to use the newly generated Message class:
-
-.. code-block:: php
+And configure ``SonataNotificationBundle`` to use the newly generated ``Message`` class::
 
     # config/packages/sonata_notification.yaml
 
