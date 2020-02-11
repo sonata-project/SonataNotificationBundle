@@ -26,7 +26,7 @@ use ZendDiagnostics\Result\Warning;
 
 class MessageManagerBackendTest extends TestCase
 {
-    public function testCreateAndPublish()
+    public function testCreateAndPublish(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
@@ -43,7 +43,7 @@ class MessageManagerBackendTest extends TestCase
         $this->assertSame(['message' => 'salut'], $message->getBody());
     }
 
-    public function testHandleSuccess()
+    public function testHandleSuccess(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
@@ -61,7 +61,7 @@ class MessageManagerBackendTest extends TestCase
         $this->assertNotNull($message->getCompletedAt());
     }
 
-    public function testHandleError()
+    public function testHandleError(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
@@ -88,14 +88,14 @@ class MessageManagerBackendTest extends TestCase
     /**
      * @dataProvider statusProvider
      */
-    public function testStatus($counts, $expectedStatus, $message)
+    public function testStatus($counts, $expectedStatus, $message): void
     {
         if (!class_exists(Success::class)) {
             $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
         }
 
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->exactly(1))->method('countStates')->willReturn($counts);
+        $modelManager->expects($this->once())->method('countStates')->willReturn($counts);
 
         $backend = new MessageManagerBackend($modelManager, [
             MessageInterface::STATE_IN_PROGRESS => 10,
@@ -110,7 +110,7 @@ class MessageManagerBackendTest extends TestCase
         $this->assertSame($message, $status->getMessage());
     }
 
-    public static function statusProvider()
+    public static function statusProvider(): array
     {
         if (!class_exists(Success::class)) {
             return [[1, 1, 1]];

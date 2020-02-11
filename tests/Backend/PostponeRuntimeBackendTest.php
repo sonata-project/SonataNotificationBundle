@@ -27,7 +27,7 @@ use ZendDiagnostics\Result\Success;
  */
 class PostponeRuntimeBackendTest extends TestCase
 {
-    public function testIteratorContainsPublishedMessages()
+    public function testIteratorContainsPublishedMessages(): void
     {
         $backend = new PostponeRuntimeBackend(
             $this->createMock(EventDispatcherInterface::class),
@@ -56,7 +56,7 @@ class PostponeRuntimeBackendTest extends TestCase
         }
     }
 
-    public function testNoMessagesOnEvent()
+    public function testNoMessagesOnEvent(): void
     {
         $backend = $this->getMockBuilder(PostponeRuntimeBackend::class)
             ->setMethods(['handle'])
@@ -71,7 +71,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $backend->onEvent();
     }
 
-    public function testLiveEnvironment()
+    public function testLiveEnvironment(): void
     {
         $dispatcher = new EventDispatcher();
         $backend = new PostponeRuntimeBackend($dispatcher, true);
@@ -97,7 +97,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
     }
 
-    public function testRecursiveMessage()
+    public function testRecursiveMessage(): void
     {
         $dispatcher = new EventDispatcher();
         $backend = new PostponeRuntimeBackend($dispatcher, true);
@@ -112,7 +112,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $phpunit->passed1 = false;
         $phpunit->passed2 = false;
 
-        $dispatcher->addListener('notification.demo1', static function (ConsumerEventInterface $event) use ($phpunit, $message1, $message2, $backend, $dispatcher) {
+        $dispatcher->addListener('notification.demo1', static function (ConsumerEventInterface $event) use ($phpunit, $message1, $message2, $backend) {
             $phpunit->assertSame($message1, $event->getMessage());
 
             $phpunit->passed1 = true;
@@ -135,7 +135,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $this->assertSame(MessageInterface::STATE_DONE, $message2->getState());
     }
 
-    public function testStatusIsOk()
+    public function testStatusIsOk(): void
     {
         if (!class_exists(Success::class)) {
             $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
@@ -150,7 +150,7 @@ class PostponeRuntimeBackendTest extends TestCase
         $this->assertInstanceOf(Success::class, $status);
     }
 
-    public function testOnCliPublishHandlesDirectly()
+    public function testOnCliPublishHandlesDirectly(): void
     {
         $backend = $this->getMockBuilder(PostponeRuntimeBackend::class)
             ->setMethods(['handle'])

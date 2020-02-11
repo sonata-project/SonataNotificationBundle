@@ -27,19 +27,22 @@ use Sonata\NotificationBundle\Model\Message;
  */
 class AMQPMessageIteratorTest extends TestCase
 {
-    public function testShouldImplementMessageIteratorInterface()
+    public function testShouldImplementMessageIteratorInterface(): void
     {
         $rc = new \ReflectionClass(AMQPMessageIterator::class);
 
         $this->assertTrue($rc->implementsInterface(MessageIteratorInterface::class));
     }
 
-    public function testCouldBeConstructedWithChannelAndContextAsArguments()
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testCouldBeConstructedWithChannelAndContextAsArguments(): void
     {
         new AMQPMessageIterator($this->createChannelMock(), $this->createConsumerStub());
     }
 
-    public function testShouldIterateOverThreeMessagesAndExit()
+    public function testShouldIterateOverThreeMessagesAndExit(): void
     {
         $firstMessage = new AmqpMessage('{"body": {"value": "theFirstMessageBody"}, "type": "aType", "state": "aState"}');
         $secondMessage = new AmqpMessage('{"body": {"value": "theSecondMessageBody"}, "type": "aType", "state": "aState"}');
@@ -76,14 +79,12 @@ class AMQPMessageIteratorTest extends TestCase
     {
         $queue = $this->createMock(AmqpQueue::class);
         $queue
-            ->expects($this->any())
             ->method('getQueueName')
             ->willReturn($queueName)
         ;
 
         $consumer = $this->createMock(AmqpConsumer::class);
         $consumer
-            ->expects($this->any())
             ->method('getQueue')
             ->willReturn($queue)
         ;

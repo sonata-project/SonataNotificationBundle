@@ -27,7 +27,7 @@ class BackendHealthCheckTest extends TestCase
         }
     }
 
-    public function testCheck()
+    public function testCheck(): void
     {
         $result = new Success('Test check', 'OK');
 

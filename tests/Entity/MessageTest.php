@@ -21,7 +21,7 @@ class MessageTest extends TestCase
     /**
      * @dataProvider getBodyValues
      */
-    public function testGetValue($body, $names, $expected, $default)
+    public function testGetValue($body, $names, $expected, $default): void
     {
         $message = new Message();
 
@@ -30,7 +30,7 @@ class MessageTest extends TestCase
         $this->assertSame($expected, $message->getValue($names, $default));
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $message = new Message();
         $message->setId(42);
@@ -45,7 +45,7 @@ class MessageTest extends TestCase
         $this->assertNull($newMessage->getId());
     }
 
-    public function testStatuses()
+    public function testStatuses(): void
     {
         $message = new Message();
 
@@ -62,10 +62,7 @@ class MessageTest extends TestCase
         $this->assertTrue($message->isOpen());
     }
 
-    /**
-     * @return array
-     */
-    public function getBodyValues()
+    public function getBodyValues(): array
     {
         return [
             [['name' => 'foobar'], ['name'], 'foobar', null],

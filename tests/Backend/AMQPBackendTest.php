@@ -49,7 +49,7 @@ class AMQPBackendTest extends TestCase
         AmqpConnectionFactoryStub::$config = null;
     }
 
-    public function testInitializeWithNoDeadLetterExchangeAndNoDeadLetterRoutingKey()
+    public function testInitializeWithNoDeadLetterExchangeAndNoDeadLetterRoutingKey(): void
     {
         $backend = $this->buildBackend();
 
@@ -98,7 +98,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testInitializeWithDeadLetterExchangeAndNoDeadLetterRoutingKey()
+    public function testInitializeWithDeadLetterExchangeAndNoDeadLetterRoutingKey(): void
     {
         $backend = $this->buildBackend(false, self::DEAD_LETTER_EXCHANGE);
 
@@ -152,7 +152,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testInitializeWithDeadLetterExchangeAndDeadLetterRoutingKey()
+    public function testInitializeWithDeadLetterExchangeAndDeadLetterRoutingKey(): void
     {
         $backend = $this->buildBackend(false, self::DEAD_LETTER_EXCHANGE, self::DEAD_LETTER_ROUTING_KEY);
 
@@ -198,7 +198,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testInitializeWithTTL()
+    public function testInitializeWithTTL(): void
     {
         $backend = $this->buildBackend(false, null, null, self::TTL);
 
@@ -237,7 +237,7 @@ class AMQPBackendTest extends TestCase
         $backend->initialize();
     }
 
-    public function testGetIteratorWithNoPrefetchCount()
+    public function testGetIteratorWithNoPrefetchCount(): void
     {
         $backend = $this->buildBackend();
 
@@ -272,7 +272,7 @@ class AMQPBackendTest extends TestCase
         $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
-    public function testGetIteratorWithPrefetchCount()
+    public function testGetIteratorWithPrefetchCount(): void
     {
         $backend = $this->buildBackend(false, null, null, null, self::PREFETCH_COUNT);
 
@@ -307,10 +307,7 @@ class AMQPBackendTest extends TestCase
         $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
-    /**
-     * @return AMQPBackend
-     */
-    protected function buildBackend($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null)
+    protected function buildBackend($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null): AMQPBackend
     {
         $backend = new AMQPBackend(
             self::EXCHANGE,

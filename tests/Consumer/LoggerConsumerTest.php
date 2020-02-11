@@ -28,7 +28,7 @@ class LoggerConsumerTest extends TestCase
      * @param $type
      * @param $calledType
      */
-    public function testProcess($type, $calledType)
+    public function testProcess($type, $calledType): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method($calledType);
@@ -48,7 +48,7 @@ class LoggerConsumerTest extends TestCase
     /**
      * @return array[]
      */
-    public function calledTypeProvider()
+    public function calledTypeProvider(): array
     {
         return [
             ['emerg', 'emergency'],
@@ -62,7 +62,7 @@ class LoggerConsumerTest extends TestCase
         ];
     }
 
-    public function testInvalidType()
+    public function testInvalidType(): void
     {
         $this->expectException(InvalidParameterException::class);
 
