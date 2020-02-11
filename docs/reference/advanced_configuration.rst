@@ -92,7 +92,7 @@ Full configuration options:
             # Iteration listener class must implement Sonata\NotificationBundle\Event\IterationListener
             iteration_listeners:  []
             class:
-                message:              Application\Sonata\NotificationBundle\Entity\Message
+                message:              App\Entity\Message
             admin:
                 enabled:              true
                 message:
@@ -110,7 +110,6 @@ Full configuration options:
                     default:
                         mappings:
                             SonataNotificationBundle: ~
-                            ApplicationSonataNotificationBundle: ~
 
 Changing AMQP transport
 -----------------------
