@@ -24,7 +24,7 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
  */
 class MessageManagerBackendDispatcherTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $testBackend = $this->createMock(MessageManagerBackend::class);
 

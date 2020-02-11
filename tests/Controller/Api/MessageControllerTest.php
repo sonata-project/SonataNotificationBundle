@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MessageControllerTest extends TestCase
 {
-    public function testGetMessagesAction()
+    public function testGetMessagesAction(): void
     {
         $messageManager = $this->createMock(MessageManagerInterface::class);
         $messageManager->expects($this->once())->method('getPager')->willReturn([]);
@@ -41,7 +41,7 @@ class MessageControllerTest extends TestCase
         $this->assertSame([], $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
     }
 
-    public function testPostMessageAction()
+    public function testPostMessageAction(): void
     {
         $message = $this->createMock(MessageInterface::class);
 
@@ -61,7 +61,7 @@ class MessageControllerTest extends TestCase
         $this->assertInstanceOf(MessageInterface::class, $message);
     }
 
-    public function testPostMessageInvalidAction()
+    public function testPostMessageInvalidAction(): void
     {
         $message = $this->createMock(MessageInterface::class);
 
@@ -84,10 +84,8 @@ class MessageControllerTest extends TestCase
      * @param $message
      * @param $messageManager
      * @param $formFactory
-     *
-     * @return MessageController
      */
-    public function createMessageController($message = null, $messageManager = null, $formFactory = null)
+    public function createMessageController($message = null, $messageManager = null, $formFactory = null): MessageController
     {
         if (null === $messageManager) {
             $messageManager = $this->createMock(SiteManagerInterface::class);

@@ -26,7 +26,7 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 
 class MessageManagerTest extends TestCase
 {
-    public function testCancel()
+    public function testCancel(): void
     {
         $manager = $this->getMessageManagerMock();
 
@@ -37,7 +37,7 @@ class MessageManagerTest extends TestCase
         $this->assertTrue($message->isCancelled());
     }
 
-    public function testRestart()
+    public function testRestart(): void
     {
         $manager = $this->getMessageManagerMock();
 
@@ -55,12 +55,12 @@ class MessageManagerTest extends TestCase
         $this->assertSame(13, $newMessage->getRestartCount());
     }
 
-    public function testGetPager()
+    public function testGetPager(): void
     {
         $self = $this;
         $this
             ->getMessageManager(static function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
+                $qb->expects($self->once())->method('getRootAliases')->willReturn(['m']);
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with([]);
                 $qb->expects($self->once())->method('orderBy')->with(
@@ -71,24 +71,23 @@ class MessageManagerTest extends TestCase
             ->getPager([], 1);
     }
 
-    public function testGetPagerWithInvalidSort()
+    public function testGetPagerWithInvalidSort(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Invalid sort field \'invalid\' in \'Sonata\\NotificationBundle\\Entity\\BaseMessage\' class');
 
-        $self = $this;
         $this
-            ->getMessageManager(static function ($qb) use ($self) {
+            ->getMessageManager(static function ($qb) {
             })
             ->getPager([], 1, 10, ['invalid' => 'ASC']);
     }
 
-    public function testGetPagerWithMultipleSort()
+    public function testGetPagerWithMultipleSort(): void
     {
         $self = $this;
         $this
             ->getMessageManager(static function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
+                $qb->expects($self->once())->method('getRootAliases')->willReturn(['m']);
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('setParameters')->with([]);
                 $qb->expects($self->exactly(2))->method('orderBy')->with(
@@ -109,12 +108,12 @@ class MessageManagerTest extends TestCase
             ]);
     }
 
-    public function testGetPagerWithOpenedMessages()
+    public function testGetPagerWithOpenedMessages(): void
     {
         $self = $this;
         $this
             ->getMessageManager(static function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
+                $qb->expects($self->once())->method('getRootAliases')->willReturn(['m']);
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
                     'state' => MessageInterface::STATE_OPEN,
@@ -123,12 +122,12 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_OPEN], 1);
     }
 
-    public function testGetPagerWithCanceledMessages()
+    public function testGetPagerWithCanceledMessages(): void
     {
         $self = $this;
         $this
             ->getMessageManager(static function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
+                $qb->expects($self->once())->method('getRootAliases')->willReturn(['m']);
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
                     'state' => MessageInterface::STATE_CANCELLED,
@@ -137,12 +136,12 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_CANCELLED], 1);
     }
 
-    public function testGetPagerWithInProgressMessages()
+    public function testGetPagerWithInProgressMessages(): void
     {
         $self = $this;
         $this
             ->getMessageManager(static function ($qb) use ($self) {
-                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(['m']));
+                $qb->expects($self->once())->method('getRootAliases')->willReturn(['m']);
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('m.state = :state'));
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo([
                     'state' => MessageInterface::STATE_IN_PROGRESS,
@@ -151,22 +150,14 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_IN_PROGRESS], 1);
     }
 
-    /**
-     * @return MessageManagerMock
-     */
-    protected function getMessageManagerMock()
+    protected function getMessageManagerMock(): MessageManagerMock
     {
         $registry = $this->createMock(ManagerRegistry::class);
 
-        $manager = new MessageManagerMock(Message::class, $registry);
-
-        return $manager;
+        return new MessageManagerMock(Message::class, $registry);
     }
 
-    /**
-     * @return MessageManager
-     */
-    protected function getMessageManager($qbCallback)
+    protected function getMessageManager($qbCallback): MessageManager
     {
         $query = $this->getMockForAbstractClass(
             AbstractQuery::class,
@@ -177,42 +168,40 @@ class MessageManagerTest extends TestCase
             true,
             ['execute']
         );
-        $query->expects($this->any())->method('execute')->willReturn(true);
+        $query->method('execute')->willReturn(true);
 
         $qb = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$this->createMock(EntityManager::class)])
             ->getMock();
 
-        $qb->expects($this->any())->method('select')->willReturn($qb);
-        $qb->expects($this->any())->method('getQuery')->willReturn($query);
+        $qb->method('select')->willReturn($qb);
+        $qb->method('getQuery')->willReturn($query);
 
         $qbCallback($qb);
 
         $repository = $this->createMock(EntityRepository::class);
-        $repository->expects($this->any())->method('createQueryBuilder')->willReturn($qb);
+        $repository->method('createQueryBuilder')->willReturn($qb);
 
         $metadata = $this->createMock(ClassMetadata::class);
-        $metadata->expects($this->any())->method('getFieldNames')->willReturn([
+        $metadata->method('getFieldNames')->willReturn([
             'state',
             'type',
         ]);
 
         $em = $this->createMock(EntityManager::class);
-        $em->expects($this->any())->method('getRepository')->willReturn($repository);
-        $em->expects($this->any())->method('getClassMetadata')->willReturn($metadata);
+        $em->method('getRepository')->willReturn($repository);
+        $em->method('getClassMetadata')->willReturn($metadata);
 
         $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())->method('getManagerForClass')->willReturn($em);
+        $registry->method('getManagerForClass')->willReturn($em);
 
         return  new MessageManager(BaseMessage::class, $registry);
     }
 
     /**
      * @param int $state
-     *
-     * @return Message
      */
-    protected function getMessage($state = MessageInterface::STATE_OPEN)
+    protected function getMessage($state = MessageInterface::STATE_OPEN): Message
     {
         $message = new Message();
 

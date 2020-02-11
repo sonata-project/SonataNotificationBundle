@@ -36,15 +36,12 @@ class MessageManagerMessageIterator extends Iterator
     /**
      * @param array $types
      */
-    public function _bufferize($types = [])
+    public function _bufferize($types = []): void
     {
         $this->bufferize($types);
     }
 
-    /**
-     * @return array
-     */
-    public function getBuffer()
+    public function getBuffer(): array
     {
         return $this->buffer;
     }

@@ -44,7 +44,7 @@ class SwiftMailerConsumerTest extends TestCase
     /**
      * Tests the sendEmail method.
      */
-    public function testSendEmail()
+    public function testSendEmail(): void
     {
         $message = new Message();
         $message->setBody([

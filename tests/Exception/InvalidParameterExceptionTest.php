@@ -21,7 +21,7 @@ use Sonata\NotificationBundle\Exception\InvalidParameterException;
  */
 class InvalidParameterExceptionTest extends TestCase
 {
-    public function testException()
+    public function testException(): void
     {
         $this->expectException(InvalidParameterException::class);
 
