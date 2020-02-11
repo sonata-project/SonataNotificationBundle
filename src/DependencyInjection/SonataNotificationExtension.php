@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
-use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
+use Sonata\Doctrine\Mapper\DoctrineCollector;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Model\MessageInterface;
