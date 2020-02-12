@@ -19,6 +19,7 @@ use Sonata\NotificationBundle\Consumer\ConsumerEventInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use ZendDiagnostics\Result\Success;
 
 /**
@@ -90,7 +91,7 @@ class PostponeRuntimeBackendTest extends TestCase
             $phpunit->passed = true;
         });
 
-        $dispatcher->dispatch('kernel.terminate');
+        $dispatcher->dispatch(new GenericEvent(), 'kernel.terminate');
 
         $this->assertTrue($phpunit->passed);
         $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
@@ -125,7 +126,7 @@ class PostponeRuntimeBackendTest extends TestCase
             $phpunit->passed2 = true;
         });
 
-        $dispatcher->dispatch('kernel.terminate');
+        $dispatcher->dispatch(new GenericEvent(), 'kernel.terminate');
 
         $this->assertTrue($phpunit->passed1);
         $this->assertTrue($phpunit->passed2);

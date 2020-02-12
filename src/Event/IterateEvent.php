@@ -16,7 +16,7 @@ namespace Sonata\NotificationBundle\Event;
 use Sonata\NotificationBundle\Backend\BackendInterface;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event for ConsumerHandlerCommand iterations event.
