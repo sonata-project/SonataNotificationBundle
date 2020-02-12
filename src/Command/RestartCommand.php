@@ -61,7 +61,8 @@ class RestartCommand extends ContainerAwareCommand
                 $input->getOption('pause'),
                 $input->getOption('batch-size'),
                 $input->getOption('max-attempts'),
-                $input->getOption('attempt-delay'));
+                $input->getOption('attempt-delay')
+            );
         } else {
             $messages = $this->getErroneousMessageSelector()->getMessages(
                 $input->getOption('type'),

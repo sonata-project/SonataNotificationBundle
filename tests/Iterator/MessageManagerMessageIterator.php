@@ -29,7 +29,8 @@ class MessageManagerMessageIterator extends Iterator
             new MessageManagerMock(Message::class, $registry),
             [],
             $pause,
-            $batchSize);
+            $batchSize
+        );
     }
 
     /**
