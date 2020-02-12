@@ -116,7 +116,8 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
                 $currentMemory = memory_get_usage(true);
 
-                $output->writeln(sprintf('<comment>OK! </comment> - %0.04fs, %ss, %s, %s - %s = %s, %0.02f%%',
+                $output->writeln(sprintf(
+                    '<comment>OK! </comment> - %0.04fs, %ss, %s, %s - %s = %s, %0.02f%%',
                     microtime(true) - $start,
                     $date->format('U') - $message->getCreatedAt()->format('U'),
                     $this->formatMemory($currentMemory - $memoryUsage),

@@ -324,7 +324,8 @@ class SonataNotificationExtension extends Extension
         foreach ($deadLetterRoutingKeys as $key) {
             if (!\in_array($key, $routingKeys, true)) {
                 throw new \RuntimeException(sprintf(
-                    'You must configure the queue having the routing_key "%s" same as dead_letter_routing_key', $key
+                    'You must configure the queue having the routing_key "%s" same as dead_letter_routing_key',
+                    $key
                 ));
             }
         }
