@@ -146,7 +146,7 @@ class MessageManagerBackend implements BackendInterface
             $message->setState(MessageInterface::STATE_IN_PROGRESS);
             $this->messageManager->save($message);
 
-            $dispatcher->dispatch($message->getType(), $event);
+            $dispatcher->dispatch($event, $message->getType());
 
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);

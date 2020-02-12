@@ -226,7 +226,7 @@ class AMQPBackend implements BackendInterface
         $amqpMessage = $message->getValue('interopMessage');
 
         try {
-            $dispatcher->dispatch($message->getType(), $event);
+            $dispatcher->dispatch($event, $message->getType());
 
             $this->consumer->acknowledge($amqpMessage);
 
