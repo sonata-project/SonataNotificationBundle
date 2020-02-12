@@ -173,7 +173,8 @@ class SonataNotificationExtensionTest extends TestCase
         $container = new ContainerBuilder();
 
         $containerBundles = array_merge(
-            ['SonataNotificationBundle' => SonataNotificationBundle::class], $bundles
+            ['SonataNotificationBundle' => SonataNotificationBundle::class],
+            $bundles
         );
         $container->setParameter('kernel.bundles', $containerBundles);
 
@@ -201,14 +202,18 @@ class SonataNotificationExtensionTest extends TestCase
     private function assertAlias($alias, $service)
     {
         $this->assertSame(
-            $alias, (string) $this->container->getAlias($service), sprintf('%s alias is correct', $service)
+            $alias,
+            (string) $this->container->getAlias($service),
+            sprintf('%s alias is correct', $service)
         );
     }
 
     private function assertParameter($expectedValue, $name)
     {
         $this->assertSame(
-            $expectedValue, $this->container->getParameter($name), sprintf('%s parameter is correct', $name)
+            $expectedValue,
+            $this->container->getParameter($name),
+            sprintf('%s parameter is correct', $name)
         );
     }
 
