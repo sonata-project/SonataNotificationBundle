@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
-use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
+use Sonata\Doctrine\Mapper\DoctrineCollector;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -324,7 +324,8 @@ class SonataNotificationExtension extends Extension
         foreach ($deadLetterRoutingKeys as $key) {
             if (!\in_array($key, $routingKeys, true)) {
                 throw new \RuntimeException(sprintf(
-                    'You must configure the queue having the routing_key "%s" same as dead_letter_routing_key', $key
+                    'You must configure the queue having the routing_key "%s" same as dead_letter_routing_key',
+                    $key
                 ));
             }
         }

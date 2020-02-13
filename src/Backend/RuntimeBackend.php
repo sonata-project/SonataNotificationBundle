@@ -93,7 +93,7 @@ class RuntimeBackend implements BackendInterface
         $event = new ConsumerEvent($message);
 
         try {
-            $dispatcher->dispatch($message->getType(), $event);
+            $dispatcher->dispatch($event, $message->getType());
 
             $message->setCompletedAt(new \DateTime());
             $message->setState(MessageInterface::STATE_DONE);

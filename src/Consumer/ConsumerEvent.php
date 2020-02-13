@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Consumer;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ConsumerEvent extends Event implements ConsumerEventInterface
 {

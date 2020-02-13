@@ -64,7 +64,7 @@ You can disable the admin if you don't need it :
 Doctrine Configuration
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Add these bundles in the config mapping definition (or enable `auto_mapping`_):
+Add this bundle in the config mapping definition (or enable `auto_mapping`_):
 
 .. code-block:: yaml
 
@@ -75,59 +75,10 @@ Add these bundles in the config mapping definition (or enable `auto_mapping`_):
             entity_managers:
                 default:
                     mappings:
-                        ApplicationSonataNotificationBundle: ~
                         SonataNotificationBundle: ~
 
         dbal:
             types:
                 json: Sonata\Doctrine\Types\JsonType
-
-Extending the Bundle
---------------------
-
-.. note::
-
-    You can skip this section if you are using Flex and installed a bundle
-    with ``sonata-project/notification-orm-pack``.
-
-At this point, the bundle is functional, but not quite ready yet. You need to
-generate the correct entities for the media:
-
-.. code-block:: bash
-
-    bin/console sonata:easy-extends:generate SonataNotificationBundle --dest=src --namespace_prefix=App
-
-With provided parameters, the files are generated in ``src/Application/Sonata/NotificationBundle``.
-
-.. note::
-
-    The command will generate domain objects in ``App\Application`` namespace.
-    So you can point entities' associations to a global and common namespace.
-    This will make Entities sharing easier as your models will allow to
-    point to a global namespace. For instance the message will be
-    ``App\Application\Sonata\NotificationBundle\Entity\Message``.
-
-Now, add the new ``Application`` Bundle into the ``bundles.php``::
-
-    // config/bundles.php
-
-    return [
-        // ...
-        App\Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle::class => ['all' => true],
-    ];
-
-And configure ``SonataNotificationBundle`` to use the newly generated ``Message`` class::
-
-    # config/packages/sonata_notification.yaml
-
-    sonata_notification:
-        class:
-            message: App\Application\Sonata\NotificationBundle\Entity\Message
-
-The only thing left is to update your schema:
-
-.. code-block:: bash
-
-    bin/console doctrine:schema:update --force
 
 .. _`auto_mapping`: http://symfony.com/doc/2.0/reference/configuration/doctrine.html#configuration-overview

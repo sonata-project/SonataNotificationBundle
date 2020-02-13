@@ -22,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RestartCommand extends ContainerAwareCommand
 {
@@ -61,7 +62,8 @@ class RestartCommand extends ContainerAwareCommand
                 $input->getOption('pause'),
                 $input->getOption('batch-size'),
                 $input->getOption('max-attempts'),
-                $input->getOption('attempt-delay'));
+                $input->getOption('attempt-delay')
+            );
         } else {
             $messages = $this->getErroneousMessageSelector()->getMessages(
                 $input->getOption('type'),
@@ -80,6 +82,7 @@ class RestartCommand extends ContainerAwareCommand
             }
         }
 
+        /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
         foreach ($messages as $message) {
@@ -98,7 +101,7 @@ class RestartCommand extends ContainerAwareCommand
             ));
 
             if ($pullMode) {
-                $eventDispatcher->dispatch(IterateEvent::EVENT_NAME, new IterateEvent($messages, null, $newMessage));
+                $eventDispatcher->dispatch(new IterateEvent($messages, null, $newMessage), IterateEvent::EVENT_NAME);
             }
         }
 

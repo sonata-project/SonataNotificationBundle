@@ -151,7 +151,7 @@ EOF;
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('message')
-                        ->defaultValue('Application\\Sonata\\NotificationBundle\\Entity\\Message')
+                        ->defaultValue('App\\Entity\\Message')
                     ->end()
                 ->end()
             ->end()

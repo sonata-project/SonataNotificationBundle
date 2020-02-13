@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ConsumerHandlerCommand extends ContainerAwareCommand
 {
@@ -115,7 +116,8 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
                 $currentMemory = memory_get_usage(true);
 
-                $output->writeln(sprintf('<comment>OK! </comment> - %0.04fs, %ss, %s, %s - %s = %s, %0.02f%%',
+                $output->writeln(sprintf(
+                    '<comment>OK! </comment> - %0.04fs, %ss, %s, %s - %s = %s, %0.02f%%',
                     microtime(true) - $start,
                     $date->format('U') - $message->getCreatedAt()->format('U'),
                     $this->formatMemory($currentMemory - $memoryUsage),
@@ -135,8 +137,8 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             }
 
             $this->getEventDispatcher()->dispatch(
-                IterateEvent::EVENT_NAME,
-                new IterateEvent($iterator, $backend, $message)
+                new IterateEvent($iterator, $backend, $message),
+                IterateEvent::EVENT_NAME
             );
 
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
