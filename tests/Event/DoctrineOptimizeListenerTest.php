@@ -15,12 +15,12 @@ namespace Sonata\NotificationBundle\Tests\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\BackendInterface;
 use Sonata\NotificationBundle\Event\DoctrineOptimizeListener;
 use Sonata\NotificationBundle\Event\IterateEvent;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class DoctrineOptimizeListenerTest extends TestCase
 {
@@ -31,7 +31,7 @@ class DoctrineOptimizeListenerTest extends TestCase
         $manager = $this->createMock(EntityManager::class);
         $manager->expects($this->once())->method('isOpen')->willReturn(false);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->once())->method('getManagers')->willReturn([
             'default' => $manager,
         ]);
@@ -52,7 +52,7 @@ class DoctrineOptimizeListenerTest extends TestCase
         $manager->expects($this->once())->method('isOpen')->willReturn(true);
         $manager->expects($this->once())->method('getUnitOfWork')->willReturn($unitofwork);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->once())->method('getManagers')->willReturn([
             'default' => $manager,
         ]);
