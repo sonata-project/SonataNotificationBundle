@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Event;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Doctrine context optimizer
@@ -29,7 +28,7 @@ class DoctrineBackendOptimizeListener implements IterationListener
      */
     protected $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(Registry $doctrine)
     {
         $this->doctrine = $doctrine;
     }
