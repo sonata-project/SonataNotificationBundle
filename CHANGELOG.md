@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.7.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.6.2...3.7.0) - 2020-03-26
+### Fixed
+- Fix doctrine deprecations
+
+### Removed
+- SonataEasyExtendsBundle
+- Support for Symfony < 3.4
+- Support for Symfony >= 4, < 4.2
+
 ## [3.6.2](https://github.com/sonata-project/SonataNotificationBundle/compare/3.6.1...3.6.2) - 2019-07-20
 ### Changed
 - Make `sonata.notification.consumer.metadata` service public
