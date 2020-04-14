@@ -74,7 +74,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
      * Actually, an event is not necessary, you can call this method manually, to.
      * The event is not processed in any way.
      */
-    public function onEvent(Event $event = null)
+    public function onEvent(?Event $event = null)
     {
         while (!empty($this->messages)) {
             $message = array_shift($this->messages);
