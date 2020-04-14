@@ -23,7 +23,7 @@ class MessageManagerMock extends MessageManager
     /**
      * {@inheritdoc}
      */
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
     {
         $result = [];
         while (null !== $limit && $limit > 0) {
