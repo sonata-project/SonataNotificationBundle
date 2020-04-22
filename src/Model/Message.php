@@ -120,7 +120,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setCompletedAt(\DateTime $completedAt = null): void
+    public function setCompletedAt(?\DateTime $completedAt = null): void
     {
         $this->completedAt = $completedAt;
     }
@@ -136,7 +136,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setCreatedAt(\DateTime $createdAt = null): void
+    public function setCreatedAt(?\DateTime $createdAt = null): void
     {
         $this->createdAt = $createdAt;
     }
@@ -216,7 +216,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null): void
+    public function setUpdatedAt(?\DateTime $updatedAt = null): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -246,7 +246,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setStartedAt(\DateTime $startedAt = null): void
+    public function setStartedAt(?\DateTime $startedAt = null): void
     {
         $this->startedAt = $startedAt;
     }

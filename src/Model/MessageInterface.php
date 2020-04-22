@@ -42,7 +42,7 @@ interface MessageInterface
     /**
      * @param \DateTime $completedAt
      */
-    public function setCompletedAt(\DateTime $completedAt = null);
+    public function setCompletedAt(?\DateTime $completedAt = null);
 
     /**
      * @return \DateTime
@@ -52,7 +52,7 @@ interface MessageInterface
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt(\DateTime $createdAt = null);
+    public function setCreatedAt(?\DateTime $createdAt = null);
 
     /**
      * @return \DateTime
@@ -102,7 +102,7 @@ interface MessageInterface
     /**
      * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null);
+    public function setUpdatedAt(?\DateTime $updatedAt = null);
 
     /**
      * @return \DateTime
@@ -112,7 +112,7 @@ interface MessageInterface
     /**
      * @param \DateTime $startedAt
      */
-    public function setStartedAt(\DateTime $startedAt = null);
+    public function setStartedAt(?\DateTime $startedAt = null);
 
     /**
      * @return \DateTime
