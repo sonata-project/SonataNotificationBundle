@@ -21,9 +21,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class SonataNotificationBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new NotificationCompilerPass());
@@ -31,9 +28,6 @@ class SonataNotificationBundle extends Bundle
         $this->registerFormMapping();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function boot()
     {
         if (!\defined('AMQP_DEBUG')) {
@@ -46,11 +40,15 @@ class SonataNotificationBundle extends Bundle
 
     /**
      * Register form mapping information.
+     *
+     * NEXT_MAJOR: remove this method
      */
     public function registerFormMapping()
     {
-        FormHelper::registerFormTypeMapping([
-            'sonata_notification_api_form_message' => MessageSerializationType::class,
-        ]);
+        if (class_exists(FormHelper::class)) {
+            FormHelper::registerFormTypeMapping([
+                'sonata_notification_api_form_message' => MessageSerializationType::class,
+            ]);
+        }
     }
 }
