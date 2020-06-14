@@ -13,6 +13,14 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Exception;
 
-class InvalidParameterException extends \RuntimeException
-{
+use Sonata\CoreBundle\Exception\InvalidParameterException as CoreBundleException;
+
+if (class_exists(CoreBundleException::class)) {
+    class InvalidParameterException extends CoreBundleException
+    {
+    }
+} else {
+    class InvalidParameterException extends \RuntimeException
+    {
+    }
 }
