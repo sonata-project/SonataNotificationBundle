@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.7.0...3.8.0) - 2020-06-26
+### Removed
+- [[#440](https://github.com/sonata-project/SonataNotificationBundle/pull/440)]
+  Remove SonataCoreBundle dependencies
+([@wbloszyk](https://github.com/wbloszyk))
+
 ## [3.7.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.6.2...3.7.0) - 2020-03-26
 ### Fixed
 - Fix doctrine deprecations
