@@ -5,5 +5,6 @@
             <argument type="service" id="sonata.notification.manager.message"/>
             <argument type="service" id="form.factory"/>
         </service>
+        <service id="Sonata\NotificationBundle\Controller\Api\MessageController" alias="sonata.notification.controller.api.message" public="true"/>
     </services>
 </container>
