@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\Notification;
 
+use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\Success;
+use Laminas\Diagnostics\Result\Warning;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Exception\HandlingException;
@@ -20,9 +23,6 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\NotificationBundle\Tests\Entity\Message;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ZendDiagnostics\Result\Failure;
-use ZendDiagnostics\Result\Success;
-use ZendDiagnostics\Result\Warning;
 
 class MessageManagerBackendTest extends TestCase
 {
@@ -90,10 +90,6 @@ class MessageManagerBackendTest extends TestCase
      */
     public function testStatus($counts, $expectedStatus, $message): void
     {
-        if (!class_exists(Success::class)) {
-            $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
-        }
-
         $modelManager = $this->createMock(MessageManagerInterface::class);
         $modelManager->expects($this->once())->method('countStates')->willReturn($counts);
 

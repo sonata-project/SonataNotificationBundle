@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\Backend;
 
+use Laminas\Diagnostics\Result\Success;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\PostponeRuntimeBackend;
 use Sonata\NotificationBundle\Consumer\ConsumerEventInterface;
@@ -20,7 +21,6 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use ZendDiagnostics\Result\Success;
 
 /**
  * @covers \Sonata\NotificationBundle\Backend\PostponeRuntimeBackend
@@ -137,10 +137,6 @@ class PostponeRuntimeBackendTest extends TestCase
 
     public function testStatusIsOk(): void
     {
-        if (!class_exists(Success::class)) {
-            $this->markTestSkipped('The class ZendDiagnostics\Result\Success does not exist');
-        }
-
         $backend = new PostponeRuntimeBackend(
             $this->createMock(EventDispatcherInterface::class),
             true

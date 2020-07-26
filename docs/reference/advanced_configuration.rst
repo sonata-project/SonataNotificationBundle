@@ -90,15 +90,15 @@ Full configuration options:
             # Iterate event is thrown on each command iteration
             #
             # Iteration listener class must implement Sonata\NotificationBundle\Event\IterationListener
-            iteration_listeners:  []
+            iteration_listeners: []
             class:
-                message:              App\Entity\Message
+                message: App\Entity\SonataNotificationMessage
             admin:
-                enabled:              true
+                enabled: true
                 message:
-                    class:                Sonata\NotificationBundle\Admin\MessageAdmin
-                    controller:           'SonataNotificationBundle:MessageAdmin'
-                    translation:          SonataNotificationBundle
+                    class: Sonata\NotificationBundle\Admin\MessageAdmin
+                    controller: 'SonataNotificationBundle:MessageAdmin'
+                    translation: SonataNotificationBundle
 
     .. code-block:: yaml
 
