@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Laminas\Diagnostics\Result\ResultInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ZendDiagnostics\Result\ResultInterface;
 
 interface BackendInterface
 {

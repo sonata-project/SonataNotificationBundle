@@ -13,68 +13,46 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\DependencyInjection;
 
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use PHPUnit\Framework\TestCase;
-use Sonata\NotificationBundle\DependencyInjection\Compiler\NotificationCompilerPass;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sonata\NotificationBundle\DependencyInjection\SonataNotificationExtension;
-use Sonata\NotificationBundle\SonataNotificationBundle;
-use Symfony\Bridge\Monolog\Logger;
-use Symfony\Bundle\MonologBundle\MonologBundle;
-use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class SonataNotificationExtensionTest extends TestCase
+final class SonataNotificationExtensionTest extends AbstractExtensionTestCase
 {
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-
-    protected function tearDown(): void
+    protected function setUp(): void
     {
-        unset($this->container);
+        parent::setUp();
+        $this->container->setParameter('kernel.bundles', [
+            'SonataDoctrineBundle' => true,
+            'SonataAdminBundle' => true,
+        ]);
     }
 
     public function testEmptyConfig(): void
     {
-        $container = $this->getContainerBuilder([
-            'MonologBundle' => MonologBundle::class,
-            'SwiftmailerBundle' => SwiftmailerBundle::class,
-        ]);
-        $extension = new SonataNotificationExtension();
-        $extension->load([], $container);
+        $this->load();
 
-        $this->assertAlias('sonata.notification.backend.runtime', 'sonata.notification.backend');
-        $this->assertHasDefinition('sonata.notification.consumer.swift_mailer');
-        $this->assertHasDefinition('sonata.notification.consumer.logger');
-        $this->assertParameter('sonata.notification.backend.runtime', 'sonata.notification.backend');
-
-        $container->compile();
+        $this->assertContainerBuilderHasAlias('sonata.notification.backend', 'sonata.notification.backend.runtime');
+        $this->assertContainerBuilderHasService('sonata.notification.consumer.swift_mailer');
+        $this->assertContainerBuilderHasService('sonata.notification.consumer.logger');
+        $this->assertContainerBuilderHasParameter('sonata.notification.backend', 'sonata.notification.backend.runtime');
     }
 
     public function testDoNotRegisterDefaultConsumers(): void
     {
-        $container = $this->getContainerBuilder();
-        $extension = new SonataNotificationExtension();
-        $extension->load([
-            [
-                'consumers' => [
-                    'register_default' => false,
-                ],
+        $this->load([
+            'consumers' => [
+                'register_default' => false,
             ],
-        ], $container);
+        ]);
 
-        $this->assertHasNoDefinition('sonata.notification.consumer.swift_mailer');
-        $this->assertHasNoDefinition('sonata.notification.consumer.logger');
-        $this->assertHasNoDefinition('sonata.notification.manager.message.default');
-        $this->assertHasNoDefinition('sonata.notification.erroneous_messages_selector');
-        $this->assertHasNoDefinition('sonata.notification.event.doctrine_optimize');
-        $this->assertHasNoDefinition('sonata.notification.event.doctrine_backend_optimize');
+        $this->assertContainerBuilderNotHasService('sonata.notification.consumer.swift_mailer');
+        $this->assertContainerBuilderNotHasService('sonata.notification.consumer.logger');
+        $this->assertContainerBuilderNotHasService('sonata.notification.manager.message.default');
+        $this->assertContainerBuilderNotHasService('sonata.notification.erroneous_messages_selector');
+        $this->assertContainerBuilderNotHasService('sonata.notification.event.doctrine_optimize');
+        $this->assertContainerBuilderNotHasService('sonata.notification.event.doctrine_backend_optimize');
 
-        $this->assertParameter([], 'sonata.notification.event.iteration_listeners');
-
-        $container->compile();
+        $this->assertContainerBuilderHasParameter('sonata.notification.event.iteration_listeners', []);
     }
 
     public function testDoctrineBackendNoConfig(): void
@@ -82,47 +60,31 @@ class SonataNotificationExtensionTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Please configure the sonata_notification.backends.doctrine section');
 
-        $container = $this->getContainerBuilder([
-            'DoctrineBundle' => DoctrineBundle::class,
+        $this->load([
+            'backend' => 'sonata.notification.backend.doctrine',
         ]);
-        $extension = new SonataNotificationExtension();
-
-        $extension->load([
-            [
-                'backend' => 'sonata.notification.backend.doctrine',
-            ],
-        ], $container);
     }
 
     public function testDoctrineBackend(): void
     {
-        $container = $this->getContainerBuilder([
-            'DoctrineBundle' => DoctrineBundle::class,
-        ]);
-        $extension = new SonataNotificationExtension();
-        $extension->load([
-            [
-                'backend' => 'sonata.notification.backend.doctrine',
-                'backends' => [
-                    'doctrine' => null,
-                ],
-                'consumers' => [
-                    'register_default' => false,
-                ],
+        $this->load([
+            'backend' => 'sonata.notification.backend.doctrine',
+            'backends' => [
+                'doctrine' => null,
             ],
-        ], $container);
+            'consumers' => [
+                'register_default' => false,
+            ],
+        ]);
 
-        $this->assertHasDefinition('sonata.notification.manager.message.default');
-        $this->assertHasDefinition('sonata.notification.erroneous_messages_selector');
-        $this->assertHasDefinition('sonata.notification.event.doctrine_optimize');
-        $this->assertHasDefinition('sonata.notification.event.doctrine_backend_optimize');
+        $this->assertContainerBuilderHasService('sonata.notification.manager.message.default');
+        $this->assertContainerBuilderHasService('sonata.notification.erroneous_messages_selector');
+        $this->assertContainerBuilderHasService('sonata.notification.event.doctrine_optimize');
+        $this->assertContainerBuilderHasService('sonata.notification.event.doctrine_backend_optimize');
 
-        $this->assertParameter(
-            ['sonata.notification.event.doctrine_backend_optimize'],
-            'sonata.notification.event.iteration_listeners'
-        );
-
-        $container->compile();
+        $this->assertContainerBuilderHasParameter('sonata.notification.event.iteration_listeners', [
+            'sonata.notification.event.doctrine_backend_optimize',
+        ]);
     }
 
     public function testRabbitMQBackendNoConfig(): void
@@ -130,104 +92,37 @@ class SonataNotificationExtensionTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Please configure the sonata_notification.backends.rabbitmq section');
 
-        $container = $this->getContainerBuilder();
-        $extension = new SonataNotificationExtension();
-
-        $extension->load([
-            [
-                'backend' => 'sonata.notification.backend.rabbitmq',
-            ],
-        ], $container);
+        $this->load([
+            'backend' => 'sonata.notification.backend.rabbitmq',
+        ]);
     }
 
     public function testRabbitMQBackend(): void
     {
-        $container = $this->getContainerBuilder();
-        $extension = new SonataNotificationExtension();
-        $extension->load([
-            [
-                'backend' => 'sonata.notification.backend.rabbitmq',
-                'backends' => [
-                    'rabbitmq' => [
-                        'exchange' => 'logs',
-                    ],
-                ],
-                'consumers' => [
-                    'register_default' => false,
+        $this->load([
+            'backend' => 'sonata.notification.backend.rabbitmq',
+            'backends' => [
+                'rabbitmq' => [
+                    'exchange' => 'logs',
                 ],
             ],
-        ], $container);
+            'consumers' => [
+                'register_default' => false,
+            ],
+        ]);
 
-        $this->assertHasNoDefinition('sonata.notification.manager.message.default');
-        $this->assertHasNoDefinition('sonata.notification.erroneous_messages_selector');
-        $this->assertHasNoDefinition('sonata.notification.event.doctrine_optimize');
-        $this->assertHasNoDefinition('sonata.notification.event.doctrine_backend_optimize');
+        $this->assertContainerBuilderNotHasService('sonata.notification.manager.message.default');
+        $this->assertContainerBuilderNotHasService('sonata.notification.erroneous_messages_selector');
+        $this->assertContainerBuilderNotHasService('sonata.notification.event.doctrine_optimize');
+        $this->assertContainerBuilderNotHasService('sonata.notification.event.doctrine_backend_optimize');
 
-        $this->assertParameter([], 'sonata.notification.event.iteration_listeners');
-
-        $container->compile();
+        $this->assertContainerBuilderHasParameter('sonata.notification.event.iteration_listeners', []);
     }
 
-    private function getContainerBuilder(array $bundles = []): ContainerBuilder
+    protected function getContainerExtensions(): array
     {
-        $container = new ContainerBuilder();
-
-        $containerBundles = array_merge(
-            ['SonataNotificationBundle' => SonataNotificationBundle::class],
-            $bundles
-        );
-        $container->setParameter('kernel.bundles', $containerBundles);
-
-        $container->addCompilerPass(new NotificationCompilerPass());
-
-        if (isset($containerBundles['MonologBundle'])) {
-            $container->register('logger')
-                ->setClass(Logger::class)
-                ->setPublic(true);
-        }
-        if (isset($containerBundles['SwiftmailerBundle'])) {
-            $container->register('mailer')
-                ->setClass(\Swift_Mailer::class)
-                ->setPublic(true);
-        }
-        if (isset($containerBundles['DoctrineBundle'])) {
-            $container->register('doctrine')
-                ->setClass(Registry::class)
-                ->setPublic(true);
-        }
-
-        return $this->container = $container;
-    }
-
-    private function assertAlias($alias, $service): void
-    {
-        $this->assertSame(
-            $alias,
-            (string) $this->container->getAlias($service),
-            sprintf('%s alias is correct', $service)
-        );
-    }
-
-    private function assertParameter($expectedValue, $name): void
-    {
-        $this->assertSame(
-            $expectedValue,
-            $this->container->getParameter($name),
-            sprintf('%s parameter is correct', $name)
-        );
-    }
-
-    private function assertHasDefinition($definition): void
-    {
-        $this->assertTrue(
-            $this->container->hasDefinition($definition) ? true : $this->container->hasAlias($definition)
-        );
-    }
-
-    private function assertHasNoDefinition($service): void
-    {
-        $this->assertFalse(
-            $this->container->hasDefinition($service) ? true : $this->container->hasAlias($service)
-        );
+        return [
+            new SonataNotificationExtension(),
+        ];
     }
 }

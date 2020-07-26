@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Backend;
 
-use ZendDiagnostics\Check\AbstractCheck;
+use Laminas\Diagnostics\Check\AbstractCheck;
 
 class BackendHealthCheck extends AbstractCheck
 {

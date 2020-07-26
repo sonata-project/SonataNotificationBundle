@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Backend;
 
+use Laminas\Diagnostics\Result\Success;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ZendDiagnostics\Result\Success;
 
 /**
  * Producer side of the doctrine backend.
