@@ -162,7 +162,7 @@ class SonataNotificationExtension extends Extension
     public function registerDoctrineMapping(array $config)
     {
         @trigger_error(
-            'Using SonataEasyExtendsBundle is deprecated since sonata-project/notification-bundle 3.x. Please register SonataDoctrineBundle as a bundle instead.',
+            'Using SonataEasyExtendsBundle is deprecated since sonata-project/notification-bundle 3.9. Please register SonataDoctrineBundle as a bundle instead.',
             E_USER_DEPRECATED
         );
 
