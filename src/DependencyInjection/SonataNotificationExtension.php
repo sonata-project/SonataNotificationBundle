@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\DependencyInjection;
 
 use Sonata\Doctrine\Mapper\DoctrineCollector;
+use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector as DeprecatedDoctrineCollector;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\MessageManagerBackend;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -78,7 +79,13 @@ class SonataNotificationExtension extends Extension
         $container->setAlias('sonata.notification.backend', $config['backend'])->setPublic(true);
         $container->setParameter('sonata.notification.backend', $config['backend']);
 
-        $this->registerDoctrineMapping($config);
+        if (isset($bundles['SonataDoctrineBundle'])) {
+            $this->registerSonataDoctrineMapping($config);
+        } else {
+            // NEXT MAJOR: Remove next line and throw error when not registering SonataDoctrineBundle
+            $this->registerDoctrineMapping($config);
+        }
+
         $this->registerParameters($container, $config);
         $this->configureBackends($container, $config);
         $this->configureClass($container, $config);
@@ -149,9 +156,17 @@ class SonataNotificationExtension extends Extension
         }
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     */
     public function registerDoctrineMapping(array $config): void
     {
-        $collector = DoctrineCollector::getInstance();
+        @trigger_error(
+            'Using SonataEasyExtendsBundle is deprecated since sonata-project/notification-bundle 3.9. Please register SonataDoctrineBundle as a bundle instead.',
+            E_USER_DEPRECATED
+        );
+
+        $collector = DeprecatedDoctrineCollector::getInstance();
 
         $collector->addIndex($config['class']['message'], 'idx_state', [
             'state',
@@ -425,6 +440,14 @@ class SonataNotificationExtension extends Extension
         $container->setDefinition($id, $definition);
 
         return $id;
+    }
+
+    private function registerSonataDoctrineMapping(array $config): void
+    {
+        $collector = DoctrineCollector::getInstance();
+
+        $collector->addIndex($config['class']['message'], 'idx_state', ['state']);
+        $collector->addIndex($config['class']['message'], 'idx_created_at', ['created_at']);
     }
 
     /**

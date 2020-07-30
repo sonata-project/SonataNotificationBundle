@@ -41,7 +41,7 @@ class IteratorProxyMessageIteratorTest extends TestCase
     /**
      * @see https://gist.github.com/2852498
      */
-    public function expectIterator($mock, array $content, $withKey = false, $counter = 0)
+    public function expectIterator($mock, array $content, $withKey = false, $counter = 0): int
     {
         $mock
             ->expects($this->at($counter))

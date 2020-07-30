@@ -2,6 +2,39 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.9.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.8.0...3.9.0) - 2020-07-26
+### Added
+- [[#448](https://github.com/sonata-project/SonataNotificationBundle/pull/448)]
+  Added public alias
+`Sonata\NotificationBundle\Controller\Api\MessageController` for
+`sonata.notification.controller.api.message` service
+([@wbloszyk](https://github.com/wbloszyk))
+
+### Changed
+- [[#452](https://github.com/sonata-project/SonataNotificationBundle/pull/452)]
+  SonataEasyExtendsBundle is now optional, using SonataDoctrineBundle is
+preferred ([@jordisala1991](https://github.com/jordisala1991))
+- [[#452](https://github.com/sonata-project/SonataNotificationBundle/pull/452)]
+  Use Laminas instead of deprecated Zend
+([@jordisala1991](https://github.com/jordisala1991))
+
+### Deprecated
+- [[#452](https://github.com/sonata-project/SonataNotificationBundle/pull/452)]
+  Using SonataEasyExtendsBundle to add Doctrine mapping information
+([@jordisala1991](https://github.com/jordisala1991))
+
+### Fixed
+- [[#448](https://github.com/sonata-project/SonataNotificationBundle/pull/448)]
+  Fix RestFul API - `Class could not be determined for Controller identified`
+Error ([@wbloszyk](https://github.com/wbloszyk))
+
+### Removed
+- [[#451](https://github.com/sonata-project/SonataNotificationBundle/pull/451)]
+  Removed support for deprecated "rest" routing type
+([@wbloszyk](https://github.com/wbloszyk))
+- [[#450](https://github.com/sonata-project/SonataNotificationBundle/pull/450)]
+  Support for PHP < 7.2 ([@wbloszyk](https://github.com/wbloszyk))
+
 ## [3.8.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.7.0...3.8.0) - 2020-06-26
 ### Removed
 - [[#440](https://github.com/sonata-project/SonataNotificationBundle/pull/440)]

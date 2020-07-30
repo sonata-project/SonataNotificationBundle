@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Controller\Api;
 
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\Route;
-use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sonata\DatagridBundle\Pager\PagerInterface;
@@ -23,9 +21,12 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
+ *
+ * @Route(defaults={"_format": "json"}, requirements={"_format": "json|xml|html"})
  */
 class MessageController
 {
@@ -53,13 +54,15 @@ class MessageController
      *  output={"class"="Sonata\DatagridBundle\Pager\PagerInterface", "groups"={"sonata_api_read"}}
      * )
      *
-     * @QueryParam(name="page", requirements="\d+", default="1", description="Page for message list pagination")
-     * @QueryParam(name="count", requirements="\d+", default="10", description="Number of messages by page")
-     * @QueryParam(name="type", nullable=true, description="Message type filter")
-     * @QueryParam(name="state", requirements="\d+", strict=true, nullable=true, description="Message status filter")
-     * @QueryParam(name="orderBy", map=true, requirements="ASC|DESC", nullable=true, strict=true, description="Query groups order by clause (key is field, value is direction)")
+     * @Rest\Get("/messages.{_format}", name="get_messages")
      *
-     * @View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
+     * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Page for message list pagination")
+     * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Number of messages by page")
+     * @Rest\QueryParam(name="type", nullable=true, description="Message type filter")
+     * @Rest\QueryParam(name="state", requirements="\d+", strict=true, nullable=true, description="Message status filter")
+     * @Rest\QueryParam(name="orderBy", map=true, requirements="ASC|DESC", nullable=true, strict=true, description="Query groups order by clause (key is field, value is direction)")
+     *
+     * @Rest\View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
      *
      * @return PagerInterface
      */
@@ -102,9 +105,9 @@ class MessageController
      *  }
      * )
      *
-     * @View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
+     * @Rest\Post("/messages.{_format}", name="post_message")
      *
-     * @Route(requirements={"_format"="json|xml"})
+     * @Rest\View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
      *
      * @param Request $request A Symfony request
      *

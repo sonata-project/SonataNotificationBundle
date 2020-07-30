@@ -62,10 +62,7 @@ class MessageTest extends TestCase
         $this->assertTrue($message->isOpen());
     }
 
-    /**
-     * @return array
-     */
-    public function getBodyValues()
+    public function getBodyValues(): array
     {
         return [
             [['name' => 'foobar'], ['name'], 'foobar', null],

@@ -15,6 +15,7 @@ namespace Sonata\NotificationBundle\Tests\Backend;
 
 use Enqueue\AmqpLib\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
 use Sonata\NotificationBundle\Backend\AMQPBackendDispatcher;
@@ -176,7 +177,20 @@ class AMQPBackendDispatcherTest extends TestCase
         $dispatcher->createAndPublish('message.type.foo', []);
     }
 
-    protected function getMockQueue($queue, $type, $called = null)
+    protected function getDispatcher(array $backends, array $queues = [['queue' => 'foo', 'routing_key' => 'message.type.foo']]): AMQPBackendDispatcher
+    {
+        $settings = [
+                'host' => 'foo',
+                'port' => 'port',
+                'user' => 'user',
+                'pass' => 'pass',
+                'vhost' => '/',
+        ];
+
+        return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);
+    }
+
+    private function getMockQueue($queue, $type, $called = null): MockObject
     {
         $methods = ['createAndPublish', 'initialize'];
         $args = ['', 'foo', false, 'message.type.foo'];
@@ -192,18 +206,5 @@ class AMQPBackendDispatcherTest extends TestCase
         }
 
         return $mock;
-    }
-
-    protected function getDispatcher(array $backends, array $queues = [['queue' => 'foo', 'routing_key' => 'message.type.foo']])
-    {
-        $settings = [
-                'host' => 'foo',
-                'port' => 'port',
-                'user' => 'user',
-                'pass' => 'pass',
-                'vhost' => '/',
-        ];
-
-        return new AMQPBackendDispatcher($settings, $queues, 'default', $backends);
     }
 }

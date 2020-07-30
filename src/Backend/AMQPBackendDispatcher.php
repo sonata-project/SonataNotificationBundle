@@ -18,11 +18,11 @@ use Enqueue\AmqpTools\RabbitMqDlxDelayStrategy;
 use Guzzle\Http\Client as GuzzleClient;
 use Interop\Amqp\AmqpConnectionFactory;
 use Interop\Amqp\AmqpContext;
+use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\Success;
 use Sonata\NotificationBundle\Exception\BackendNotFoundException;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ZendDiagnostics\Result\Failure;
-use ZendDiagnostics\Result\Success;
 
 /**
  * Producer side of the rabbitmq backend.

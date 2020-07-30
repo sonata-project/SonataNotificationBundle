@@ -48,7 +48,7 @@ class LoggerConsumerTest extends TestCase
     /**
      * @return array[]
      */
-    public function calledTypeProvider()
+    public function calledTypeProvider(): array
     {
         return [
             ['emerg', 'emergency'],

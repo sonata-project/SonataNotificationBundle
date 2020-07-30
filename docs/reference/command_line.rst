@@ -11,26 +11,35 @@ This command must be started in production environment to limit memory usage pro
 debugging information.
 
 The ``iteration`` option is the number of iterations the command can accept before exiting.
-This ``iteration`` value must be set to avoid memory limit or other issues related to PHP
+This ``iteration`` value must be set to avoid memory limitations or other issues related to PHP
 and long running processes.
 
 Monitoring process : Supervisord
 --------------------------------
 
-This command cannot be used or started as it is on a production server. The task must be supervised by a process control system.
-There are many solutions available, here a solution with ``supervisord``:
+This command should not be used directly on a production server. The task must be supervised by a process control system.
+There are many solutions available. The following solution uses ``supervisord``.
 
-Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems
+Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems. Replacing "yourapp" with a short name for your application, create a new file at ``/etc/supervisor/conf.d/yourapp.conf``. Update the paths and names in this example file as is appropriate for your use-case.
 
 .. code-block:: ini
 
-    [program:sonata_production_sonata_notification]
+    [program:yourapp_sonata_notification]
     command=/home/org.sonata-project.demo/current/bin/console sonata:notification:start --env=notification --iteration=250
     autorestart=true
     user=www-data
     redirect_stderr=false
     stdout_logfile=/home/org.sonata-project.demo/logs/sonata_notification.log
     stdout_logfile_maxbytes=10MB
+
+You can check on the status , stop, and start the service with the following respective commands. Read the `supervisor documentation <http://supervisord.org/running.html>`_ for more details.
+
+.. code-block:: sh
+
+    supervisorctl status yourapp_sonata_notification
+    supervisorctl stop yourapp_sonata_notification
+    supervisorctl start yourapp_sonata_notification
+
 
 If you are deploying with Capistrano, you can restart the supervisor process with a custom task:
 

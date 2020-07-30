@@ -32,6 +32,9 @@ class AMQPMessageIteratorTest extends TestCase
         $this->assertTrue($rc->implementsInterface(MessageIteratorInterface::class));
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testCouldBeConstructedWithContextAsFirstArgument(): void
     {
         new AMQPMessageIterator($this->createMock(AmqpConsumer::class));
@@ -62,5 +65,35 @@ class AMQPMessageIteratorTest extends TestCase
         }
 
         $this->assertSame(['theFirstMessageBody', 'theSecondMessageBody', 'theThirdMessageBody'], $values);
+    }
+
+    /**
+     * @param mixed $queueName
+     *
+     * @return AmqpConsumer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createConsumerStub($queueName = null)
+    {
+        $queue = $this->createMock(AmqpQueue::class);
+        $queue
+            ->method('getQueueName')
+            ->willReturn($queueName)
+        ;
+
+        $consumer = $this->createMock(AmqpConsumer::class);
+        $consumer
+            ->method('getQueue')
+            ->willReturn($queue)
+        ;
+
+        return $consumer;
+    }
+
+    /**
+     * @return AMQPChannel|\PHPUnit_Framework_MockObject_MockObject|AMQPChannel
+     */
+    private function createChannelMock()
+    {
+        return $this->createMock(AMQPChannel::class);
     }
 }

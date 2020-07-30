@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\Controller\Api;
 
-use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Controller\Api\MessageController;
 use Sonata\NotificationBundle\Model\MessageInterface;
@@ -34,7 +34,7 @@ class MessageControllerTest extends TestCase
         $messageManager = $this->createMock(MessageManagerInterface::class);
         $messageManager->expects($this->once())->method('getPager')->willReturn([]);
 
-        $paramFetcher = $this->createMock(ParamFetcher::class);
+        $paramFetcher = $this->createMock(ParamFetcherInterface::class);
         $paramFetcher->expects($this->exactly(3))->method('get');
         $paramFetcher->expects($this->once())->method('all')->willReturn([]);
 
@@ -84,10 +84,8 @@ class MessageControllerTest extends TestCase
      * @param $message
      * @param $messageManager
      * @param $formFactory
-     *
-     * @return MessageController
      */
-    public function createMessageController($message = null, $messageManager = null, $formFactory = null)
+    public function createMessageController($message = null, $messageManager = null, $formFactory = null): MessageController
     {
         if (null === $messageManager) {
             $messageManager = $this->createMock(SiteManagerInterface::class);
