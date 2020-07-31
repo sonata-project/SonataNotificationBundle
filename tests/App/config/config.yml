@@ -1,0 +1,45 @@
+framework:
+    test: true
+    secret: '50n474.U53r'
+    form:
+        enabled: true
+    translator:
+        enabled: true
+    session:
+        handler_id: session.handler.native_file
+        storage_id: session.storage.mock_file
+        name: MOCKSESSID
+    profiler:
+        enabled: true
+        collect: false
+
+twig:
+    exception_controller: null
+    paths:
+        - '%kernel.project_dir%/templates'
+    strict_variables: '%kernel.debug%'
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: force
+    body_converter:
+        enabled: false
+        validate: true
+
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        path: '%app.base_dir%sonata_notification_test.db3'
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    SonataNotificationBundle: ~
+                    SonataNotificationTest:
+                        type: annotation
+                        dir: '%kernel.project_dir%/Entity'
+                        is_bundle: false
+                        prefix: Sonata\NotificationBundle\Tests\App\Entity
