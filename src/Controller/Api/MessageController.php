@@ -21,12 +21,9 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
- *
- * @Route(defaults={"_format": "json"}, requirements={"_format": "json|xml|html"})
  */
 class MessageController
 {
@@ -53,8 +50,6 @@ class MessageController
      *  resource=true,
      *  output={"class"="Sonata\DatagridBundle\Pager\PagerInterface", "groups"={"sonata_api_read"}}
      * )
-     *
-     * @Rest\Get("/messages.{_format}", name="get_messages")
      *
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Page for message list pagination")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Number of messages by page")
@@ -104,8 +99,6 @@ class MessageController
      *      400="Returned when an error has occurred while message creation"
      *  }
      * )
-     *
-     * @Rest\Post("/messages.{_format}", name="post_message")
      *
      * @Rest\View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
      *
