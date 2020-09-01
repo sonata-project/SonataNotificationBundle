@@ -15,7 +15,7 @@ namespace Sonata\NotificationBundle\Entity;
 
 use Doctrine\ORM\QueryBuilder;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
-use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
+use Sonata\DatagridBundle\Pager\PagerInterface;
 use Sonata\Doctrine\Entity\BaseEntityManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
@@ -151,7 +151,7 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     /**
      * {@inheritdoc}
      */
-    public function getPager(array $criteria, $page, $limit = 10, array $sort = [])
+    public function getPager(array $criteria, int $page, int $limit = 10, array $sort = []): PagerInterface
     {
         $query = $this->getRepository()
             ->createQueryBuilder('m')
@@ -183,14 +183,8 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         }
 
         $query->setParameters($parameters);
-        $pager = new Pager();
 
-        $pager->setMaxPerPage($limit);
-        $pager->setQuery(new ProxyQuery($query));
-        $pager->setPage($page);
-        $pager->init();
-
-        return $pager;
+        return Pager::create($query, $limit, $page);
     }
 
     /**

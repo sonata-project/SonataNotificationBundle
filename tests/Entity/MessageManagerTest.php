@@ -181,9 +181,10 @@ class MessageManagerTest extends TestCase
             false,
             true,
             true,
-            ['execute']
+            ['execute', 'getSingleScalarResult']
         );
         $query->method('execute')->willReturn(true);
+        $query->method('getSingleScalarResult')->willReturn(1);
 
         $qb = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$this->createMock(EntityManager::class)])
