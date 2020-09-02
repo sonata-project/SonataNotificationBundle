@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\Functional\Routing;
 
+use Nelmio\ApiDocBundle\Annotation\Operation;
 use Sonata\NotificationBundle\Tests\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -40,7 +41,15 @@ final class RoutingTest extends WebTestCase
 
     public function getRoutes(): iterable
     {
-        yield ['nelmio_api_doc_index', '/api/doc/{view}', ['GET']];
+        // API
+        if (class_exists(Operation::class)) {
+            yield ['app.swagger_ui', '/api/doc', ['GET']];
+            yield ['app.swagger', '/api/doc.json', ['GET']];
+        } else {
+            yield ['nelmio_api_doc_index', '/api/doc/{view}', ['GET']];
+        }
+
+        // API - Message
         yield ['sonata_api_notification_message_get_messages', '/api/notification/messages.{_format}', ['GET']];
         yield ['sonata_api_notification_message_post_message', '/api/notification/messages.{_format}', ['POST']];
     }

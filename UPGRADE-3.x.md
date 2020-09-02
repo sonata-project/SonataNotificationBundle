@@ -8,6 +8,10 @@ UPGRADE FROM 3.x to 3.x
 
 There is a minimal BC Break on `MessageManager::getPager`. If you are extending this method you should add parameter and return type hints.
 
+### Support for NelmioApiDocBundle > 3.6 is added
+
+Controllers for NelmioApiDocBundle v2 were moved under `Sonata\NotificationBundle\Controller\Api\Legacy\` namespace and controllers for NelmioApiDocBundle v3 were added as replacement. If you extend them, you must ensure they are using the corresponding inheritance.
+
 UPGRADE FROM 3.8 to 3.9
 =======================
 
