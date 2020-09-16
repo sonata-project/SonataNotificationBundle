@@ -15,6 +15,7 @@ namespace Sonata\NotificationBundle\Tests\Controller\Api;
 
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use PHPUnit\Framework\TestCase;
+use Sonata\DatagridBundle\Pager\PagerInterface;
 use Sonata\NotificationBundle\Controller\Api\MessageController;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
@@ -32,13 +33,25 @@ class MessageControllerTest extends TestCase
     public function testGetMessagesAction(): void
     {
         $messageManager = $this->createMock(MessageManagerInterface::class);
-        $messageManager->expects($this->once())->method('getPager')->willReturn([]);
+        $pager = $this->createStub(PagerInterface::class);
+        $messageManager->expects($this->once())->method('getPager')->willReturn($pager);
 
         $paramFetcher = $this->createMock(ParamFetcherInterface::class);
-        $paramFetcher->expects($this->exactly(3))->method('get');
+        $paramFetcher
+            ->expects($this->exactly(3))
+            ->method('get')
+            ->withConsecutive(
+                ['page'],
+                ['count'],
+                ['orderBy']
+            )->willReturnOnConsecutiveCalls(
+                1,
+                10,
+                'ASC'
+            );
         $paramFetcher->expects($this->once())->method('all')->willReturn([]);
 
-        $this->assertSame([], $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
+        $this->assertSame($pager, $this->createMessageController(null, $messageManager)->getMessagesAction($paramFetcher));
     }
 
     public function testPostMessageAction(): void
