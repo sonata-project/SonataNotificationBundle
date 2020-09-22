@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.10.0](sonata-project/SonataNotificationBundle/compare/3.9.0...3.10.0) - 2020-09-22
+### Changed
+- [[#457](https://github.com/sonata-project/SonataNotificationBundle/pull/457)]
+  Support for deprecated "rest" routing type in favor for xml
+([@wbloszyk](https://github.com/wbloszyk))
+- [[#471](https://github.com/sonata-project/SonataNotificationBundle/pull/471)]
+  Bump `sonata-project/datagrid-bundle` version
+([@core23](https://github.com/core23))
+
+### Fixed
+- [[#458](https://github.com/sonata-project/SonataNotificationBundle/pull/458)]
+  Make `ErroneousMessagesSelector` service public again
+([@core23](https://github.com/core23))
+
 ## [3.9.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.8.0...3.9.0) - 2020-07-26
 ### Added
 - [[#448](https://github.com/sonata-project/SonataNotificationBundle/pull/448)]
