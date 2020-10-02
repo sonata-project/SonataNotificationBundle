@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\DependencyInjection;
 
+use Nelmio\ApiDocBundle\Annotation\Operation;
 use Sonata\Doctrine\Mapper\DoctrineCollector;
 use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector as DeprecatedDoctrineCollector;
 use Sonata\NotificationBundle\Backend\AMQPBackend;
@@ -58,7 +59,12 @@ class SonataNotificationExtension extends Extension
             $loader->load('event.xml');
 
             if (isset($bundles['FOSRestBundle'], $bundles['NelmioApiDocBundle'])) {
-                $loader->load('api_controllers.xml');
+                // NEXT_MAJOR: remove legacy api
+                if (class_exists(Operation::class)) {
+                    $loader->load('api_controllers.xml');
+                } else {
+                    $loader->load('api_controllers_legacy.xml');
+                }
                 $loader->load('api_form.xml');
             }
 
