@@ -19,14 +19,32 @@ use Sonata\NotificationBundle\Consumer\ConsumerInterface;
 use Sonata\NotificationBundle\Event\IterateEvent;
 use Sonata\NotificationBundle\Exception\HandlingException;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ConsumerHandlerCommand extends ContainerAwareCommand
+class ConsumerHandlerCommand extends Command
 {
+    /**
+     * @var BackendInterface
+     */
+    private $backend;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(BackendInterface $backend, EventDispatcherInterface $eventDispatcher)
+    {
+        parent::__construct(null);
+
+        $this->backend = $backend;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -47,7 +65,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $startDate = new \DateTime();
 
         $output->writeln(sprintf('[%s] <info>Checking listeners</info>', $startDate->format('r')));
-        foreach ($this->getNotificationDispatcher()->getListeners() as $type => $listeners) {
+        foreach ($this->eventDispatcher->getListeners() as $type => $listeners) {
             $output->writeln(sprintf(' - %s', $type));
             foreach ($listeners as $listener) {
                 if (!$listener[0] instanceof ConsumerInterface) {
@@ -112,7 +130,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
             try {
                 $start = microtime(true);
-                $returnInfos = $backend->handle($message, $this->getNotificationDispatcher());
+                $returnInfos = $backend->handle($message, $this->eventDispatcher);
 
                 $currentMemory = memory_get_usage(true);
 
@@ -136,7 +154,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
                 $output->writeln(sprintf('<error>KO! - %s</error>', $e->getMessage()));
             }
 
-            $this->getEventDispatcher()->dispatch(
+            $this->eventDispatcher->dispatch(
                 new IterateEvent($iterator, $backend, $message),
                 IterateEvent::EVENT_NAME
             );
@@ -186,39 +204,21 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
      */
     private function getBackend($type = null)
     {
-        $backend = $this->getContainer()->get('sonata.notification.backend');
-
-        if ($type && !\array_key_exists($type, $this->getNotificationDispatcher()->getListeners())) {
-            throw new \RuntimeException(sprintf('The type `%s` does not exist, available types: %s', $type, implode(', ', array_keys($this->getNotificationDispatcher()->getListeners()))));
+        if ($type && !\array_key_exists($type, $this->eventDispatcher->getListeners())) {
+            throw new \RuntimeException(sprintf('The type `%s` does not exist, available types: %s', $type, implode(', ', array_keys($this->eventDispatcher->getListeners()))));
         }
 
-        if (null !== $type && !$backend instanceof QueueDispatcherInterface) {
+        if (null !== $type && !$this->backend instanceof QueueDispatcherInterface) {
             throw new \RuntimeException(sprintf(
                 'Unable to use the provided type %s with a non QueueDispatcherInterface backend',
                 $type
             ));
         }
 
-        if ($backend instanceof QueueDispatcherInterface) {
-            return $backend->getBackend($type);
+        if ($this->backend instanceof QueueDispatcherInterface) {
+            return $this->backend->getBackend($type);
         }
 
-        return $backend;
-    }
-
-    /**
-     * @return EventDispatcherInterface
-     */
-    private function getNotificationDispatcher()
-    {
-        return $this->getContainer()->get('sonata.notification.dispatcher');
-    }
-
-    /**
-     * @return EventDispatcherInterface
-     */
-    private function getEventDispatcher()
-    {
-        return $this->getContainer()->get('event_dispatcher');
+        return $this->backend;
     }
 }

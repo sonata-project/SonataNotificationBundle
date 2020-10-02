@@ -20,3 +20,7 @@ UPGRADE FROM 3.x to 4.0
 ### Configuration
 
 * `sonata_notification.admin.enabled` is not enabled by default
+
+### Commands
+
+All commands now extend `Symfony\Component\Console\Command\Command` class instead of the deprecated `Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand` class.
