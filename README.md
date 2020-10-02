@@ -23,13 +23,13 @@ master | [![Test][test_unstable_badge]][test_unstable_link] | [![Coverage Status
 
 ## Documentation
 
-Check out the documentation on the [official website](https://sonata-project.org/bundles/notification).
+Checkout the  documentation on the [official website](https://sonata-project.org/bundles/notification).
 
 ## Support
 
 For general support and questions, please use [StackOverflow](http://stackoverflow.com/questions/tagged/sonata).
 
-If you think you found a bug or you have a feature idea to propose, feel free to open an issue
+If you think you found a bug or you have a feature concept to propose, feel free to open an issue
 **after looking** at the [contributing guide](CONTRIBUTING.md).
 
 ## License
