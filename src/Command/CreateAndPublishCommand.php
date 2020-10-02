@@ -13,13 +13,26 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Sonata\NotificationBundle\Backend\BackendInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateAndPublishCommand extends ContainerAwareCommand
+class CreateAndPublishCommand extends Command
 {
+    /**
+     * @var BackendInterface
+     */
+    private $backend;
+
+    public function __construct(BackendInterface $backend)
+    {
+        parent::__construct(null);
+
+        $this->backend = $backend;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -43,10 +56,7 @@ class CreateAndPublishCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException('Body does not contain valid json.');
         }
 
-        $this->getContainer()
-            ->get('sonata.notification.backend')
-            ->createAndPublish($type, $body)
-        ;
+        $this->backend->createAndPublish($type, $body);
 
         $output->writeln('<info>Done !</info>');
     }

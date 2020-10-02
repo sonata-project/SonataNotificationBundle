@@ -13,12 +13,25 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Sonata\NotificationBundle\Consumer\Metadata;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListHandlerCommand extends ContainerAwareCommand
+class ListHandlerCommand extends Command
 {
+    /**
+     * @var Metadata
+     */
+    private $metadata;
+
+    public function __construct(Metadata $metadata)
+    {
+        parent::__construct(null);
+
+        $this->metadata = $metadata;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,20 +47,12 @@ class ListHandlerCommand extends ContainerAwareCommand
     public function execute(InputInterface $input, OutputInterface $output): void
     {
         $output->writeln('<info>List of consumers available</info>');
-        foreach ($this->getMetadata() as $type => $ids) {
+        foreach ($this->metadata->getInformations() as $type => $ids) {
             foreach ($ids as $id) {
                 $output->writeln(sprintf('<info>%s</info> - <comment>%s</comment>', $type, $id));
             }
         }
 
         $output->writeln(' done!');
-    }
-
-    /**
-     * @return array
-     */
-    private function getMetadata()
-    {
-        return $this->getContainer()->get('sonata.notification.consumer.metadata')->getInformations();
     }
 }

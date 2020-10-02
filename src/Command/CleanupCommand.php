@@ -13,13 +13,26 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Command;
 
+use Sonata\NotificationBundle\Backend\BackendInterface;
 use Sonata\NotificationBundle\Backend\QueueDispatcherInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CleanupCommand extends ContainerAwareCommand
+class CleanupCommand extends Command
 {
+    /**
+     * @var BackendInterface
+     */
+    private $backend;
+
+    public function __construct(
+        BackendInterface $backend
+    ) {
+        parent::__construct(null);
+        $this->backend = $backend;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,12 +59,10 @@ class CleanupCommand extends ContainerAwareCommand
      */
     private function getBackend()
     {
-        $backend = $this->getContainer()->get('sonata.notification.backend');
-
-        if ($backend instanceof QueueDispatcherInterface) {
-            return $backend->getBackend(null);
+        if ($this->backend instanceof QueueDispatcherInterface) {
+            return $this->backend->getBackend(null);
         }
 
-        return $backend;
+        return $this->backend;
     }
 }

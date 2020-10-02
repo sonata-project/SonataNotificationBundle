@@ -18,14 +18,44 @@ use Sonata\NotificationBundle\Event\IterateEvent;
 use Sonata\NotificationBundle\Iterator\ErroneousMessageIterator;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Sonata\NotificationBundle\Selector\ErroneousMessagesSelector;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class RestartCommand extends ContainerAwareCommand
+class RestartCommand extends Command
 {
+    /**
+     * @var BackendInterface
+     */
+    private $backend;
+
+    /**
+     * @var ErroneousMessagesSelector
+     */
+    private $erroneousMessagesSelector;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var MessageManagerInterface
+     */
+    private $messageManager;
+
+    public function __construct(BackendInterface $backend, ErroneousMessagesSelector $erroneousMessagesSelector, EventDispatcherInterface $eventDispatcher, MessageManagerInterface $messageManager)
+    {
+        parent::__construct(null);
+
+        $this->backend = $backend;
+        $this->erroneousMessagesSelector = $erroneousMessagesSelector;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->messageManager = $messageManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,11 +83,10 @@ class RestartCommand extends ContainerAwareCommand
         }
 
         $pullMode = $input->getOption('pulling');
-        $manager = $this->getMessageManager();
 
         if ($pullMode) {
             $messages = new ErroneousMessageIterator(
-                $manager,
+                $this->messageManager,
                 $input->getOption('type'),
                 $input->getOption('pause'),
                 $input->getOption('batch-size'),
@@ -65,7 +94,7 @@ class RestartCommand extends ContainerAwareCommand
                 $input->getOption('attempt-delay')
             );
         } else {
-            $messages = $this->getErroneousMessageSelector()->getMessages(
+            $messages = $this->erroneousMessagesSelector->getMessages(
                 $input->getOption('type'),
                 $input->getOption('max-attempts')
             );
@@ -82,15 +111,12 @@ class RestartCommand extends ContainerAwareCommand
             }
         }
 
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $this->getContainer()->get('event_dispatcher');
-
         foreach ($messages as $message) {
             $id = $message->getId();
 
-            $newMessage = $manager->restart($message);
+            $newMessage = $this->messageManager->restart($message);
 
-            $this->getBackend()->publish($newMessage);
+            $this->backend->publish($newMessage);
 
             $output->writeln(sprintf(
                 'Reset Message %s <info>#%d</info>, new id %d. Attempt #%d',
@@ -101,36 +127,10 @@ class RestartCommand extends ContainerAwareCommand
             ));
 
             if ($pullMode) {
-                $eventDispatcher->dispatch(new IterateEvent($messages, null, $newMessage), IterateEvent::EVENT_NAME);
+                $this->eventDispatcher->dispatch(new IterateEvent($messages, null, $newMessage), IterateEvent::EVENT_NAME);
             }
         }
 
         $output->writeln('<info>Done!</info>');
-    }
-
-    /**
-     * Return the erroneous message selector service.
-     *
-     * @return ErroneousMessagesSelector
-     */
-    protected function getErroneousMessageSelector()
-    {
-        return $this->getContainer()->get('sonata.notification.erroneous_messages_selector');
-    }
-
-    /**
-     * @return MessageManagerInterface
-     */
-    protected function getMessageManager()
-    {
-        return $this->getContainer()->get('sonata.notification.manager.message');
-    }
-
-    /**
-     * @return BackendInterface
-     */
-    protected function getBackend()
-    {
-        return $this->getContainer()->get('sonata.notification.backend');
     }
 }
