@@ -23,7 +23,7 @@ master | [![Test][test_unstable_badge]][test_unstable_link] | [![Coverage Status
 
 ## Documentation
 
-Checkout the  documentation on the [official website](https://sonata-project.org/bundles/notification).
+Checkout our documentation on the [official website](https://sonata-project.org/bundles/notification).
 
 ## Support
 
