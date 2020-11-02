@@ -106,12 +106,12 @@ class AMQPBackendTest extends TestCase
         $deadLetterTopic = new ImplAmqpTopic(self::DEAD_LETTER_EXCHANGE);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->at(0))
+        $contextMock->expects($this->once())
             ->method('createQueue')
             ->with($this->identicalTo(self::QUEUE))
             ->willReturn($queue);
 
-        $contextMock->expects($this->at(1))
+        $contextMock->expects($this->once())
             ->method('declareQueue')
             ->with($this->identicalTo($queue))
             ->willReturnCallback(function (AmqpQueue $queue): void {
@@ -119,31 +119,25 @@ class AMQPBackendTest extends TestCase
                 $this->assertSame(['x-dead-letter-exchange' => self::DEAD_LETTER_EXCHANGE], $queue->getArguments());
             });
 
-        $contextMock->expects($this->at(2))
+        $contextMock->expects($this->exactly(2))
             ->method('createTopic')
-            ->with($this->identicalTo(self::EXCHANGE))
-            ->willReturn($topic);
+            ->willReturnMap([
+                [self::EXCHANGE, $topic],
+                [self::DEAD_LETTER_EXCHANGE, $deadLetterTopic],
+            ]);
 
-        $contextMock->expects($this->at(3))
-            ->method('declareTopic')
-            ->with($this->identicalTo($topic));
-
-        $contextMock->expects($this->at(4))
+        $contextMock->expects($this->atLeastOnce())
             ->method('bind')
             ->with($this->isInstanceOf(AmqpBind::class));
 
-        $contextMock->expects($this->at(5))
-            ->method('createTopic')
-            ->with($this->identicalTo(self::DEAD_LETTER_EXCHANGE))
-            ->willReturn($deadLetterTopic);
-
-        $contextMock->expects($this->at(6))
+        $contextMock->expects($this->exactly(2))
             ->method('declareTopic')
-            ->with($this->identicalTo($deadLetterTopic))
-            ->willReturnCallback(function (AmqpTopic $topic): void {
-                $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
-                $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
-                $this->assertSame([], $topic->getArguments());
+            ->willReturnCallback(function (AmqpTopic $topic) use ($deadLetterTopic) {
+                if ($topic === $deadLetterTopic) {
+                    $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
+                    $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
+                    $this->assertSame([], $topic->getArguments());
+                }
             });
 
         AmqpConnectionFactoryStub::$context = $contextMock;
@@ -157,15 +151,14 @@ class AMQPBackendTest extends TestCase
 
         $queue = new ImplAmqpQueue(self::QUEUE);
         $topic = new ImplAmqpTopic(self::EXCHANGE);
-        $deadLetterTopic = new ImplAmqpTopic(self::DEAD_LETTER_EXCHANGE);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->at(0))
+        $contextMock->expects($this->once())
             ->method('createQueue')
             ->with($this->identicalTo(self::QUEUE))
             ->willReturn($queue);
 
-        $contextMock->expects($this->at(1))
+        $contextMock->expects($this->once())
             ->method('declareQueue')
             ->with($this->identicalTo($queue))
             ->willReturnCallback(function (AmqpQueue $queue): void {
@@ -179,16 +172,16 @@ class AMQPBackendTest extends TestCase
                 );
             });
 
-        $contextMock->expects($this->at(2))
+        $contextMock->expects($this->once())
             ->method('createTopic')
             ->with($this->identicalTo(self::EXCHANGE))
             ->willReturn($topic);
 
-        $contextMock->expects($this->at(3))
+        $contextMock->expects($this->once())
             ->method('declareTopic')
             ->with($this->identicalTo($topic));
 
-        $contextMock->expects($this->at(4))
+        $contextMock->expects($this->once())
             ->method('bind')
             ->with($this->isInstanceOf(AmqpBind::class));
 
