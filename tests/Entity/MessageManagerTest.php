@@ -196,7 +196,7 @@ class MessageManagerTest extends TestCase
         $registry = $this->createMock(ManagerRegistry::class);
         $registry->method('getManagerForClass')->willReturn($em);
 
-        return  new MessageManager(BaseMessage::class, $registry);
+        return new MessageManager(BaseMessage::class, $registry);
     }
 
     /**
