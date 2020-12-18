@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Sonata\NotificationBundle\Iterator\MessageManagerMessageIterator as Iterator;
 use Sonata\NotificationBundle\Model\Message;
 use Sonata\NotificationBundle\Tests\Entity\MessageManagerMock;
