@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Tests\Iterator;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
 
 /**
