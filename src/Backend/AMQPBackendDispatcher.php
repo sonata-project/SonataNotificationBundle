@@ -79,7 +79,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
      */
     public function getChannel()
     {
-        @trigger_error(sprintf('The method %s is deprecated since version 3.3 and will be removed in 4.0. Use %s::getContext() instead.', __METHOD__, __CLASS__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The method %s is deprecated since version 3.3 and will be removed in 4.0. Use %s::getContext() instead.', __METHOD__, __CLASS__), \E_USER_DEPRECATED);
 
         if (!$this->channel) {
             if (!$this->context instanceof \Enqueue\AmqpLib\AmqpContext) {
@@ -286,7 +286,7 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
 
         $client = new GuzzleClient();
-        $client->setConfig(['curl.options' => [CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
+        $client->setConfig(['curl.options' => [\CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);
 
