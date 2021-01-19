@@ -49,7 +49,7 @@ class LoggerConsumer implements ConsumerInterface
                     'Using an instance of "%s" is deprecated since version 2.3. Use Psr\Log\LoggerInterface instead.',
                     \get_class($logger)
                 ),
-                E_USER_DEPRECATED
+                \E_USER_DEPRECATED
             );
         }
         $this->logger = $logger;
