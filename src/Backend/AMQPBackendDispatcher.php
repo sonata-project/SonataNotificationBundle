@@ -243,7 +243,7 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
 
         $client = new GuzzleClient();
-        $client->setConfig(['curl.options' => [CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
+        $client->setConfig(['curl.options' => [\CURLOPT_CONNECTTIMEOUT_MS => 3000]]);
         $request = $client->get(sprintf('%s/queues', $this->settings['console_url']));
         $request->setAuth($this->settings['user'], $this->settings['pass']);
 

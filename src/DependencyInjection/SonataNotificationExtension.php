@@ -169,7 +169,7 @@ class SonataNotificationExtension extends Extension
     {
         @trigger_error(
             'Using SonataEasyExtendsBundle is deprecated since sonata-project/notification-bundle 3.9. Please register SonataDoctrineBundle as a bundle instead.',
-            E_USER_DEPRECATED
+            \E_USER_DEPRECATED
         );
 
         $collector = DeprecatedDoctrineCollector::getInstance();
