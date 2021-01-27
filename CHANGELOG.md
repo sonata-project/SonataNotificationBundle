@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.29.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.10.0...3.29.0) - 2021-01-27
+### Added
+- [[#522](https://github.com/sonata-project/SonataNotificationBundle/pull/522)] Added support for `doctrine/persistence` 2 ([@core23](https://github.com/core23))
+- [[#478](https://github.com/sonata-project/SonataNotificationBundle/pull/478)] Support for `nelmio/api-doc-bundle` >= 3.6 ([@wbloszyk](https://github.com/wbloszyk))
+
 ## [3.10.0](sonata-project/SonataNotificationBundle/compare/3.9.0...3.10.0) - 2020-09-22
 ### Changed
 - [[#457](https://github.com/sonata-project/SonataNotificationBundle/pull/457)]
@@ -125,7 +130,7 @@ Error ([@wbloszyk](https://github.com/wbloszyk))
 ### Changed
 - Auto-register all aliases as public
 - Auto-register consumer as public service
- 
+
 ### Fixed
 - `isRequired()` was removed since a default is specified
 - MessageAdmin loads correct ChoiceType for the state filter (instead of ChoiceFilter)
