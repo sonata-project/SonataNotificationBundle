@@ -16,7 +16,6 @@ namespace Sonata\NotificationBundle\Backend;
 use Laminas\Diagnostics\Result\Success;
 use Sonata\NotificationBundle\Iterator\IteratorProxyMessageIterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -74,7 +73,7 @@ class PostponeRuntimeBackend extends RuntimeBackend
      * Actually, an event is not necessary, you can call this method manually, to.
      * The event is not processed in any way.
      */
-    public function onEvent(?Event $event = null)
+    public function onEvent()
     {
         while (!empty($this->messages)) {
             $message = array_shift($this->messages);
