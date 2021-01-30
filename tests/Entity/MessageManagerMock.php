@@ -45,7 +45,7 @@ class MessageManagerMock extends MessageManager
         return $result;
     }
 
-    public function save($message, $andFlush = true)
+    public function save($entity, $andFlush = true)
     {
     }
 }
