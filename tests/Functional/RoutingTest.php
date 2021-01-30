@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Sonata\NotificationBundle\Tests\Functional\Routing;
+namespace Sonata\NotificationBundle\Tests\Functional;
 
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Sonata\NotificationBundle\Tests\App\AppKernel;
