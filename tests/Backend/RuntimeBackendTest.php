@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Sonata\NotificationBundle\Tests\Notification;
+namespace Sonata\NotificationBundle\Tests\Backend;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Backend\RuntimeBackend;
