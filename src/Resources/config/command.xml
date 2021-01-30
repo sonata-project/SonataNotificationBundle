@@ -18,13 +18,6 @@
             <argument type="service" id="sonata.notification.backend"/>
             <tag name="console.command"/>
         </service>
-        <service id="Sonata\NotificationBundle\Command\RestartCommand" class="Sonata\NotificationBundle\Command\RestartCommand" public="true">
-            <argument type="service" id="sonata.notification.backend"/>
-            <argument type="service" id="sonata.notification.erroneous_messages_selector"/>
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="sonata.notification.manager.message"/>
-            <tag name="console.command"/>
-        </service>
         <service id="Sonata\NotificationBundle\Command\CleanupCommand" class="Sonata\NotificationBundle\Command\CleanupCommand" public="true">
             <argument type="service" id="sonata.notification.backend"/>
             <tag name="console.command"/>

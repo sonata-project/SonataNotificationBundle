@@ -6,5 +6,12 @@
             <argument>%sonata.notification.message.class%</argument>
             <argument type="service" id="doctrine"/>
         </service>
+        <service id="Sonata\NotificationBundle\Command\RestartCommand" class="Sonata\NotificationBundle\Command\RestartCommand" public="true">
+            <argument type="service" id="sonata.notification.backend"/>
+            <argument type="service" id="sonata.notification.erroneous_messages_selector"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="sonata.notification.manager.message"/>
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>
