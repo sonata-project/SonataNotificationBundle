@@ -153,7 +153,7 @@ class MessageController
     {
         $message = null;
 
-        $form = $this->formFactory->createNamed(null, 'sonata_notification_api_form_message', $message, [
+        $form = $this->formFactory->createNamed('', 'sonata_notification_api_form_message', $message, [
             'csrf_protection' => false,
         ]);
 
