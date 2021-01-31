@@ -25,14 +25,14 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
     /**
      * {@inheritdoc}
      */
-    public function save($message, $andFlush = true): void
+    public function save($entity, $andFlush = true): void
     {
         //Hack for ConsumerHandlerCommand->optimize()
-        if ($message->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($message)) {
-            $message = $this->getEntityManager()->getUnitOfWork()->merge($message);
+        if ($entity->getId() && !$this->em->getUnitOfWork()->isInIdentityMap($entity)) {
+            $entity = $this->getEntityManager()->getUnitOfWork()->merge($entity);
         }
 
-        parent::save($message, $andFlush);
+        parent::save($entity, $andFlush);
     }
 
     /**

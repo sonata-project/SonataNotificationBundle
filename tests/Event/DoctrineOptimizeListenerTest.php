@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Sonata\NotificationBundle\Tests\Entity;
+namespace Sonata\NotificationBundle\Tests\Event;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;

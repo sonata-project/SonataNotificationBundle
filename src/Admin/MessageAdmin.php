@@ -60,9 +60,9 @@ class MessageAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('id')
             ->add('type')
             ->add('createdAt')
@@ -77,9 +77,9 @@ class MessageAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('id', null, ['route' => ['name' => 'show']])
             ->add('type')
             ->add('createdAt')
@@ -93,11 +93,11 @@ class MessageAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $class = $this->getClass();
 
-        $datagridMapper
+        $filter
             ->add('type')
             ->add('state', null, [], ChoiceType::class, ['choices' => $class::getStateList()])
         ;
