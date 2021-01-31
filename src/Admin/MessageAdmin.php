@@ -16,7 +16,7 @@ namespace Sonata\NotificationBundle\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -27,7 +27,7 @@ class MessageAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    public function configureRoutes(RouteCollection $collection): void
+    public function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection
             ->remove('edit')
@@ -39,7 +39,7 @@ class MessageAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    public function getBatchActions()
+    public function getBatchActions(): array
     {
         $actions = [];
         $actions['publish'] = [
