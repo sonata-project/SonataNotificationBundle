@@ -12,8 +12,6 @@ framework:
     profiler:
         enabled: true
         collect: false
-    templating:
-        engines: ['twig']
 
 twig:
     exception_controller: null
