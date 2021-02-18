@@ -43,9 +43,11 @@
     "conflict": {
         "friendsofsymfony/rest-bundle": "<2.3",
         "jms/serializer": "<0.13",
+        "liip/monitor-bundle": "<1.0",
         "nelmio/api-doc-bundle": "<2.13 || >=4.0",
         "sonata-project/admin-bundle": "<3.1",
-        "sonata-project/core-bundle": "<3.20"
+        "sonata-project/core-bundle": "<3.20",
+        "sonata-project/doctrine-orm-admin-bundle": "<3.0"
     },
     "require-dev": {
         "enqueue/amqp-lib": "^0.8",
@@ -67,10 +69,10 @@
     },
     "suggest": {
         "guzzlehttp/guzzle": "If you want to get a status report when using the rabbitMQ backend.",
-        "liip/monitor-bundle": "^1.0",
+        "liip/monitor-bundle": "Integrates the LiipMonitor library into Symfony",
         "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
         "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
-        "sonata-project/doctrine-orm-admin-bundle": "^3.0"
+        "sonata-project/doctrine-orm-admin-bundle": "If you want to persist entities"
     },
     "config": {
         "sort-packages": true
