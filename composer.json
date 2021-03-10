@@ -45,9 +45,9 @@
         "jms/serializer": "<0.13",
         "liip/monitor-bundle": "<1.0",
         "nelmio/api-doc-bundle": "<2.13 || >=4.0",
-        "sonata-project/admin-bundle": "<3.1",
+        "sonata-project/admin-bundle": "<4.0",
         "sonata-project/core-bundle": "<3.20",
-        "sonata-project/doctrine-orm-admin-bundle": "<3.0"
+        "sonata-project/doctrine-orm-admin-bundle": "<4.0"
     },
     "require-dev": {
         "enqueue/amqp-lib": "^0.8",
