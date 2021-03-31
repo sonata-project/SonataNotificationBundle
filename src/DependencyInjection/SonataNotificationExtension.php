@@ -289,8 +289,7 @@ class SonataNotificationExtension extends Extension
         $definition
             ->replaceArgument(1, $queues)
             ->replaceArgument(2, $defaultQueue)
-            ->replaceArgument(3, $qBackends)
-        ;
+            ->replaceArgument(3, $qBackends);
     }
 
     /**
@@ -409,8 +408,7 @@ class SonataNotificationExtension extends Extension
             ->replaceArgument(0, $connection)
             ->replaceArgument(1, $queues)
             ->replaceArgument(2, $defaultQueue)
-            ->replaceArgument(3, $amqBackends)
-        ;
+            ->replaceArgument(3, $amqBackends);
     }
 
     /**
