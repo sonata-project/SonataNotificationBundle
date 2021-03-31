@@ -45,8 +45,7 @@ class CreateAndPublishCommand extends ContainerAwareCommand
 
         $this->getContainer()
             ->get('sonata.notification.backend')
-            ->createAndPublish($type, $body)
-        ;
+            ->createAndPublish($type, $body);
 
         $output->writeln('<info>Done !</info>');
     }

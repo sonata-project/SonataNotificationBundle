@@ -65,8 +65,7 @@ class PostponeRuntimeBackendTest extends TestCase
 
         $backend
             ->expects($this->never())
-            ->method('handle')
-        ;
+            ->method('handle');
 
         $backend->onEvent();
     }
@@ -155,8 +154,7 @@ class PostponeRuntimeBackendTest extends TestCase
 
         $backend
             ->expects($this->once())
-            ->method('handle')
-        ;
+            ->method('handle');
 
         $message = $backend->create('notification.demo', []);
         $backend->publish($message);
