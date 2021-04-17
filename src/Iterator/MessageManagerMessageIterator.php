@@ -62,42 +62,27 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
         $this->batchSize = $batchSize;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->current;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next()
     {
         $this->setCurrent();
         ++$this->counter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->counter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         $this->setCurrent();

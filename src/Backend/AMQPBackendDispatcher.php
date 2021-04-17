@@ -141,9 +141,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         return $this->context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackend($type)
     {
         if (!$this->backendsInitialized) {
@@ -184,9 +181,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         return $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         throw new \RuntimeException(
@@ -194,9 +188,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
         throw new \RuntimeException(
@@ -204,9 +195,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         try {
@@ -245,9 +233,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         return new Success('Channel is running (RabbitMQ) and consumers for all queues available.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup()
     {
         throw new \RuntimeException(
@@ -262,9 +247,6 @@ class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize()
     {
     }

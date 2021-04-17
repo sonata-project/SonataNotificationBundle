@@ -19,18 +19,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListHandlerCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         $this->setName('sonata:notification:list-handler');
         $this->setDescription('List all consumers available');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>List of consumers available</info>');

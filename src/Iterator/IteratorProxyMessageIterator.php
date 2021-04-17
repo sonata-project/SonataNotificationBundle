@@ -28,41 +28,26 @@ class IteratorProxyMessageIterator implements MessageIteratorInterface
         $this->iterator = $iterator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->iterator->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next()
     {
         $this->iterator->next();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->iterator->key();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid()
     {
         return $this->iterator->valid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         $this->iterator->rewind();

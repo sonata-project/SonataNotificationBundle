@@ -56,9 +56,6 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackend($type)
     {
         $default = null;
@@ -76,41 +73,26 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         return $this->getDefaultBackend();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         throw new \RuntimeException('You need to use a specific doctrine backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
         throw new \RuntimeException('You need to use a specific doctrine backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         return new Success('Channel is running (Database) and consumers for all queues available.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup()
     {
         throw new \RuntimeException('You need to use a specific doctrine backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize()
     {
     }

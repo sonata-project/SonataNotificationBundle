@@ -20,9 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateAndPublishCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         $this
@@ -31,9 +28,6 @@ class CreateAndPublishCommand extends ContainerAwareCommand
             ->addArgument('body', InputArgument::REQUIRED, 'Body of the notification (json)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $type = $input->getArgument('type');

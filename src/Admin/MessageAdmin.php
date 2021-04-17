@@ -24,9 +24,6 @@ class MessageAdmin extends AbstractAdmin
 {
     protected $classnameLabel = 'Message';
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureRoutes(RouteCollection $collection)
     {
         $collection
@@ -35,9 +32,6 @@ class MessageAdmin extends AbstractAdmin
             ->remove('history');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBatchActions()
     {
         $actions = [];
@@ -56,9 +50,6 @@ class MessageAdmin extends AbstractAdmin
         return $actions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureShowFields(ShowMapper $show)
     {
         $show
@@ -72,9 +63,6 @@ class MessageAdmin extends AbstractAdmin
             ->add('restartCount');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureListFields(ListMapper $list)
     {
         $list
@@ -87,9 +75,6 @@ class MessageAdmin extends AbstractAdmin
             ->add('restartCount');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $class = $this->getClass();

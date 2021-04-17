@@ -20,18 +20,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CleanupCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         $this->setName('sonata:notification:cleanup');
         $this->setDescription('Clean up backend message');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $output->write('<info>Starting ... </info>');

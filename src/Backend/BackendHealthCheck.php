@@ -27,25 +27,16 @@ class BackendHealthCheck extends AbstractCheck
         $this->backend = $backend;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function check()
     {
         return $this->backend->getStatus();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'Sonata Notification Default Backend';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGroup()
     {
         return 'sonata';

@@ -27,9 +27,6 @@ class SwiftMailerConsumer implements ConsumerInterface
         $this->mailer = $mailer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ConsumerEvent $event)
     {
         if (!$this->mailer->getTransport()->isStarted()) {

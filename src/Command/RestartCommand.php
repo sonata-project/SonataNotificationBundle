@@ -26,9 +26,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RestartCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         $this->setName('sonata:notification:restart');
@@ -41,9 +38,6 @@ class RestartCommand extends ContainerAwareCommand
         $this->addOption('batch-size', null, InputOption::VALUE_OPTIONAL, 'Number of message to process on each pull (used only when pulling option is set)', 10);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>Starting... </info>');

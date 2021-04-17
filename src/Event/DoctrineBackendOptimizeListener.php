@@ -34,9 +34,6 @@ class DoctrineBackendOptimizeListener implements IterationListener
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function iterate(IterateEvent $event)
     {
         if (!method_exists($event->getIterator(), 'isBufferEmpty')) {

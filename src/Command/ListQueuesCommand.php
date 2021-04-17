@@ -20,18 +20,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListQueuesCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         $this->setName('sonata:notification:list-queues');
         $this->setDescription('List all queues available');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $backend = $this->getContainer()->get('sonata.notification.backend');
