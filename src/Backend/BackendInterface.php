@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Backend;
 
 use Laminas\Diagnostics\Result\ResultInterface;
+use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

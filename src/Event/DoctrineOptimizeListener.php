@@ -25,7 +25,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class DoctrineOptimizeListener implements IterationListener
 {
     /**
-     * @var Registry
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
