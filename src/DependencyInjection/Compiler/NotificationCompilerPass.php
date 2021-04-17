@@ -23,9 +23,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class NotificationCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('sonata.notification.dispatcher')) {

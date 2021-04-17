@@ -83,9 +83,6 @@ class MessageManagerBackend implements BackendInterface
         $this->types = $types;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message)
     {
         $this->messageManager->save($message);
@@ -93,9 +90,6 @@ class MessageManagerBackend implements BackendInterface
         return $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create($type, array $body)
     {
         $message = $this->messageManager->create();
@@ -106,25 +100,16 @@ class MessageManagerBackend implements BackendInterface
         return $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAndPublish($type, array $body)
     {
         return $this->publish($this->create($type, $body));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return new MessageManagerMessageIterator($this->messageManager, $this->types, $this->pause, $this->batchSize);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize()
     {
     }
@@ -134,9 +119,6 @@ class MessageManagerBackend implements BackendInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
         $event = new ConsumerEvent($message);
@@ -163,9 +145,6 @@ class MessageManagerBackend implements BackendInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         try {
@@ -193,9 +172,6 @@ class MessageManagerBackend implements BackendInterface
         return new Success('Ok (Database)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup()
     {
         $this->messageManager->cleanup($this->maxAge);

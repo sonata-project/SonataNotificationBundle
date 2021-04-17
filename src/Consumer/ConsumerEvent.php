@@ -33,9 +33,6 @@ class ConsumerEvent extends Event implements ConsumerEventInterface
         $this->message = $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMessage()
     {
         return $this->message;

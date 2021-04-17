@@ -22,9 +22,6 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function save($entity, $andFlush = true)
     {
         //Hack for ConsumerHandlerCommand->optimize()
@@ -35,9 +32,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         parent::save($entity, $andFlush);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findByTypes(array $types, $state, $batchSize)
     {
         $params = [];
@@ -48,9 +42,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         return $query->getQuery()->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findByAttempts(array $types, $state, $batchSize, $maxAttempts = null, $attemptDelay = 10)
     {
         $params = [];
@@ -71,9 +62,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         return $query->getQuery()->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function countStates()
     {
         $tableName = $this->getEntityManager()->getClassMetadata($this->class)->table['name'];
@@ -96,9 +84,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         return $states;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup($maxAge)
     {
         $tableName = $this->getEntityManager()->getClassMetadata($this->class)->table['name'];
@@ -116,9 +101,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         $qb->getQuery()->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cancel(MessageInterface $message, $force = false)
     {
         if (($message->isRunning() || $message->isError()) && !$force) {
@@ -130,9 +112,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         $this->save($message);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function restart(MessageInterface $message)
     {
         if ($message->isOpen() || $message->isRunning() || $message->isCancelled()) {
@@ -148,9 +127,6 @@ class MessageManager extends BaseEntityManager implements MessageManagerInterfac
         return $newMessage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPager(array $criteria, int $page, int $limit = 10, array $sort = []): PagerInterface
     {
         $query = $this->getRepository()

@@ -27,9 +27,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ConsumerHandlerCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure()
     {
         $this->setName('sonata:notification:start');
@@ -39,9 +36,6 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
         $this->addOption('show-details', 'd', InputOption::VALUE_OPTIONAL, 'Show consumers return details', true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $startDate = new \DateTime();

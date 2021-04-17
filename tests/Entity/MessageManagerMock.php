@@ -20,9 +20,6 @@ use Sonata\NotificationBundle\Entity\MessageManager;
  */
 class MessageManagerMock extends MessageManager
 {
-    /**
-     * {@inheritdoc}
-     */
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
     {
         $result = [];

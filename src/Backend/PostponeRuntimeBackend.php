@@ -51,9 +51,6 @@ class PostponeRuntimeBackend extends RuntimeBackend
         $this->postponeOnCli = $postponeOnCli;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message)
     {
         // if the message is generated from the cli the message is handled
@@ -82,17 +79,11 @@ class PostponeRuntimeBackend extends RuntimeBackend
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return new IteratorProxyMessageIterator(new \ArrayIterator($this->messages));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         return new Success('Postpone runtime backend', 'Ok (Postpone Runtime)');

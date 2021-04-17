@@ -82,17 +82,11 @@ class AMQPMessageIterator implements MessageIteratorInterface
         $this->queue = $consumer->getQueue()->getQueueName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next()
     {
         $this->isValid = false;
@@ -117,25 +111,16 @@ class AMQPMessageIterator implements MessageIteratorInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         $this->counter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid()
     {
         return $this->isValid;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         $this->isValid = true;

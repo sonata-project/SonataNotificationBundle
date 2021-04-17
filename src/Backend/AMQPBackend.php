@@ -110,9 +110,6 @@ class AMQPBackend implements BackendInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize()
     {
         $args = [];
@@ -150,9 +147,6 @@ class AMQPBackend implements BackendInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message)
     {
         $body = json_encode([
@@ -173,9 +167,6 @@ class AMQPBackend implements BackendInterface
         $this->getContext()->createProducer()->send($topic, $amqpMessage);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create($type, array $body)
     {
         $message = new Message();
@@ -186,17 +177,11 @@ class AMQPBackend implements BackendInterface
         return $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAndPublish($type, array $body)
     {
         $this->publish($this->create($type, $body));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         $context = $this->getContext();
@@ -215,9 +200,6 @@ class AMQPBackend implements BackendInterface
         return new AMQPMessageIterator($context->getLibChannel(), $this->consumer);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher)
     {
         $event = new ConsumerEvent($message);
@@ -249,9 +231,6 @@ class AMQPBackend implements BackendInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         try {
@@ -263,9 +242,6 @@ class AMQPBackend implements BackendInterface
         return new Success('Channel is running (RabbitMQ)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup()
     {
         throw new \RuntimeException('Not implemented');

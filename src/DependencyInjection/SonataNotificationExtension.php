@@ -33,9 +33,6 @@ class SonataNotificationExtension extends Extension
      */
     protected $amqpCounter = 0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();

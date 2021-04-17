@@ -34,9 +34,6 @@ class DoctrineOptimizeListener implements IterationListener
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function iterate(IterateEvent $event)
     {
         foreach ($this->doctrine->getManagers() as $name => $manager) {

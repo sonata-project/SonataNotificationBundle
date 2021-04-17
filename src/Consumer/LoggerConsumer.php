@@ -55,9 +55,6 @@ class LoggerConsumer implements ConsumerInterface
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ConsumerEvent $event)
     {
         $message = $event->getMessage();

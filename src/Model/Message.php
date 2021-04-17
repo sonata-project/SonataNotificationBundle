@@ -67,9 +67,6 @@ class Message implements MessageInterface
         $this->state = self::STATE_OPEN;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
         $this->state = self::STATE_OPEN;
@@ -80,25 +77,16 @@ class Message implements MessageInterface
         $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setBody(array $body)
     {
         $this->body = $body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBody()
     {
         return $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getValue($names, $default = null)
     {
         if (!\is_array($names)) {
@@ -117,113 +105,71 @@ class Message implements MessageInterface
         return $body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCompletedAt(?\DateTime $completedAt = null)
     {
         $this->completedAt = $completedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCompletedAt()
     {
         return $this->completedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setGroup($group)
     {
         $this->group = $group;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGroup()
     {
         return $this->group;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setType($type)
     {
         $this->type = $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setState($state)
     {
         $this->state = $state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getState()
     {
         return $this->state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setRestartCount($restartCount)
     {
         $this->restartCount = $restartCount;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRestartCount()
     {
         return $this->restartCount;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
@@ -243,25 +189,16 @@ class Message implements MessageInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setStartedAt(?\DateTime $startedAt = null)
     {
         $this->startedAt = $startedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStartedAt()
     {
         return $this->startedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStateName()
     {
         $list = self::getStateList();
@@ -269,33 +206,21 @@ class Message implements MessageInterface
         return isset($list[$this->getState()]) ? $list[$this->getState()] : '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isRunning()
     {
         return self::STATE_IN_PROGRESS === $this->state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isCancelled()
     {
         return self::STATE_CANCELLED === $this->state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isError()
     {
         return self::STATE_ERROR === $this->state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isOpen()
     {
         return self::STATE_OPEN === $this->state;
