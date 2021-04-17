@@ -32,8 +32,7 @@ class MessageAdmin extends AbstractAdmin
         $collection
             ->remove('edit')
             ->remove('create')
-            ->remove('history')
-        ;
+            ->remove('history');
     }
 
     /**
@@ -70,8 +69,7 @@ class MessageAdmin extends AbstractAdmin
             ->add('completedAt')
             ->add('getStateName')
             ->add('body')
-            ->add('restartCount')
-        ;
+            ->add('restartCount');
     }
 
     /**
@@ -86,8 +84,7 @@ class MessageAdmin extends AbstractAdmin
             ->add('startedAt')
             ->add('completedAt')
             ->add('getStateName')
-            ->add('restartCount')
-        ;
+            ->add('restartCount');
     }
 
     /**
@@ -99,7 +96,6 @@ class MessageAdmin extends AbstractAdmin
 
         $filter
             ->add('type')
-            ->add('state', null, [], ChoiceType::class, ['choices' => $class::getStateList()])
-        ;
+            ->add('state', null, [], ChoiceType::class, ['choices' => $class::getStateList()]);
     }
 }

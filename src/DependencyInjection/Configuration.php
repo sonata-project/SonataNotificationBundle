@@ -174,8 +174,7 @@ EOF;
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }
@@ -248,8 +247,7 @@ EOF;
         $connectionNode = $node
             ->info($queuesInfo)
             ->requiresAtLeastOneElement()
-            ->prototype('array')
-        ;
+            ->prototype('array');
 
         $connectionNode
             ->children()

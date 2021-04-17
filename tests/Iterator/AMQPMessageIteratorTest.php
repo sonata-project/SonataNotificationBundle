@@ -77,14 +77,12 @@ class AMQPMessageIteratorTest extends TestCase
         $queue = $this->createMock(AmqpQueue::class);
         $queue
             ->method('getQueueName')
-            ->willReturn($queueName)
-        ;
+            ->willReturn($queueName);
 
         $consumer = $this->createMock(AmqpConsumer::class);
         $consumer
             ->method('getQueue')
-            ->willReturn($queue)
-        ;
+            ->willReturn($queue);
 
         return $consumer;
     }

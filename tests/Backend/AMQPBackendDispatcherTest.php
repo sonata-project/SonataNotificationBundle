@@ -201,8 +201,7 @@ class AMQPBackendDispatcherTest extends TestCase
 
         if (null !== $called) {
             $mock->expects($called)
-                ->method('createAndPublish')
-            ;
+                ->method('createAndPublish');
         }
 
         return $mock;

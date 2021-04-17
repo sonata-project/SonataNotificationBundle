@@ -29,8 +29,7 @@ class MessageManagerBackendDispatcherTest extends TestCase
         $testBackend = $this->createMock(MessageManagerBackend::class);
 
         $testBackend->expects($this->once())
-            ->method('setDispatcher')
-        ;
+            ->method('setDispatcher');
 
         $message = new Message();
         $message->setType('test');
@@ -38,8 +37,7 @@ class MessageManagerBackendDispatcherTest extends TestCase
 
         $testBackend->expects($this->once())
             ->method('create')
-            ->willReturn($message)
-        ;
+            ->willReturn($message);
 
         $mMgr = $this->createMock(MessageManagerInterface::class);
 

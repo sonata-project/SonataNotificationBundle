@@ -44,7 +44,7 @@
         "friendsofsymfony/rest-bundle": "<2.3",
         "jms/serializer": "<0.13",
         "liip/monitor-bundle": "<1.0",
-        "nelmio/api-doc-bundle": "<2.13 || >=4.0",
+        "nelmio/api-doc-bundle": "<2.13.5 || >=4.0",
         "sonata-project/admin-bundle": "<3.1",
         "sonata-project/core-bundle": "<3.20",
         "sonata-project/doctrine-orm-admin-bundle": "<3.0"
@@ -57,19 +57,21 @@
         "liip/monitor-bundle": "^2.6",
         "matthiasnoback/symfony-config-test": "^4.2",
         "matthiasnoback/symfony-dependency-injection-test": "^4.1",
-        "nelmio/api-doc-bundle": "^2.13.4 || ^3.6",
+        "nelmio/api-doc-bundle": "^2.13.5 || ^3.6",
         "sonata-project/admin-bundle": "4.x-dev",
         "sonata-project/doctrine-orm-admin-bundle": "4.x-dev",
         "swiftmailer/swiftmailer": "^5.0 || ^6.0",
-        "symfony/browser-kit": "^4.4 || ^5.1",
-        "symfony/phpunit-bridge": "^5.1.8",
+        "symfony/browser-kit": "^4.4 || ^5.2",
+        "symfony/phpunit-bridge": "^5.2",
         "symfony/swiftmailer-bundle": "^3.4",
         "symfony/templating": "^4.4 || ^5.2",
         "symfony/yaml": "^4.4 || ^5.2"
     },
     "suggest": {
+        "friendsofsymfony/rest-bundle": "If you want to expose a ReST API.",
         "guzzlehttp/guzzle": "If you want to get a status report when using the rabbitMQ backend.",
         "liip/monitor-bundle": "Integrates the LiipMonitor library into Symfony",
+        "nelmio/api-doc-bundle": "If you want to provide OAS documentation for the ReST API.",
         "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
         "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
         "sonata-project/doctrine-orm-admin-bundle": "If you want to persist entities"
