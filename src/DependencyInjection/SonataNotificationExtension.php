@@ -245,6 +245,7 @@ class SonataNotificationExtension extends Extension
 
         $defaultSet = false;
         $declaredQueues = [];
+        $defaultQueue = '';
 
         foreach ($queues as $pos => &$queue) {
             if (\in_array($queue['queue'], $declaredQueues, true)) {
@@ -351,6 +352,7 @@ class SonataNotificationExtension extends Extension
         }
 
         $declaredQueues = [];
+        $defaultQueue = '';
 
         $defaultSet = false;
         foreach ($queues as $pos => $queue) {

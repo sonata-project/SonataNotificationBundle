@@ -34,6 +34,8 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
     protected $default;
 
     /**
+     * NEXT_MAJOR: Remove $messageManager parameter.
+     *
      * @param MessageManagerInterface $messageManager Only used in compiler pass
      * @param string                  $defaultQueue
      */

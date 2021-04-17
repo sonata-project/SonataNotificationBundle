@@ -57,13 +57,15 @@
         "matthiasnoback/symfony-config-test": "^4.2",
         "matthiasnoback/symfony-dependency-injection-test": "^4.1",
         "nelmio/api-doc-bundle": "^2.13.5 || ^3.6",
+        "phpstan/phpstan": "^0.12.83",
         "sonata-project/doctrine-orm-admin-bundle": "^3.19",
         "swiftmailer/swiftmailer": "^5.0 || ^6.0",
         "symfony/browser-kit": "^4.4 || ^5.2",
         "symfony/phpunit-bridge": "^5.2",
         "symfony/swiftmailer-bundle": "^3.4",
         "symfony/templating": "^4.4 || ^5.2",
-        "symfony/yaml": "^4.4 || ^5.2"
+        "symfony/yaml": "^4.4 || ^5.2",
+        "vimeo/psalm": "^4.7"
     },
     "suggest": {
         "friendsofsymfony/rest-bundle": "If you want to expose a ReST API.",

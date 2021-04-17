@@ -49,6 +49,11 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
     protected $buffer = [];
 
     /**
+     * @var int
+     */
+    protected $pause;
+
+    /**
      * @param array $types
      * @param int   $pause
      * @param int   $batchSize
