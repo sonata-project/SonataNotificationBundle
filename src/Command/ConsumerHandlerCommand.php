@@ -138,9 +138,11 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');
 
-                return;
+                return 0;
             }
         }
+
+        return 0;
     }
 
     /**

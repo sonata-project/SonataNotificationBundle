@@ -34,6 +34,8 @@ class CleanupCommand extends ContainerAwareCommand
         $this->getBackend()->cleanup();
 
         $output->writeln('done!');
+
+        return 0;
     }
 
     /**
