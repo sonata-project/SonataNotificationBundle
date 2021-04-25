@@ -26,7 +26,7 @@ interface QueueDispatcherInterface
     /**
      * Get a backend by message type.
      *
-     * @param string $type
+     * @param string|null $type
      *
      * @throws BackendNotFoundException
      *

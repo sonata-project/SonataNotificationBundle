@@ -217,10 +217,10 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param bool $checkLevel
-     * @param int  $pause
-     * @param int  $maxAge
-     * @param int  $batchSize
+     * @param array $checkLevel
+     * @param int   $pause
+     * @param int   $maxAge
+     * @param int   $batchSize
      *
      * @throws \RuntimeException
      */
@@ -292,7 +292,7 @@ class SonataNotificationExtension extends Extension
 
     /**
      * @param string $manager
-     * @param bool   $checkLevel
+     * @param array  $checkLevel
      * @param int    $pause
      * @param int    $maxAge
      * @param int    $batchSize

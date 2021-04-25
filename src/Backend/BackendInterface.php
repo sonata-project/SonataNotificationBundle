@@ -41,6 +41,8 @@ interface BackendInterface
 
     /**
      * Initialize.
+     *
+     * @return void
      */
     public function initialize();
 
@@ -56,6 +58,8 @@ interface BackendInterface
 
     /**
      * Clean up messages.
+     *
+     * @return void
      */
     public function cleanup();
 }
