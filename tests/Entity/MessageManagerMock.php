@@ -20,7 +20,7 @@ use Sonata\NotificationBundle\Entity\MessageManager;
  */
 class MessageManagerMock extends MessageManager
 {
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array
     {
         $result = [];
         while (null !== $limit && $limit > 0) {
@@ -31,7 +31,7 @@ class MessageManagerMock extends MessageManager
         return $result;
     }
 
-    public function findByTypes(array $types, $state, $batchSize)
+    public function findByTypes(array $types, $state, $batchSize): array
     {
         $result = [];
         while (null !== $batchSize && $batchSize > 0) {
@@ -42,7 +42,7 @@ class MessageManagerMock extends MessageManager
         return $result;
     }
 
-    public function save($entity, $andFlush = true)
+    public function save($entity, $andFlush = true): void
     {
     }
 }
