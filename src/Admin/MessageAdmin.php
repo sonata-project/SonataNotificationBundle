@@ -81,6 +81,9 @@ class MessageAdmin extends AbstractAdmin
 
         $filter
             ->add('type')
-            ->add('state', null, [], ChoiceType::class, ['choices' => $class::getStateList()]);
+            ->add('state', null, [
+                'field_type' => ChoiceType::class,
+                'field_options' => ['choices' => $class::getStateList()],
+            ]);
     }
 }
