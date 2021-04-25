@@ -63,6 +63,7 @@ class MessageControllerTest extends TestCase
 
         $form = $this->createMock(Form::class);
         $form->expects($this->once())->method('handleRequest');
+        $form->expects($this->once())->method('isSubmitted')->willReturn(true);
         $form->expects($this->once())->method('isValid')->willReturn(true);
         $form->expects($this->once())->method('getData')->willReturn($message);
 
@@ -83,7 +84,7 @@ class MessageControllerTest extends TestCase
 
         $form = $this->createMock(Form::class);
         $form->expects($this->once())->method('handleRequest');
-        $form->expects($this->once())->method('isValid')->willReturn(false);
+        $form->expects($this->once())->method('isSubmitted')->willReturn(false);
 
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->expects($this->once())->method('createNamed')->willReturn($form);
