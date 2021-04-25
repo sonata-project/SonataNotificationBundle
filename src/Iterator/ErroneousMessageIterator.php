@@ -46,7 +46,7 @@ class ErroneousMessageIterator extends MessageManagerMessageIterator
     /**
      * Find messages in error.
      *
-     * @param $types
+     * @param array $types
      *
      * @return mixed
      */
