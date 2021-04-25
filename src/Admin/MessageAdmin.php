@@ -20,6 +20,9 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @phpstan-extends AbstractAdmin<\Sonata\NotificationBundle\Model\Message>
+ */
 class MessageAdmin extends AbstractAdmin
 {
     protected $classnameLabel = 'Message';
