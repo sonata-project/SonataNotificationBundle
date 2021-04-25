@@ -10,6 +10,7 @@ Symfony SonataNotificationBundle
 
 [![Latest Stable Version](https://poser.pugx.org/sonata-project/notification-bundle/v/stable)](https://packagist.org/packages/sonata-project/notification-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/sonata-project/notification-bundle/v/unstable)](https://packagist.org/packages/sonata-project/notification-bundle)
+[![Psalm Type Coverage][shepherd_stable_badge]][shepherd_stable_link]
 [![License](https://poser.pugx.org/sonata-project/notification-bundle/license)](https://packagist.org/packages/sonata-project/notification-bundle)
 
 [![Total Downloads](https://poser.pugx.org/sonata-project/notification-bundle/downloads)](https://packagist.org/packages/sonata-project/notification-bundle)
@@ -45,3 +46,5 @@ This package is available under the [MIT license](LICENSE).
 [coverage_stable_link]: https://codecov.io/gh/sonata-project/SonataNotificationBundle/branch/3.x
 [coverage_unstable_badge]: https://codecov.io/gh/sonata-project/SonataNotificationBundle/branch/master/graph/badge.svg
 [coverage_unstable_link]: https://codecov.io/gh/sonata-project/SonataNotificationBundle/branch/master
+[shepherd_stable_badge]: https://shepherd.dev/github/sonata-project/SonataNotificationBundle/coverage.svg
+[shepherd_stable_link]: https://shepherd.dev/github/sonata-project/SonataNotificationBundle
