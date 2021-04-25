@@ -147,7 +147,7 @@ class ConsumerHandlerCommand extends ContainerAwareCommand
 
     /**
      * @param string $type
-     * @param string $backend
+     * @param object $backend
      *
      * @throws \RuntimeException
      */
