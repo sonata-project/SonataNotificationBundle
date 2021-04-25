@@ -49,8 +49,8 @@ interface MessageManagerInterface extends ManagerInterface, PageableInterface
     public function findByTypes(array $types, $state, $batchSize);
 
     /**
-     * @param          $state
-     * @param          $batchSize
+     * @param int      $state
+     * @param int      $batchSize
      * @param int|null $maxAttempts
      * @param int      $attemptDelay
      *

@@ -33,7 +33,7 @@ interface MessageInterface
 
     /**
      * @param array|string $names
-     * @param $default
+     * @param mixed        $default
      *
      * @return mixed
      */
