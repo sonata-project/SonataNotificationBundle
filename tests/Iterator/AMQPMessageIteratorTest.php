@@ -17,6 +17,8 @@ use Interop\Amqp\AmqpConsumer;
 use Interop\Amqp\AmqpQueue;
 use Interop\Amqp\Impl\AmqpMessage;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
@@ -39,7 +41,7 @@ class AMQPMessageIteratorTest extends TestCase
      */
     public function testCouldBeConstructedWithChannelAndContextAsArguments(): void
     {
-        new AMQPMessageIterator($this->createChannelMock(), $this->createConsumerStub());
+        new AMQPMessageIterator($this->createChannelStub(), $this->createConsumerMock());
     }
 
     public function testShouldIterateOverThreeMessagesAndExit(): void
@@ -48,13 +50,13 @@ class AMQPMessageIteratorTest extends TestCase
         $secondMessage = new AmqpMessage('{"body": {"value": "theSecondMessageBody"}, "type": "aType", "state": "aState"}');
         $thirdMessage = new AmqpMessage('{"body": {"value": "theThirdMessageBody"}, "type": "aType", "state": "aState"}');
 
-        $consumerMock = $this->createConsumerStub('aQueueName');
+        $consumerMock = $this->createConsumerMock('aQueueName');
         $consumerMock
             ->expects($this->exactly(4))
             ->method('receive')
             ->willReturnOnConsecutiveCalls($firstMessage, $secondMessage, $thirdMessage, null);
 
-        $iterator = new AMQPMessageIterator($this->createChannelMock(), $consumerMock);
+        $iterator = new AMQPMessageIterator($this->createChannelStub(), $consumerMock);
 
         $values = [];
         foreach ($iterator as $message) {
@@ -73,9 +75,9 @@ class AMQPMessageIteratorTest extends TestCase
     /**
      * @param mixed $queueName
      *
-     * @return AmqpConsumer|\PHPUnit_Framework_MockObject_MockObject
+     * @return AmqpConsumer&MockObject
      */
-    private function createConsumerStub($queueName = null)
+    private function createConsumerMock($queueName = null)
     {
         $queue = $this->createMock(AmqpQueue::class);
         $queue
@@ -91,10 +93,10 @@ class AMQPMessageIteratorTest extends TestCase
     }
 
     /**
-     * @return AMQPChannel|\PHPUnit_Framework_MockObject_MockObject|AMQPChannel
+     * @return AMQPChannel&Stub
      */
-    private function createChannelMock()
+    private function createChannelStub()
     {
-        return $this->createMock(AMQPChannel::class);
+        return $this->createStub(AMQPChannel::class);
     }
 }
