@@ -35,6 +35,8 @@ class ListHandlerCommand extends ContainerAwareCommand
         }
 
         $output->writeln(' done!');
+
+        return 0;
     }
 
     /**

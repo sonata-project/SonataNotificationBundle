@@ -35,7 +35,7 @@ class ListQueuesCommand extends ContainerAwareCommand
                 'The backend class <info>'.\get_class($backend).'</info> does not provide multiple queues.'
             );
 
-            return;
+            return 0;
         }
 
         $output->writeln('<info>List of queues available</info>');
@@ -46,5 +46,7 @@ class ListQueuesCommand extends ContainerAwareCommand
                 $queue['routing_key']
             ));
         }
+
+        return 0;
     }
 }

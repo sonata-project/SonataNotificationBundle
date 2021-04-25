@@ -42,5 +42,7 @@ class CreateAndPublishCommand extends ContainerAwareCommand
             ->createAndPublish($type, $body);
 
         $output->writeln('<info>Done !</info>');
+
+        return 0;
     }
 }

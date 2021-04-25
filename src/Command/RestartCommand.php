@@ -72,7 +72,7 @@ class RestartCommand extends ContainerAwareCommand
             if (0 === \count($messages)) {
                 $output->writeln('Nothing to restart, bye.');
 
-                return;
+                return 0;
             }
         }
 
@@ -100,6 +100,8 @@ class RestartCommand extends ContainerAwareCommand
         }
 
         $output->writeln('<info>Done!</info>');
+
+        return 0;
     }
 
     /**
