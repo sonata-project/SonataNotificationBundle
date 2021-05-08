@@ -15,6 +15,9 @@ namespace Sonata\NotificationBundle\Backend;
 
 use Laminas\Diagnostics\Check\AbstractCheck;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class BackendHealthCheck extends AbstractCheck
 {
     /**

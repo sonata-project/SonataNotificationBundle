@@ -20,6 +20,9 @@ use Sonata\Doctrine\Entity\BaseEntityManager;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {
     public function save($entity, $andFlush = true)

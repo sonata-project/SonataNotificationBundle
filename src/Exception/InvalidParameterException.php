@@ -20,6 +20,9 @@ if (class_exists(CoreBundleException::class)) {
     {
     }
 } else {
+    /**
+     * @final since sonata-project/notification-bundle 3.x
+     */
     class InvalidParameterException extends \RuntimeException
     {
     }

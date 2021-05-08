@@ -25,6 +25,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class ConsumerHandlerCommand extends ContainerAwareCommand
 {
     public function configure()

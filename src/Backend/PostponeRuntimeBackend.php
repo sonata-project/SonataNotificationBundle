@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @see https://gist.github.com/3852361
  *
  * @author Toni Uebernickel <tuebernickel@gmail.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class PostponeRuntimeBackend extends RuntimeBackend
 {

@@ -22,6 +22,8 @@ use Symfony\Contracts\EventDispatcher\Event;
  * Event for ConsumerHandlerCommand iterations event.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class IterateEvent extends Event
 {
