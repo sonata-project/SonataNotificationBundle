@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @phpstan-extends AbstractAdmin<\Sonata\NotificationBundle\Model\Message>
+ * @final since sonata-project/notification-bundle 3.x
  */
 class MessageAdmin extends AbstractAdmin
 {

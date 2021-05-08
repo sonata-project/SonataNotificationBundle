@@ -15,6 +15,9 @@ namespace Sonata\NotificationBundle\Form\Type;
 
 use Sonata\Form\Type\BaseDoctrineORMSerializationType;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class MessageSerializationType extends BaseDoctrineORMSerializationType
 {
 }

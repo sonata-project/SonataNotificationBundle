@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Consumer;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class Metadata
 {
     /**

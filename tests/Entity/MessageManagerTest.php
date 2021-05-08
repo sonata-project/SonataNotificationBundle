@@ -28,7 +28,7 @@ class MessageManagerTest extends TestCase
 {
     public function testCancel(): void
     {
-        $manager = $this->getMessageManagerMock();
+        $manager = $this->createMessageManager();
 
         $message = $this->getMessage();
 
@@ -39,7 +39,7 @@ class MessageManagerTest extends TestCase
 
     public function testRestart(): void
     {
-        $manager = $this->getMessageManagerMock();
+        $manager = $this->createMessageManager();
 
         // test un-restartable status
         $this->assertNull($manager->restart($this->getMessage(MessageInterface::STATE_OPEN)));
@@ -150,13 +150,6 @@ class MessageManagerTest extends TestCase
             ->getPager(['state' => MessageInterface::STATE_IN_PROGRESS], 1);
     }
 
-    protected function getMessageManagerMock(): MessageManagerMock
-    {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        return new MessageManagerMock(Message::class, $registry);
-    }
-
     protected function getMessageManager($qbCallback): MessageManager
     {
         $query = $this->getMockForAbstractClass(
@@ -209,5 +202,25 @@ class MessageManagerTest extends TestCase
         $message->setState($state);
 
         return $message;
+    }
+
+    private function createMessageManager(): MessageManager
+    {
+        $repository = $this->createMock(EntityRepository::class);
+
+        $metadata = $this->createMock(ClassMetadata::class);
+        $metadata->method('getFieldNames')->willReturn([
+            'state',
+            'type',
+        ]);
+
+        $em = $this->createMock(EntityManager::class);
+        $em->method('getRepository')->willReturn($repository);
+        $em->method('getClassMetadata')->willReturn($metadata);
+
+        $registry = $this->createMock(ManagerRegistry::class);
+        $registry->method('getManagerForClass')->willReturn($em);
+
+        return new MessageManager(BaseMessage::class, $registry);
     }
 }

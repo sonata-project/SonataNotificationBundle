@@ -4,6 +4,10 @@ UPGRADE 3.x
 UPGRADE FROM 3.x to 3.x
 =======================
 
+### Close API
+
+Most of the classes have been marked as `@final` and they will be final in `4.0`.
+
 ### Upgrade to SonataDatagridBundle 3.0
 
 There is a minimal BC Break on `MessageManager::getPager`. If you are extending this method you should add parameter and return type hints.

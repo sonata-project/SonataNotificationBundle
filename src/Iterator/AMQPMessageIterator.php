@@ -18,6 +18,9 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Sonata\NotificationBundle\Model\Message;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class AMQPMessageIterator implements MessageIteratorInterface
 {
     /**

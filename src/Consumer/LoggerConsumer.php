@@ -16,6 +16,9 @@ namespace Sonata\NotificationBundle\Consumer;
 use Psr\Log\LoggerInterface;
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class LoggerConsumer implements ConsumerInterface
 {
     /**

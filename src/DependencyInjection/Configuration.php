@@ -19,6 +19,9 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()

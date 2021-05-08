@@ -26,6 +26,9 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class SonataNotificationExtension extends Extension
 {
     /**

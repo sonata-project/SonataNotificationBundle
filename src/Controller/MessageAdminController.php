@@ -20,6 +20,9 @@ use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class MessageAdminController extends CRUDController
 {
     /**

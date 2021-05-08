@@ -19,6 +19,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class CleanupCommand extends ContainerAwareCommand
 {
     public function configure()

@@ -23,6 +23,9 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class MessageManagerBackend implements BackendInterface
 {
     /**

@@ -16,6 +16,9 @@ namespace Sonata\NotificationBundle\Iterator;
 use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class ErroneousMessageIterator extends MessageManagerMessageIterator
 {
     /**
