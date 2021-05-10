@@ -15,6 +15,9 @@ namespace Sonata\NotificationBundle\Consumer;
 
 use Sonata\NotificationBundle\Model\MessageInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class SwiftMailerConsumer implements ConsumerInterface
 {
     /**
@@ -27,9 +30,6 @@ class SwiftMailerConsumer implements ConsumerInterface
         $this->mailer = $mailer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ConsumerEvent $event): void
     {
         if (!$this->mailer->getTransport()->isStarted()) {

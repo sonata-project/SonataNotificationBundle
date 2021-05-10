@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Producer side of the doctrine backend.
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class MessageManagerBackendDispatcher extends QueueBackendDispatcher
 {
@@ -34,6 +36,8 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
     protected $default;
 
     /**
+     * NEXT_MAJOR: Remove $messageManager parameter.
+     *
      * @param MessageManagerInterface $messageManager Only used in compiler pass
      * @param string                  $defaultQueue
      */
@@ -56,9 +60,6 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackend($type)
     {
         $default = null;
@@ -76,41 +77,26 @@ class MessageManagerBackendDispatcher extends QueueBackendDispatcher
         return $this->getDefaultBackend();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): void
     {
         throw new \RuntimeException('You need to use a specific doctrine backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         throw new \RuntimeException('You need to use a specific doctrine backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         return new Success('Channel is running (Database) and consumers for all queues available.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup(): void
     {
         throw new \RuntimeException('You need to use a specific doctrine backend supporting the selected queue to run a consumer.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(): void
     {
     }

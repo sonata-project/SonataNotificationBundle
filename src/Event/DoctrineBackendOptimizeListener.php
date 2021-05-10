@@ -21,6 +21,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * Used with doctrine backend to clear context taking care of the batch iterations.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class DoctrineBackendOptimizeListener implements IterationListener
 {
@@ -34,9 +36,6 @@ class DoctrineBackendOptimizeListener implements IterationListener
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function iterate(IterateEvent $event): void
     {
         if (!method_exists($event->getIterator(), 'isBufferEmpty')) {

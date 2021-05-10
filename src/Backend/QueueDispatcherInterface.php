@@ -19,14 +19,16 @@ use Sonata\NotificationBundle\Exception\BackendNotFoundException;
  * A QueueDispatcherInterface acts as a router for different
  * queue types.
  *
- * @see AMQPBackendDispatcher for an eample implementation
+ * @see AMQPBackendDispatcher for an example implementation
  */
 interface QueueDispatcherInterface
 {
     /**
      * Get a backend by message type.
      *
-     * @param string $type
+     * NEXT_MAJOR: Change signature to getBackend(?string $type = null);
+     *
+     * @param string|null $type
      *
      * @throws BackendNotFoundException
      *

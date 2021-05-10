@@ -26,6 +26,9 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class SonataNotificationExtension extends Extension
 {
     /**
@@ -33,9 +36,6 @@ class SonataNotificationExtension extends Extension
      */
     protected $amqpCounter = 0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
@@ -220,10 +220,10 @@ class SonataNotificationExtension extends Extension
     }
 
     /**
-     * @param bool $checkLevel
-     * @param int  $pause
-     * @param int  $maxAge
-     * @param int  $batchSize
+     * @param array $checkLevel
+     * @param int   $pause
+     * @param int   $maxAge
+     * @param int   $batchSize
      *
      * @throws \RuntimeException
      */
@@ -245,6 +245,7 @@ class SonataNotificationExtension extends Extension
 
         $defaultSet = false;
         $declaredQueues = [];
+        $defaultQueue = '';
 
         foreach ($queues as $pos => &$queue) {
             if (\in_array($queue['queue'], $declaredQueues, true)) {
@@ -294,7 +295,7 @@ class SonataNotificationExtension extends Extension
 
     /**
      * @param string $manager
-     * @param bool   $checkLevel
+     * @param array  $checkLevel
      * @param int    $pause
      * @param int    $maxAge
      * @param int    $batchSize
@@ -351,6 +352,7 @@ class SonataNotificationExtension extends Extension
         }
 
         $declaredQueues = [];
+        $defaultQueue = '';
 
         $defaultSet = false;
         foreach ($queues as $pos => $queue) {

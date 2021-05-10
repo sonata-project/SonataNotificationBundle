@@ -51,17 +51,11 @@ final class AMQPMessageIterator implements MessageIteratorInterface
         $this->isValid = true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         $this->isValid = false;
@@ -81,25 +75,16 @@ final class AMQPMessageIterator implements MessageIteratorInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): void
     {
         $this->counter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid()
     {
         return $this->isValid;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->isValid = true;

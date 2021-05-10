@@ -15,8 +15,10 @@ namespace Sonata\NotificationBundle\Consumer;
 
 use Psr\Log\LoggerInterface;
 use Sonata\NotificationBundle\Exception\InvalidParameterException;
-use Symfony\Component\HttpKernel\Log\LoggerInterface as LegacyLoggerInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class LoggerConsumer implements ConsumerInterface
 {
     /**
@@ -38,26 +40,11 @@ class LoggerConsumer implements ConsumerInterface
         'debug' => 'debug',
     ];
 
-    /**
-     * @param LoggerInterface|LegacyLoggerInterface $logger
-     */
-    public function __construct($logger)
+    public function __construct(LoggerInterface $logger)
     {
-        if ($logger instanceof LegacyLoggerInterface) {
-            @trigger_error(
-                sprintf(
-                    'Using an instance of "%s" is deprecated since version 2.3. Use Psr\Log\LoggerInterface instead.',
-                    \get_class($logger)
-                ),
-                \E_USER_DEPRECATED
-            );
-        }
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ConsumerEvent $event): void
     {
         $message = $event->getMessage();

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\NotificationBundle\Exception;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class HandlingException extends \RuntimeException
 {
 }

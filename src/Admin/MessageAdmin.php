@@ -20,13 +20,14 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @phpstan-extends AbstractAdmin<\Sonata\NotificationBundle\Model\Message>
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class MessageAdmin extends AbstractAdmin
 {
     protected $classnameLabel = 'Message';
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection
@@ -35,9 +36,6 @@ class MessageAdmin extends AbstractAdmin
             ->remove('history');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBatchActions(): array
     {
         $actions = [];
@@ -56,9 +54,6 @@ class MessageAdmin extends AbstractAdmin
         return $actions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -72,9 +67,6 @@ class MessageAdmin extends AbstractAdmin
             ->add('restartCount');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -87,15 +79,15 @@ class MessageAdmin extends AbstractAdmin
             ->add('restartCount');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $class = $this->getClass();
 
         $filter
             ->add('type')
-            ->add('state', null, [], ChoiceType::class, ['choices' => $class::getStateList()]);
+            ->add('state', null, [
+                'field_type' => ChoiceType::class,
+                'field_options' => ['choices' => $class::getStateList()],
+            ]);
     }
 }

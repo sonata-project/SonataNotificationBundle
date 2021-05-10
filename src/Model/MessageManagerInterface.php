@@ -19,12 +19,12 @@ use Sonata\Doctrine\Model\ManagerInterface;
 interface MessageManagerInterface extends ManagerInterface, PageableInterface
 {
     /**
-     * @return int
+     * @return array
      */
     public function countStates();
 
     /**
-     * @param $maxAge
+     * @param int $maxAge
      */
     public function cleanup($maxAge);
 
@@ -49,10 +49,10 @@ interface MessageManagerInterface extends ManagerInterface, PageableInterface
     public function findByTypes(array $types, $state, $batchSize);
 
     /**
-     * @param      $state
-     * @param      $batchSize
-     * @param null $maxAttempts
-     * @param int  $attemptDelay
+     * @param int      $state
+     * @param int      $batchSize
+     * @param int|null $maxAttempts
+     * @param int      $attemptDelay
      *
      * @return mixed
      */

@@ -18,14 +18,17 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Sonata\DatagridBundle\Pager\PagerInterface;
-use Sonata\NotificationBundle\Model\MessageInterface;
+use Sonata\NotificationBundle\Form\Type\MessageSerializationType;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Hugo Briand <briand@ekino.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class MessageController
 {
@@ -147,19 +150,19 @@ class MessageController
      *
      * @Rest\View(serializerGroups={"sonata_api_read"}, serializerEnableMaxDepthChecks=true)
      *
-     * @return MessageInterface
+     * @return FormInterface
      */
     public function postMessageAction(Request $request)
     {
         $message = null;
 
-        $form = $this->formFactory->createNamed('', 'sonata_notification_api_form_message', $message, [
+        $form = $this->formFactory->createNamed('', MessageSerializationType::class, $message, [
             'csrf_protection' => false,
         ]);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();
             $this->messageManager->save($message);
 

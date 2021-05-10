@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Producer side of the rabbitmq backend.
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 final class AMQPBackendDispatcher extends QueueBackendDispatcher
 {
@@ -98,9 +100,6 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         return $this->context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackend($type)
     {
         if (!$this->backendsInitialized) {
@@ -141,9 +140,6 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         return $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): void
     {
         throw new \RuntimeException(
@@ -151,9 +147,6 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         throw new \RuntimeException(
@@ -161,9 +154,6 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         try {
@@ -202,9 +192,6 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         return new Success('Channel is running (RabbitMQ) and consumers for all queues available.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup(): void
     {
         throw new \RuntimeException(
@@ -219,9 +206,6 @@ final class AMQPBackendDispatcher extends QueueBackendDispatcher
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(): void
     {
     }

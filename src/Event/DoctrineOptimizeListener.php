@@ -21,11 +21,13 @@ use Doctrine\Persistence\ManagerRegistry;
  * Do not use with doctrine backend, use DoctrineBackendOptimizeListener instead.
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class DoctrineOptimizeListener implements IterationListener
 {
     /**
-     * @var Registry
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
@@ -34,9 +36,6 @@ class DoctrineOptimizeListener implements IterationListener
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function iterate(IterateEvent $event): void
     {
         foreach ($this->doctrine->getManagers() as $name => $manager) {

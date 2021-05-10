@@ -24,6 +24,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class RestartCommand extends Command
 {
     /**
@@ -56,9 +59,6 @@ class RestartCommand extends Command
         $this->messageManager = $messageManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(): void
     {
         $this->setName('sonata:notification:restart');
@@ -71,10 +71,7 @@ class RestartCommand extends Command
         $this->addOption('batch-size', null, InputOption::VALUE_OPTIONAL, 'Number of message to process on each pull (used only when pulling option is set)', 10);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<info>Starting... </info>');
 
@@ -107,7 +104,7 @@ class RestartCommand extends Command
             if (0 === \count($messages)) {
                 $output->writeln('Nothing to restart, bye.');
 
-                return;
+                return 0;
             }
         }
 
@@ -132,5 +129,7 @@ class RestartCommand extends Command
         }
 
         $output->writeln('<info>Done!</info>');
+
+        return 0;
     }
 }

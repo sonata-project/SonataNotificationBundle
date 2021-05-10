@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Tests\Mock;
 
 use Interop\Amqp\AmqpConnectionFactory;
-use Interop\Queue\PsrContext;
 
 class AmqpConnectionFactoryStub implements AmqpConnectionFactory
 {
@@ -26,9 +25,6 @@ class AmqpConnectionFactoryStub implements AmqpConnectionFactory
         static::$config = $config;
     }
 
-    /**
-     * @return PsrContext
-     */
     public function createContext()
     {
         return static::$context;

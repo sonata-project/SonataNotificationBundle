@@ -19,6 +19,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class CreateAndPublishCommand extends Command
 {
     /**
@@ -33,9 +36,6 @@ class CreateAndPublishCommand extends Command
         $this->backend = $backend;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(): void
     {
         $this
@@ -44,10 +44,7 @@ class CreateAndPublishCommand extends Command
             ->addArgument('body', InputArgument::REQUIRED, 'Body of the notification (json)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $type = $input->getArgument('type');
         $body = json_decode($input->getArgument('body'), true);
@@ -59,5 +56,7 @@ class CreateAndPublishCommand extends Command
         $this->backend->createAndPublish($type, $body);
 
         $output->writeln('<info>Done !</info>');
+
+        return 0;
     }
 }

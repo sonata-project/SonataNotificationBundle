@@ -25,6 +25,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class ConsumerHandlerCommand extends Command
 {
     /**
@@ -45,9 +48,6 @@ class ConsumerHandlerCommand extends Command
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(): void
     {
         $this->setName('sonata:notification:start');
@@ -57,10 +57,7 @@ class ConsumerHandlerCommand extends Command
         $this->addOption('show-details', 'd', InputOption::VALUE_OPTIONAL, 'Show consumers return details', true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $startDate = new \DateTime();
 
@@ -162,14 +159,16 @@ class ConsumerHandlerCommand extends Command
             if ($input->getOption('iteration') && $i >= (int) $input->getOption('iteration')) {
                 $output->writeln('End of iteration cycle');
 
-                return;
+                return 0;
             }
         }
+
+        return 0;
     }
 
     /**
      * @param string $type
-     * @param string $backend
+     * @param object $backend
      *
      * @throws \RuntimeException
      */

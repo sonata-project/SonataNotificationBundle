@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @see https://gist.github.com/3852361
  *
  * @author Toni Uebernickel <tuebernickel@gmail.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class PostponeRuntimeBackend extends RuntimeBackend
 {
@@ -51,9 +53,6 @@ class PostponeRuntimeBackend extends RuntimeBackend
         $this->postponeOnCli = $postponeOnCli;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message): void
     {
         // if the message is generated from the cli the message is handled
@@ -82,17 +81,11 @@ class PostponeRuntimeBackend extends RuntimeBackend
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return new IteratorProxyMessageIterator(new \ArrayIterator($this->messages));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         return new Success('Postpone runtime backend', 'Ok (Postpone Runtime)');

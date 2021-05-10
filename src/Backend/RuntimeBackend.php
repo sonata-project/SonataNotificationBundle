@@ -32,9 +32,6 @@ class RuntimeBackend implements BackendInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message)
     {
         $this->handle($message, $this->dispatcher);
@@ -42,9 +39,6 @@ class RuntimeBackend implements BackendInterface
         return $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create($type, array $body)
     {
         $message = new Message();
@@ -55,39 +49,24 @@ class RuntimeBackend implements BackendInterface
         return $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAndPublish($type, array $body)
     {
         return $this->publish($this->create($type, $body));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return new \EmptyIterator();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         $event = new ConsumerEvent($message);
@@ -105,9 +84,6 @@ class RuntimeBackend implements BackendInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         return new Success('Runtime backend health check', 'Ok  (Runtime)');

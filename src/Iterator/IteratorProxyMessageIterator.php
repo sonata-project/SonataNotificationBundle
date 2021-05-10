@@ -15,6 +15,8 @@ namespace Sonata\NotificationBundle\Iterator;
 
 /**
  * @author Toni Uebernickel <tuebernickel@gmail.com>
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class IteratorProxyMessageIterator implements MessageIteratorInterface
 {
@@ -28,41 +30,26 @@ class IteratorProxyMessageIterator implements MessageIteratorInterface
         $this->iterator = $iterator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->iterator->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         $this->iterator->next();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->iterator->key();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid()
     {
         return $this->iterator->valid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->iterator->rewind();

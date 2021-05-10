@@ -15,6 +15,9 @@ namespace Sonata\NotificationBundle\Tests\Iterator;
 
 use Interop\Amqp\AmqpConsumer;
 use Interop\Amqp\Impl\AmqpMessage;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Sonata\NotificationBundle\Iterator\AMQPMessageIterator;
 use Sonata\NotificationBundle\Iterator\MessageIteratorInterface;
@@ -70,9 +73,9 @@ class AMQPMessageIteratorTest extends TestCase
     /**
      * @param mixed $queueName
      *
-     * @return AmqpConsumer|\PHPUnit_Framework_MockObject_MockObject
+     * @return AmqpConsumer&MockObject
      */
-    private function createConsumerStub($queueName = null)
+    private function createConsumerMock($queueName = null)
     {
         $queue = $this->createMock(AmqpQueue::class);
         $queue
@@ -88,10 +91,10 @@ class AMQPMessageIteratorTest extends TestCase
     }
 
     /**
-     * @return AMQPChannel|\PHPUnit_Framework_MockObject_MockObject|AMQPChannel
+     * @return AMQPChannel&Stub
      */
-    private function createChannelMock()
+    private function createChannelStub()
     {
-        return $this->createMock(AMQPChannel::class);
+        return $this->createStub(AMQPChannel::class);
     }
 }

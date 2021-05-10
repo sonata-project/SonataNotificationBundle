@@ -21,11 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ *
+ * @internal since sonata-project/notification-bundle 4.0
+ */
 class NotificationCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('sonata.notification.dispatcher')) {

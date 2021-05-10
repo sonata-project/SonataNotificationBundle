@@ -30,6 +30,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Consumer side of the rabbitMQ backend.
+ *
+ * @final since sonata-project/notification-bundle 3.x
  */
 class AMQPBackend implements BackendInterface
 {
@@ -109,9 +111,6 @@ class AMQPBackend implements BackendInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(): void
     {
         $args = [];
@@ -149,9 +148,6 @@ class AMQPBackend implements BackendInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function publish(MessageInterface $message): void
     {
         $body = json_encode([
@@ -172,9 +168,6 @@ class AMQPBackend implements BackendInterface
         $this->getContext()->createProducer()->send($topic, $amqpMessage);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create($type, array $body)
     {
         $message = new Message();
@@ -185,17 +178,11 @@ class AMQPBackend implements BackendInterface
         return $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAndPublish($type, array $body): void
     {
         $this->publish($this->create($type, $body));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         $context = $this->getContext();
@@ -210,9 +197,6 @@ class AMQPBackend implements BackendInterface
         return new AMQPMessageIterator($this->consumer);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(MessageInterface $message, EventDispatcherInterface $dispatcher): void
     {
         $event = new ConsumerEvent($message);
@@ -244,9 +228,6 @@ class AMQPBackend implements BackendInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatus()
     {
         try {
@@ -258,9 +239,6 @@ class AMQPBackend implements BackendInterface
         return new Success('Channel is running (RabbitMQ)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cleanup(): void
     {
         throw new \RuntimeException('Not implemented');

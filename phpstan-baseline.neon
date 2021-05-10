@@ -1,0 +1,11 @@
+parameters:
+    ignoreErrors:
+        - # NEXT_MAJOR: Remove this issue.
+            message: "#^Constructor of class Sonata\\\\NotificationBundle\\\\Backend\\\\MessageManagerBackendDispatcher has an unused parameter \\$messageManager\\.$#"
+            count: 1
+            path: src/Backend/MessageManagerBackendDispatcher.php
+
+        - # NEXT_MAJOR: Remove this issue.
+            message: "#^Call to static method getInstance\\(\\) on an unknown class Sonata\\\\EasyExtendsBundle\\\\Mapper\\\\DoctrineCollector\\.$#"
+            count: 1
+            path: src/DependencyInjection/SonataNotificationExtension.php

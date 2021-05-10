@@ -18,6 +18,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @final since sonata-project/notification-bundle 3.x
+ */
 class ListHandlerCommand extends Command
 {
     /**
@@ -32,19 +35,13 @@ class ListHandlerCommand extends Command
         $this->metadata = $metadata;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(): void
     {
         $this->setName('sonata:notification:list-handler');
         $this->setDescription('List all consumers available');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<info>List of consumers available</info>');
         foreach ($this->metadata->getInformations() as $type => $ids) {
@@ -54,5 +51,7 @@ class ListHandlerCommand extends Command
         }
 
         $output->writeln(' done!');
+
+        return 0;
     }
 }
