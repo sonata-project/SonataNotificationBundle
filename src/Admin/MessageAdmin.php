@@ -36,9 +36,8 @@ class MessageAdmin extends AbstractAdmin
             ->remove('history');
     }
 
-    public function getBatchActions(): array
+    protected function configureBatchActions(array $actions): array
     {
-        $actions = [];
         $actions['publish'] = [
             'label' => $this->getLabelTranslatorStrategy()->getLabel('publish', 'batch', 'message'),
             'translation_domain' => $this->getTranslationDomain(),
