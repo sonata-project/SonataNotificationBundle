@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.13.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.12.0...3.13.0) - 2021-06-27
+### Changed
+- [[#580](https://github.com/sonata-project/SonataNotificationBundle/pull/580)] Marked classes to be final in the next major version ([@franmomu](https://github.com/franmomu))
+
+### Fixed
+- [[#577](https://github.com/sonata-project/SonataNotificationBundle/pull/577)] Fixed API form handling ([@franmomu](https://github.com/franmomu))
+
 ## [3.12.0](https://github.com/sonata-project/SonataNotificationBundle/compare/3.11.0...3.12.0) - 2021-03-24
 ### Added
 - [[#564](https://github.com/sonata-project/SonataNotificationBundle/pull/564)] Support for "symfony/config:^5.2" ([@phansys](https://github.com/phansys))
