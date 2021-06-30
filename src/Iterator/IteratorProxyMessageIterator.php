@@ -16,7 +16,7 @@ namespace Sonata\NotificationBundle\Iterator;
 /**
  * @author Toni Uebernickel <tuebernickel@gmail.com>
  *
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  */
 class IteratorProxyMessageIterator implements MessageIteratorInterface
 {

@@ -21,7 +21,7 @@ use Sonata\NotificationBundle\Model\MessageInterface;
 use Sonata\NotificationBundle\Model\MessageManagerInterface;
 
 /**
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  */
 class MessageManager extends BaseEntityManager implements MessageManagerInterface
 {

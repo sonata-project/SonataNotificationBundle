@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  *
  * @internal since sonata-project/notification-bundle 4.0
  */
