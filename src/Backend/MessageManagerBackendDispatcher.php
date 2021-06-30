@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Producer side of the doctrine backend.
  *
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  */
 class MessageManagerBackendDispatcher extends QueueBackendDispatcher
 {

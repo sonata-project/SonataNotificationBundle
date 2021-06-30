@@ -23,7 +23,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  *
  * @author Kevin Nedelec <kevin.nedelec@ekino.com>
  *
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  */
 class IterateEvent extends Event
 {

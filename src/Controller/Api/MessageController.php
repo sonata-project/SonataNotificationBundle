@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Hugo Briand <briand@ekino.com>
  *
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  */
 class MessageController
 {

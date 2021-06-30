@@ -19,7 +19,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Sonata\NotificationBundle\Model\Message;
 
 /**
- * @final since sonata-project/notification-bundle 3.x
+ * @final since sonata-project/notification-bundle 3.13
  */
 class AMQPMessageIterator implements MessageIteratorInterface
 {
