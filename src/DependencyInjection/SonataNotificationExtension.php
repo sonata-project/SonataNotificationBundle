@@ -487,5 +487,7 @@ class SonataNotificationExtension extends Extension
                 return $queue['dead_letter_exchange'];
             }
         }
+
+        throw new \InvalidArgumentException(sprintf('The key %s was not found', $key));
     }
 }
