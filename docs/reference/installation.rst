@@ -13,11 +13,11 @@ also some Sonata dependencies that need to be installed and configured beforehan
 
 Optional dependencies:
 
-* `SonataAdminBundle <https://sonata-project.org/bundles/admin>`_
+* `SonataAdminBundle <https://docs.sonata-project.org/projects/SonataAdminBundle/en/3.x/>`_
 
 And the persistence bundle (currently, not all the implementations of the Sonata persistence bundles are available):
 
-* `SonataDoctrineOrmAdminBundle <https://sonata-project.org/bundles/doctrine-orm-admin>`_
+* `SonataDoctrineOrmAdminBundle <https://docs.sonata-project.org/projects/SonataDoctrineORMAdminBundle/en/3.x/>`_
 
 Follow also their configuration step; you will find everything you need in
 their own installation chapter.
