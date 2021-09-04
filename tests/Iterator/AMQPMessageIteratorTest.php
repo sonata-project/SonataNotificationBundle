@@ -32,7 +32,7 @@ class AMQPMessageIteratorTest extends TestCase
     {
         $rc = new \ReflectionClass(AMQPMessageIterator::class);
 
-        $this->assertTrue($rc->implementsInterface(MessageIteratorInterface::class));
+        static::assertTrue($rc->implementsInterface(MessageIteratorInterface::class));
     }
 
     /**
@@ -51,7 +51,7 @@ class AMQPMessageIteratorTest extends TestCase
 
         $consumerMock = $this->createMock(AmqpConsumer::class);
         $consumerMock
-            ->expects($this->exactly(4))
+            ->expects(static::exactly(4))
             ->method('receive')
             ->willReturnOnConsecutiveCalls($firstMessage, $secondMessage, $thirdMessage, null);
 
@@ -61,13 +61,13 @@ class AMQPMessageIteratorTest extends TestCase
         foreach ($iterator as $message) {
             /* @var Message $message */
 
-            $this->assertInstanceOf(Message::class, $message);
-            $this->assertInstanceOf(\Interop\Amqp\AmqpMessage::class, $message->getValue('interopMessage'));
+            static::assertInstanceOf(Message::class, $message);
+            static::assertInstanceOf(\Interop\Amqp\AmqpMessage::class, $message->getValue('interopMessage'));
 
             $values[] = $message->getValue('value');
         }
 
-        $this->assertSame(['theFirstMessageBody', 'theSecondMessageBody', 'theThirdMessageBody'], $values);
+        static::assertSame(['theFirstMessageBody', 'theSecondMessageBody', 'theThirdMessageBody'], $values);
     }
 
     /**

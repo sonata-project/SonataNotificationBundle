@@ -94,13 +94,13 @@ class MessageManagerMessageIteratorTest extends TestCase
         $newMessage->setType('newer.message');
 
         $messageManager = $this->createMock(MessageManagerInterface::class);
-        $messageManager->expects($this->once())->method('findByTypes')->willReturn([$oldMessage, $newMessage]);
+        $messageManager->expects(static::once())->method('findByTypes')->willReturn([$oldMessage, $newMessage]);
 
         $iterator = new MessageManagerMessageIteratorObject($messageManager, [], 500000, 2);
 
         $iterator->next();
-        $this->assertSame($oldMessage, $iterator->current());
+        static::assertSame($oldMessage, $iterator->current());
         $iterator->next();
-        $this->assertSame($newMessage, $iterator->current());
+        static::assertSame($newMessage, $iterator->current());
     }
 }
