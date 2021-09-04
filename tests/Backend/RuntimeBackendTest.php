@@ -28,12 +28,12 @@ class RuntimeBackendTest extends TestCase
         $backend = new RuntimeBackend($dispatcher);
         $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
-        $this->assertInstanceOf(MessageInterface::class, $message);
+        static::assertInstanceOf(MessageInterface::class, $message);
 
-        $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
-        $this->assertNotNull($message->getCreatedAt());
-        $this->assertSame('foo', $message->getType());
-        $this->assertSame(['message' => 'salut'], $message->getBody());
+        static::assertSame(MessageInterface::STATE_DONE, $message->getState());
+        static::assertNotNull($message->getCreatedAt());
+        static::assertSame('foo', $message->getType());
+        static::assertSame(['message' => 'salut'], $message->getBody());
     }
 
     public function testIterator(): void
@@ -41,7 +41,7 @@ class RuntimeBackendTest extends TestCase
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $backend = new RuntimeBackend($dispatcher);
 
-        $this->assertInstanceOf('Iterator', $backend->getIterator());
+        static::assertInstanceOf('Iterator', $backend->getIterator());
     }
 
     public function testHandleSuccess(): void
@@ -49,14 +49,14 @@ class RuntimeBackendTest extends TestCase
         $message = new Message();
 
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
-        $dispatcher->expects($this->once())->method('dispatch');
+        $dispatcher->expects(static::once())->method('dispatch');
 
         $backend = new RuntimeBackend($dispatcher);
 
         $backend->handle($message, $dispatcher);
-        $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
-        $this->assertNotNull($message->getCreatedAt());
-        $this->assertNotNull($message->getCompletedAt());
+        static::assertSame(MessageInterface::STATE_DONE, $message->getState());
+        static::assertNotNull($message->getCreatedAt());
+        static::assertNotNull($message->getCompletedAt());
     }
 
     public function testHandleError(): void
@@ -64,7 +64,7 @@ class RuntimeBackendTest extends TestCase
         $message = new Message();
 
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
-        $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
+        $dispatcher->expects(static::once())->method('dispatch')->will(static::throwException(new \RuntimeException()));
 
         $backend = new RuntimeBackend($dispatcher);
 
@@ -75,10 +75,10 @@ class RuntimeBackendTest extends TestCase
         } catch (HandlingException $e) {
         }
 
-        $this->assertInstanceOf(HandlingException::class, $e);
+        static::assertInstanceOf(HandlingException::class, $e);
 
-        $this->assertSame(MessageInterface::STATE_ERROR, $message->getState());
-        $this->assertNotNull($message->getCreatedAt());
-        $this->assertNotNull($message->getCompletedAt());
+        static::assertSame(MessageInterface::STATE_ERROR, $message->getState());
+        static::assertNotNull($message->getCreatedAt());
+        static::assertNotNull($message->getCompletedAt());
     }
 }

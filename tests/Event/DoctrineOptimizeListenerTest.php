@@ -29,10 +29,10 @@ class DoctrineOptimizeListenerTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $manager = $this->createMock(EntityManager::class);
-        $manager->expects($this->once())->method('isOpen')->willReturn(false);
+        $manager->expects(static::once())->method('isOpen')->willReturn(false);
 
         $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->once())->method('getManagers')->willReturn([
+        $registry->expects(static::once())->method('getManagers')->willReturn([
             'default' => $manager,
         ]);
 
@@ -46,14 +46,14 @@ class DoctrineOptimizeListenerTest extends TestCase
     public function testOptimize(): void
     {
         $unitofwork = $this->createMock(UnitOfWork::class);
-        $unitofwork->expects($this->once())->method('clear');
+        $unitofwork->expects(static::once())->method('clear');
 
         $manager = $this->createMock(EntityManager::class);
-        $manager->expects($this->once())->method('isOpen')->willReturn(true);
-        $manager->expects($this->once())->method('getUnitOfWork')->willReturn($unitofwork);
+        $manager->expects(static::once())->method('isOpen')->willReturn(true);
+        $manager->expects(static::once())->method('getUnitOfWork')->willReturn($unitofwork);
 
         $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->once())->method('getManagers')->willReturn([
+        $registry->expects(static::once())->method('getManagers')->willReturn([
             'default' => $manager,
         ]);
 

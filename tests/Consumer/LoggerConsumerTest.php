@@ -31,7 +31,7 @@ class LoggerConsumerTest extends TestCase
     public function testProcess($type, $calledType): void
     {
         $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method($calledType);
+        $logger->expects(static::once())->method($calledType);
 
         $message = new Message();
         $message->setBody([

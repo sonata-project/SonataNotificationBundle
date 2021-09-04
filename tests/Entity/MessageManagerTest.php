@@ -34,7 +34,7 @@ class MessageManagerTest extends TestCase
 
         $manager->cancel($message);
 
-        $this->assertTrue($message->isCancelled());
+        static::assertTrue($message->isCancelled());
     }
 
     public function testRestart(): void
@@ -42,17 +42,17 @@ class MessageManagerTest extends TestCase
         $manager = $this->createMessageManager();
 
         // test un-restartable status
-        $this->assertNull($manager->restart($this->getMessage(MessageInterface::STATE_OPEN)));
-        $this->assertNull($manager->restart($this->getMessage(MessageInterface::STATE_CANCELLED)));
-        $this->assertNull($manager->restart($this->getMessage(MessageInterface::STATE_IN_PROGRESS)));
+        static::assertNull($manager->restart($this->getMessage(MessageInterface::STATE_OPEN)));
+        static::assertNull($manager->restart($this->getMessage(MessageInterface::STATE_CANCELLED)));
+        static::assertNull($manager->restart($this->getMessage(MessageInterface::STATE_IN_PROGRESS)));
 
         $message = $this->getMessage(MessageInterface::STATE_ERROR);
         $message->setRestartCount(12);
 
         $newMessage = $manager->restart($message);
 
-        $this->assertSame(MessageInterface::STATE_OPEN, $newMessage->getState());
-        $this->assertSame(13, $newMessage->getRestartCount());
+        static::assertSame(MessageInterface::STATE_OPEN, $newMessage->getState());
+        static::assertSame(13, $newMessage->getRestartCount());
     }
 
     public function testGetPager(): void

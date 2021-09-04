@@ -25,10 +25,10 @@ class BackendHealthCheckTest extends TestCase
         $result = new Success('Test check', 'OK');
 
         $backend = $this->createMock(BackendInterface::class);
-        $backend->expects($this->once())->method('getStatus')->willReturn($result);
+        $backend->expects(static::once())->method('getStatus')->willReturn($result);
 
         $health = new BackendHealthCheck($backend);
 
-        $this->assertSame($result, $health->check());
+        static::assertSame($result, $health->check());
     }
 }
