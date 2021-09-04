@@ -27,7 +27,7 @@ class MessageTest extends TestCase
 
         $message->setBody($body);
 
-        $this->assertSame($expected, $message->getValue($names, $default));
+        static::assertSame($expected, $message->getValue($names, $default));
     }
 
     public function testClone(): void
@@ -36,13 +36,13 @@ class MessageTest extends TestCase
         $message->setId(42);
         $message->setState(Message::STATE_ERROR);
 
-        $this->assertTrue($message->isError());
-        $this->assertSame(42, $message->getId());
+        static::assertTrue($message->isError());
+        static::assertSame(42, $message->getId());
 
         $newMessage = clone $message;
 
-        $this->assertTrue($newMessage->isOpen());
-        $this->assertNull($newMessage->getId());
+        static::assertTrue($newMessage->isOpen());
+        static::assertNull($newMessage->getId());
     }
 
     public function testStatuses(): void
@@ -50,16 +50,16 @@ class MessageTest extends TestCase
         $message = new Message();
 
         $message->setState(MessageInterface::STATE_IN_PROGRESS);
-        $this->assertTrue($message->isRunning());
+        static::assertTrue($message->isRunning());
 
         $message->setState(MessageInterface::STATE_CANCELLED);
-        $this->assertTrue($message->isCancelled());
+        static::assertTrue($message->isCancelled());
 
         $message->setState(MessageInterface::STATE_ERROR);
-        $this->assertTrue($message->isError());
+        static::assertTrue($message->isError());
 
         $message->setState(MessageInterface::STATE_OPEN);
-        $this->assertTrue($message->isOpen());
+        static::assertTrue($message->isOpen());
     }
 
     public function getBodyValues(): array

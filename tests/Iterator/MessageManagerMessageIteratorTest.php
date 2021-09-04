@@ -37,7 +37,7 @@ class MessageManagerMessageIteratorTest extends TestCase
 
         $iterator->_bufferize();
 
-        $this->assertCount(10, $iterator->getBuffer());
+        static::assertCount(10, $iterator->getBuffer());
     }
 
     public function testIterations(): void
@@ -47,20 +47,20 @@ class MessageManagerMessageIteratorTest extends TestCase
         $iterator = new MessageManagerMessageIterator($this->registry, 0);
 
         $iterator->rewind();
-        $this->assertTrue($iterator->valid());
-        $this->assertNotNull($iterator->current());
+        static::assertTrue($iterator->valid());
+        static::assertNotNull($iterator->current());
 
         $iterator->next();
-        $this->assertTrue($iterator->valid());
-        $this->assertNotNull($iterator->current());
+        static::assertTrue($iterator->valid());
+        static::assertNotNull($iterator->current());
 
         --$size;
         while (--$size >= 1) {
             $iterator->next();
         }
 
-        $this->assertTrue($iterator->valid());
-        $this->assertNotNull($iterator->current());
+        static::assertTrue($iterator->valid());
+        static::assertNotNull($iterator->current());
     }
 
     public function testLongForeach(): void
@@ -71,7 +71,7 @@ class MessageManagerMessageIteratorTest extends TestCase
 
         foreach ($iterator as $message) {
             ++$count;
-            $this->assertNotNull($message);
+            static::assertNotNull($message);
             if ($count > 20) {
                 return;
             }

@@ -27,7 +27,7 @@ class AMQPBackendDispatcherTest extends TestCase
     protected function setUp(): void
     {
         if (!class_exists(AmqpConnectionFactory::class)) {
-            $this->markTestSkipped('enqueue/amqp-lib library is not installed');
+            static::markTestSkipped('enqueue/amqp-lib library is not installed');
         }
 
         AmqpConnectionFactoryStub::$config = null;
@@ -79,7 +79,7 @@ class AMQPBackendDispatcherTest extends TestCase
 
         $dispatcher->getContext();
 
-        $this->assertSame([
+        static::assertSame([
             'host' => 'theHost',
             'port' => 'thePort',
             'user' => 'theUser',
@@ -110,13 +110,13 @@ class AMQPBackendDispatcherTest extends TestCase
 
         $actualContext = $dispatcher->getContext();
 
-        $this->assertSame($expectedContext, $actualContext);
+        static::assertSame($expectedContext, $actualContext);
     }
 
     public function testQueue(): void
     {
-        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
-        $mock2 = $this->getMockQueue('bar', 'message.type.foo', $this->never());
+        $mock = $this->getMockQueue('foo', 'message.type.foo', static::once());
+        $mock2 = $this->getMockQueue('bar', 'message.type.foo', static::never());
         $fooBackend = ['type' => 'message.type.foo', 'backend' => $mock];
         $barBackend = ['type' => 'message.type.bar', 'backend' => $mock2];
         $backends = [$fooBackend, $barBackend];
@@ -126,7 +126,7 @@ class AMQPBackendDispatcherTest extends TestCase
 
     public function testDefaultQueue(): void
     {
-        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->once());
+        $mock = $this->getMockQueue('foo', 'message.type.foo', static::once());
         $fooBackend = ['type' => 'default', 'backend' => $mock];
         $dispatcher = $this->getDispatcher([$fooBackend]);
         $dispatcher->createAndPublish('some.other.type', []);
@@ -134,7 +134,7 @@ class AMQPBackendDispatcherTest extends TestCase
 
     public function testDefaultQueueNotFound(): void
     {
-        $mock = $this->getMockQueue('foo', 'message.type.foo', $this->never());
+        $mock = $this->getMockQueue('foo', 'message.type.foo', static::never());
         $fooBackend = ['type' => 'message.type.foo', 'backend' => $mock];
         $dispatcher = $this->getDispatcher([$fooBackend]);
 
@@ -166,7 +166,7 @@ class AMQPBackendDispatcherTest extends TestCase
 
         foreach ($queues as $queue) {
             $mock = $this->getMockQueue($queue['queue'], $queue['routing_key']);
-            $mock->expects($this->once())
+            $mock->expects(static::once())
                 ->method('initialize');
             $backends[] = ['type' => $queue['routing_key'], 'backend' => $mock];
         }

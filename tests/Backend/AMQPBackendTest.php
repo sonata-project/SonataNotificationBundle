@@ -42,7 +42,7 @@ class AMQPBackendTest extends TestCase
     protected function setUp(): void
     {
         if (!class_exists(AmqpConnectionFactory::class)) {
-            $this->markTestSkipped('enqueue/amqp-lib library is not installed');
+            static::markTestSkipped('enqueue/amqp-lib library is not installed');
         }
 
         AmqpConnectionFactoryStub::$context = null;
@@ -57,36 +57,36 @@ class AMQPBackendTest extends TestCase
         $topic = new ImplAmqpTopic(self::EXCHANGE);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createQueue')
-            ->with($this->identicalTo(self::QUEUE))
+            ->with(static::identicalTo(self::QUEUE))
             ->willReturn($queue);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareQueue')
-            ->with($this->identicalTo($queue))
+            ->with(static::identicalTo($queue))
             ->willReturnCallback(function (AmqpQueue $queue) {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame([], $queue->getArguments());
             });
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createTopic')
-            ->with($this->identicalTo(self::EXCHANGE))
+            ->with(static::identicalTo(self::EXCHANGE))
             ->willReturn($topic);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareTopic')
-            ->with($this->identicalTo($topic))
+            ->with(static::identicalTo($topic))
             ->willReturnCallback(function (AmqpTopic $topic) {
                 $this->assertTrue((bool) ($topic->getFlags() & AmqpTopic::FLAG_DURABLE));
                 $this->assertSame(AmqpTopic::TYPE_DIRECT, $topic->getType());
                 $this->assertSame([], $topic->getArguments());
             });
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('bind')
-            ->with($this->isInstanceOf(AmqpBind::class))
+            ->with(static::isInstanceOf(AmqpBind::class))
             ->willReturnCallback(function (ImplAmqpBind $bind) use ($queue, $topic) {
                 $this->assertSame($queue, $bind->getTarget());
                 $this->assertSame($topic, $bind->getSource());
@@ -107,31 +107,31 @@ class AMQPBackendTest extends TestCase
         $deadLetterTopic = new ImplAmqpTopic(self::DEAD_LETTER_EXCHANGE);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createQueue')
-            ->with($this->identicalTo(self::QUEUE))
+            ->with(static::identicalTo(self::QUEUE))
             ->willReturn($queue);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareQueue')
-            ->with($this->identicalTo($queue))
+            ->with(static::identicalTo($queue))
             ->willReturnCallback(function (AmqpQueue $queue) {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame(['x-dead-letter-exchange' => self::DEAD_LETTER_EXCHANGE], $queue->getArguments());
             });
 
-        $contextMock->expects($this->exactly(2))
+        $contextMock->expects(static::exactly(2))
             ->method('createTopic')
             ->willReturnMap([
                 [self::EXCHANGE, $topic],
                 [self::DEAD_LETTER_EXCHANGE, $deadLetterTopic],
             ]);
 
-        $contextMock->expects($this->atLeastOnce())
+        $contextMock->expects(static::atLeastOnce())
             ->method('bind')
-            ->with($this->isInstanceOf(AmqpBind::class));
+            ->with(static::isInstanceOf(AmqpBind::class));
 
-        $contextMock->expects($this->exactly(2))
+        $contextMock->expects(static::exactly(2))
             ->method('declareTopic')
             ->willReturnCallback(function (AmqpTopic $topic) use ($deadLetterTopic) {
                 if ($topic === $deadLetterTopic) {
@@ -154,14 +154,14 @@ class AMQPBackendTest extends TestCase
         $topic = new ImplAmqpTopic(self::EXCHANGE);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createQueue')
-            ->with($this->identicalTo(self::QUEUE))
+            ->with(static::identicalTo(self::QUEUE))
             ->willReturn($queue);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareQueue')
-            ->with($this->identicalTo($queue))
+            ->with(static::identicalTo($queue))
             ->willReturnCallback(function (AmqpQueue $queue) {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame(
@@ -173,18 +173,18 @@ class AMQPBackendTest extends TestCase
                 );
             });
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createTopic')
-            ->with($this->identicalTo(self::EXCHANGE))
+            ->with(static::identicalTo(self::EXCHANGE))
             ->willReturn($topic);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareTopic')
-            ->with($this->identicalTo($topic));
+            ->with(static::identicalTo($topic));
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('bind')
-            ->with($this->isInstanceOf(AmqpBind::class));
+            ->with(static::isInstanceOf(AmqpBind::class));
 
         AmqpConnectionFactoryStub::$context = $contextMock;
 
@@ -199,31 +199,31 @@ class AMQPBackendTest extends TestCase
         $topic = new ImplAmqpTopic(self::EXCHANGE);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createQueue')
-            ->with($this->identicalTo(self::QUEUE))
+            ->with(static::identicalTo(self::QUEUE))
             ->willReturn($queue);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareQueue')
-            ->with($this->identicalTo($queue))
+            ->with(static::identicalTo($queue))
             ->willReturnCallback(function (AmqpQueue $queue) {
                 $this->assertTrue((bool) ($queue->getFlags() & AmqpQueue::FLAG_DURABLE));
                 $this->assertSame(['x-message-ttl' => self::TTL], $queue->getArguments());
             });
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createTopic')
-            ->with($this->identicalTo(self::EXCHANGE))
+            ->with(static::identicalTo(self::EXCHANGE))
             ->willReturn($topic);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('declareTopic')
-            ->with($this->identicalTo($topic));
+            ->with(static::identicalTo($topic));
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('bind')
-            ->with($this->isInstanceOf(AmqpBind::class));
+            ->with(static::isInstanceOf(AmqpBind::class));
 
         AmqpConnectionFactoryStub::$context = $contextMock;
 
@@ -237,24 +237,24 @@ class AMQPBackendTest extends TestCase
         $queue = new ImplAmqpQueue('aQueue');
 
         $consumerMock = $this->createMock(AmqpConsumer::class);
-        $consumerMock->expects($this->once())
+        $consumerMock->expects(static::once())
             ->method('getQueue')
             ->willReturn($queue);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->never())
+        $contextMock->expects(static::never())
             ->method('setQos');
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createQueue')
             ->willReturn($queue);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createConsumer')
-            ->with($this->identicalTo($queue))
+            ->with(static::identicalTo($queue))
             ->willReturn($consumerMock);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('getLibChannel')
             ->willReturn($this->createMock(AMQPChannel::class));
 
@@ -262,7 +262,7 @@ class AMQPBackendTest extends TestCase
 
         $iterator = $backend->getIterator();
 
-        $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
+        static::assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
     public function testGetIteratorWithPrefetchCount(): void
@@ -271,25 +271,25 @@ class AMQPBackendTest extends TestCase
 
         $queue = new ImplAmqpQueue('aQueue');
         $consumerMock = $this->createMock(AmqpConsumer::class);
-        $consumerMock->expects($this->once())
+        $consumerMock->expects(static::once())
             ->method('getQueue')
             ->willReturn($queue);
 
         $contextMock = $this->createMock(AmqpContext::class);
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('setQos')
-            ->with($this->isNull(), $this->identicalTo(self::PREFETCH_COUNT), $this->isFalse());
+            ->with(static::isNull(), static::identicalTo(self::PREFETCH_COUNT), static::isFalse());
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createQueue')
             ->willReturn($queue);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('createConsumer')
-            ->with($this->identicalTo($queue))
+            ->with(static::identicalTo($queue))
             ->willReturn($consumerMock);
 
-        $contextMock->expects($this->once())
+        $contextMock->expects(static::once())
             ->method('getLibChannel')
             ->willReturn($this->createMock(AMQPChannel::class));
 
@@ -297,7 +297,7 @@ class AMQPBackendTest extends TestCase
 
         $iterator = $backend->getIterator();
 
-        $this->assertInstanceOf(AMQPMessageIterator::class, $iterator);
+        static::assertInstanceOf(AMQPMessageIterator::class, $iterator);
     }
 
     protected function buildBackend($recover = false, $deadLetterExchange = null, $deadLetterRoutingKey = null, $ttl = null, $prefetchCount = null): AMQPBackend

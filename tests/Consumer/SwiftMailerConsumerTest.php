@@ -83,31 +83,31 @@ class SwiftMailerConsumerTest extends TestCase
         ]);
 
         $mail = $this->createMock('Swift_Message');
-        $mail->expects($this->once())->method('setSubject')->with($this->equalTo('subject'))->willReturnSelf();
-        $mail->expects($this->once())->method('setFrom')->with($this->equalTo(['from@mail.fr' => 'nameFrom']))->willReturnSelf();
-        $mail->expects($this->once())->method('setTo')->with($this->equalTo(['to1@mail.fr', 'to2@mail.fr' => 'nameTo2']))->willReturnSelf();
-        $mail->expects($this->once())->method('setReplyTo')->with($this->equalTo(['replyTo1@mail.fr', 'replyTo2@mail.fr' => 'nameReplyTo2']))->willReturnSelf();
-        $mail->expects($this->once())->method('setReturnPath')->with($this->equalTo(['email' => 'returnPath@mail.fr']))->willReturnSelf();
-        $mail->expects($this->once())
+        $mail->expects(static::once())->method('setSubject')->with(static::equalTo('subject'))->willReturnSelf();
+        $mail->expects(static::once())->method('setFrom')->with(static::equalTo(['from@mail.fr' => 'nameFrom']))->willReturnSelf();
+        $mail->expects(static::once())->method('setTo')->with(static::equalTo(['to1@mail.fr', 'to2@mail.fr' => 'nameTo2']))->willReturnSelf();
+        $mail->expects(static::once())->method('setReplyTo')->with(static::equalTo(['replyTo1@mail.fr', 'replyTo2@mail.fr' => 'nameReplyTo2']))->willReturnSelf();
+        $mail->expects(static::once())->method('setReturnPath')->with(static::equalTo(['email' => 'returnPath@mail.fr']))->willReturnSelf();
+        $mail->expects(static::once())
             ->method('setCc')
-            ->with($this->equalTo(['cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2']))
+            ->with(static::equalTo(['cc1@mail.fr', 'cc2@mail.fr' => 'nameCc2']))
             ->willReturnSelf();
-        $mail->expects($this->once())
+        $mail->expects(static::once())
             ->method('setBcc')
-            ->with($this->equalTo(['bcc1@mail.fr', 'bcc2@mail.fr' => 'nameBcc2']))
+            ->with(static::equalTo(['bcc1@mail.fr', 'bcc2@mail.fr' => 'nameBcc2']))
             ->willReturnSelf();
-        $mail->expects($this->exactly(2))
+        $mail->expects(static::exactly(2))
             ->method('addPart')
             ->withConsecutive(
-                [$this->equalTo('message text'), $this->equalTo('text/plain')],
-                [$this->equalTo('message html'), $this->equalTo('text/html')]
+                [static::equalTo('message text'), static::equalTo('text/plain')],
+                [static::equalTo('message html'), static::equalTo('text/html')]
             )
             ->willReturnSelf();
-        $mail->expects($this->once())
+        $mail->expects(static::once())
             ->method('attach')
             ->willReturnSelf();
 
-        $this->mailer->expects($this->once())->method('createMessage')->willReturn($mail);
+        $this->mailer->expects(static::once())->method('createMessage')->willReturn($mail);
 
         $method = new \ReflectionMethod($this->consumer, 'sendEmail');
         $method->setAccessible(true);

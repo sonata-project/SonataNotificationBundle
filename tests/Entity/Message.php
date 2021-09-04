@@ -36,8 +36,8 @@ class BaseMessageTest extends TestCase
 
         $clonedMessage = clone $originalMessage;
 
-        $this->assertSame(['body'], $clonedMessage->getBody());
-        $this->assertSame(MessageInterface::STATE_ERROR, $clonedMessage->getState());
-        $this->assertNull($clonedMessage->getId());
+        static::assertSame(['body'], $clonedMessage->getBody());
+        static::assertSame(MessageInterface::STATE_ERROR, $clonedMessage->getState());
+        static::assertNull($clonedMessage->getId());
     }
 }

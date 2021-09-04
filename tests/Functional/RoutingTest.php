@@ -34,9 +34,9 @@ final class RoutingTest extends WebTestCase
 
         $route = $router->getRouteCollection()->get($name);
 
-        $this->assertNotNull($route);
-        $this->assertSame($path, $route->getPath());
-        $this->assertEmpty(array_diff($methods, $route->getMethods()));
+        static::assertNotNull($route);
+        static::assertSame($path, $route->getPath());
+        static::assertEmpty(array_diff($methods, $route->getMethods()));
     }
 
     public function getRoutes(): iterable

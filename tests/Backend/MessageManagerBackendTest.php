@@ -30,45 +30,45 @@ class MessageManagerBackendTest extends TestCase
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->once())->method('save')->willReturn($message);
-        $modelManager->expects($this->once())->method('create')->willReturn($message);
+        $modelManager->expects(static::once())->method('save')->willReturn($message);
+        $modelManager->expects(static::once())->method('create')->willReturn($message);
 
         $backend = new MessageManagerBackend($modelManager, []);
         $message = $backend->createAndPublish('foo', ['message' => 'salut']);
 
-        $this->assertInstanceOf(MessageInterface::class, $message);
-        $this->assertSame(MessageInterface::STATE_OPEN, $message->getState());
-        $this->assertNotNull($message->getCreatedAt());
-        $this->assertSame('foo', $message->getType());
-        $this->assertSame(['message' => 'salut'], $message->getBody());
+        static::assertInstanceOf(MessageInterface::class, $message);
+        static::assertSame(MessageInterface::STATE_OPEN, $message->getState());
+        static::assertNotNull($message->getCreatedAt());
+        static::assertSame('foo', $message->getType());
+        static::assertSame(['message' => 'salut'], $message->getBody());
     }
 
     public function testHandleSuccess(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->exactly(2))->method('save')->willReturn($message);
+        $modelManager->expects(static::exactly(2))->method('save')->willReturn($message);
 
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
-        $dispatcher->expects($this->once())->method('dispatch');
+        $dispatcher->expects(static::once())->method('dispatch');
 
         $backend = new MessageManagerBackend($modelManager, []);
 
         $backend->handle($message, $dispatcher);
 
-        $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
-        $this->assertNotNull($message->getCreatedAt());
-        $this->assertNotNull($message->getCompletedAt());
+        static::assertSame(MessageInterface::STATE_DONE, $message->getState());
+        static::assertNotNull($message->getCreatedAt());
+        static::assertNotNull($message->getCompletedAt());
     }
 
     public function testHandleError(): void
     {
         $message = new Message();
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->exactly(2))->method('save')->willReturn($message);
+        $modelManager->expects(static::exactly(2))->method('save')->willReturn($message);
 
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
-        $dispatcher->expects($this->once())->method('dispatch')->will($this->throwException(new \RuntimeException()));
+        $dispatcher->expects(static::once())->method('dispatch')->will(static::throwException(new \RuntimeException()));
         $backend = new MessageManagerBackend($modelManager, []);
 
         $e = false;
@@ -78,11 +78,11 @@ class MessageManagerBackendTest extends TestCase
         } catch (HandlingException $e) {
         }
 
-        $this->assertInstanceOf(HandlingException::class, $e);
+        static::assertInstanceOf(HandlingException::class, $e);
 
-        $this->assertSame(MessageInterface::STATE_ERROR, $message->getState());
-        $this->assertNotNull($message->getCreatedAt());
-        $this->assertNotNull($message->getCompletedAt());
+        static::assertSame(MessageInterface::STATE_ERROR, $message->getState());
+        static::assertNotNull($message->getCreatedAt());
+        static::assertNotNull($message->getCompletedAt());
     }
 
     /**
@@ -91,7 +91,7 @@ class MessageManagerBackendTest extends TestCase
     public function testStatus($counts, $expectedStatus, $message): void
     {
         $modelManager = $this->createMock(MessageManagerInterface::class);
-        $modelManager->expects($this->once())->method('countStates')->willReturn($counts);
+        $modelManager->expects(static::once())->method('countStates')->willReturn($counts);
 
         $backend = new MessageManagerBackend($modelManager, [
             MessageInterface::STATE_IN_PROGRESS => 10,
@@ -102,8 +102,8 @@ class MessageManagerBackendTest extends TestCase
 
         $status = $backend->getStatus();
 
-        $this->assertInstanceOf(\get_class($expectedStatus), $status);
-        $this->assertSame($message, $status->getMessage());
+        static::assertInstanceOf(\get_class($expectedStatus), $status);
+        static::assertSame($message, $status->getMessage());
     }
 
     public static function statusProvider(): array
