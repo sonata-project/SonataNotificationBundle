@@ -30,8 +30,8 @@ class IteratorProxyMessageIteratorTest extends TestCase
 
         $proxy = new IteratorProxyMessageIterator($actualIterator);
         foreach ($proxy as $eachKey => $eachEntry) {
-            $this->assertNotNull($eachKey);
-            $this->assertNotEmpty($eachEntry);
+            static::assertNotNull($eachKey);
+            static::assertNotEmpty($eachEntry);
         }
     }
 }

@@ -52,7 +52,7 @@ class PostponeRuntimeBackendTest extends TestCase
 
         $iterator = $backend->getIterator();
         foreach ($iterator as $eachKey => $eachMessage) {
-            $this->assertSame($messages[$eachKey], $eachMessage);
+            static::assertSame($messages[$eachKey], $eachMessage);
         }
     }
 
@@ -64,7 +64,7 @@ class PostponeRuntimeBackendTest extends TestCase
             ->getMock();
 
         $backend
-            ->expects($this->never())
+            ->expects(static::never())
             ->method('handle');
 
         $backend->onEvent();
@@ -92,8 +92,8 @@ class PostponeRuntimeBackendTest extends TestCase
 
         $dispatcher->dispatch(new GenericEvent(), 'kernel.terminate');
 
-        $this->assertTrue($phpunit->passed);
-        $this->assertSame(MessageInterface::STATE_DONE, $message->getState());
+        static::assertTrue($phpunit->passed);
+        static::assertSame(MessageInterface::STATE_DONE, $message->getState());
     }
 
     public function testRecursiveMessage(): void
@@ -127,11 +127,11 @@ class PostponeRuntimeBackendTest extends TestCase
 
         $dispatcher->dispatch(new GenericEvent(), 'kernel.terminate');
 
-        $this->assertTrue($phpunit->passed1);
-        $this->assertTrue($phpunit->passed2);
+        static::assertTrue($phpunit->passed1);
+        static::assertTrue($phpunit->passed2);
 
-        $this->assertSame(MessageInterface::STATE_DONE, $message1->getState());
-        $this->assertSame(MessageInterface::STATE_DONE, $message2->getState());
+        static::assertSame(MessageInterface::STATE_DONE, $message1->getState());
+        static::assertSame(MessageInterface::STATE_DONE, $message2->getState());
     }
 
     public function testStatusIsOk(): void
@@ -142,7 +142,7 @@ class PostponeRuntimeBackendTest extends TestCase
         );
 
         $status = $backend->getStatus();
-        $this->assertInstanceOf(Success::class, $status);
+        static::assertInstanceOf(Success::class, $status);
     }
 
     public function testOnCliPublishHandlesDirectly(): void
@@ -153,7 +153,7 @@ class PostponeRuntimeBackendTest extends TestCase
             ->getMock();
 
         $backend
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('handle');
 
         $message = $backend->create('notification.demo', []);

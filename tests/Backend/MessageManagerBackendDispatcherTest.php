@@ -28,14 +28,14 @@ class MessageManagerBackendDispatcherTest extends TestCase
     {
         $testBackend = $this->createMock(MessageManagerBackend::class);
 
-        $testBackend->expects($this->once())
+        $testBackend->expects(static::once())
             ->method('setDispatcher');
 
         $message = new Message();
         $message->setType('test');
         $message->setBody([]);
 
-        $testBackend->expects($this->once())
+        $testBackend->expects(static::once())
             ->method('create')
             ->willReturn($message);
 
@@ -43,6 +43,6 @@ class MessageManagerBackendDispatcherTest extends TestCase
 
         $mMgrBackend = new MessageManagerBackendDispatcher($mMgr, [], '', [['types' => ['test'], 'backend' => $testBackend]]);
 
-        $this->assertSame($message, $mMgrBackend->create('test', []));
+        static::assertSame($message, $mMgrBackend->create('test', []));
     }
 }
