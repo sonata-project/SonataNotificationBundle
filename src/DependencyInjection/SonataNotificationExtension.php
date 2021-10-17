@@ -255,7 +255,7 @@ class SonataNotificationExtension extends Extension
             $declaredQueues[] = $queue['queue'];
 
             // make the configuration compatible with old code and rabbitmq
-            if (isset($queue['routing_key']) && \strlen($queue['routing_key']) > 0) {
+            if (isset($queue['routing_key']) && '' !== $queue['routing_key']) {
                 $queue['types'] = [$queue['routing_key']];
             }
 
