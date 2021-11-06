@@ -26,8 +26,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Producer side of the rabbitmq backend.
- *
- * @final since sonata-project/notification-bundle 3.13
  */
 final class AMQPBackendDispatcher extends QueueBackendDispatcher
 {

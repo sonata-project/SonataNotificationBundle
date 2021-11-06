@@ -67,6 +67,9 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
         $this->batchSize = $batchSize;
     }
 
+    /**
+     * @return mixed
+     */
     public function current()
     {
         return $this->current;
@@ -78,11 +81,17 @@ class MessageManagerMessageIterator implements MessageIteratorInterface
         ++$this->counter;
     }
 
+    /**
+     * @return mixed
+     */
     public function key()
     {
         return $this->counter;
     }
 
+    /**
+     * @return bool
+     */
     public function valid()
     {
         return true;

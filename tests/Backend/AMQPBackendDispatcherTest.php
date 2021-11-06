@@ -77,6 +77,7 @@ class AMQPBackendDispatcherTest extends TestCase
             []
         );
 
+        AmqpConnectionFactoryStub::$context = $this->createMock(AmqpContext::class);
         $dispatcher->getContext();
 
         static::assertSame([

@@ -30,6 +30,9 @@ class IteratorProxyMessageIterator implements MessageIteratorInterface
         $this->iterator = $iterator;
     }
 
+    /**
+     * @return mixed
+     */
     public function current()
     {
         return $this->iterator->current();
@@ -40,11 +43,17 @@ class IteratorProxyMessageIterator implements MessageIteratorInterface
         $this->iterator->next();
     }
 
+    /**
+     * @return mixed
+     */
     public function key()
     {
         return $this->iterator->key();
     }
 
+    /**
+     * @return bool
+     */
     public function valid()
     {
         return $this->iterator->valid();

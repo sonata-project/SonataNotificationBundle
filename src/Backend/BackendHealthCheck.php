@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NotificationBundle\Backend;
 
 use Laminas\Diagnostics\Check\AbstractCheck;
+use Laminas\Diagnostics\Result\ResultInterface;
 
 /**
  * @final since sonata-project/notification-bundle 3.13
@@ -30,11 +31,17 @@ class BackendHealthCheck extends AbstractCheck
         $this->backend = $backend;
     }
 
+    /**
+     * @return ResultInterface
+     */
     public function check()
     {
         return $this->backend->getStatus();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'Sonata Notification Default Backend';

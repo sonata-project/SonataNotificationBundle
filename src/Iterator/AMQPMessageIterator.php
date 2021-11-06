@@ -51,6 +51,9 @@ final class AMQPMessageIterator implements MessageIteratorInterface
         $this->isValid = true;
     }
 
+    /**
+     * @return mixed
+     */
     public function current()
     {
         return $this->message;
@@ -80,7 +83,7 @@ final class AMQPMessageIterator implements MessageIteratorInterface
         $this->counter;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->isValid;
     }
