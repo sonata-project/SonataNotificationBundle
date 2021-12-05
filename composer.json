@@ -94,5 +94,6 @@
         "psr-4": {
             "Sonata\\NotificationBundle\\Tests\\": "tests/"
         }
-    }
+    },
+    "abandoned": true
 }
