@@ -1,14 +1,13 @@
 {
     "name": "sonata-project/notification-bundle",
-    "type": "symfony-bundle",
     "description": "Symfony SonataNotificationBundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
     "keywords": [
         "page",
         "sonata",
         "cms"
     ],
-    "homepage": "https://docs.sonata-project.org/projects/SonataNotificationBundle",
-    "license": "MIT",
     "authors": [
         {
             "name": "Thomas Rabaix",
@@ -20,6 +19,7 @@
             "homepage": "https://github.com/sonata-project/SonataNotificationBundle/contributors"
         }
     ],
+    "homepage": "https://docs.sonata-project.org/projects/SonataNotificationBundle",
     "require": {
         "php": "^7.3 || ^8.0",
         "ext-json": "*",
@@ -39,14 +39,6 @@
         "symfony/http-foundation": "^4.4 || ^5.3",
         "symfony/http-kernel": "^4.4 || ^5.3",
         "symfony/security-core": "^4.4 || ^5.3"
-    },
-    "conflict": {
-        "friendsofsymfony/rest-bundle": "<2.3",
-        "jms/serializer": "<0.13",
-        "liip/monitor-bundle": "<2.6",
-        "nelmio/api-doc-bundle": "<2.13.5 || >=4.0",
-        "sonata-project/admin-bundle": "<4.0",
-        "sonata-project/doctrine-orm-admin-bundle": "<4.0"
     },
     "require-dev": {
         "enqueue/amqp-lib": "^0.8",
@@ -69,6 +61,14 @@
         "symfony/yaml": "^4.4 || ^5.3",
         "vimeo/psalm": "^4.7"
     },
+    "conflict": {
+        "friendsofsymfony/rest-bundle": "<2.3",
+        "jms/serializer": "<0.13",
+        "liip/monitor-bundle": "<2.6",
+        "nelmio/api-doc-bundle": "<2.13.5 || >=4.0",
+        "sonata-project/admin-bundle": "<4.0",
+        "sonata-project/doctrine-orm-admin-bundle": "<4.0"
+    },
     "suggest": {
         "friendsofsymfony/rest-bundle": "If you want to expose a ReST API.",
         "guzzlehttp/guzzle": "If you want to get a status report when using the rabbitMQ backend.",
@@ -77,9 +77,6 @@
         "queue-interop/amqp-interop": "Install any amqp-interop compatible transport if you want use RabbitMQ. For example enqueue/amqp-lib:^0.8",
         "sonata-project/admin-bundle": "To be able to use MessageAdmin.",
         "sonata-project/doctrine-orm-admin-bundle": "If you want to persist entities"
-    },
-    "config": {
-        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -90,5 +87,8 @@
         "psr-4": {
             "Sonata\\NotificationBundle\\Tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
