@@ -3,6 +3,7 @@
     "description": "Symfony SonataNotificationBundle",
     "license": "MIT",
     "type": "symfony-bundle",
+    "abandoned": true,
     "keywords": [
         "page",
         "sonata",
